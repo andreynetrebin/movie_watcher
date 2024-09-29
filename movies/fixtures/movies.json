@@ -1,0 +1,5379 @@
+[
+{
+  "model": "movies.genre",
+  "pk": 1,
+  "fields": {
+    "name": "криминал"
+  }
+},
+{
+  "model": "movies.genre",
+  "pk": 2,
+  "fields": {
+    "name": "комедия"
+  }
+},
+{
+  "model": "movies.genre",
+  "pk": 4,
+  "fields": {
+    "name": "мелодрама"
+  }
+},
+{
+  "model": "movies.genre",
+  "pk": 5,
+  "fields": {
+    "name": "триллер"
+  }
+},
+{
+  "model": "movies.genre",
+  "pk": 6,
+  "fields": {
+    "name": "драма"
+  }
+},
+{
+  "model": "movies.genre",
+  "pk": 7,
+  "fields": {
+    "name": "боевик"
+  }
+},
+{
+  "model": "movies.genre",
+  "pk": 8,
+  "fields": {
+    "name": "биография"
+  }
+},
+{
+  "model": "movies.genre",
+  "pk": 9,
+  "fields": {
+    "name": "спорт"
+  }
+},
+{
+  "model": "movies.genre",
+  "pk": 10,
+  "fields": {
+    "name": "фантастика"
+  }
+},
+{
+  "model": "movies.genre",
+  "pk": 11,
+  "fields": {
+    "name": "приключения"
+  }
+},
+{
+  "model": "movies.genre",
+  "pk": 12,
+  "fields": {
+    "name": "ужасы"
+  }
+},
+{
+  "model": "movies.genre",
+  "pk": 13,
+  "fields": {
+    "name": "мультфильм"
+  }
+},
+{
+  "model": "movies.genre",
+  "pk": 14,
+  "fields": {
+    "name": "семейный"
+  }
+},
+{
+  "model": "movies.genre",
+  "pk": 15,
+  "fields": {
+    "name": "фэнтези"
+  }
+},
+{
+  "model": "movies.country",
+  "pk": 1,
+  "fields": {
+    "name": "США"
+  }
+},
+{
+  "model": "movies.country",
+  "pk": 2,
+  "fields": {
+    "name": "Франция"
+  }
+},
+{
+  "model": "movies.country",
+  "pk": 3,
+  "fields": {
+    "name": "Швейцария"
+  }
+},
+{
+  "model": "movies.country",
+  "pk": 4,
+  "fields": {
+    "name": "Великобритания"
+  }
+},
+{
+  "model": "movies.country",
+  "pk": 5,
+  "fields": {
+    "name": "Мексика"
+  }
+},
+{
+  "model": "movies.country",
+  "pk": 6,
+  "fields": {
+    "name": "Канада"
+  }
+},
+{
+  "model": "movies.director",
+  "pk": 1,
+  "fields": {
+    "name": "Рон Ховард",
+    "staff_id": 8919
+  }
+},
+{
+  "model": "movies.director",
+  "pk": 2,
+  "fields": {
+    "name": "Роберт Родригес",
+    "staff_id": 30966
+  }
+},
+{
+  "model": "movies.director",
+  "pk": 3,
+  "fields": {
+    "name": "Элай Рот",
+    "staff_id": 39311
+  }
+},
+{
+  "model": "movies.director",
+  "pk": 4,
+  "fields": {
+    "name": "Квентин Тарантино",
+    "staff_id": 7640
+  }
+},
+{
+  "model": "movies.director",
+  "pk": 5,
+  "fields": {
+    "name": "Эдгар Райт",
+    "staff_id": 479555
+  }
+},
+{
+  "model": "movies.director",
+  "pk": 6,
+  "fields": {
+    "name": "Роб Зомби",
+    "staff_id": 31932
+  }
+},
+{
+  "model": "movies.director",
+  "pk": 7,
+  "fields": {
+    "name": "Люк Бессон",
+    "staff_id": 24505
+  }
+},
+{
+  "model": "movies.director",
+  "pk": 8,
+  "fields": {
+    "name": "Клинт Иствуд",
+    "staff_id": 22948
+  }
+},
+{
+  "model": "movies.director",
+  "pk": 9,
+  "fields": {
+    "name": "Тони Скотт",
+    "staff_id": 11891
+  }
+},
+{
+  "model": "movies.director",
+  "pk": 10,
+  "fields": {
+    "name": "Антуан Фукуа",
+    "staff_id": 12755
+  }
+},
+{
+  "model": "movies.director",
+  "pk": 11,
+  "fields": {
+    "name": "Пьер Морель",
+    "staff_id": 441686
+  }
+},
+{
+  "model": "movies.director",
+  "pk": 12,
+  "fields": {
+    "name": "Марк Л. Лестер",
+    "staff_id": 23293
+  }
+},
+{
+  "model": "movies.director",
+  "pk": 13,
+  "fields": {
+    "name": "Крис Уэдж",
+    "staff_id": 39391
+  }
+},
+{
+  "model": "movies.director",
+  "pk": 14,
+  "fields": {
+    "name": "Карлос Салдана",
+    "staff_id": 39390
+  }
+},
+{
+  "model": "movies.director",
+  "pk": 15,
+  "fields": {
+    "name": "Эндрю Адамсон",
+    "staff_id": 47247
+  }
+},
+{
+  "model": "movies.director",
+  "pk": 16,
+  "fields": {
+    "name": "Вики Дженсон",
+    "staff_id": 33815
+  }
+},
+{
+  "model": "movies.writer",
+  "pk": 1,
+  "fields": {
+    "name": "Джон Ли Хэнкок",
+    "staff_id": 7978
+  }
+},
+{
+  "model": "movies.writer",
+  "pk": 2,
+  "fields": {
+    "name": "А.Дж. Квиннелл",
+    "staff_id": 223572
+  }
+},
+{
+  "model": "movies.writer",
+  "pk": 3,
+  "fields": {
+    "name": "Брайан Хелгеленд",
+    "staff_id": 21975
+  }
+},
+{
+  "model": "movies.writer",
+  "pk": 4,
+  "fields": {
+    "name": "Ричард Уэнк",
+    "staff_id": 27645
+  }
+},
+{
+  "model": "movies.writer",
+  "pk": 5,
+  "fields": {
+    "name": "Майкл Слоун",
+    "staff_id": 427422
+  }
+},
+{
+  "model": "movies.writer",
+  "pk": 6,
+  "fields": {
+    "name": "Ричард Линдхейм",
+    "staff_id": 1780297
+  }
+},
+{
+  "model": "movies.writer",
+  "pk": 7,
+  "fields": {
+    "name": "Люк Бессон",
+    "staff_id": 24505
+  }
+},
+{
+  "model": "movies.writer",
+  "pk": 8,
+  "fields": {
+    "name": "Роберт Марк Кэмен",
+    "staff_id": 38147
+  }
+},
+{
+  "model": "movies.writer",
+  "pk": 9,
+  "fields": {
+    "name": "Джеф Лоуб",
+    "staff_id": 68463
+  }
+},
+{
+  "model": "movies.writer",
+  "pk": 10,
+  "fields": {
+    "name": "Мэттью Уайсмен",
+    "staff_id": 68464
+  }
+},
+{
+  "model": "movies.writer",
+  "pk": 11,
+  "fields": {
+    "name": "Стивен Е. де Соуза",
+    "staff_id": 31539
+  }
+},
+{
+  "model": "movies.writer",
+  "pk": 12,
+  "fields": {
+    "name": "Майкл Дж. Уилсон",
+    "staff_id": 2822529
+  }
+},
+{
+  "model": "movies.writer",
+  "pk": 13,
+  "fields": {
+    "name": "Майкл Берг",
+    "staff_id": 39392
+  }
+},
+{
+  "model": "movies.writer",
+  "pk": 14,
+  "fields": {
+    "name": "Питер Экерман",
+    "staff_id": 39393
+  }
+},
+{
+  "model": "movies.writer",
+  "pk": 15,
+  "fields": {
+    "name": "Джеймс Бреснахэн",
+    "staff_id": 39394
+  }
+},
+{
+  "model": "movies.writer",
+  "pk": 16,
+  "fields": {
+    "name": "Даг Комптон",
+    "staff_id": 39396
+  }
+},
+{
+  "model": "movies.writer",
+  "pk": 17,
+  "fields": {
+    "name": "Джефф Сергей",
+    "staff_id": 1102212
+  }
+},
+{
+  "model": "movies.writer",
+  "pk": 18,
+  "fields": {
+    "name": "Майк Тёрмайер",
+    "staff_id": 39399
+  }
+},
+{
+  "model": "movies.writer",
+  "pk": 19,
+  "fields": {
+    "name": "Гален Т. Чу",
+    "staff_id": 39395
+  }
+},
+{
+  "model": "movies.writer",
+  "pk": 20,
+  "fields": {
+    "name": "Ксет Файнберг",
+    "staff_id": 39397
+  }
+},
+{
+  "model": "movies.writer",
+  "pk": 21,
+  "fields": {
+    "name": "Уильям Стейг",
+    "staff_id": 47248
+  }
+},
+{
+  "model": "movies.writer",
+  "pk": 22,
+  "fields": {
+    "name": "Тед Эллиот",
+    "staff_id": 30871
+  }
+},
+{
+  "model": "movies.writer",
+  "pk": 23,
+  "fields": {
+    "name": "Терри Россио",
+    "staff_id": 30872
+  }
+},
+{
+  "model": "movies.writer",
+  "pk": 24,
+  "fields": {
+    "name": "Джо Стиллман",
+    "staff_id": 47249
+  }
+},
+{
+  "model": "movies.writer",
+  "pk": 25,
+  "fields": {
+    "name": "Роджер С.Х. Шульман",
+    "staff_id": 31585
+  }
+},
+{
+  "model": "movies.writer",
+  "pk": 26,
+  "fields": {
+    "name": "Коуди Кэмерон",
+    "staff_id": 47250
+  }
+},
+{
+  "model": "movies.writer",
+  "pk": 27,
+  "fields": {
+    "name": "Крис Миллер",
+    "staff_id": 1939803
+  }
+},
+{
+  "model": "movies.writer",
+  "pk": 28,
+  "fields": {
+    "name": "Конрад Вернон",
+    "staff_id": 30486
+  }
+},
+{
+  "model": "movies.writer",
+  "pk": 29,
+  "fields": {
+    "name": "",
+    "staff_id": 3958619
+  }
+},
+{
+  "model": "movies.movie",
+  "pk": 14,
+  "fields": {
+    "title": "Великий уравнитель",
+    "title_original": "The Equalizer",
+    "year": 2014,
+    "duration": 132,
+    "kinopoisk_id": 196707,
+    "kinopoisk_url": "https://www.kinopoisk.ru/film/196707/",
+    "slug": "velikij-uravnitel_196707",
+    "poster": "images/2024/09/29/196707_3KWbXre.jpg",
+    "description": "Бывший агент ЦРУ, пожилой афроамериканец Роберт Макколл, решил начать жизнь заново, оставить непростое прошлое и смотреть в будущее, как и обещал покойной жене. Он уже нашёл обычную работу продавца в магазине. Однажды Макколл вступается за юную проститутку Тери, с которой болтал в местной закусочной и которая находится под контролем русской мафии. Макколл прекращает свою добровольную отставку и начинает самостоятельные поиски правосудия. Все, кто страдает от криминальных авторитетов, коррумпированных чиновников и не может найти помощи у государства, находят помощь в лице Макколла. Он поможет. Потому что он — великий уравнитель.",
+    "created": "2024-09-29T20:03:15.344Z",
+    "movie_json": {
+      "type": "FILM",
+      "year": 2014,
+      "has3D": false,
+      "genres": [
+        {
+          "genre": "триллер"
+        },
+        {
+          "genre": "криминал"
+        },
+        {
+          "genre": "боевик"
+        }
+      ],
+      "imdbId": "tt0455944",
+      "nameEn": null,
+      "nameRu": "Великий уравнитель",
+      "serial": false,
+      "slogan": "What do you see when you look at me?",
+      "webUrl": "https://www.kinopoisk.ru/film/196707/",
+      "endYear": null,
+      "hasImax": true,
+      "logoUrl": "https://avatars.mds.yandex.net/get-ott/212840/2a0000017c37d6706c227ce0f1b309ef8cf0/orig",
+      "coverUrl": "https://avatars.mds.yandex.net/get-ott/212840/2a0000017c37d69d2c11698270ce1c887e9f/orig",
+      "lastSync": "2024-09-03T09:21:15.689501",
+      "completed": false,
+      "countries": [
+        {
+          "country": "США"
+        }
+      ],
+      "posterUrl": "https://kinopoiskapiunofficial.tech/images/posters/kp/196707.jpg",
+      "shortFilm": false,
+      "startYear": null,
+      "filmLength": 132,
+      "ratingImdb": 7.2,
+      "ratingMpaa": "r",
+      "description": "Бывший агент ЦРУ, пожилой афроамериканец Роберт Макколл, решил начать жизнь заново, оставить непростое прошлое и смотреть в будущее, как и обещал покойной жене. Он уже нашёл обычную работу продавца в магазине. Однажды Макколл вступается за юную проститутку Тери, с которой болтал в местной закусочной и которая находится под контролем русской мафии. Макколл прекращает свою добровольную отставку и начинает самостоятельные поиски правосудия. Все, кто страдает от криминальных авторитетов, коррумпированных чиновников и не может найти помощи у государства, находят помощь в лице Макколла. Он поможет. Потому что он — великий уравнитель.",
+      "kinopoiskId": 196707,
+      "ratingAwait": null,
+      "nameOriginal": "The Equalizer",
+      "reviewsCount": 153,
+      "kinopoiskHDId": "4de6cb2468aa0bef922692a13aaaccaf",
+      "ratingAgeLimits": "age18",
+      "ratingKinopoisk": 7.1,
+      "ratingRfCritics": 75.0,
+      "editorAnnotation": null,
+      "posterUrlPreview": "https://kinopoiskapiunofficial.tech/images/posters/kp_small/196707.jpg",
+      "productionStatus": null,
+      "ratingAwaitCount": 0,
+      "ratingGoodReview": 68.0,
+      "shortDescription": "Отставной морпех против русской мафии. Суровый экшен с Дензелом Вашингтоном",
+      "ratingFilmCritics": 5.7,
+      "isTicketsAvailable": false,
+      "ratingImdbVoteCount": 429027,
+      "ratingKinopoiskVoteCount": 372197,
+      "ratingRfCriticsVoteCount": 8,
+      "ratingGoodReviewVoteCount": 86,
+      "ratingFilmCriticsVoteCount": 206
+    },
+    "movie_staff_json": [
+      {
+        "nameEn": "Antoine Fuqua",
+        "nameRu": "Антуан Фукуа",
+        "staffId": 12755,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_12755.jpg",
+        "description": null,
+        "professionKey": "DIRECTOR",
+        "professionText": "Режиссеры"
+      },
+      {
+        "nameEn": "Denzel Washington",
+        "nameRu": "Дензел Вашингтон",
+        "staffId": 10134,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_10134.jpg",
+        "description": "Robert McCall",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Marton Csokas",
+        "nameRu": "Мартон Чокаш",
+        "staffId": 18503,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_18503.jpg",
+        "description": "Teddy",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Chloë Grace Moretz",
+        "nameRu": "Хлоя Грейс Морец",
+        "staffId": 568564,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_568564.jpg",
+        "description": "Teri",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "David Harbour",
+        "nameRu": "Дэвид Харбор",
+        "staffId": 544909,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_544909.jpg",
+        "description": "Masters",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Haley Bennett",
+        "nameRu": "Хейли Беннетт",
+        "staffId": 1113040,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1113040.jpg",
+        "description": "Mandy",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Bill Pullman",
+        "nameRu": "Билл Пуллман",
+        "staffId": 6470,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_6470.jpg",
+        "description": "Brian Plummer",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Melissa Leo",
+        "nameRu": "Мелисса Лео",
+        "staffId": 32893,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_32893.jpg",
+        "description": "Susan Plummer",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "David Meunier",
+        "nameRu": "Дэвид Мюнье",
+        "staffId": 1051159,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1051159.jpg",
+        "description": "Slavi",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Johnny Skourtis",
+        "nameRu": "Джонни Скуртис",
+        "staffId": 2697720,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2697720.jpg",
+        "description": "Ralphie",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Alex Veadov",
+        "nameRu": "Алекс Видов",
+        "staffId": 55113,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_55113.jpg",
+        "description": "Tevi",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Vladimir Kulich",
+        "nameRu": "Владимир Кулих",
+        "staffId": 20957,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_20957.jpg",
+        "description": "Vladimir Pushkin",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "E. Roger Mitchell",
+        "nameRu": "И. Роджер Митчелл",
+        "staffId": 8407,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_8407.jpg",
+        "description": "Lead Investigator",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "James Wilcox",
+        "nameRu": "Джеймс Уилкокс",
+        "staffId": 2432280,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2432280.jpg",
+        "description": "Pederson",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Mike O'Dea",
+        "nameRu": "Майк О’Ди",
+        "staffId": 1194821,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1194821.jpg",
+        "description": "Remar (в титрах: Mike P. O'Dea)",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Anastasia Mousis Sanidopoulos",
+        "nameRu": "Анастасия Мусис Санидопулос",
+        "staffId": 3336380,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3336380.jpg",
+        "description": "Jenny (в титрах: Anastasia Mousis)",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Allen Maldonado",
+        "nameRu": "Аллен Мальдонадо",
+        "staffId": 36755,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_36755.jpg",
+        "description": "Marcus",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Rhet Kidd",
+        "nameRu": "Рет Кидд",
+        "staffId": 1711045,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1711045.jpg",
+        "description": "Jay (в титрах: Chris Lemieux)",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Mike Morrell",
+        "nameRu": "Майк Морелл",
+        "staffId": 3508518,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3508518.jpg",
+        "description": "HM Brian",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Matt Lasky",
+        "nameRu": "Мэтт Ласки",
+        "staffId": 1139031,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1139031.jpg",
+        "description": "Marat",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Shawn Fitzgibbon",
+        "nameRu": "Шон Фитцгиббон",
+        "staffId": 30253,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_30253.jpg",
+        "description": "Little John Looney",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Vitaliy Shtabnoy",
+        "nameRu": "Виталий Штабной",
+        "staffId": 2329104,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2329104.jpg",
+        "description": "Andri",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Timothy John Smith",
+        "nameRu": "Тимоти Джон Смит",
+        "staffId": 3612029,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3612029.jpg",
+        "description": "Detective Gilly (в титрах: Timothy Smith)",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Robert Wahlberg",
+        "nameRu": "Роберт Уолберг",
+        "staffId": 30268,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_30268.jpg",
+        "description": "Detective Harris",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Steve Sweeney",
+        "nameRu": "Стив Суини",
+        "staffId": 6155,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_6155.jpg",
+        "description": "Counterman",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Owen Burke",
+        "nameRu": "Оуэн Бурк",
+        "staffId": 2274365,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2274365.jpg",
+        "description": "Thief",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Luz Mery Sanchez",
+        "nameRu": "Луз Мэри Санчес",
+        "staffId": 3360215,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3360215.jpg",
+        "description": "Ralphie's Mom (в титрах: Luz Sanchez)",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "John Romualdi",
+        "nameRu": "Джон Ромуальди",
+        "staffId": 97346,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_97346.jpg",
+        "description": "Agent Mosley",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Johnny Messner",
+        "nameRu": "Джонни Месснер",
+        "staffId": 15162,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_15162.jpg",
+        "description": "P&E Worker",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Patrick Coppola",
+        "nameRu": "Патрик Коппола",
+        "staffId": 54391,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_54391.jpg",
+        "description": "Homeowner",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "William Xifaras",
+        "nameRu": "Уильям Ксифарас",
+        "staffId": 2461143,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2461143.jpg",
+        "description": "Laborer",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Jenny Johnson",
+        "nameRu": "Дженни Джонсон",
+        "staffId": 3704013,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3704013.jpg",
+        "description": "Reporter",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Peter Haydu",
+        "nameRu": "Питер Айду",
+        "staffId": 1526439,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1526439.jpg",
+        "description": "Bank Officer",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Tait Fletcher",
+        "nameRu": "Тейт Флетчер",
+        "staffId": 9404,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_9404.jpg",
+        "description": "Teddy's Guy",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Mark Stefanich",
+        "nameRu": "Марк Стефанич",
+        "staffId": 29694,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_29694.jpg",
+        "description": "Teddy's Guy",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Dan Bilzerian",
+        "nameRu": "Ден Билзерян",
+        "staffId": 2787200,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2787200.jpg",
+        "description": "Teddy's Guy",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Matt Leonard",
+        "nameRu": "Мэтт Леонард",
+        "staffId": 1179371,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1179371.jpg",
+        "description": "Teddy's Guy",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Sala Baker",
+        "nameRu": "Сала Бейкер",
+        "staffId": 32390,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_32390.jpg",
+        "description": "Teddy's Guy (в титрах: Elisala Baker)",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Yan Dron",
+        "nameRu": "Ян Дрон",
+        "staffId": 227546,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_227546.jpg",
+        "description": "Teddy's Guy",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Alexander M. Akerblom",
+        "nameRu": "",
+        "staffId": 6086056,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_6086056.jpg",
+        "description": "Meat Plant Worker, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Christian Alvarado",
+        "nameRu": "Кристиан Альварадо",
+        "staffId": 2549108,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2549108.jpg",
+        "description": "Boston PD, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Giovanni Alabiso",
+        "nameRu": "Джованни Алабизо",
+        "staffId": 2068851,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2068851.jpg",
+        "description": "Customer, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Emilija Baksys",
+        "nameRu": "Эмилия Баксис",
+        "staffId": 3636466,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3636466.jpg",
+        "description": "Patron, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Susan Bergeron",
+        "nameRu": "",
+        "staffId": 4470132,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_4470132.jpg",
+        "description": "Bookworm Bus Passenger, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Eliane Brick",
+        "nameRu": "Элиан Брик",
+        "staffId": 3652371,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3652371.jpg",
+        "description": "Pedestrian, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Sara Jane Burns",
+        "nameRu": "Сара Джейн Бёрнс",
+        "staffId": 3428458,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3428458.jpg",
+        "description": "Girl Outside Club, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Mark Burzenski",
+        "nameRu": "Марк Бузенски",
+        "staffId": 2297915,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2297915.jpg",
+        "description": "Boston PD, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "David Cohen",
+        "nameRu": "Дэвид Коэн",
+        "staffId": 1725002,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1725002.jpg",
+        "description": "Pedestrian, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Alexis Capozzi",
+        "nameRu": "Алексис Капоцци",
+        "staffId": 2897558,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2897558.jpg",
+        "description": "Model, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Shawn Contois",
+        "nameRu": "Шон Контуа",
+        "staffId": 2891864,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2891864.jpg",
+        "description": "Construction Worker, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Guy Cooper",
+        "nameRu": "Гай Купер",
+        "staffId": 2967540,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2967540.jpg",
+        "description": "Home Mart Employee, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Peter Crafts",
+        "nameRu": "Питер Крафтс",
+        "staffId": 965306,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_965306.jpg",
+        "description": "McCall Coworker Lunch Buddy, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Tiffany Crosby",
+        "nameRu": "Тиффани Кросби",
+        "staffId": 3048905,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3048905.jpg",
+        "description": "Pedestrian, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Pasquale Dalessio",
+        "nameRu": "Паскале Далессио",
+        "staffId": 2977271,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2977271.jpg",
+        "description": "Home Mart Employee, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Tess Degen",
+        "nameRu": "Тесс Деген",
+        "staffId": 2905877,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2905877.jpg",
+        "description": "Customer, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Serge Didenko",
+        "nameRu": "Серж Диденко",
+        "staffId": 3380815,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3380815.jpg",
+        "description": "Russian Thug, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Sal Dimino",
+        "nameRu": "Сэл Димино",
+        "staffId": 1092749,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1092749.jpg",
+        "description": "Businessman, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Bob Dio",
+        "nameRu": "Боб Дио",
+        "staffId": 1335004,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1335004.jpg",
+        "description": "Town's Homeless Drunk, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Steven Dougherty",
+        "nameRu": "Стивен Догерти",
+        "staffId": 3443250,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3443250.jpg",
+        "description": "Shopper, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Tihomir Dukic",
+        "nameRu": "Тихомир Дукич",
+        "staffId": 1565638,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1565638.jpg",
+        "description": "Teddy's Guy, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Alexandr Dvornikov",
+        "nameRu": "Александр Дворников",
+        "staffId": 3426363,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3426363.jpg",
+        "description": "Russian Heavy / Driver, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Ryan Eatherton",
+        "nameRu": "Райан Итертон",
+        "staffId": 3054200,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3054200.jpg",
+        "description": "Home Mart Employee, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Nash Edgerton",
+        "nameRu": "Нэш Эдгертон",
+        "staffId": 31368,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_31368.jpg",
+        "description": "Teddy's Guy, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Andrew Farazi",
+        "nameRu": "",
+        "staffId": 3300802,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3300802.jpg",
+        "description": "Gangster, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "James Gaiero",
+        "nameRu": "Джеймс Гайеро",
+        "staffId": 4235929,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_4235929.jpg",
+        "description": "Home Mart Shopper, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Debra Garrett",
+        "nameRu": "Дэбби Гаррет",
+        "staffId": 144753,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_144753.jpg",
+        "description": "Jade, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Mark Garrigus",
+        "nameRu": "Марк Пи Гарригас",
+        "staffId": 2845068,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2845068.jpg",
+        "description": "Home Mart Employee, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Mickey Gilmore",
+        "nameRu": "Мики Гилмор",
+        "staffId": 2983258,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2983258.jpg",
+        "description": "Street Thug, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Tom Granger",
+        "nameRu": "Томас Грэйнджер",
+        "staffId": 3111513,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3111513.jpg",
+        "description": "Beach Patron, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Elaine Victoria Grey",
+        "nameRu": "Элейн Виктория Грей",
+        "staffId": 2297795,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2297795.jpg",
+        "description": "Subway Passenger, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Mackenzie Hawe",
+        "nameRu": "Маккензи Хоу",
+        "staffId": 2312926,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2312926.jpg",
+        "description": "Girl on Bus, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Paul Held",
+        "nameRu": "Пол Хелд",
+        "staffId": 3439180,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3439180.jpg",
+        "description": "Head Waiter, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Joeyanna Hodnett",
+        "nameRu": "",
+        "staffId": 3604584,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3604584.jpg",
+        "description": "Girl on the Beach, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Rosemary Howard",
+        "nameRu": "Розмари Ховард",
+        "staffId": 1419232,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1419232.jpg",
+        "description": "Home Mart Customer, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Kimberly Howe",
+        "nameRu": "Кимберли Хоу",
+        "staffId": 2900469,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2900469.jpg",
+        "description": "Russian Patron, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Frankie Imbergamo",
+        "nameRu": "Фрэнки Имбергамо",
+        "staffId": 1174320,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1174320.jpg",
+        "description": "Homeowner, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Mike Jablon",
+        "nameRu": "Майк Джэблон",
+        "staffId": 2532885,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2532885.jpg",
+        "description": "Russian Businessman, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Felipe Jorge",
+        "nameRu": "Фелипе Хорхе",
+        "staffId": 3081457,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3081457.jpg",
+        "description": "Man with Baby, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Samantha Kelly",
+        "nameRu": "Саманта Келли",
+        "staffId": 1682982,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1682982.jpg",
+        "description": "Home Mart Customer, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Bobby Kenney",
+        "nameRu": "Бобби Кенни",
+        "staffId": 2289576,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2289576.jpg",
+        "description": "Home Mart Customer, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "J Parker Kent",
+        "nameRu": "Дж Паркер Кент",
+        "staffId": 2702834,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2702834.jpg",
+        "description": "Police Officer, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Jessica Kent",
+        "nameRu": "Джессика Кент",
+        "staffId": 3104181,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3104181.jpg",
+        "description": "Girl at Ballpark, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Jeffery Kincannon",
+        "nameRu": "Джеффри Кинкэннон",
+        "staffId": 2632160,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2632160.jpg",
+        "description": "Home Mart Family, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "David A. Kirsch",
+        "nameRu": "Дэвид А. Кирш",
+        "staffId": 2292782,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2292782.jpg",
+        "description": "Forklift Operator, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Sasha Kuznetsova",
+        "nameRu": "Саша Кузнецова",
+        "staffId": 2364774,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2364774.jpg",
+        "description": "Waitress, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Hashim Lafond",
+        "nameRu": "Хашим Лафон",
+        "staffId": 2907242,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2907242.jpg",
+        "description": "Carnival Patron, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Che Landon",
+        "nameRu": "Челси Лэндон",
+        "staffId": 2107167,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2107167.jpg",
+        "description": "Thief, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Henry Laun",
+        "nameRu": "Генри Лаун",
+        "staffId": 3488890,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3488890.jpg",
+        "description": "Bouncer, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Davide Leone",
+        "nameRu": "Давид Леоне",
+        "staffId": 3932025,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3932025.jpg",
+        "description": "Construction worker, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "John Joseph Lindsey",
+        "nameRu": "Джон Джозеф Линдси",
+        "staffId": 2923418,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2923418.jpg",
+        "description": "Customer at Store Robbery, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Isabel B. Lirag",
+        "nameRu": "Изабель Б. Лираг",
+        "staffId": 3266501,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3266501.jpg",
+        "description": "Girl at Carnival, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Frantz Louizia",
+        "nameRu": "Франц Луизиа",
+        "staffId": 5984948,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_5984948.jpg",
+        "description": "Carnival Patron, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Brianna Lynch",
+        "nameRu": "Брианна Линч",
+        "staffId": 3648112,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3648112.jpg",
+        "description": "Bartender, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Phyllis Lynn",
+        "nameRu": "Филлис Линн",
+        "staffId": 2335432,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2335432.jpg",
+        "description": "Softball Spectator, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Gwen MacKay",
+        "nameRu": "Гвен Маккэй",
+        "staffId": 2384361,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2384361.jpg",
+        "description": "Bus Traveler, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Alex Madera",
+        "nameRu": "Алекс Мадера",
+        "staffId": 1877220,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1877220.jpg",
+        "description": "Home Mart Customer, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Tom Mariano",
+        "nameRu": "Том Мариано",
+        "staffId": 731814,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_731814.jpg",
+        "description": "Gangster, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Robert Masiello",
+        "nameRu": "Роберт Мазиелло",
+        "staffId": 1194825,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1194825.jpg",
+        "description": "Home Mart Employee, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "J. Michael Mendoza",
+        "nameRu": "Х. Майкл Мендоса",
+        "staffId": 3347250,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3347250.jpg",
+        "description": "Pedestrian, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Kristina Mezzetti",
+        "nameRu": "Кристина Меццетти",
+        "staffId": 3056204,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3056204.jpg",
+        "description": "Model, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Gavin Monteiro",
+        "nameRu": "Гэвин Монтейро",
+        "staffId": 3562190,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3562190.jpg",
+        "description": "Kid on Street, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Bella Moore",
+        "nameRu": "",
+        "staffId": 4228882,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_4228882.jpg",
+        "description": "Carnival child, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Judy Nadel",
+        "nameRu": "Джуди Нэдель",
+        "staffId": 3422297,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3422297.jpg",
+        "description": "Child at Carnival, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Lance Norris",
+        "nameRu": "Лэнс Норрис",
+        "staffId": 30258,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_30258.jpg",
+        "description": "Butcher, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "David Sean O'Donnell",
+        "nameRu": "",
+        "staffId": 4741417,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_4741417.jpg",
+        "description": "Parent, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Peter Olejnik",
+        "nameRu": "Питер Олейник",
+        "staffId": 3443076,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3443076.jpg",
+        "description": "Russian Thug, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Joseph Oliveira",
+        "nameRu": "Джозеф Оливейра",
+        "staffId": 3324459,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3324459.jpg",
+        "description": "Pedestrian, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Richard Pacheco",
+        "nameRu": "Ричард Пачеко",
+        "staffId": 1805549,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1805549.jpg",
+        "description": "Home Mart Customer, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Chris Palermo",
+        "nameRu": "Крис Палермо",
+        "staffId": 2769694,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2769694.jpg",
+        "description": "Pedestrian, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Joseph Paolo",
+        "nameRu": "Джозеф Паоло",
+        "staffId": 2470499,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2470499.jpg",
+        "description": "Pedestrian, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Tracy Parris",
+        "nameRu": "",
+        "staffId": 3822061,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3822061.jpg",
+        "description": "HomeMart Employee, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Patrick Pitu",
+        "nameRu": "Патрик Питу",
+        "staffId": 727462,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_727462.jpg",
+        "description": "Albanian Kid, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Christopher S. Porter",
+        "nameRu": "Кристофер С. Портер",
+        "staffId": 1460090,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1460090.jpg",
+        "description": "Bus Passenger, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Kyle W. Porter",
+        "nameRu": "",
+        "staffId": 3439184,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3439184.jpg",
+        "description": "Waiter, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Diezel Ramos",
+        "nameRu": "Дизел Рамос",
+        "staffId": 2678383,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2678383.jpg",
+        "description": "Boston PD, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Meredith Prunty",
+        "nameRu": "Мередит Прунти",
+        "staffId": 2297783,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2297783.jpg",
+        "description": "Girl on Bus, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Alan Resnic",
+        "nameRu": "Алан Реснич",
+        "staffId": 1141624,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1141624.jpg",
+        "description": "Home Mart Customer, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Austin J. Ryan",
+        "nameRu": "Остин Дж. Райан",
+        "staffId": 3790678,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3790678.jpg",
+        "description": "Boy, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Luke Ryan",
+        "nameRu": "Люк Райан",
+        "staffId": 3879844,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3879844.jpg",
+        "description": "Boy in Park, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Chanty Sok",
+        "nameRu": "Шанти Сок",
+        "staffId": 1874365,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1874365.jpg",
+        "description": "Restaurant Patron, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "David Struffolino",
+        "nameRu": "Дэвид Струффолино",
+        "staffId": 2714711,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2714711.jpg",
+        "description": "Shopper, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Lino Tanaka",
+        "nameRu": "Лино Танака",
+        "staffId": 3443075,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3443075.jpg",
+        "description": "Jogger in the Park, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "John Tartaglia",
+        "nameRu": "Джон Тарталья",
+        "staffId": 435228,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_435228.jpg",
+        "description": "Singer, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Jillian Taylor",
+        "nameRu": "Джиллиан Тейлор",
+        "staffId": 1635714,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1635714.jpg",
+        "description": "Bus Stop Pedestrian, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Beau Turgeon",
+        "nameRu": "",
+        "staffId": 4143555,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_4143555.jpg",
+        "description": "Carnival Patron, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Kayla Rae Vesce",
+        "nameRu": "",
+        "staffId": 4716192,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_4716192.jpg",
+        "description": "Model, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Roman Vangeli",
+        "nameRu": "Роман Вангели",
+        "staffId": 3337250,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3337250.jpg",
+        "description": "Model, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Billy «V» Vigeant",
+        "nameRu": "Билли «Ви» Вижант",
+        "staffId": 2167315,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2167315.jpg",
+        "description": "Power & Electric Guy, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Jan Waldman",
+        "nameRu": "Ян Уолдман",
+        "staffId": 3439190,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3439190.jpg",
+        "description": "Carnival Attendee, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Christopher Weigel",
+        "nameRu": "Кристофер Вейгель",
+        "staffId": 3937049,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3937049.jpg",
+        "description": "Russian Patron, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Charlie Weston",
+        "nameRu": "",
+        "staffId": 5269997,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_5269997.jpg",
+        "description": "Russian Thug, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Amy Whalen",
+        "nameRu": "Эми Уэйлен",
+        "staffId": 3454006,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3454006.jpg",
+        "description": "Pedestrian, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Precious White",
+        "nameRu": "Прешес Уайт",
+        "staffId": 2978752,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2978752.jpg",
+        "description": "Girl at Carnival, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Dora Winifred",
+        "nameRu": "Дора Секстон",
+        "staffId": 3722199,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3722199.jpg",
+        "description": "Pedestrian, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Christopher Wyman",
+        "nameRu": "",
+        "staffId": 5756657,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_5756657.jpg",
+        "description": "Boston Swat, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Alex Ziwak",
+        "nameRu": "Алекс Зивак",
+        "staffId": 1553056,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1553056.jpg",
+        "description": "Russian Heavy / Bouncer, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Todd Black",
+        "nameRu": "Тодд Блэк",
+        "staffId": 32793,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_32793.jpg",
+        "description": null,
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Jason Blumenthal",
+        "nameRu": "Джейсон Блюменталь",
+        "staffId": 32794,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_32794.jpg",
+        "description": null,
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Tony Eldridge",
+        "nameRu": "Тони Элдридж",
+        "staffId": 7126,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_7126.jpg",
+        "description": null,
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Mace Neufeld",
+        "nameRu": "Мэйс Нойфельд",
+        "staffId": 24681,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_24681.jpg",
+        "description": null,
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Alex Siskin",
+        "nameRu": "Алекс Сискин",
+        "staffId": 25726,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_25726.jpg",
+        "description": null,
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Michael Sloan",
+        "nameRu": "Майкл Слоун",
+        "staffId": 427422,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_427422.jpg",
+        "description": null,
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Steve Tisch",
+        "nameRu": "Стив Тиш",
+        "staffId": 14914,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_14914.jpg",
+        "description": null,
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Denzel Washington",
+        "nameRu": "Дензел Вашингтон",
+        "staffId": 10134,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_10134.jpg",
+        "description": null,
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "David J. Bloomfield",
+        "nameRu": "Дэвид Дж. Блумфилд",
+        "staffId": 698215,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_698215.jpg",
+        "description": "исполнительный продюсер",
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Lance Johnson",
+        "nameRu": "Лэнс Джонсон",
+        "staffId": 397303,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_397303.jpg",
+        "description": "сопродюсер",
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Kathlene Samick",
+        "nameRu": "Кэтлин Сэмик",
+        "staffId": 1618751,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1618751.jpg",
+        "description": "ассоциированный продюсер",
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Ezra Swerdlow",
+        "nameRu": "Эзра Свердлоу",
+        "staffId": 34746,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_34746.jpg",
+        "description": "исполнительный продюсер",
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Ben Waisbren",
+        "nameRu": "Бен Уайсбрен",
+        "staffId": 1077256,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1077256.jpg",
+        "description": "исполнительный продюсер",
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "",
+        "nameRu": "Всеволод Кузнецов",
+        "staffId": 1616407,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1616407.jpg",
+        "description": null,
+        "professionKey": "VOICE_DIRECTOR",
+        "professionText": "Режиссеры дубляжа"
+      },
+      {
+        "nameEn": "",
+        "nameRu": "Андрей Шепелёв",
+        "staffId": 2788921,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2788921.jpg",
+        "description": null,
+        "professionKey": "TRANSLATOR",
+        "professionText": "Переводчики"
+      },
+      {
+        "nameEn": "Richard Wenk",
+        "nameRu": "Ричард Уэнк",
+        "staffId": 27645,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_27645.jpg",
+        "description": null,
+        "professionKey": "WRITER",
+        "professionText": "Сценаристы"
+      },
+      {
+        "nameEn": "Michael Sloan",
+        "nameRu": "Майкл Слоун",
+        "staffId": 427422,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_427422.jpg",
+        "description": null,
+        "professionKey": "WRITER",
+        "professionText": "Сценаристы"
+      },
+      {
+        "nameEn": "Richard Lindheim",
+        "nameRu": "Ричард Линдхейм",
+        "staffId": 1780297,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1780297.jpg",
+        "description": null,
+        "professionKey": "WRITER",
+        "professionText": "Сценаристы"
+      },
+      {
+        "nameEn": "Mauro Fiore",
+        "nameRu": "Мауро Фиоре",
+        "staffId": 611668,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_611668.jpg",
+        "description": null,
+        "professionKey": "OPERATOR",
+        "professionText": "Операторы"
+      },
+      {
+        "nameEn": "Harry Gregson-Williams",
+        "nameRu": "Гарри Грегсон-Уильямс",
+        "staffId": 608582,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_608582.jpg",
+        "description": null,
+        "professionKey": "COMPOSER",
+        "professionText": "Композиторы"
+      },
+      {
+        "nameEn": "Naomi Shohan",
+        "nameRu": "Наоми Шохан",
+        "staffId": 152418,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_152418.jpg",
+        "description": "постановщик",
+        "professionKey": "DESIGN",
+        "professionText": "Художники"
+      },
+      {
+        "nameEn": "David Lazan",
+        "nameRu": "Дэвид Лазан",
+        "staffId": 1987241,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1987241.jpg",
+        "description": null,
+        "professionKey": "DESIGN",
+        "professionText": "Художники"
+      },
+      {
+        "nameEn": "David C. Robinson",
+        "nameRu": "Дэвид С. Робинсон",
+        "staffId": 1986221,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1986221.jpg",
+        "description": "по костюмам",
+        "professionKey": "DESIGN",
+        "professionText": "Художники"
+      },
+      {
+        "nameEn": "Leslie E. Rollins",
+        "nameRu": "Лесли Е. Роллинз",
+        "staffId": 1986404,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1986404.jpg",
+        "description": "по декорациям",
+        "professionKey": "DESIGN",
+        "professionText": "Художники"
+      },
+      {
+        "nameEn": "John Refoua",
+        "nameRu": "Джон Рефуа",
+        "staffId": 1813202,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1813202.jpg",
+        "description": null,
+        "professionKey": "EDITOR",
+        "professionText": "Монтажеры"
+      }
+    ],
+    "user": 1,
+    "genres": [
+      1,
+      5,
+      7
+    ],
+    "countries": [
+      1
+    ],
+    "directors": [
+      10
+    ],
+    "writers": [
+      4,
+      5,
+      6
+    ],
+    "users_like": []
+  }
+},
+{
+  "model": "movies.movie",
+  "pk": 15,
+  "fields": {
+    "title": "Заложница",
+    "title_original": "Taken",
+    "year": 2007,
+    "duration": 90,
+    "kinopoisk_id": 276376,
+    "kinopoisk_url": "https://www.kinopoisk.ru/film/276376/",
+    "slug": "zalozhnitsa_276376",
+    "poster": "images/2024/09/29/276376.jpg",
+    "description": "Молодую девушку похитили во время туристического отдыха. Её отец пускается в опасное приключение-спасение, чтобы вернуть дочь и наказать виновных лично.",
+    "created": "2024-09-29T20:03:53.524Z",
+    "movie_json": {
+      "type": "FILM",
+      "year": 2007,
+      "has3D": false,
+      "genres": [
+        {
+          "genre": "триллер"
+        },
+        {
+          "genre": "криминал"
+        },
+        {
+          "genre": "боевик"
+        }
+      ],
+      "imdbId": null,
+      "nameEn": null,
+      "nameRu": "Заложница",
+      "serial": false,
+      "slogan": "Они забрали его дочь. Он заберёт их жизни",
+      "webUrl": "https://www.kinopoisk.ru/film/276376/",
+      "endYear": null,
+      "hasImax": false,
+      "logoUrl": "https://avatars.mds.yandex.net/get-ott/2439731/2a00000172551ad38ff44fa612e9239ed5cf/orig",
+      "coverUrl": "https://avatars.mds.yandex.net/get-ott/223007/2a0000017c0735129da86e787b58ba586d7a/orig",
+      "lastSync": "2024-09-03T14:09:21.203307",
+      "completed": false,
+      "countries": [
+        {
+          "country": "США"
+        },
+        {
+          "country": "Франция"
+        },
+        {
+          "country": "Великобритания"
+        }
+      ],
+      "posterUrl": "https://kinopoiskapiunofficial.tech/images/posters/kp/276376.jpg",
+      "shortFilm": false,
+      "startYear": null,
+      "filmLength": 90,
+      "ratingImdb": 7.7,
+      "ratingMpaa": "pg13",
+      "description": "Молодую девушку похитили во время туристического отдыха. Её отец пускается в опасное приключение-спасение, чтобы вернуть дочь и наказать виновных лично.",
+      "kinopoiskId": 276376,
+      "ratingAwait": null,
+      "nameOriginal": "Taken",
+      "reviewsCount": 340,
+      "kinopoiskHDId": "4141d789899b7c6da6c00be22ffcf444",
+      "ratingAgeLimits": "age18",
+      "ratingKinopoisk": 7.9,
+      "ratingRfCritics": 100.0,
+      "editorAnnotation": null,
+      "posterUrlPreview": "https://kinopoiskapiunofficial.tech/images/posters/kp_small/276376.jpg",
+      "productionStatus": null,
+      "ratingAwaitCount": 0,
+      "ratingGoodReview": 91.0,
+      "shortDescription": "Кровавая одиссея бывшего спецагента по Парижу в поисках похищенной дочери. Виртуозный боевик Люка Бессона",
+      "ratingFilmCritics": 5.8,
+      "isTicketsAvailable": false,
+      "ratingImdbVoteCount": 641109,
+      "ratingKinopoiskVoteCount": 255667,
+      "ratingRfCriticsVoteCount": 5,
+      "ratingGoodReviewVoteCount": 285,
+      "ratingFilmCriticsVoteCount": 178
+    },
+    "movie_staff_json": [
+      {
+        "nameEn": "Pierre Morel",
+        "nameRu": "Пьер Морель",
+        "staffId": 441686,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_441686.jpg",
+        "description": null,
+        "professionKey": "DIRECTOR",
+        "professionText": "Режиссеры"
+      },
+      {
+        "nameEn": "Liam Neeson",
+        "nameRu": "Лиам Нисон",
+        "staffId": 6534,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_6534.jpg",
+        "description": "Bryan Mills",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Maggie Grace",
+        "nameRu": "Мэгги Грэйс",
+        "staffId": 462509,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_462509.jpg",
+        "description": "Kim",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Famke Janssen",
+        "nameRu": "Фамке Янссен",
+        "staffId": 8216,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_8216.jpg",
+        "description": "Lenore",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Olivier Rabourdin",
+        "nameRu": "Оливье Рабурден",
+        "staffId": 24562,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_24562.jpg",
+        "description": "Jean-Claude",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Leland Orser",
+        "nameRu": "Лиленд Орсер",
+        "staffId": 25308,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_25308.jpg",
+        "description": "Sam",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Xander Berkeley",
+        "nameRu": "Ксандер Беркли",
+        "staffId": 11649,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_11649.jpg",
+        "description": "Stuart",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Holly Valance",
+        "nameRu": "Холли Вэлэнс",
+        "staffId": 584251,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_584251.jpg",
+        "description": "Sheerah",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Jon Gries",
+        "nameRu": "Джон Грайз",
+        "staffId": 31971,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_31971.jpg",
+        "description": "Casey",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "David Warshofsky",
+        "nameRu": "Дэвид Уоршофски",
+        "staffId": 25405,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_25405.jpg",
+        "description": "Bernie",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Gérard Watkins",
+        "nameRu": "Жерар Уоткинс",
+        "staffId": 132435,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_132435.jpg",
+        "description": "St-Clair",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Katie Cassidy",
+        "nameRu": "Кэти Кэссиди",
+        "staffId": 723057,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_723057.jpg",
+        "description": "Amanda",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Marc Amyot",
+        "nameRu": "Марк Амио",
+        "staffId": 455,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_455.jpg",
+        "description": "Pharmacist",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Arben Bajraktaraj",
+        "nameRu": "Арбен Байрактарай",
+        "staffId": 437518,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_437518.jpg",
+        "description": "Marko",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Radivoje Bukvic",
+        "nameRu": "Радивойе Буквич",
+        "staffId": 487602,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_487602.jpg",
+        "description": "Anton (в титрах: Rasha Bukvic)",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Mathieu Busson",
+        "nameRu": "Матье Бюссон",
+        "staffId": 283700,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_283700.jpg",
+        "description": "Undercover Agent",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Michel Flash",
+        "nameRu": "Мишель Флэш",
+        "staffId": 1719809,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1719809.jpg",
+        "description": "Gio",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Nicolas Giraud",
+        "nameRu": "Николя Жиро",
+        "staffId": 878842,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_878842.jpg",
+        "description": "Peter",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Rubens Hyka",
+        "nameRu": "Рубенс Хука",
+        "staffId": 1719810,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1719810.jpg",
+        "description": "Leka",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Camille Japy",
+        "nameRu": "Камилла Жапи",
+        "staffId": 250044,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_250044.jpg",
+        "description": "Isabelle",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Valentin Kalaj",
+        "nameRu": "Валентин Калай",
+        "staffId": 1664530,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1664530.jpg",
+        "description": "Vinz",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Fani Kolarova",
+        "nameRu": "Фани Коларова",
+        "staffId": 596924,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_596924.jpg",
+        "description": "Prostitute",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Goran Kostic",
+        "nameRu": "Горан Костич",
+        "staffId": 573833,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_573833.jpg",
+        "description": "Gregor",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Christophe Kourotchkine",
+        "nameRu": "Кристоф Курочкин",
+        "staffId": 88569,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_88569.jpg",
+        "description": "Gilles",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Edwin Krüger",
+        "nameRu": "Эдвин Крюгер",
+        "staffId": 387670,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_387670.jpg",
+        "description": "Jean-Claude's Assistant",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Jalil Naciri",
+        "nameRu": "Джалил Насири",
+        "staffId": 253701,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_253701.jpg",
+        "description": "Ali",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Anka Radici",
+        "nameRu": "Анка Радичи",
+        "staffId": 1289712,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1289712.jpg",
+        "description": "Ingrid",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Nathan Rippy",
+        "nameRu": "Нэйтан Риппи",
+        "staffId": 1556300,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1556300.jpg",
+        "description": "Victor",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Héléna Soubeyrand",
+        "nameRu": "Элена Субейран",
+        "staffId": 1208785,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1208785.jpg",
+        "description": "Girl with the Jacket",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Tommy Spahija",
+        "nameRu": "Томми Спахиджа",
+        "staffId": 1719811,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1719811.jpg",
+        "description": "Nezir",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Anatole Taubman",
+        "nameRu": "Анатоль Таубман",
+        "staffId": 23243,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_23243.jpg",
+        "description": "Dardan",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Bertrand Treuil",
+        "nameRu": "Бертран Трюиль",
+        "staffId": 126890,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_126890.jpg",
+        "description": "Taxi Driver",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Opender Singh",
+        "nameRu": "Опендер Сингх",
+        "staffId": 228858,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_228858.jpg",
+        "description": "Singh",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Christy Miller",
+        "nameRu": "Кристи Миллер",
+        "staffId": 1106994,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1106994.jpg",
+        "description": "Paper Shop Clerk",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "George Hertzberg",
+        "nameRu": "Джордж Хертцберг",
+        "staffId": 63094,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_63094.jpg",
+        "description": "Security - Stuart's Mansion",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Nabil Massad",
+        "nameRu": "Набил Массад",
+        "staffId": 41777,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_41777.jpg",
+        "description": "Sheik Raman",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Ivette González",
+        "nameRu": "Иветта Гонсалес",
+        "staffId": 96317,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_96317.jpg",
+        "description": "Maid (в титрах: Ivette Gonzalez)",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Thierry Stein",
+        "nameRu": "Тьерри Стейн",
+        "staffId": 1094230,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1094230.jpg",
+        "description": "Physionomiste",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Don Abernathy",
+        "nameRu": "Дон Абернати",
+        "staffId": 461383,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_461383.jpg",
+        "description": "Airport Traveler, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Whitney Adams",
+        "nameRu": "",
+        "staffId": 5196417,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_5196417.jpg",
+        "description": "Party Guest, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Affif Ben Badra",
+        "nameRu": "Аффиф Бен Бадра",
+        "staffId": 615434,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_615434.jpg",
+        "description": "Albanian Guard, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Sophie Chamoux",
+        "nameRu": "Софи Шаму",
+        "staffId": 1549576,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1549576.jpg",
+        "description": "Bit Part, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Healthy Emmie",
+        "nameRu": "",
+        "staffId": 7067680,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_7067680.jpg",
+        "description": "Parisan Tourist, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Michael Finn",
+        "nameRu": "Майкл Финн",
+        "staffId": 1556141,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1556141.jpg",
+        "description": "Airport Pilot, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Dan Flood",
+        "nameRu": "",
+        "staffId": 4002582,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_4002582.jpg",
+        "description": "Airport Traveler, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Katrina Forrest",
+        "nameRu": "Катрина Форрест",
+        "staffId": 2357069,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2357069.jpg",
+        "description": "Maid, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Jean-Yves Freyburger",
+        "nameRu": "Жан-Ив Фрейбурже",
+        "staffId": 588669,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_588669.jpg",
+        "description": "Waiter, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Steve Vanousek",
+        "nameRu": "Стив Ванусек",
+        "staffId": 1593218,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1593218.jpg",
+        "description": "Party Guest, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Spencer Kayden",
+        "nameRu": "Спенсер Кэйден",
+        "staffId": 44887,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_44887.jpg",
+        "description": "Mrs. Emory - Call Girl, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Alexandra Kedzierska",
+        "nameRu": "",
+        "staffId": 1967923,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1967923.jpg",
+        "description": "Call Girl, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Elton LeBlanc",
+        "nameRu": "Элтон ЛеБлан",
+        "staffId": 739817,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_739817.jpg",
+        "description": "Man in Wrong Hospital, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Alban Lenoir",
+        "nameRu": "Альбан Ленуар",
+        "staffId": 729227,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_729227.jpg",
+        "description": "Security Agent, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Mylène Ragon",
+        "nameRu": "Милен Рагон",
+        "staffId": 2255091,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2255091.jpg",
+        "description": "Prostitute, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Christina Alice Schmidt",
+        "nameRu": "",
+        "staffId": 2954958,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2954958.jpg",
+        "description": "Party Friend, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Tamara Witmer",
+        "nameRu": "Тамара Уитмер",
+        "staffId": 1170942,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1170942.jpg",
+        "description": "Prostitute, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Luc Besson",
+        "nameRu": "Люк Бессон",
+        "staffId": 24505,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_24505.jpg",
+        "description": "в титрах не указан",
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Didier Hoarau",
+        "nameRu": "Дидье Хорау",
+        "staffId": 24543,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_24543.jpg",
+        "description": "исполнительный продюсер",
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Franck Lebreton",
+        "nameRu": "Франк Лебретон",
+        "staffId": 479028,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_479028.jpg",
+        "description": "линейный продюсер (в титрах: frank lebreton)",
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Michael Mandaville",
+        "nameRu": "Мишель Мандавилль",
+        "staffId": 104458,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_104458.jpg",
+        "description": "линейный продюсер: США (в титрах: Michaël Mandaville)",
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "",
+        "nameRu": "Всеволод Кузнецов",
+        "staffId": 1616407,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1616407.jpg",
+        "description": null,
+        "professionKey": "VOICE_DIRECTOR",
+        "professionText": "Режиссеры дубляжа"
+      },
+      {
+        "nameEn": "",
+        "nameRu": "Ксения Ишимцева",
+        "staffId": 4164474,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_4164474.jpg",
+        "description": null,
+        "professionKey": "TRANSLATOR",
+        "professionText": "Переводчики"
+      },
+      {
+        "nameEn": "Luc Besson",
+        "nameRu": "Люк Бессон",
+        "staffId": 24505,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_24505.jpg",
+        "description": null,
+        "professionKey": "WRITER",
+        "professionText": "Сценаристы"
+      },
+      {
+        "nameEn": "Robert Mark Kamen",
+        "nameRu": "Роберт Марк Кэмен",
+        "staffId": 38147,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_38147.jpg",
+        "description": null,
+        "professionKey": "WRITER",
+        "professionText": "Сценаристы"
+      },
+      {
+        "nameEn": "Michel Abramowicz",
+        "nameRu": "Мишель Абрамович",
+        "staffId": 278446,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_278446.jpg",
+        "description": null,
+        "professionKey": "OPERATOR",
+        "professionText": "Операторы"
+      },
+      {
+        "nameEn": "Nathaniel Mechaly",
+        "nameRu": "Натэниел Мекали",
+        "staffId": 632708,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_632708.jpg",
+        "description": null,
+        "professionKey": "COMPOSER",
+        "professionText": "Композиторы"
+      },
+      {
+        "nameEn": "Hugues Tissandier",
+        "nameRu": "Юг Тиссандье",
+        "staffId": 1999076,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1999076.jpg",
+        "description": "постановщик",
+        "professionKey": "DESIGN",
+        "professionText": "Художники"
+      },
+      {
+        "nameEn": "Gilles Boillot",
+        "nameRu": "Жиль Буалло",
+        "staffId": 2008168,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2008168.jpg",
+        "description": null,
+        "professionKey": "DESIGN",
+        "professionText": "Художники"
+      },
+      {
+        "nameEn": "Corinne Bruand",
+        "nameRu": "Корина Бруан",
+        "staffId": 2010969,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2010969.jpg",
+        "description": "по костюмам",
+        "professionKey": "DESIGN",
+        "professionText": "Художники"
+      },
+      {
+        "nameEn": "Olivier Bériot",
+        "nameRu": "Оливье Берио",
+        "staffId": 2001314,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2001314.jpg",
+        "description": "по костюмам",
+        "professionKey": "DESIGN",
+        "professionText": "Художники"
+      },
+      {
+        "nameEn": "Alain Pitrel",
+        "nameRu": "Ален Питрель",
+        "staffId": 1192736,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1192736.jpg",
+        "description": "по декорациям",
+        "professionKey": "DESIGN",
+        "professionText": "Художники"
+      },
+      {
+        "nameEn": "Frédéric Thoraval",
+        "nameRu": "Фредерик Тораваль",
+        "staffId": 1986147,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1986147.jpg",
+        "description": null,
+        "professionKey": "EDITOR",
+        "professionText": "Монтажеры"
+      }
+    ],
+    "user": 1,
+    "genres": [
+      1,
+      5,
+      7
+    ],
+    "countries": [
+      1,
+      2,
+      4
+    ],
+    "directors": [
+      11
+    ],
+    "writers": [
+      7,
+      8
+    ],
+    "users_like": []
+  }
+},
+{
+  "model": "movies.movie",
+  "pk": 16,
+  "fields": {
+    "title": "Коммандос",
+    "title_original": "Commando",
+    "year": 1985,
+    "duration": 87,
+    "kinopoisk_id": 2238,
+    "kinopoisk_url": "https://www.kinopoisk.ru/film/2238/",
+    "slug": "kommandos_2238",
+    "poster": "images/2024/09/29/2238.jpg",
+    "description": "Бывший командир спецотряда, полковник в отставке Джон Матрикс, живёт в большом доме вдали от города вместе со своей 11-летней дочерью Дженни, пока однажды её не похищает бывший подчинённый Джона. Теперь бывшим сослуживцам придётся несладко.",
+    "created": "2024-09-29T20:04:41.835Z",
+    "movie_json": {
+      "type": "FILM",
+      "year": 1985,
+      "has3D": false,
+      "genres": [
+        {
+          "genre": "триллер"
+        },
+        {
+          "genre": "приключения"
+        },
+        {
+          "genre": "боевик"
+        }
+      ],
+      "imdbId": "tt0088944",
+      "nameEn": null,
+      "nameRu": "Коммандос",
+      "serial": false,
+      "slogan": "Somewhere... somehow... someone's going to pay!",
+      "webUrl": "https://www.kinopoisk.ru/film/2238/",
+      "endYear": null,
+      "hasImax": false,
+      "logoUrl": null,
+      "coverUrl": "https://avatars.mds.yandex.net/get-ott/212840/2a0000017c2d5cd42936e700274f6c005e50/orig",
+      "lastSync": "2024-09-03T16:11:13.926295",
+      "completed": false,
+      "countries": [
+        {
+          "country": "США"
+        }
+      ],
+      "posterUrl": "https://kinopoiskapiunofficial.tech/images/posters/kp/2238.jpg",
+      "shortFilm": false,
+      "startYear": null,
+      "filmLength": 87,
+      "ratingImdb": 6.7,
+      "ratingMpaa": "r",
+      "description": "Бывший командир спецотряда, полковник в отставке Джон Матрикс, живёт в большом доме вдали от города вместе со своей 11-летней дочерью Дженни, пока однажды её не похищает бывший подчинённый Джона. Теперь бывшим сослуживцам придётся несладко.",
+      "kinopoiskId": 2238,
+      "ratingAwait": null,
+      "nameOriginal": "Commando",
+      "reviewsCount": 77,
+      "kinopoiskHDId": "456b0ff21f3abb87a3525f7baffa9dee",
+      "ratingAgeLimits": "age18",
+      "ratingKinopoisk": 7.4,
+      "ratingRfCritics": null,
+      "editorAnnotation": null,
+      "posterUrlPreview": "https://kinopoiskapiunofficial.tech/images/posters/kp_small/2238.jpg",
+      "productionStatus": null,
+      "ratingAwaitCount": 0,
+      "ratingGoodReview": 98.0,
+      "shortDescription": "Бывший спецназовец спасает дочь из лап головорезов. Эпический боевик из 1980-х с Арнольдом Шварценеггером",
+      "ratingFilmCritics": 5.8,
+      "isTicketsAvailable": false,
+      "ratingImdbVoteCount": 176931,
+      "ratingKinopoiskVoteCount": 78404,
+      "ratingRfCriticsVoteCount": 0,
+      "ratingGoodReviewVoteCount": 73,
+      "ratingFilmCriticsVoteCount": 36
+    },
+    "movie_staff_json": [
+      {
+        "nameEn": "Mark L. Lester",
+        "nameRu": "Марк Л. Лестер",
+        "staffId": 23293,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_23293.jpg",
+        "description": null,
+        "professionKey": "DIRECTOR",
+        "professionText": "Режиссеры"
+      },
+      {
+        "nameEn": "Arnold Schwarzenegger",
+        "nameRu": "Арнольд Шварценеггер",
+        "staffId": 6264,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_6264.jpg",
+        "description": "Matrix",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Rae Dawn Chong",
+        "nameRu": "Рэй Дон Чонг",
+        "staffId": 18572,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_18572.jpg",
+        "description": "Cindy",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Dan Hedaya",
+        "nameRu": "Дэн Хедайя",
+        "staffId": 8566,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_8566.jpg",
+        "description": "Arius",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Vernon Wells",
+        "nameRu": "Вернон Уэллс",
+        "staffId": 54347,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_54347.jpg",
+        "description": "Bennett",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "James Olson",
+        "nameRu": "Джеймс Олсон",
+        "staffId": 152953,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_152953.jpg",
+        "description": "Major General Franklin Kirby",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "David Patrick Kelly",
+        "nameRu": "Дэвид Патрик Келли",
+        "staffId": 17476,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_17476.jpg",
+        "description": "Sully",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Alyssa Milano",
+        "nameRu": "Алисса Милано",
+        "staffId": 32002,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_32002.jpg",
+        "description": "Jenny",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Bill Duke",
+        "nameRu": "Билл Дьюк",
+        "staffId": 1731,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1731.jpg",
+        "description": "Cooke",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Drew Snyder",
+        "nameRu": "Дрю Снайдер",
+        "staffId": 9377,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_9377.jpg",
+        "description": "Lawson",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Sharon Wyatt",
+        "nameRu": "Шэрон Уайатт",
+        "staffId": 60691,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_60691.jpg",
+        "description": "Leslie",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Michael DeLano",
+        "nameRu": "Майкл ДеЛано",
+        "staffId": 49349,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_49349.jpg",
+        "description": "Forrestal",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Bob Minor",
+        "nameRu": "Боб Майнор",
+        "staffId": 58269,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_58269.jpg",
+        "description": "Jackson",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Michael Adams",
+        "nameRu": "Майкл Адамс",
+        "staffId": 110270,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_110270.jpg",
+        "description": "Harris (в титрах: Mike Adams)",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Gary Carlos Cervantes",
+        "nameRu": "Гэри Сервантес",
+        "staffId": 24488,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_24488.jpg",
+        "description": "Diaz (в титрах: Carlos Cervantes)",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Lenny Juliano",
+        "nameRu": "Ленни Джулиано",
+        "staffId": 18753,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_18753.jpg",
+        "description": "Soldier",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Charles Meshack",
+        "nameRu": "Чарльз Мешак",
+        "staffId": 121244,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_121244.jpg",
+        "description": "Henriques",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Chelsea Field",
+        "nameRu": "Челси Филд",
+        "staffId": 71671,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_71671.jpg",
+        "description": "Vicky the Western Flight Attendant",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Julie Hayek",
+        "nameRu": "Джули Хайек",
+        "staffId": 152954,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_152954.jpg",
+        "description": "Susan the Western Flight Attendant",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Hank Calia",
+        "nameRu": "Хэнк Калиа",
+        "staffId": 80635,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_80635.jpg",
+        "description": "Latin Man",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Walter Scott",
+        "nameRu": "Уолтер Скотт",
+        "staffId": 76055,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_76055.jpg",
+        "description": "Cates",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Greg Wayne Elam",
+        "nameRu": "Грег Уэйн Элам",
+        "staffId": 20716,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_20716.jpg",
+        "description": "Biggs (в титрах: Gregory W. Elam)",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "George Fisher",
+        "nameRu": "Джордж Фишер",
+        "staffId": 8614,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_8614.jpg",
+        "description": "Mall Security Guard",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Phil Adams",
+        "nameRu": "Фил Эдамс",
+        "staffId": 149470,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_149470.jpg",
+        "description": "Officer in Galleria",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Ava Cadell",
+        "nameRu": "Ава Каделл",
+        "staffId": 73494,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_73494.jpg",
+        "description": "Girl in Bed at Motel",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Mikul Robins",
+        "nameRu": "Микул Робинс",
+        "staffId": 92709,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_92709.jpg",
+        "description": "Boy in Bed at Motel",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Branscombe Richmond",
+        "nameRu": "Брэнскомб Ричмонд",
+        "staffId": 39537,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_39537.jpg",
+        "description": "Vega",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Matt Landers",
+        "nameRu": "Мэтт Лэндерс",
+        "staffId": 7906,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_7906.jpg",
+        "description": "Fred",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Peter DuPont",
+        "nameRu": "Питер ДюПон",
+        "staffId": 116216,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_116216.jpg",
+        "description": "Daryl",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Tom Simmons",
+        "nameRu": "Том Симмонс",
+        "staffId": 57744,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_57744.jpg",
+        "description": "Kirby's Driver",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Bill Paxton",
+        "nameRu": "Билл Пэкстон",
+        "staffId": 985,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_985.jpg",
+        "description": "Intercept Officer",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Richard D. Reich",
+        "nameRu": "Ричард Ройс",
+        "staffId": 152955,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_152955.jpg",
+        "description": "Intercept Officer (в титрах: Richard Royce)",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "John Reyes",
+        "nameRu": "Джон Рейс",
+        "staffId": 152956,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_152956.jpg",
+        "description": "Val Verde Heavy",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Billy Cardenas",
+        "nameRu": "Билли Карденас",
+        "staffId": 152957,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_152957.jpg",
+        "description": "Val Verde Heavy",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Eddie Reyes",
+        "nameRu": "Эдди Рейс",
+        "staffId": 152958,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_152958.jpg",
+        "description": "Val Verde Heavy (в титрах: Edward Reyes)",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Vivian Daily",
+        "nameRu": "Вивиан Дэйли",
+        "staffId": 152959,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_152959.jpg",
+        "description": "Woman Officer",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Thomas Rosales Jr.",
+        "nameRu": "Томас Розалес мл.",
+        "staffId": 2965,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2965.jpg",
+        "description": "Young Guerrilla",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Ronald C. McCarty",
+        "nameRu": "Рональд С. МакКарти",
+        "staffId": 152960,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_152960.jpg",
+        "description": "Guerrilla",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Jim Painter",
+        "nameRu": "Джим Пэйнтер",
+        "staffId": 123267,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_123267.jpg",
+        "description": "Police Officer",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Tony Brubaker",
+        "nameRu": "Тони Брубэйкер",
+        "staffId": 77628,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_77628.jpg",
+        "description": "Man Arius, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Nick Dimitri",
+        "nameRu": "Ник Дмитрий",
+        "staffId": 79176,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_79176.jpg",
+        "description": "Guerrilla Guarding Plane, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Larry Holt",
+        "nameRu": "Ларри Холт",
+        "staffId": 85368,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_85368.jpg",
+        "description": "2nd Mall Security Guard, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Danny Nero",
+        "nameRu": "Дэнни Неро",
+        "staffId": 144442,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_144442.jpg",
+        "description": "Police Officer, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Rick Sawaya",
+        "nameRu": "Рик Савайя",
+        "staffId": 146794,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_146794.jpg",
+        "description": "Island Guerrilla, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Adrian Tafoya",
+        "nameRu": "Адриан Тафоя",
+        "staffId": 683849,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_683849.jpg",
+        "description": "Commuter in Airport, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Fernando Verdugo",
+        "nameRu": "Фернандо Вердуго",
+        "staffId": 139626,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_139626.jpg",
+        "description": "Airport Commuter, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Dick Warlock",
+        "nameRu": "Дик Уорлок",
+        "staffId": 1959709,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1959709.jpg",
+        "description": "Officer in Mall, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Tom Willett",
+        "nameRu": "Том Виллетт",
+        "staffId": 71277,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_71277.jpg",
+        "description": "Airport Commuter, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Stephanie Brody",
+        "nameRu": "Стефани Броди",
+        "staffId": 152961,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_152961.jpg",
+        "description": "ассоциированный сопродюсер",
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Robert Kosberg",
+        "nameRu": "Роберт Косберг",
+        "staffId": 23325,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_23325.jpg",
+        "description": "ассоциированный сопродюсер",
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Jeph Loeb",
+        "nameRu": "Джеф Лоуб",
+        "staffId": 68463,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_68463.jpg",
+        "description": "ассоциированный продюсер (в титрах: joseph loeb iii)",
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Joel Silver",
+        "nameRu": "Джоэл Силвер",
+        "staffId": 1790,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1790.jpg",
+        "description": "produced by",
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Matthew Weisman",
+        "nameRu": "Мэттью Уайсмен",
+        "staffId": 68464,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_68464.jpg",
+        "description": "ассоциированный продюсер",
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Jeph Loeb",
+        "nameRu": "Джеф Лоуб",
+        "staffId": 68463,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_68463.jpg",
+        "description": "история",
+        "professionKey": "WRITER",
+        "professionText": "Сценаристы"
+      },
+      {
+        "nameEn": "Matthew Weisman",
+        "nameRu": "Мэттью Уайсмен",
+        "staffId": 68464,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_68464.jpg",
+        "description": "история",
+        "professionKey": "WRITER",
+        "professionText": "Сценаристы"
+      },
+      {
+        "nameEn": "Steven E. de Souza",
+        "nameRu": "Стивен Е. де Соуза",
+        "staffId": 31539,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_31539.jpg",
+        "description": "история",
+        "professionKey": "WRITER",
+        "professionText": "Сценаристы"
+      },
+      {
+        "nameEn": "Matthew F. Leonetti",
+        "nameRu": "Мэттью Ф. Леонетти",
+        "staffId": 328992,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_328992.jpg",
+        "description": null,
+        "professionKey": "OPERATOR",
+        "professionText": "Операторы"
+      },
+      {
+        "nameEn": "James Horner",
+        "nameRu": "Джеймс Хорнер",
+        "staffId": 163573,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_163573.jpg",
+        "description": null,
+        "professionKey": "COMPOSER",
+        "professionText": "Композиторы"
+      },
+      {
+        "nameEn": "John Vallone",
+        "nameRu": "Джон Валлоне",
+        "staffId": 144238,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_144238.jpg",
+        "description": "постановщик",
+        "professionKey": "DESIGN",
+        "professionText": "Художники"
+      },
+      {
+        "nameEn": "Robert Gould",
+        "nameRu": "Роберт Гулд",
+        "staffId": 1987288,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1987288.jpg",
+        "description": "по декорациям",
+        "professionKey": "DESIGN",
+        "professionText": "Художники"
+      },
+      {
+        "nameEn": "Glenn Farr",
+        "nameRu": "Гленн Фарр",
+        "staffId": 1996288,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1996288.jpg",
+        "description": null,
+        "professionKey": "EDITOR",
+        "professionText": "Монтажеры"
+      },
+      {
+        "nameEn": "Mark Goldblatt",
+        "nameRu": "Марк Голдблатт",
+        "staffId": 137722,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_137722.jpg",
+        "description": null,
+        "professionKey": "EDITOR",
+        "professionText": "Монтажеры"
+      },
+      {
+        "nameEn": "John F. Link",
+        "nameRu": "Джон Ф. Линк",
+        "staffId": 2056119,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2056119.jpg",
+        "description": null,
+        "professionKey": "EDITOR",
+        "professionText": "Монтажеры"
+      }
+    ],
+    "user": 1,
+    "genres": [
+      5,
+      7,
+      11
+    ],
+    "countries": [
+      1
+    ],
+    "directors": [
+      12
+    ],
+    "writers": [
+      9,
+      10,
+      11
+    ],
+    "users_like": []
+  }
+},
+{
+  "model": "movies.movie",
+  "pk": 17,
+  "fields": {
+    "title": "Ледниковый период",
+    "title_original": "Ice Age",
+    "year": 2002,
+    "duration": 81,
+    "kinopoisk_id": 707,
+    "kinopoisk_url": "https://www.kinopoisk.ru/film/707/",
+    "slug": "lednikovyij-period_707",
+    "poster": "images/2024/09/29/707.jpg",
+    "description": "Действие разворачивается 20 тыс. лет назад. Чтобы избежать приближающегося из-за наступления ледникового периода холода, животные мигрируют на юг. Однако некоторые из них всё-таки решают остаться - одинокий, угрюмый мамонт Манфред, а также бесшабашный ленивец Сид.\n\nСлучайно эта парочка наталкивается на человеческого детёныша. Они решаются вернуть его людям и отправляются в путешествие. По пути они встречают саблезубого хитрого тигра. И теперь этой веселой компании предстоят забавные приключения!",
+    "created": "2024-09-29T20:05:47.658Z",
+    "movie_json": {
+      "type": "FILM",
+      "year": 2002,
+      "has3D": false,
+      "genres": [
+        {
+          "genre": "приключения"
+        },
+        {
+          "genre": "комедия"
+        },
+        {
+          "genre": "мультфильм"
+        },
+        {
+          "genre": "семейный"
+        }
+      ],
+      "imdbId": "tt0268380",
+      "nameEn": null,
+      "nameRu": "Ледниковый период",
+      "serial": false,
+      "slogan": "Отмороженные герои",
+      "webUrl": "https://www.kinopoisk.ru/film/707/",
+      "endYear": null,
+      "hasImax": false,
+      "logoUrl": "https://avatars.mds.yandex.net/get-ott/224348/2a00000178caa63bf267c0dc90f6caa80aed/orig",
+      "coverUrl": "https://avatars.mds.yandex.net/get-ott/1531675/2a0000017c280e362c5f91b266a7cd54e6e2/orig",
+      "lastSync": "2024-09-03T15:32:04.766288",
+      "completed": false,
+      "countries": [
+        {
+          "country": "США"
+        },
+        {
+          "country": "Франция"
+        },
+        {
+          "country": "Канада"
+        }
+      ],
+      "posterUrl": "https://kinopoiskapiunofficial.tech/images/posters/kp/707.jpg",
+      "shortFilm": false,
+      "startYear": null,
+      "filmLength": 81,
+      "ratingImdb": 7.5,
+      "ratingMpaa": "pg",
+      "description": "Действие разворачивается 20 тыс. лет назад. Чтобы избежать приближающегося из-за наступления ледникового периода холода, животные мигрируют на юг. Однако некоторые из них всё-таки решают остаться - одинокий, угрюмый мамонт Манфред, а также бесшабашный ленивец Сид.\n\nСлучайно эта парочка наталкивается на человеческого детёныша. Они решаются вернуть его людям и отправляются в путешествие. По пути они встречают саблезубого хитрого тигра. И теперь этой веселой компании предстоят забавные приключения!",
+      "kinopoiskId": 707,
+      "ratingAwait": null,
+      "nameOriginal": "Ice Age",
+      "reviewsCount": 87,
+      "kinopoiskHDId": "4cd7425ecc77b34d9e17a7101b727556",
+      "ratingAgeLimits": "age0",
+      "ratingKinopoisk": 8.0,
+      "ratingRfCritics": null,
+      "editorAnnotation": null,
+      "posterUrlPreview": "https://kinopoiskapiunofficial.tech/images/posters/kp_small/707.jpg",
+      "productionStatus": null,
+      "ratingAwaitCount": 0,
+      "ratingGoodReview": 88.0,
+      "shortDescription": "Доисторические животные объединяются, чтобы спасти человеческого детеныша. Смешно, душевно и очень красиво",
+      "ratingFilmCritics": 6.8,
+      "isTicketsAvailable": false,
+      "ratingImdbVoteCount": 526363,
+      "ratingKinopoiskVoteCount": 443881,
+      "ratingRfCriticsVoteCount": 0,
+      "ratingGoodReviewVoteCount": 70,
+      "ratingFilmCriticsVoteCount": 168
+    },
+    "movie_staff_json": [
+      {
+        "nameEn": "Chris Wedge",
+        "nameRu": "Крис Уэдж",
+        "staffId": 39391,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_39391.jpg",
+        "description": null,
+        "professionKey": "DIRECTOR",
+        "professionText": "Режиссеры"
+      },
+      {
+        "nameEn": "Carlos Saldanha",
+        "nameRu": "Карлос Салдана",
+        "staffId": 39390,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_39390.jpg",
+        "description": null,
+        "professionKey": "DIRECTOR",
+        "professionText": "Режиссеры"
+      },
+      {
+        "nameEn": "Ray Romano",
+        "nameRu": "Рэй Романо",
+        "staffId": 35310,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_35310.jpg",
+        "description": "Manfred, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "John Leguizamo",
+        "nameRu": "Джон Легуизамо",
+        "staffId": 6464,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_6464.jpg",
+        "description": "Sid, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Denis Leary",
+        "nameRu": "Дэнис Лири",
+        "staffId": 4092,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_4092.jpg",
+        "description": "Diego, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Goran Višnjić",
+        "nameRu": "Горан Вишнич",
+        "staffId": 10464,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_10464.jpg",
+        "description": "Soto, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Jack Black",
+        "nameRu": "Джек Блэк",
+        "staffId": 23724,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_23724.jpg",
+        "description": "Zeke, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Cedric The Entertainer",
+        "nameRu": "Седрик «Развлекатель»",
+        "staffId": 13390,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_13390.jpg",
+        "description": "Carl, озвучка (в титрах: Cedric the Entertainer)",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Stephen Root",
+        "nameRu": "Стивен Рут",
+        "staffId": 22595,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_22595.jpg",
+        "description": "Frank / Start, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Diedrich Bader",
+        "nameRu": "Дидрих Бадер",
+        "staffId": 22597,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_22597.jpg",
+        "description": "Oscar, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Alan Tudyk",
+        "nameRu": "Алан Тьюдик",
+        "staffId": 10102,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_10102.jpg",
+        "description": "Lenny / Oscar / Dab, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Lorri Bagley",
+        "nameRu": "Лорри Бэгли",
+        "staffId": 8592,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_8592.jpg",
+        "description": "Jennifer, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Jane Krakowski",
+        "nameRu": "Джейн Краковски",
+        "staffId": 20124,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_20124.jpg",
+        "description": "Rachel, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Peter Ackerman",
+        "nameRu": "Питер Экерман",
+        "staffId": 39393,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_39393.jpg",
+        "description": "Dodo / Macrauchenia, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "P.J. Benjamin",
+        "nameRu": "П.Дж. Бенжамин",
+        "staffId": 39400,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_39400.jpg",
+        "description": "Dodo, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Josh Hamilton",
+        "nameRu": "Джош Хэмилтон",
+        "staffId": 12170,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_12170.jpg",
+        "description": "Dodo / Aardvark, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Chris Wedge",
+        "nameRu": "Крис Уэдж",
+        "staffId": 39391,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_39391.jpg",
+        "description": "Dodo / Scrat, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Denny Dillon",
+        "nameRu": "Денни Диллон",
+        "staffId": 39401,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_39401.jpg",
+        "description": "Glyptodon, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Mitzi McCall",
+        "nameRu": "Митци МакКолл",
+        "staffId": 20172,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_20172.jpg",
+        "description": "Glyptodont, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Tara Strong",
+        "nameRu": "Тара Стронг",
+        "staffId": 8830,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_8830.jpg",
+        "description": "Roshan / Start, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Jack Angel",
+        "nameRu": "Джек Эйнджел",
+        "staffId": 16040,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_16040.jpg",
+        "description": "Various ~в титрах не указан~",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Sidney DeSeve",
+        "nameRu": "",
+        "staffId": 6596678,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_6596678.jpg",
+        "description": "Dodo, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Michael Bell",
+        "nameRu": "Майкл Белл",
+        "staffId": 8833,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_8833.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Dann Fink",
+        "nameRu": "Дэнн Финк",
+        "staffId": 15957,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_15957.jpg",
+        "description": "Dodo, в титрах не указан, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Kimberly Brooks",
+        "nameRu": "Кимберли Брукс",
+        "staffId": 1388736,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1388736.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Lori Forte",
+        "nameRu": "Лори Форте",
+        "staffId": 39403,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_39403.jpg",
+        "description": null,
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Cam Clarke",
+        "nameRu": "Кэм Кларк",
+        "staffId": 81298,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_81298.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Mahom Nordon",
+        "nameRu": "",
+        "staffId": 7136614,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_7136614.jpg",
+        "description": "рассказчик, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "John C. Donkin",
+        "nameRu": "Джон С. Донкин",
+        "staffId": 39402,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_39402.jpg",
+        "description": "ассоциированный продюсер",
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Darin De Paul",
+        "nameRu": "Дэрин Де Пол",
+        "staffId": 131018,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_131018.jpg",
+        "description": "дополнительные голоса, озвучка, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Rodger Bumpass",
+        "nameRu": "Роджер Бампасс",
+        "staffId": 7327,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_7327.jpg",
+        "description": "Various ~в титрах не указан~",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Christopher Meledandri",
+        "nameRu": "Кристофер Меледандри",
+        "staffId": 39404,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_39404.jpg",
+        "description": "исполнительный продюсер",
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Paul Eiding",
+        "nameRu": "Пол Айдинг",
+        "staffId": 21208,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_21208.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "",
+        "nameRu": "Элеонора Прохницкая",
+        "staffId": 1671964,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1671964.jpg",
+        "description": null,
+        "professionKey": "VOICE_DIRECTOR",
+        "professionText": "Режиссеры дубляжа"
+      },
+      {
+        "nameEn": "Jennifer Darling",
+        "nameRu": "Дженнифер Дарлинг",
+        "staffId": 7328,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_7328.jpg",
+        "description": "Various ~в титрах не указан~",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "",
+        "nameRu": "Геннадий Панин",
+        "staffId": 2456846,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2456846.jpg",
+        "description": null,
+        "professionKey": "TRANSLATOR",
+        "professionText": "Переводчики"
+      },
+      {
+        "nameEn": "Michael J. Wilson",
+        "nameRu": "Майкл Дж. Уилсон",
+        "staffId": 2822529,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2822529.jpg",
+        "description": "история",
+        "professionKey": "WRITER",
+        "professionText": "Сценаристы"
+      },
+      {
+        "nameEn": "Sandy Fox",
+        "nameRu": "Сэнди Фокс",
+        "staffId": 141309,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_141309.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Michael Berg",
+        "nameRu": "Майкл Берг",
+        "staffId": 39392,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_39392.jpg",
+        "description": null,
+        "professionKey": "WRITER",
+        "professionText": "Сценаристы"
+      },
+      {
+        "nameEn": "Holly Gauthier-Frankel",
+        "nameRu": "Холли Дж. Франкель",
+        "staffId": 235015,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_235015.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Marsha Kramer",
+        "nameRu": "Марша Крамер",
+        "staffId": 132045,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_132045.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Peter Ackerman",
+        "nameRu": "Питер Экерман",
+        "staffId": 39393,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_39393.jpg",
+        "description": null,
+        "professionKey": "WRITER",
+        "professionText": "Сценаристы"
+      },
+      {
+        "nameEn": "Bill Farmer",
+        "nameRu": "Билл Фармер",
+        "staffId": 21450,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_21450.jpg",
+        "description": "Various ~в титрах не указан~",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "James Bresnahan",
+        "nameRu": "Джеймс Бреснахэн",
+        "staffId": 39394,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_39394.jpg",
+        "description": "история",
+        "professionKey": "WRITER",
+        "professionText": "Сценаристы"
+      },
+      {
+        "nameEn": "Lex Lang",
+        "nameRu": "Алексис Лэнг",
+        "staffId": 6017,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_6017.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Doug Compton",
+        "nameRu": "Даг Комптон",
+        "staffId": 39396,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_39396.jpg",
+        "description": "история",
+        "professionKey": "WRITER",
+        "professionText": "Сценаристы"
+      },
+      {
+        "nameEn": "Carolyn Lawrence",
+        "nameRu": "Кэролин Лоуренс",
+        "staffId": 51310,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_51310.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Danny Mann",
+        "nameRu": "Дэнни Манн",
+        "staffId": 7334,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_7334.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Jeff Siergey",
+        "nameRu": "Джефф Сергей",
+        "staffId": 1102212,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1102212.jpg",
+        "description": "история",
+        "professionKey": "WRITER",
+        "professionText": "Сценаристы"
+      },
+      {
+        "nameEn": "David McCharen",
+        "nameRu": "Дэвид МакЧарен",
+        "staffId": 9915,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_9915.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Michael Thurmeier",
+        "nameRu": "Майк Тёрмайер",
+        "staffId": 39399,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_39399.jpg",
+        "description": "история",
+        "professionKey": "WRITER",
+        "professionText": "Сценаристы"
+      },
+      {
+        "nameEn": "Bobbi Page",
+        "nameRu": "Бобби Пейдж",
+        "staffId": 9917,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_9917.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Galen T. Chu",
+        "nameRu": "Гален Т. Чу",
+        "staffId": 39395,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_39395.jpg",
+        "description": "история",
+        "professionKey": "WRITER",
+        "professionText": "Сценаристы"
+      },
+      {
+        "nameEn": "Xeth Feinberg",
+        "nameRu": "Ксет Файнберг",
+        "staffId": 39397,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_39397.jpg",
+        "description": "история",
+        "professionKey": "WRITER",
+        "professionText": "Сценаристы"
+      },
+      {
+        "nameEn": "Paul Pape",
+        "nameRu": "Пол Пейп",
+        "staffId": 39054,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_39054.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Peter Renaday",
+        "nameRu": "Питер Ренадэй",
+        "staffId": 47274,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_47274.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Sherry Lynn",
+        "nameRu": "Шерри Линн",
+        "staffId": 7332,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_7332.jpg",
+        "description": "Various ~в титрах не указан~",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "David Newman",
+        "nameRu": "Дэвид Ньюман",
+        "staffId": 131699,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_131699.jpg",
+        "description": null,
+        "professionKey": "COMPOSER",
+        "professionText": "Композиторы"
+      },
+      {
+        "nameEn": "Brian McEntee",
+        "nameRu": "Брайан МакЭнти",
+        "staffId": 78205,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_78205.jpg",
+        "description": "постановщик",
+        "professionKey": "DESIGN",
+        "professionText": "Художники"
+      },
+      {
+        "nameEn": "Michelle Ruff",
+        "nameRu": "Мишель Руфф",
+        "staffId": 6034,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_6034.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Skip Stellrecht",
+        "nameRu": "Скип Стреллрехт",
+        "staffId": 1960143,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1960143.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "John Carnochan",
+        "nameRu": "Джон Карнокэн",
+        "staffId": 2006981,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2006981.jpg",
+        "description": null,
+        "professionKey": "EDITOR",
+        "professionText": "Монтажеры"
+      },
+      {
+        "nameEn": "Mona Marshall",
+        "nameRu": "Мона Маршалл",
+        "staffId": 6377,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_6377.jpg",
+        "description": "Various ~в титрах не указан~",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Catherine Taber",
+        "nameRu": "Катрин Табер",
+        "staffId": 72568,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_72568.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Russi Taylor",
+        "nameRu": "Расси Тейлор",
+        "staffId": 29107,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_29107.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Brian Tochi",
+        "nameRu": "Брайан Точи",
+        "staffId": 21454,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_21454.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Ethan Murray",
+        "nameRu": "Этан Мюррэй",
+        "staffId": 396487,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_396487.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Patrick Pinney",
+        "nameRu": "Патрик Пинни",
+        "staffId": 196,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_196.jpg",
+        "description": "Various ~в титрах не указан~",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Phil Proctor",
+        "nameRu": "Филип Проктор",
+        "staffId": 8842,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_8842.jpg",
+        "description": "Various ~в титрах не указан~",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Billy West",
+        "nameRu": "Билли Уэст",
+        "staffId": 8845,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_8845.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      }
+    ],
+    "user": 1,
+    "genres": [
+      2,
+      11,
+      13,
+      14
+    ],
+    "countries": [
+      1,
+      2,
+      6
+    ],
+    "directors": [
+      13,
+      14
+    ],
+    "writers": [
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "users_like": []
+  }
+},
+{
+  "model": "movies.movie",
+  "pk": 18,
+  "fields": {
+    "title": "Шрэк",
+    "title_original": "Shrek",
+    "year": 2001,
+    "duration": 90,
+    "kinopoisk_id": 430,
+    "kinopoisk_url": "https://www.kinopoisk.ru/film/430/",
+    "slug": "shrek_430",
+    "poster": "images/2024/09/29/430.jpg",
+    "description": "Жил да был в сказочном государстве большой зеленый великан по имени Шрэк. Жил он в гордом одиночестве в лесу, на болоте, которое считал своим. Но однажды злобный коротышка — лорд Фаркуад, правитель волшебного королевства, безжалостно согнал на Шрэково болото всех сказочных обитателей.\nИ беспечной жизни зеленого великана пришел конец. Но лорд Фаркуад пообещал вернуть Шрэку болото, если великан добудет ему прекрасную принцессу Фиону, которая томится в неприступной башне, охраняемой огнедышащим драконом.",
+    "created": "2024-09-29T20:06:17.990Z",
+    "movie_json": {
+      "type": "FILM",
+      "year": 2001,
+      "has3D": false,
+      "genres": [
+        {
+          "genre": "мелодрама"
+        },
+        {
+          "genre": "приключения"
+        },
+        {
+          "genre": "фэнтези"
+        },
+        {
+          "genre": "комедия"
+        },
+        {
+          "genre": "мультфильм"
+        },
+        {
+          "genre": "семейный"
+        }
+      ],
+      "imdbId": "tt0126029",
+      "nameEn": null,
+      "nameRu": "Шрэк",
+      "serial": false,
+      "slogan": "Its Big!",
+      "webUrl": "https://www.kinopoisk.ru/film/430/",
+      "endYear": null,
+      "hasImax": false,
+      "logoUrl": "https://avatars.mds.yandex.net/get-ott/1672343/2a000001706322b7aab311a80769a58e93d4/orig",
+      "coverUrl": "https://avatars.mds.yandex.net/get-ott/1652588/2a0000018d69c88735c31f1e96136f33b503/orig",
+      "lastSync": "2024-09-03T08:54:43.256327",
+      "completed": false,
+      "countries": [
+        {
+          "country": "США"
+        }
+      ],
+      "posterUrl": "https://kinopoiskapiunofficial.tech/images/posters/kp/430.jpg",
+      "shortFilm": false,
+      "startYear": null,
+      "filmLength": 90,
+      "ratingImdb": 7.9,
+      "ratingMpaa": "pg",
+      "description": "Жил да был в сказочном государстве большой зеленый великан по имени Шрэк. Жил он в гордом одиночестве в лесу, на болоте, которое считал своим. Но однажды злобный коротышка — лорд Фаркуад, правитель волшебного королевства, безжалостно согнал на Шрэково болото всех сказочных обитателей.\nИ беспечной жизни зеленого великана пришел конец. Но лорд Фаркуад пообещал вернуть Шрэку болото, если великан добудет ему прекрасную принцессу Фиону, которая томится в неприступной башне, охраняемой огнедышащим драконом.",
+      "kinopoiskId": 430,
+      "ratingAwait": null,
+      "nameOriginal": "Shrek",
+      "reviewsCount": 115,
+      "kinopoiskHDId": "4ad80bb0eadac154a255cbd395e093e9",
+      "ratingAgeLimits": "age18",
+      "ratingKinopoisk": 8.2,
+      "ratingRfCritics": null,
+      "editorAnnotation": null,
+      "posterUrlPreview": "https://kinopoiskapiunofficial.tech/images/posters/kp_small/430.jpg",
+      "productionStatus": null,
+      "ratingAwaitCount": 0,
+      "ratingGoodReview": 89.0,
+      "shortDescription": "Огр-мизантроп спасает принцессу, чтобы вернуть свое болото. Революционная анимация о том, что красота — внутри",
+      "ratingFilmCritics": 7.8,
+      "isTicketsAvailable": false,
+      "ratingImdbVoteCount": 746143,
+      "ratingKinopoiskVoteCount": 848031,
+      "ratingRfCriticsVoteCount": 2,
+      "ratingGoodReviewVoteCount": 100,
+      "ratingFilmCriticsVoteCount": 213
+    },
+    "movie_staff_json": [
+      {
+        "nameEn": "Andrew Adamson",
+        "nameRu": "Эндрю Адамсон",
+        "staffId": 47247,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_47247.jpg",
+        "description": null,
+        "professionKey": "DIRECTOR",
+        "professionText": "Режиссеры"
+      },
+      {
+        "nameEn": "Vicky Jenson",
+        "nameRu": "Вики Дженсон",
+        "staffId": 33815,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_33815.jpg",
+        "description": null,
+        "professionKey": "DIRECTOR",
+        "professionText": "Режиссеры"
+      },
+      {
+        "nameEn": "Mike Myers",
+        "nameRu": "Майк Майерс",
+        "staffId": 22613,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_22613.jpg",
+        "description": "Shrek / Blind Mouse / Opening Narration, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Eddie Murphy",
+        "nameRu": "Эдди Мерфи",
+        "staffId": 25674,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_25674.jpg",
+        "description": "Donkey, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Cameron Diaz",
+        "nameRu": "Кэмерон Диас",
+        "staffId": 9836,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_9836.jpg",
+        "description": "Princess Fiona, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "John Lithgow",
+        "nameRu": "Джон Литгоу",
+        "staffId": 8837,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_8837.jpg",
+        "description": "Lord Farquaad, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Vincent Cassel",
+        "nameRu": "Венсан Кассель",
+        "staffId": 11506,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_11506.jpg",
+        "description": "Monsieur Hood, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Peter Dennis",
+        "nameRu": "Питер Деннис",
+        "staffId": 47251,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_47251.jpg",
+        "description": "Ogre Hunter, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Clive Pearse",
+        "nameRu": "Клайв Пирс",
+        "staffId": 47252,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_47252.jpg",
+        "description": "Ogre Hunter, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Jim Cummings",
+        "nameRu": "Джим Каммингс",
+        "staffId": 195,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_195.jpg",
+        "description": "Captain of Guards, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Bobby Block",
+        "nameRu": "Бобби Блок",
+        "staffId": 47253,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_47253.jpg",
+        "description": "Baby Bear, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Chris Miller",
+        "nameRu": "Крис Миллер",
+        "staffId": 1939803,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1939803.jpg",
+        "description": "Geppetto / Magic Mirror, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Chris Miller",
+        "nameRu": "",
+        "staffId": 3958619,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3958619.jpg",
+        "description": "Geppetto / Magic Mirror, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Cody Cameron",
+        "nameRu": "Коуди Кэмерон",
+        "staffId": 47250,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_47250.jpg",
+        "description": "Pinnochio / Three Pigs, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Kathleen Freeman",
+        "nameRu": "Кэтлин Фримен",
+        "staffId": 9035,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_9035.jpg",
+        "description": "Old Woman, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Michael Galasso",
+        "nameRu": "Майкл Джалассо",
+        "staffId": 1222764,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1222764.jpg",
+        "description": "Peter Pan, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Christopher Knights",
+        "nameRu": "Кристофер Найтс",
+        "staffId": 47255,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_47255.jpg",
+        "description": "Blind Mouse / Thelonious, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Simon J. Smith",
+        "nameRu": "Саймон Дж. Смит",
+        "staffId": 47256,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_47256.jpg",
+        "description": "Blind Mouse, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Conrad Vernon",
+        "nameRu": "Конрад Вернон",
+        "staffId": 30486,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_30486.jpg",
+        "description": "Gingerbread Man, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Jacquie Barnbrook",
+        "nameRu": "Жаки Барнбрук",
+        "staffId": 18689,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_18689.jpg",
+        "description": "Wrestling Fan, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Guillaume Aretos",
+        "nameRu": "Гийом Аретос",
+        "staffId": 47257,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_47257.jpg",
+        "description": "Merry Man, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "John Bisom",
+        "nameRu": "Джон Бисом",
+        "staffId": 47258,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_47258.jpg",
+        "description": "Merry Man, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Matthew Gonder",
+        "nameRu": "Матьё Гондер",
+        "staffId": 47259,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_47259.jpg",
+        "description": "Merry Man, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Calvin Remsberg",
+        "nameRu": "Кэлвин Ремсберг",
+        "staffId": 47260,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_47260.jpg",
+        "description": "Merry Man, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Jean-Paul Vignon",
+        "nameRu": "Жан-Поль Виньон",
+        "staffId": 47261,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_47261.jpg",
+        "description": "Merry Man, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Val Bettin",
+        "nameRu": "Вэл Бэттин",
+        "staffId": 47262,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_47262.jpg",
+        "description": "Bishop, озвучка",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Nick Guest",
+        "nameRu": "Ник Гест",
+        "staffId": 2090432,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2090432.jpg",
+        "description": "Lord Farquaad's Guards, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Andrew Adamson",
+        "nameRu": "Эндрю Адамсон",
+        "staffId": 47247,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_47247.jpg",
+        "description": "Duloc Mascot, озвучка, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Charlie Adler",
+        "nameRu": "Чарльз Адлер",
+        "staffId": 8853,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_8853.jpg",
+        "description": "Guards, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Jeffrey Katzenberg",
+        "nameRu": "Джеффри Катценберг",
+        "staffId": 30489,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_30489.jpg",
+        "description": null,
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Rosemary Alexander",
+        "nameRu": "Розмари Александр",
+        "staffId": 37954,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_37954.jpg",
+        "description": "Duloc Woman, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Dee Bradley Baker",
+        "nameRu": "Ди Брэдли Бейкер",
+        "staffId": 27542,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_27542.jpg",
+        "description": "Dwarf, озвучка, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Aron Warner",
+        "nameRu": "Арон Уорнер",
+        "staffId": 47283,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_47283.jpg",
+        "description": null,
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Corey Burton",
+        "nameRu": "Кори Бертон",
+        "staffId": 182,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_182.jpg",
+        "description": "Lord Farquaad's Guards, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Aria Noelle Curzon",
+        "nameRu": "Ария Ноэль Курзон",
+        "staffId": 26725,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_26725.jpg",
+        "description": "Flora, Fauna & Merryweather, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Carlos Alazraqui",
+        "nameRu": "Карлос Аласраки",
+        "staffId": 26747,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_26747.jpg",
+        "description": "Guards, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "John H. Williams",
+        "nameRu": "Джон Х. Уильямс",
+        "staffId": 37132,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_37132.jpg",
+        "description": null,
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Brian Cummings",
+        "nameRu": "Брайан Каммингс",
+        "staffId": 120140,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_120140.jpg",
+        "description": "Merry Man / The Giant / Duck / Ogre Hunter, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Jack Angel",
+        "nameRu": "Джек Эйнджел",
+        "staffId": 16040,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_16040.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Jennifer Darling",
+        "nameRu": "Дженнифер Дарлинг",
+        "staffId": 7328,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_7328.jpg",
+        "description": "Lord Farquaad's Guards, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Michael Bell",
+        "nameRu": "Майкл Белл",
+        "staffId": 8833,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_8833.jpg",
+        "description": "Guards, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Patty Cornell",
+        "nameRu": "Пэтти Корнелл",
+        "staffId": 266677,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_266677.jpg",
+        "description": "Clockwork Chorus, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Ted Elliott",
+        "nameRu": "Тед Эллиот",
+        "staffId": 30871,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_30871.jpg",
+        "description": "сопродюсер",
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Aleksandar Cvjetkovic",
+        "nameRu": "Александр Цветкович",
+        "staffId": 126534,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_126534.jpg",
+        "description": "Shrek, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Sally Dworsky",
+        "nameRu": "Сэлли Дворски",
+        "staffId": 102643,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_102643.jpg",
+        "description": "Princess Fiona, исполнитель песни, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Penney Finkelman Cox",
+        "nameRu": "Пенни Финкелман  Кокс",
+        "staffId": 47279,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_47279.jpg",
+        "description": "исполнительный продюсер",
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Greg Berg",
+        "nameRu": "Грег Берг",
+        "staffId": 93815,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_93815.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Jane Hartwell",
+        "nameRu": "Джейн Хартвелл",
+        "staffId": 47280,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_47280.jpg",
+        "description": "ассоциированный продюсер",
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Bill Farmer",
+        "nameRu": "Билл Фармер",
+        "staffId": 21450,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_21450.jpg",
+        "description": "Lord Farquaad's Guards, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Bob Bergen",
+        "nameRu": "Боб Берген",
+        "staffId": 7321,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_7321.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Charles Dennis",
+        "nameRu": "Чарльз Дэннис",
+        "staffId": 17256,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_17256.jpg",
+        "description": "Villager, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Mehmet Ali Erbil",
+        "nameRu": "Мехмет Али Эрбил",
+        "staffId": 520581,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_520581.jpg",
+        "description": "Esek, озвучка, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Pat Fry",
+        "nameRu": "Пэт Фрай",
+        "staffId": 239575,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_239575.jpg",
+        "description": "Lord Farquaad's Guards, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "David Lipman",
+        "nameRu": "Дэвид Липман",
+        "staffId": 47281,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_47281.jpg",
+        "description": "исполнительный сопродюсер",
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Rodger Bumpass",
+        "nameRu": "Роджер Бампасс",
+        "staffId": 7327,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_7327.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Susan Fitzer",
+        "nameRu": "Сьюзэн Фитцер",
+        "staffId": 1171551,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1171551.jpg",
+        "description": "Clockwork Chorus, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Linda Olszewski",
+        "nameRu": "Линда Ольшевски",
+        "staffId": 611498,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_611498.jpg",
+        "description": "ассистент продюсера (в титрах не указан)",
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Elisa Gabrielli",
+        "nameRu": "Элиза Габриелли",
+        "staffId": 21662,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_21662.jpg",
+        "description": "Female Villager, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Robert Clotworthy",
+        "nameRu": "Роберт Клотуорти",
+        "staffId": 4146,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_4146.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Sim Evan-Jones",
+        "nameRu": "Сим Эван-Джонс",
+        "staffId": 608810,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_608810.jpg",
+        "description": "Ogre Hunter, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Sandra Rabins",
+        "nameRu": "Сандра Рэбинс",
+        "staffId": 47282,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_47282.jpg",
+        "description": "исполнительный продюсер",
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Gary A. Hecker",
+        "nameRu": "Гари А. Хэккер",
+        "staffId": 34523,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_34523.jpg",
+        "description": "Dragon Vocals, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Terry Rossio",
+        "nameRu": "Терри Россио",
+        "staffId": 30872,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_30872.jpg",
+        "description": "сопродюсер",
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Richard Horvitz",
+        "nameRu": "",
+        "staffId": 10140895,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_10140895.jpg",
+        "description": "Dwarf / The Seven Dwarfs, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Jeremy Harrington",
+        "nameRu": "Джереми Хэррингтон",
+        "staffId": 5037767,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_5037767.jpg",
+        "description": "Screaming Villlager, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Richard Steven Horvitz",
+        "nameRu": "Ричард Стивен Хорвиц",
+        "staffId": 20274,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_20274.jpg",
+        "description": "дополнительные голоса, озвучка, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Debi Derryberry",
+        "nameRu": "Деби Дерриберри",
+        "staffId": 16531,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_16531.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Carole Jeghers",
+        "nameRu": "",
+        "staffId": 61238,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_61238.jpg",
+        "description": "Lord Farquaad's Guards, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Steven Spielberg",
+        "nameRu": "Стивен Спилберг",
+        "staffId": 22260,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_22260.jpg",
+        "description": "исполнительный продюсер (в титрах не указан)",
+        "professionKey": "PRODUCER",
+        "professionText": "Продюсеры"
+      },
+      {
+        "nameEn": "Paul Eiding",
+        "nameRu": "Пол Айдинг",
+        "staffId": 21208,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_21208.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Phillip Ingram",
+        "nameRu": "Филлип Ингрэм",
+        "staffId": 74609,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_74609.jpg",
+        "description": "дополнительные голоса, озвучка, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Tom McGrath",
+        "nameRu": "Том МакГрат",
+        "staffId": 567818,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_567818.jpg",
+        "description": "Lord Farquaad's Guards, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "",
+        "nameRu": "Ярослава Турылёва",
+        "staffId": 1290076,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1290076.jpg",
+        "description": null,
+        "professionKey": "VOICE_DIRECTOR",
+        "professionText": "Режиссеры дубляжа"
+      },
+      {
+        "nameEn": "",
+        "nameRu": "Дмитрий Усачев",
+        "staffId": 2434140,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_2434140.jpg",
+        "description": null,
+        "professionKey": "TRANSLATOR",
+        "professionText": "Переводчики"
+      },
+      {
+        "nameEn": "Gerri Lawlor",
+        "nameRu": "Джерри Лоулор",
+        "staffId": 52495,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_52495.jpg",
+        "description": "Whistling Bird, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Rick Miller",
+        "nameRu": "Рик Миллер",
+        "staffId": 1491277,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1491277.jpg",
+        "description": "Guards Arresting Shrek and Fiona, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "William Steig",
+        "nameRu": "Уильям Стейг",
+        "staffId": 47248,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_47248.jpg",
+        "description": "книга",
+        "professionKey": "WRITER",
+        "professionText": "Сценаристы"
+      },
+      {
+        "nameEn": "Patrick Pinney",
+        "nameRu": "Патрик Пинни",
+        "staffId": 196,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_196.jpg",
+        "description": "Lord Farquaad's Guards, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Pat Fraley",
+        "nameRu": "Пэт Фрэли",
+        "staffId": 23966,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_23966.jpg",
+        "description": "Villagers, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Aron Warner",
+        "nameRu": "Арон Уорнер",
+        "staffId": 47283,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_47283.jpg",
+        "description": "Wolf, озвучка, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Eddie Frierson",
+        "nameRu": "Эдди Фрирсон",
+        "staffId": 49250,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_49250.jpg",
+        "description": "Guards, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Hope Levy",
+        "nameRu": "Хоуп Леви",
+        "staffId": 34425,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_34425.jpg",
+        "description": "Clockwork Chorus, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Ted Elliott",
+        "nameRu": "Тед Эллиот",
+        "staffId": 30871,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_30871.jpg",
+        "description": null,
+        "professionKey": "WRITER",
+        "professionText": "Сценаристы"
+      },
+      {
+        "nameEn": "Terry Rossio",
+        "nameRu": "Терри Россио",
+        "staffId": 30872,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_30872.jpg",
+        "description": null,
+        "professionKey": "WRITER",
+        "professionText": "Сценаристы"
+      },
+      {
+        "nameEn": "Skeleton",
+        "nameRu": "",
+        "staffId": 3719750,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3719750.jpg",
+        "description": "Knight Skeleton, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Teresa Ganzel",
+        "nameRu": "Тереза Ганзел",
+        "staffId": 50560,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_50560.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Humberto Vélez",
+        "nameRu": "Умберто Велес",
+        "staffId": 1128378,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1128378.jpg",
+        "description": "Lord Farquaad (Dubbing mexican), в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Joe Stillman",
+        "nameRu": "Джо Стиллман",
+        "staffId": 47249,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_47249.jpg",
+        "description": null,
+        "professionKey": "WRITER",
+        "professionText": "Сценаристы"
+      },
+      {
+        "nameEn": "Jess Harnell",
+        "nameRu": "Джесс Харнелл",
+        "staffId": 7331,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_7331.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Frank Welker",
+        "nameRu": "Фрэнк Уэлкер",
+        "staffId": 8967,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_8967.jpg",
+        "description": "Dragon / Animals' Vocal Effects, озвучка, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Hal Smith",
+        "nameRu": "Хэл Смит",
+        "staffId": 122466,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_122466.jpg",
+        "description": "Pied Piper, хроника, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Roger S.H. Schulman",
+        "nameRu": "Роджер С.Х. Шульман",
+        "staffId": 31585,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_31585.jpg",
+        "description": null,
+        "professionKey": "WRITER",
+        "professionText": "Сценаристы"
+      },
+      {
+        "nameEn": "Emma Taylor-Isherwood",
+        "nameRu": "Эмма Тейлор-Айшервуд",
+        "staffId": 50619,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_50619.jpg",
+        "description": "Little Girl, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Cody Cameron",
+        "nameRu": "Коуди Кэмерон",
+        "staffId": 47250,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_47250.jpg",
+        "description": "дополнительные диалоги",
+        "professionKey": "WRITER",
+        "professionText": "Сценаристы"
+      },
+      {
+        "nameEn": "Bob Joles",
+        "nameRu": "Боб Джоулз",
+        "staffId": 31589,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_31589.jpg",
+        "description": "Villagers, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "John Kassir",
+        "nameRu": "Джон Кассир",
+        "staffId": 42787,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_42787.jpg",
+        "description": "Villagers, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Chris Miller",
+        "nameRu": "Крис Миллер",
+        "staffId": 1939803,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1939803.jpg",
+        "description": "дополнительные диалоги",
+        "professionKey": "WRITER",
+        "professionText": "Сценаристы"
+      },
+      {
+        "nameEn": "Mr. Lawrence",
+        "nameRu": "Мистер Лоуренс",
+        "staffId": 555209,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_555209.jpg",
+        "description": "Villagers, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Conrad Vernon",
+        "nameRu": "Конрад Вернон",
+        "staffId": 30486,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_30486.jpg",
+        "description": "дополнительные диалоги",
+        "professionKey": "WRITER",
+        "professionText": "Сценаристы"
+      },
+      {
+        "nameEn": "Sherry Lynn",
+        "nameRu": "Шерри Линн",
+        "staffId": 7332,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_7332.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Harry Gregson-Williams",
+        "nameRu": "Гарри Грегсон-Уильямс",
+        "staffId": 608582,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_608582.jpg",
+        "description": null,
+        "professionKey": "COMPOSER",
+        "professionText": "Композиторы"
+      },
+      {
+        "nameEn": "Danny Mann",
+        "nameRu": "Дэнни Манн",
+        "staffId": 7334,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_7334.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "John Powell",
+        "nameRu": "Джон Пауэлл",
+        "staffId": 608606,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_608606.jpg",
+        "description": null,
+        "professionKey": "COMPOSER",
+        "professionText": "Композиторы"
+      },
+      {
+        "nameEn": "James Hegedus",
+        "nameRu": "Джеймс Хегедус",
+        "staffId": 1998699,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1998699.jpg",
+        "description": "постановщик",
+        "professionKey": "DESIGN",
+        "professionText": "Художники"
+      },
+      {
+        "nameEn": "Mona Marshall",
+        "nameRu": "Мона Маршалл",
+        "staffId": 6377,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_6377.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Mickie McGowan",
+        "nameRu": "Микки Макгоун",
+        "staffId": 7335,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_7335.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Guillaume Aretos",
+        "nameRu": "Гийом Аретос",
+        "staffId": 47257,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_47257.jpg",
+        "description": null,
+        "professionKey": "DESIGN",
+        "professionText": "Художники"
+      },
+      {
+        "nameEn": "Sean P. Mullen",
+        "nameRu": "Шон Маллен",
+        "staffId": 1631360,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1631360.jpg",
+        "description": null,
+        "professionKey": "DESIGN",
+        "professionText": "Художники"
+      },
+      {
+        "nameEn": "Douglas Rogers",
+        "nameRu": "Дуглас Роджерс",
+        "staffId": 1986026,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_1986026.jpg",
+        "description": null,
+        "professionKey": "DESIGN",
+        "professionText": "Художники"
+      },
+      {
+        "nameEn": "Phil Proctor",
+        "nameRu": "Филип Проктор",
+        "staffId": 8842,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_8842.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Jan Rabson",
+        "nameRu": "Жан Рэбсон",
+        "staffId": 314301,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_314301.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Isis Mussenden",
+        "nameRu": "Айзис Массенден",
+        "staffId": 85140,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_85140.jpg",
+        "description": "по костюмам",
+        "professionKey": "DESIGN",
+        "professionText": "Художники"
+      },
+      {
+        "nameEn": "Sim Evan-Jones",
+        "nameRu": "Сим Эван-Джонс",
+        "staffId": 608810,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_608810.jpg",
+        "description": null,
+        "professionKey": "EDITOR",
+        "professionText": "Монтажеры"
+      },
+      {
+        "nameEn": "Peter Renaday",
+        "nameRu": "Питер Ренадэй",
+        "staffId": 47274,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_47274.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Neil Ross",
+        "nameRu": "Нил Росс",
+        "staffId": 8522,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_8522.jpg",
+        "description": "Guards, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Harry Shearer",
+        "nameRu": "Гарри Ширер",
+        "staffId": 3654,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3654.jpg",
+        "description": "Guards, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      },
+      {
+        "nameEn": "Chris Miller",
+        "nameRu": "",
+        "staffId": 3958619,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_3958619.jpg",
+        "description": "дополнительные диалоги",
+        "professionKey": "WRITER",
+        "professionText": "Сценаристы"
+      },
+      {
+        "nameEn": "Jim Ward",
+        "nameRu": "Джим Уорд",
+        "staffId": 38054,
+        "posterUrl": "https://st.kp.yandex.net/images/actor_iphone/iphone360_38054.jpg",
+        "description": "Various, в титрах не указан",
+        "professionKey": "ACTOR",
+        "professionText": "Актеры"
+      }
+    ],
+    "user": 1,
+    "genres": [
+      2,
+      4,
+      11,
+      13,
+      14,
+      15
+    ],
+    "countries": [
+      1
+    ],
+    "directors": [
+      15,
+      16
+    ],
+    "writers": [
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29
+    ],
+    "users_like": []
+  }
+}
+]
