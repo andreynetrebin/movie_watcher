@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'movies.apps.MoviesConfig',
     'easy_thumbnails',
+    'actions.apps.ActionsConfig',
 
 ]
 

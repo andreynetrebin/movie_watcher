@@ -9,7 +9,7 @@ from django.views.decorators.http import require_POST
 from django.http import HttpResponse
 from django.core.paginator import Paginator, EmptyPage, \
 PageNotAnInteger
-
+from actions.utils import create_action
 
 
 @login_required
@@ -22,6 +22,7 @@ def movie_like(request):
             movie = Movie.objects.get(id=movie_id)
             if action == 'like':
                 movie.users_like.add(request.user)
+                create_action(request.user, 'likes', movie)
             else:
                 movie.users_like.remove(request.user)
             return JsonResponse({'status': 'ok'})
@@ -81,6 +82,7 @@ def movie_create(request):
             new_movie.movie_staff_json = cd["movie_staff_data"]
 
             new_movie.save()
+            create_action(request.user, 'added movie', new_movie)
             for genre in cd["genres"]:
                 genre_row = Genre.objects.get(name=genre)
                 new_movie.genres.add(genre_row)
