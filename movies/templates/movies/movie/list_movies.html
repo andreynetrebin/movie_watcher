@@ -1,8 +1,11 @@
+{% load thumbnail %}
 {% for movie in movies %}
 <div class="image">
 <a href="{{ movie.get_absolute_url }}">
-<a href="{{ movie.get_absolute_url }}">
-<img src="{{ movie.url }}">
+<!--{% thumbnail movie.poster 300x300 crop="smart" as im %}-->
+    {% thumbnail movie.poster 250x200 as im %}
+    <a href="{{ movie.get_absolute_url }}">
+<img src="{{ im.url }}">
 </a>
 </a>
 <div class="info">
