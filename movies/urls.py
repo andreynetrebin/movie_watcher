@@ -5,4 +5,5 @@ urlpatterns = [
     path('create/', views.movie_create, name='create'),
     path('detail/<slug:slug>/', views.movie_detail, name='detail'),
     path('like/', views.movie_like, name='like'),
+    path('', views.movie_list, name='list'),
 ]
