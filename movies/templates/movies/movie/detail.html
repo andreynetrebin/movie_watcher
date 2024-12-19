@@ -1,9 +1,14 @@
 {% extends "base.html" %}
+{% load thumbnail %}
 {% block title %}{{ movie.title }}{% endblock %}
 {% block content %}
 <h1>{{ movie.title }}</h1>
 
-<img src="{{ movie.poster.url }}" class="image-detail">
+<!--<img src="{{ movie.poster.url }}" class="image-detail">-->
+
+<a href="{{ movie.poster.url }}">
+<img src="{% thumbnail movie.poster 300x0 %}" class="image-detail">
+</a>
 {% with total_likes=movie.users_like.count users_like=movie.users_like.all %}
 {{ total_likes }}
 {{ users_like }}
