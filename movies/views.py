@@ -6,6 +6,10 @@ from .forms import MovieCreateForm
 from .models import Movie, Genre, Country, Director, Writer
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
+from django.http import HttpResponse
+from django.core.paginator import Paginator, EmptyPage, \
+PageNotAnInteger
+
 
 
 @login_required
@@ -110,3 +114,34 @@ def movie_detail(request, slug):
                   'movies/movie/detail.html',
                   {'section': 'movies',
                    'movie': movie})
+
+@login_required
+def movie_list(request):
+    movies = Movie.objects.all()
+    paginator = Paginator(movies, 8)
+    page = request.GET.get('page')
+    movies_only = request.GET.get('movies_only')
+    try:
+        movies = paginator.page(page)
+    except PageNotAnInteger:
+    # Если страница не является целым числом,
+    # то доставить первую страницу
+        movies = paginator.page(1)
+    except EmptyPage:
+        if movies_only:
+        # Если AJAX-запрос и страница вне диапазона,
+        # то вернуть пустую страницу
+            return HttpResponse('')
+    # Если страница вне диапазона,
+    # то вернуть последнюю страницу результатов
+        movies = paginator.page(paginator.num_pages)
+    if movies_only:
+        return render(request,
+    'movies/movie/list_movies.html',
+    {'section': 'movies',
+    'movies': movies})
+
+    return render(request,
+    'movies/movie/list.html',
+    {'section': 'movies',
+    'movies': movies})

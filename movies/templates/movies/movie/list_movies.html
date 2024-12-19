@@ -1,0 +1,14 @@
+{% for movie in movies %}
+<div class="image">
+<a href="{{ movie.get_absolute_url }}">
+<a href="{{ movie.get_absolute_url }}">
+<img src="{{ movie.url }}">
+</a>
+</a>
+<div class="info">
+<a href="{{ movie.get_absolute_url }}" class="title">
+{{ movie.title }}
+</a>
+</div>
+</div>
+{% endfor %}
