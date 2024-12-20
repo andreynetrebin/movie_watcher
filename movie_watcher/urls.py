@@ -28,6 +28,7 @@ urlpatterns = [
 
 ),
     path('movies/', include('movies.urls', namespace='movies')),
+    path('__debug__/', include('debug_toolbar.urls')),
 ]
 
 if settings.DEBUG:
