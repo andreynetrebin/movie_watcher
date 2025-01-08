@@ -9,22 +9,25 @@
 <a href="{{ movie.poster.url }}">
 <img src="{% thumbnail movie.poster 300x0 %}" class="image-detail">
 </a>
-{% with total_likes=movie.users_like.count users_like=movie.users_like.all %}
+{% with total_likes=movie.users_like.count total_dislikes=movie.users_dislike.count users_like=movie.users_like.all %}
 {{ total_likes }}
+{{ total_dislikes }}
 {{ users_like }}
 <div class="image-info">
 <div>
 <span class="count">
-<span class="total">{{ total_likes }}</span>
+<span class="like total">{{ total_likes }}</span>
     like{{ total_likes|pluralize }}
 </span>
-<a href="#" data-id="{{ movie.id }}" data-action="{% if request.user in users_like %}un{% endif %}like" class="like button">
-{% if request.user not in users_like %}
-Like
-{% else %}
-Unlike
-{% endif %}
-</a>
+<span class="count">
+<span class="dislike total">{{ total_dislikes }}</span>
+    dislike{{ total_dislikes|pluralize }}
+</span>
+    <br>
+    <br>
+    <a href="#" data-id="{{ movie.id }}" data-action="like"   class="like button">Like</a>
+    <a href="#" data-id="{{ movie.id }}" data-action="dislike" class="dislike button">DisLike</a>
+
 </div>
 
   <ul>
@@ -59,42 +62,91 @@ Unlike
 {% endblock %}
 
 {% block domready %}
-  const url = '{% url "movies:like" %}';
-  var options = {
+const url = '{% url "movies:like" %}';
+var options = {
     method: 'POST',
     headers: {'X-CSRFToken': csrftoken},
     mode: 'same-origin'
-  }
+};
 
-  document.querySelector('a.like')
-          .addEventListener('click', function(e){
-    e.preventDefault();
-    var likeButton = this;
+// Обработчик для кнопки "Like"
+document.querySelectorAll('a.like').forEach(function(likeButton) {
+    likeButton.addEventListener('click', function(e) {
+        e.preventDefault();
 
-    // add request body
-    var formData = new FormData();
-    formData.append('id', likeButton.dataset.id);
-    formData.append('action', likeButton.dataset.action);
-    options['body'] = formData;
+        // Подготовка данных для запроса
+        var formData = new FormData();
+        formData.append('id', likeButton.dataset.id);
+        formData.append('action', 'like'); // Указываем действие "like"
+        options['body'] = formData;
 
-    // send HTTP request
-    fetch(url, options)
-    .then(response => response.json())
-    .then(data => {
-      if (data['status'] === 'ok')
-      {
-        var previousAction = likeButton.dataset.action;
+        // Отправка HTTP-запроса
+        fetch(url, options)
+        .then(response => response.json())
+        .then(data => {
+            if (data['status'] === 'ok') {
+                var likeCount = document.querySelector('span.count .like');
+                var totalLikes = parseInt(likeCount.innerHTML);
+                likeCount.innerHTML = totalLikes + 1;
 
-        // toggle button text and data-action
-        var action = previousAction === 'like' ? 'unlike' : 'like';
-        likeButton.dataset.action = action;
-        likeButton.innerHTML = action;
+<!--                var dislikeCount = document.querySelector('span.count .dislike');-->
+<!--                var totalDislikes = parseInt(dislikeCount.innerHTML);-->
+<!--                dislikeCount.innerHTML = totalDislikes - 1;-->
 
-        // update like count
-        var likeCount = document.querySelector('span.count .total');
-        var totalLikes = parseInt(likeCount.innerHTML);
-        likeCount.innerHTML = previousAction === 'like' ? totalLikes + 1 : totalLikes - 1;
-      }
-    })
-  });
+                // Отключение кнопки "like" после нажатия
+                likeButton.classList.add('active');
+                likeButton.innerHTML = 'Liked'; // Измените текст кнопки, если нужно
+
+                // Если dislike был ранее, отключаем его
+                var dislikeButton = document.querySelector('a.dislike');
+                if (dislikeButton) {
+                    dislikeButton.classList.remove('active');
+                    dislikeButton.innerHTML = 'Dislike'; // Сброс текста кнопки
+                }
+            }
+        });
+    });
+});
+
+// Обработчик для кнопки "Dislike"
+document.querySelectorAll('a.dislike').forEach(function(dislikeButton) {
+    dislikeButton.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        // Подготовка данных для запроса
+        var formData = new FormData();
+        formData.append('id', dislikeButton.dataset.id);
+        formData.append('action', 'dislike'); // Указываем действие "dislike"
+        options['body'] = formData;
+
+        // Отправка HTTP-запроса
+        fetch(url, options)
+        .then(response => response.json())
+        .then(data => {
+            if (data['status'] === 'ok') {
+                // Обновление состояния кнопки
+                var dislikeCount = document.querySelector('span.count .dislike');
+                var totalDislikes = parseInt(dislikeCount.innerHTML);
+                dislikeCount.innerHTML = totalDislikes + 1;
+
+<!--                var likeCount = document.querySelector('span.count .like');-->
+<!--                var totalLikes = parseInt(likeCount.innerHTML);-->
+<!--                likeCount.innerHTML = totalLikes - 1;-->
+
+
+                // Отключение кнопки "dislike" после нажатия
+                dislikeButton.classList.add('active');
+                dislikeButton.innerHTML = 'Disliked'; // Измените текст кнопки, если нужно
+
+                // Если like был ранее, отключаем его
+                var likeButton = document.querySelector('a.like');
+                if (likeButton) {
+                    likeButton.classList.remove('active');
+                    likeButton.innerHTML = 'Like'; // Сброс текста кнопки
+                }
+            }
+        });
+    });
+});
+
 {% endblock %}

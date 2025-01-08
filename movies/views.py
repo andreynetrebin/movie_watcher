@@ -21,18 +21,35 @@ def movie_like(request):
         try:
             movie = Movie.objects.get(id=movie_id)
             if action == 'like':
-                movie.users_like.add(request.user)
+                if movie.users_like.filter(id=request.user.id).exists():
+                    return JsonResponse({'status': 'exists'})
+                if movie.users_dislike.filter(id=request.user.id).exists():
+                    movie.users_dislike.remove(request.user)  # Удаляем dislike, если он есть
+
+                movie.users_like.add(request.user)  # Добавляем like
                 create_action(request.user, 'likes', movie)
-            else:
-                movie.users_like.remove(request.user)
+
+            if action == 'dislike':
+                if movie.users_dislike.filter(id=request.user.id).exists():
+                    return JsonResponse({'status': 'exists'})
+                if movie.users_like.filter(id=request.user.id).exists():
+                    movie.users_like.remove(request.user)  #  Удаляем like, если он есть
+                movie.users_dislike.add(request.user)  # Добавляем dislike
+                create_action(request.user, 'dislikes', movie)
             return JsonResponse({'status': 'ok'})
         except Movie.DoesNotExist:
             pass
-        return JsonResponse({'status': 'error'})
+    return JsonResponse({'status': 'error'})
 
 
-
-# Create your views here.
+# @login_required
+# def toggle_watchlist(request, movie_id):
+#     movie = get_object_or_404(Movie, id=movie_id)
+#     watchlist_item, created = Watchlist.objects.get_or_create(user=request.user, movie=movie)
+#
+#     if not created:
+#         watchlist_item.delete()  # Удаляем из watchlist, если он уже был
+#     return redirect('movie_list')
 
 @login_required
 def movie_create(request):
