@@ -55,6 +55,11 @@ class Movie(models.Model):
         related_name='movies_like',
         blank=True
     )
+    users_dislike = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name='movies_dislike',
+        blank=True
+    )
     total_likes = models.PositiveIntegerField(default=0)
 
 
@@ -78,3 +83,10 @@ class Movie(models.Model):
     def get_absolute_url(self):
         return reverse('movies:detail', args=[self.slug])
 
+
+# class Watchlist(models.Model):
+#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+#     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+#
+#     class Meta:
+#         unique_together = ('user', 'movie')  # Ограничение на уникальность
