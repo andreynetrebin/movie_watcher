@@ -19,12 +19,12 @@
                     <button class="like" data-id="{{ movie.id }}" data-action="like">Like</button>
                     <button class="dislike" data-id="{{ movie.id }}" data-action="dislike">Dislike</button>
                     <button class="wishlist" data-id="{{ movie.id }}">
-                        {% if movie in request.user.wishlist_set.all %}
-                           Remove from Wish List
-                        {% else %}
-                            Add to Wish List
-                        {% endif %}
-                    </button>
+                {% if movie in wishlist_movies %}
+                    Remove from Wish List
+                {% else %}
+                    Add to Wish List
+                {% endif %}
+            </button>
             <button class="watched" data-id="{{ movie.id }}">
                 {% if movie in watched_movies %}
                     Mark as Unwatched

@@ -91,3 +91,9 @@ class Watched(models.Model):
 
     class Meta:
         unique_together = ('user', 'movie')  # Ограничение на уникальность
+
+class WishList(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    class Meta:
+        unique_together = ('user', 'movie')  # Ограничение на уникальность
