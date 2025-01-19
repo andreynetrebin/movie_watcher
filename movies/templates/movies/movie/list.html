@@ -128,5 +128,28 @@ document.querySelectorAll('button.watched').forEach(function(watchedButton) {
     });
 });
 
+const url_wishlist = '{% url "movies:toggle_wishlist" %}';
+document.querySelectorAll('button.wishlist').forEach(function(wishlistButton) {
+    wishlistButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        var formData = new FormData();
+        formData.append('id', wishlistButton.dataset.id);
+        fetch(url_wishlist, {
+            method: 'POST',
+            headers: {'X-CSRFToken': csrftoken},
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data['status'] === 'added') {
+                wishlistButton.innerHTML = 'Remove from Wish List';
+            } else if (data['status'] === 'removed') {
+                wishlistButton.innerHTML = 'Add to Wish List';
+            }
+        });
+    });
+});
+
+
 {% endblock %}
 
