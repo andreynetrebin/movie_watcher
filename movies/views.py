@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.shortcuts import get_object_or_404
 from .forms import MovieCreateForm
-from .models import Movie, Genre, Country, Director, Writer
+from .models import Movie, Genre, Country, Director, Writer, Watched
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.http import HttpResponse
@@ -14,6 +14,22 @@ from actions.utils import create_action
 
 @login_required
 @require_POST
+def mark_watched(request):
+    if request.method == 'POST':
+        movie_id = request.POST.get('id')
+        movie = get_object_or_404(Movie, id=movie_id)
+        # Проверяем, был ли фильм уже просмотрен
+        watched, created = Watched.objects.get_or_create(user=request.user, movie=movie)
+        if not created:
+            watched.delete()  # Удаляем из просмотренных, если он уже был
+            return JsonResponse({'status': 'removed'})
+        return JsonResponse({'status': 'added'})
+    return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
+
+
+
+
+
 def movie_like(request):
     movie_id = request.POST.get('id')
     action = request.POST.get('action')
@@ -137,6 +153,8 @@ def movie_detail(request, slug):
 @login_required
 def movie_list(request):
     movies = Movie.objects.all()
+    watched_movies = request.user.watched_set.all()  # Получаем все просмотренные фильмы
+    # wishlist_movies = request.user.wishlist_set.all()  # Получаем все фильмы в вишлисте
     paginator = Paginator(movies, 8)
     page = request.GET.get('page')
     movies_only = request.GET.get('movies_only')
@@ -158,9 +176,12 @@ def movie_list(request):
         return render(request,
     'movies/movie/list_movies.html',
     {'section': 'movies',
-    'movies': movies})
+    'movies': movies,
+      'watched_movies': watched_movies,
+     })
 
     return render(request,
     'movies/movie/list.html',
     {'section': 'movies',
-    'movies': movies})
+    'movies': movies,
+     'watched_movies': watched_movies,})

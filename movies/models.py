@@ -84,9 +84,10 @@ class Movie(models.Model):
         return reverse('movies:detail', args=[self.slug])
 
 
-# class Watchlist(models.Model):
-#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-#     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
-#
-#     class Meta:
-#         unique_together = ('user', 'movie')  # Ограничение на уникальность
+class Watched(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    # watched = models.BooleanField(default=False)  # Поле для хранения статуса просмотра
+
+    class Meta:
+        unique_together = ('user', 'movie')  # Ограничение на уникальность

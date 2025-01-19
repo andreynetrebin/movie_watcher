@@ -1,17 +1,41 @@
+
 {% load thumbnail %}
-{% for movie in movies %}
-<div class="image">
-<a href="{{ movie.get_absolute_url }}">
-<!--{% thumbnail movie.poster 300x300 crop="smart" as im %}-->
-    {% thumbnail movie.poster 250x200 as im %}
-    <a href="{{ movie.get_absolute_url }}">
-<img src="{{ im.url }}">
-</a>
-</a>
-<div class="info">
-<a href="{{ movie.get_absolute_url }}" class="title">
-{{ movie.title }}
-</a>
-</div>
-</div>
-{% endfor %}
+
+{% block content %}
+<ul>
+    {% for movie in movies %}
+        <li class="movie-item">
+            <div class="movie-poster">
+                {% if movie.poster %}
+                    <a href="{{ movie.get_absolute_url }}">
+                        <img src="{% thumbnail movie.poster 300x0 %}" alt="{{ movie.title }} poster" class="movie-poster-img">
+                    </a>
+                {% endif %}
+            </div>
+            <div class="movie-info">
+                <h2>{{ movie.title }}</h2>
+                <p>Release Year: {{ movie.year }}</p>
+                <div class="movie-actions">
+                    <button class="like" data-id="{{ movie.id }}" data-action="like">Like</button>
+                    <button class="dislike" data-id="{{ movie.id }}" data-action="dislike">Dislike</button>
+                    <button class="wishlist" data-id="{{ movie.id }}">
+                        {% if movie in request.user.wishlist_set.all %}
+                           Remove from Wish List
+                        {% else %}
+                            Add to Wish List
+                        {% endif %}
+                    </button>
+            <button class="watched" data-id="{{ movie.id }}">
+                {% if movie in watched_movies %}
+                    Mark as Unwatched
+                {% else %}
+                    Mark as Watched
+                {% endif %}
+            </button>
+                </div>
+            </div>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
