@@ -12,7 +12,7 @@ var page = 1;
 var emptyPage = false;
 var blockRequest = false;
 window.addEventListener('scroll', function(e) {
-var margin = document.body.clientHeight – window.innerHeight – 200;
+var margin = document.body.clientHeight - window.innerHeight - 200;
 if(window.pageYOffset > margin && !emptyPage && !blockRequest) {
 blockRequest = true;
 page += 1;
@@ -33,4 +33,100 @@ blockRequest = false;
 // Запустить события прокрутки
 const scrollEvent = new Event('scroll');
 window.dispatchEvent(scrollEvent);
+
+const url = '{% url "movies:like" %}';
+var options = {
+    method: 'POST',
+    headers: {'X-CSRFToken': csrftoken},
+    mode: 'same-origin'
+};
+
+// Обработчик для кнопки "Like"
+document.querySelectorAll('button.like').forEach(function(likeButton) {
+    likeButton.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        // Подготовка данных для запроса
+        var formData = new FormData();
+        formData.append('id', likeButton.dataset.id);
+        formData.append('action', 'like'); // Указываем действие "like"
+        options['body'] = formData;
+
+        // Отправка HTTP-запроса
+        fetch(url, options)
+        .then(response => response.json())
+        .then(data => {
+            if (data['status'] === 'ok') {
+
+                // Отключение кнопки "like" после нажатия
+                likeButton.classList.add('active');
+                likeButton.innerHTML = 'Liked'; // Измените текст кнопки, если нужно
+
+                // Если dislike был ранее, отключаем его
+                var dislikeButton = document.querySelector('button.dislike');
+                if (dislikeButton) {
+                    dislikeButton.classList.remove('active');
+                    dislikeButton.innerHTML = 'Dislike'; // Сброс текста кнопки
+                }
+            }
+        });
+    });
+});
+
+// Обработчик для кнопки "Dislike"
+document.querySelectorAll('button.dislike').forEach(function(dislikeButton) {
+    dislikeButton.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        // Подготовка данных для запроса
+        var formData = new FormData();
+        formData.append('id', dislikeButton.dataset.id);
+        formData.append('action', 'dislike'); // Указываем действие "dislike"
+        options['body'] = formData;
+
+        // Отправка HTTP-запроса
+        fetch(url, options)
+        .then(response => response.json())
+        .then(data => {
+            if (data['status'] === 'ok') {
+                // Обновление состояния кнопки
+
+                // Отключение кнопки "dislike" после нажатия
+                dislikeButton.classList.add('active');
+                dislikeButton.innerHTML = 'Disliked'; // Измените текст кнопки, если нужно
+
+                // Если like был ранее, отключаем его
+                var likeButton = document.querySelector('button.like');
+                if (likeButton) {
+                    likeButton.classList.remove('active');
+                    likeButton.innerHTML = 'Like'; // Сброс текста кнопки
+                }
+            }
+        });
+    });
+});
+
+const url_watched = '{% url "movies:mark_watched" %}';
+document.querySelectorAll('button.watched').forEach(function(watchedButton) {
+    watchedButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        var formData = new FormData();
+        formData.append('id', watchedButton.dataset.id);
+        fetch(url_watched, {
+            method: 'POST',
+            headers: {'X-CSRFToken': csrftoken},
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data['status'] === 'added') {
+                watchedButton.innerHTML = 'Mark as Unwatched';
+            } else if (data['status'] === 'removed') {
+                watchedButton.innerHTML = 'Mark as Watched';
+            }
+        });
+    });
+});
+
 {% endblock %}
+
