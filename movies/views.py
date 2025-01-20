@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.shortcuts import get_object_or_404
 from .forms import MovieCreateForm
+from django.db.models import Count
 from .models import Movie, Genre, Country, Director, Writer, Watched, WishList
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
@@ -73,15 +74,6 @@ def movie_like(request):
             pass
     return JsonResponse({'status': 'error'})
 
-
-# @login_required
-# def toggle_watchlist(request, movie_id):
-#     movie = get_object_or_404(Movie, id=movie_id)
-#     watchlist_item, created = Watchlist.objects.get_or_create(user=request.user, movie=movie)
-#
-#     if not created:
-#         watchlist_item.delete()  # Удаляем из watchlist, если он уже был
-#     return redirect('movie_list')
 
 @login_required
 def movie_create(request):
@@ -171,7 +163,13 @@ def movie_list(request):
     movies = Movie.objects.all()
     watched_movies = request.user.watched_set.all()  # Получаем все просмотренные фильмы
     wishlist_movies = request.user.wishlist_set.all()  # Получаем все фильмы в вишлисте
-    paginator = Paginator(movies, 8)
+
+    # Получаем топ-10 режиссеров по количеству фильмов
+    top_directors = Director.objects.annotate(num_movies=Count('movies_director')).order_by('-num_movies')[:10]
+    # Получаем топ-10 сценаристов по количеству фильмов
+    top_writers = Writer.objects.annotate(num_movies=Count('movies_writer')).order_by('-num_movies')[:10]
+
+    paginator = Paginator(movies, 5)
     page = request.GET.get('page')
     movies_only = request.GET.get('movies_only')
     try:
@@ -195,6 +193,8 @@ def movie_list(request):
     'movies': movies,
       'watched_movies': watched_movies,
         'wishlist_movies': wishlist_movies,
+        'top_directors': top_directors,
+        'top_writers': top_writers,
      })
 
     return render(request,
@@ -203,4 +203,6 @@ def movie_list(request):
     'movies': movies,
      'watched_movies': watched_movies,
      'wishlist_movies': wishlist_movies,
+     'top_directors': top_directors,
+     'top_writers': top_writers,
      })

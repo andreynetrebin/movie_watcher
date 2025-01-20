@@ -2,40 +2,61 @@
 {% load thumbnail %}
 
 {% block content %}
-<ul>
-    {% for movie in movies %}
-        <li class="movie-item">
-            <div class="movie-poster">
-                {% if movie.poster %}
-                    <a href="{{ movie.get_absolute_url }}">
-                        <img src="{% thumbnail movie.poster 300x0 %}" alt="{{ movie.title }} poster" class="movie-poster-img">
-                    </a>
-                {% endif %}
-            </div>
-            <div class="movie-info">
-                <h2>{{ movie.title }}</h2>
-                <p>Release Year: {{ movie.year }}</p>
-                <div class="movie-actions">
-                    <button class="like" data-id="{{ movie.id }}" data-action="like">Like</button>
-                    <button class="dislike" data-id="{{ movie.id }}" data-action="dislike">Dislike</button>
-                    <button class="wishlist" data-id="{{ movie.id }}">
-                {% if movie in wishlist_movies %}
-                    Remove from Wish List
-                {% else %}
-                    Add to Wish List
-                {% endif %}
-            </button>
-            <button class="watched" data-id="{{ movie.id }}">
-                {% if movie in watched_movies %}
-                    Mark as Unwatched
-                {% else %}
-                    Mark as Watched
-                {% endif %}
-            </button>
-                </div>
-            </div>
-        </li>
-    {% endfor %}
-</ul>
-{% endblock %}
+<h1>Список фильмов</h1>
 
+<div class="movie-container">
+    <div class="movie-list">
+        <ul>
+            {% for movie in movies %}
+                <li class="movie-item">
+                    <div class="movie-poster">
+                        {% if movie.poster %}
+                            <a href="{{ movie.get_absolute_url }}">
+                                <img src="{% thumbnail movie.poster 300x0 %}" alt="{{ movie.title }} постер" class="movie-poster-img">
+                            </a>
+                        {% endif %}
+                    </div>
+                    <div class="movie-info">
+                        <h2>{{ movie.title }}</h2>
+                        <p>Год выпуска: {{ movie.year }}</p>
+                        <div class="movie-actions">
+                            <button class="like" data-id="{{ movie.id }}" data-action="like">Нравится</button>
+                            <button class="dislike" data-id="{{ movie.id }}" data-action="dislike">Не нравится</button>
+                            <button class="wishlist" data-id="{{ movie.id }}">
+                                {% if movie in wishlist_movies %}
+                                    Удалить из списка желаемого
+                                {% else %}
+                                    Добавить в список желаемого
+                                {% endif %}
+                            </button>
+                            <button class="watched" data-id="{{ movie.id }}">
+                                {% if movie in watched_movies %}
+                                    Пометить как непросмотренный
+                                {% else %}
+                                    Пометить как просмотренный
+                                {% endif %}
+                            </button>
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="sidebar">
+        <h2>Топ-10 Режиссеров</h2>
+        <ul>
+            {% for director in top_directors %}
+                <li>{{ director.name }} - {{ director.num_movies }}</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Топ-10 Сценаристов</h2>
+        <ul>
+            {% for writer in top_writers %}
+                <li>{{ writer.name }} - {{ writer.num_movies }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
