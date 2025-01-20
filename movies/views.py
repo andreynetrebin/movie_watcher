@@ -22,7 +22,9 @@ def mark_watched(request):
         watched, created = Watched.objects.get_or_create(user=request.user, movie=movie)
         if not created:
             watched.delete()  # Удаляем из просмотренных, если он уже был
+            create_action(request.user, 'unmark as watched', movie)
             return JsonResponse({'status': 'removed'})
+        create_action(request.user, 'mark as watched', movie)
         return JsonResponse({'status': 'added'})
     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
 
@@ -36,7 +38,9 @@ def toggle_wishlist(request):
         wishlist_item, created = WishList.objects.get_or_create(user=request.user, movie=movie)
         if not created:
             wishlist_item.delete()  # Удаляем из вишлиста, если он уже был
+            create_action(request.user, 'remove from watchlist', movie)
             return JsonResponse({'status': 'removed'})
+        create_action(request.user, 'add to watchlist', movie)
         return JsonResponse({'status': 'added'})
     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
 
