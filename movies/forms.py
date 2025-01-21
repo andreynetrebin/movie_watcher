@@ -3,7 +3,7 @@ import re
 from django.core.files.base import ContentFile
 from django.utils.text import slugify
 from django import forms
-from .models import Movie, Genre, Country, Director, Writer
+from .models import Movie, Genre, Country, Director, Writer, Comment
 import os
 
 class MovieCreateForm(forms.ModelForm):
@@ -99,3 +99,8 @@ class MovieCreateForm(forms.ModelForm):
         if commit:
             movie.save()
         return movie
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['body']
