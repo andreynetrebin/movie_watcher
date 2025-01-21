@@ -54,11 +54,32 @@
     <li>{{ writer.name }}</li>
   {% endfor %}
   </ul>
-
-
     {{ movie.description|linebreaks }}
 </div>
   {% endwith %}
+
+<h2>Комментарии</h2>
+<ul>
+    {% for comment in comments %}
+        <li>
+            <strong>{{ comment.author.username }}</strong> ({{ comment.created_on }})<br>
+            {{ comment.body }}
+        </li>
+    {% empty %}
+        <li>Нет комментариев.</li>
+    {% endfor %}
+</ul>
+{% if user.is_authenticated %}
+    <h3>Оставить комментарий</h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Отправить</button>
+    </form>
+{% else %}
+    <p>Вы должны <a href="{% url 'login' %}">войти</a>, чтобы оставить комментарий.</p>
+{% endif %}
+
 {% endblock %}
 
 {% block domready %}

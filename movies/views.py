@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404
-from .forms import MovieCreateForm
+from .forms import MovieCreateForm, CommentForm
 from django.db.models import Count
 from .models import Movie, Genre, Country, Director, Writer, Watched, WishList
 from django.http import JsonResponse
@@ -154,10 +154,32 @@ def movie_create(request):
 
 def movie_detail(request, slug):
     movie = get_object_or_404(Movie, slug=slug)
+    comments = movie.comments.filter(active=True)
+    if request.method == 'POST':
+        form = CommentForm(data=request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.movie = movie
+            comment.author = request.user
+            comment.save()
+            create_action(request.user, 'оставил комментарий', movie)
+            return redirect(movie.get_absolute_url())  # Перенаправление на страницу фильма
+    else:
+        form = CommentForm()
+
     return render(request,
                   'movies/movie/detail.html',
                   {'section': 'movies',
-                   'movie': movie})
+                   'movie': movie,
+                   'comments': comments,
+                   'form': form})
+
+    # return render(request, 'movies/movie_detail.html', {
+    #     'movie': movie,
+    #     'comments': comments,
+    #     'form': form,
+    #
+    # })
 
 @login_required
 def movie_list(request):
@@ -175,50 +197,4 @@ def movie_list(request):
         'top_directors': top_directors,
         'top_writers': top_writers,
     })
-# def movie_list(request):
-#     movies = Movie.objects.all()
-#     watched_movies = request.user.watched_set.all()  # Получаем все просмотренные фильмы
-#     wishlist_movies = request.user.wishlist_set.all()  # Получаем все фильмы в вишлисте
-#
-#     # Получаем топ-10 режиссеров по количеству фильмов
-#     top_directors = Director.objects.annotate(num_movies=Count('movies_director')).order_by('-num_movies')[:10]
-#     # Получаем топ-10 сценаристов по количеству фильмов
-#     top_writers = Writer.objects.annotate(num_movies=Count('movies_writer')).order_by('-num_movies')[:10]
-#
-#     paginator = Paginator(movies, 5)
-#     page = request.GET.get('page')
-#     movies_only = request.GET.get('movies_only')
-#     try:
-#         movies = paginator.page(page)
-#     except PageNotAnInteger:
-#     # Если страница не является целым числом,
-#     # то доставить первую страницу
-#         movies = paginator.page(1)
-#     except EmptyPage:
-#         if movies_only:
-#         # Если AJAX-запрос и страница вне диапазона,
-#         # то вернуть пустую страницу
-#             return HttpResponse('')
-#     # Если страница вне диапазона,
-#     # то вернуть последнюю страницу результатов
-#         movies = paginator.page(paginator.num_pages)
-#     if movies_only:
-#         return render(request,
-#     'movies/movie/list_movies.html',
-#     {'section': 'movies',
-#     'movies': movies,
-#       'watched_movies': watched_movies,
-#         'wishlist_movies': wishlist_movies,
-#         'top_directors': top_directors,
-#         'top_writers': top_writers,
-#      })
-#
-#     return render(request,
-#     'movies/movie/list.html',
-#     {'section': 'movies',
-#     'movies': movies,
-#      'watched_movies': watched_movies,
-#      'wishlist_movies': wishlist_movies,
-#      'top_directors': top_directors,
-#      'top_writers': top_writers,
-#      })
+
