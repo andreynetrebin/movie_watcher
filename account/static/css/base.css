@@ -343,3 +343,27 @@ img.user-detail {
     width: 100px; /* Ширина постера */
     height: auto; /* Автоматическая высота для сохранения пропорций */
 }
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.pagination a {
+    margin: 0 10px;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.pagination a:hover {
+    background-color: #0056b3;
+}
+
+.pagination span {
+    align-self: center;
+    margin: 0 10px;
+}
