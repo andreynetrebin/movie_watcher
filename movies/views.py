@@ -183,7 +183,26 @@ def movie_detail(request, slug):
 
 @login_required
 def movie_list(request):
-    movies = Movie.objects.all()
+    user = request.user
+    movies = Movie.objects.all()  # Получаем все фильмы по умолчанию
+
+    # Фильтрация по вкладкам
+    filter_type = request.GET.get('filter', 'all')  # Получаем тип фильтра из параметров запроса
+
+    if filter_type == 'watched':
+        movies = movies.filter(watched__user=user)  # Предполагается, что у вас есть модель Watched
+    elif filter_type == 'unwatched':
+        movies = movies.exclude(watched__user=user)
+    elif filter_type == 'liked':
+        movies = movies.filter(users_like=user)
+    elif filter_type == 'disliked':
+        movies = movies.filter(users_dislike=user)
+    elif filter_type == 'watchlist':
+        movies = movies.filter(wishlist__user=user)  # Предполагается, что у вас есть модель WishList
+    elif filter_type == 'added':
+        movies = movies.filter(user=user)
+
+    # Пагинация
     paginator = Paginator(movies, 10)  # Показывать 10 фильмов на странице
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -196,5 +215,7 @@ def movie_list(request):
         'page_obj': page_obj,
         'top_directors': top_directors,
         'top_writers': top_writers,
+        'filter_type': filter_type,
     })
+
 

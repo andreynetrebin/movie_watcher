@@ -1,7 +1,16 @@
 {% load thumbnail %}
 
-{% block content %}
 <h1>Список фильмов</h1>
+
+<div class="tabs">
+    <a href="?filter=all" class="{% if filter_type == 'all' %}active{% endif %}">Все фильмы</a>
+    <a href="?filter=watched" class="{% if filter_type == 'watched' %}active{% endif %}">Просмотренные</a>
+    <a href="?filter=unwatched" class="{% if filter_type == 'unwatched' %}active{% endif %}">Непросмотренные</a>
+    <a href="?filter=liked" class="{% if filter_type == 'liked' %}active{% endif %}">Понравившиеся</a>
+    <a href="?filter=disliked" class="{% if filter_type == 'disliked' %}active{% endif %}">Непонравившиеся</a>
+    <a href="?filter=watchlist" class="{% if filter_type == 'watchlist' %}active{% endif %}">Буду смотреть</a>
+    <a href="?filter=added" class="{% if filter_type == 'added' %}active{% endif %}">Добавленные</a>
+</div>
 
 <div class="movie-container">
     <div class="movie-list">
@@ -42,32 +51,37 @@
         </ul>
     </div>
 
-    <div class="sidebar">
-        <h2>Топ-10 Режиссеров</h2>
-        <ul>
-            {% for director in top_directors %}
-                <li>{{ director.name }} - {{ director.num_movies }}</li>
-            {% endfor %}
-        </ul>
+<!--<aside class="sidebar">-->
+<!--    <h2>Топ-10 Режиссеров</h2>-->
+<!--    <ul>-->
+<!--        {% for director in top_directors %}-->
+<!--            <li>{{ director.name }} ({{ director.num_movies }} фильмов)</li>-->
+<!--        {% endfor %}-->
+<!--    </ul>-->
 
-        <h2>Топ-10 Сценаристов</h2>
-        <ul>
-            {% for writer in top_writers %}
-                <li>{{ writer.name }} - {{ writer.num_movies }}</li>
-            {% endfor %}
-        </ul>
+<!--    <h2>Топ-10 Сценаристов</h2>-->
+<!--    <ul>-->
+<!--        {% for writer in top_writers %}-->
+<!--            <li>{{ writer.name }} ({{ writer.num_movies }} фильмов)</li>-->
+<!--        {% endfor %}-->
+<!--    </ul>-->
+<!--</aside>-->
+</div>
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?filter={{ filter_type }}&page=1">Первая</a>
+                <a href="?filter={{ filter_type }}&page={{ page_obj.previous_page_number }}">Предыдущая</a>
+            {% endif %}
+
+            <span class="current">
+                Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?filter={{ filter_type }}&page={{ page_obj.next_page_number }}">Следующая</a>
+                <a href="?filter={{ filter_type }}&page={{ page_obj.paginator.num_pages }}">Последняя</a>
+            {% endif %}
+        </span>
     </div>
-</div>
 
-<div class="pagination">
-    {% if page_obj.has_previous %}
-        <a href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
-    {% endif %}
-
-    <span>Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
-
-    {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}">Следующая</a>
-    {% endif %}
-</div>
-{% endblock %}
