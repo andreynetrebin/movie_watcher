@@ -322,14 +322,6 @@ img.user-detail {
     margin-right: 20px; /* Отступ между списком фильмов и боковой панелью */
 }
 
-.sidebar {
-    flex: 1; /* Занимает 1/4 ширины контейнера */
-    background-color: #f9f9f9; /* Цвет фона для боковой панели */
-    padding: 15px; /* Отступы внутри боковой панели */
-    border: 1px solid #ddd; /* Граница боковой панели */
-    border-radius: 5px; /* Закругленные углы */
-}
-
 .movie-item {
     display: flex; /* Используем Flexbox для расположения постера и информации о фильме */
     margin-bottom: 20px; /* Отступ между фильмами */
@@ -344,26 +336,61 @@ img.user-detail {
     height: auto; /* Автоматическая высота для сохранения пропорций */
 }
 
+.sidebar {
+    float: right;
+    width: 25%;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.sidebar h2 {
+    margin-top: 0;
+}
+
 .pagination {
-    display: flex;
-    justify-content: center;
+    text-align: center;
     margin: 20px 0;
 }
 
 .pagination a {
-    margin: 0 10px;
+    margin: 0 5px;
+    text-decoration: none;
+    color: #007bff;
+}
+
+.pagination .current {
+    font-weight: bold;
+}
+
+.tabs {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.tabs a {
     padding: 10px 15px;
+    text-decoration: none;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.tabs a.active {
     background-color: #007bff;
     color: white;
-    text-decoration: none;
-    border-radius: 5px;
 }
 
-.pagination a:hover {
-    background-color: #0056b3;
+.tabs a:hover {
+    background-color: #f0f0f0;
 }
 
-.pagination span {
-    align-self: center;
-    margin: 0 10px;
+.loading {
+    display: none;
+    text-align: center;
+    font-size: 18px;
+    color: #007bff;
 }
