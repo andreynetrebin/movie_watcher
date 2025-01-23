@@ -2,62 +2,49 @@
 {% load thumbnail %}
 {% block title %}{{ movie.title }}{% endblock %}
 {% block content %}
-<h1>{{ movie.title }}</h1>
+<div class="movie-detail">
+    <div class="movie-poster">
+        <img src="{{ movie.poster.url }}" alt="{{ movie.title }} постер" class="poster-img">
+    </div>
+    <div class="movie-info">
+        <h1>{{ movie.title }}</h1>
+        <div class="info-block">
+            <div class="details">
+                <p><strong>Год выпуска:</strong> {{ movie.year }}</p>
+                <p><strong>Продолжительность:</strong> {{ movie.duration }} минут</p>
 
-<!--<img src="{{ movie.poster.url }}" class="image-detail">-->
+                <h2>Режиссеры</h2>
+                <ul>
+                    {% for director in movie.directors.all %}
+                        <li>{{ director.name }}</li>
+                    {% endfor %}
+                </ul>
 
-<a href="{{ movie.poster.url }}">
-<img src="{% thumbnail movie.poster 300x0 %}" class="image-detail">
-</a>
-{% with total_likes=movie.users_like.count total_dislikes=movie.users_dislike.count users_like=movie.users_like.all %}
-{{ total_likes }}
-{{ total_dislikes }}
-{{ users_like }}
-<div class="image-info">
-<div>
-<span class="count">
-<span class="like total">{{ total_likes }}</span>
-    like{{ total_likes|pluralize }}
-</span>
-<span class="count">
-<span class="dislike total">{{ total_dislikes }}</span>
-    dislike{{ total_dislikes|pluralize }}
-</span>
-    <br>
-    <br>
-    <a href="#" data-id="{{ movie.id }}" data-action="like"   class="like button">Like</a>
-    <a href="#" data-id="{{ movie.id }}" data-action="dislike" class="dislike button">DisLike</a>
+                <h2>Сценаристы</h2>
+                <ul>
+                    {% for writer in movie.writers.all %}
+                        <li>{{ writer.name }}</li>
+                    {% endfor %}
+                </ul>
 
+                <h2>Жанры</h2>
+                <ul>
+                    {% for genre in movie.genres.all %}
+                        <li>{{ genre.name }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="metrics">
+                <h2>Показатели</h2>
+                <p><strong>Просмотрен:</strong> {{ watched_count }}</p>
+                <p><strong>Лайки:</strong> {{ movie.users_like.count }}</p>
+                <p><strong>Дизлайки:</strong> {{ movie.users_dislike.count }}</p>
+                <p><strong>Лайки/Просмотры:</strong> {{ like_ratio|floatformat:2 }}</p>
+                <p><strong>Лайки/Дизлайки:</strong> {{ dislike_ratio|floatformat:2 }}</p>
+            </div>
+        </div>
+    </div>
 </div>
-
-  <ul>
-    {% for genre in movie.genres.all %}
-    <li>{{ genre }}</li>
-  {% endfor %}
-  </ul>
-
-  <ul>
-    {% for country in movie.countries.all %}
-    <li>{{ country }}</li>
-  {% endfor %}
-  </ul>
-
-
-    <ul>
-    {% for director in movie.directors.all %}
-    <li>{{ director.name }}</li>
-  {% endfor %}
-  </ul>
-
-     <ul>
-    {% for writer in movie.writers.all %}
-    <li>{{ writer.name }}</li>
-  {% endfor %}
-  </ul>
-    {{ movie.description|linebreaks }}
-</div>
-  {% endwith %}
-
 <h2>Комментарии</h2>
 <ul>
     {% for comment in comments %}

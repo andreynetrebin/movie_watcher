@@ -155,6 +155,11 @@ def movie_create(request):
 def movie_detail(request, slug):
     movie = get_object_or_404(Movie, slug=slug)
     comments = movie.comments.filter(active=True)
+    # Получаем количество пользователей, пометивших фильм как просмотренный
+    watched_count = Watched.objects.filter(movie=movie).count()
+    # Вычисляем соотношения
+    like_ratio = movie.total_likes / watched_count if watched_count > 0 else 0
+    dislike_ratio = movie.users_dislike.count() / movie.users_like.count() if movie.users_like.count() > 0 else 0
     if request.method == 'POST':
         form = CommentForm(data=request.POST)
         if form.is_valid():
@@ -171,6 +176,9 @@ def movie_detail(request, slug):
                   'movies/movie/detail.html',
                   {'section': 'movies',
                    'movie': movie,
+                   'watched_count': watched_count,
+                   'like_ratio': like_ratio,
+                   'dislike_ratio': dislike_ratio,
                    'comments': comments,
                    'form': form})
 
