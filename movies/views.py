@@ -24,7 +24,6 @@ def mark_watched(request):
         watched, created = Watched.objects.get_or_create(user=request.user, movie=movie)
         if not created:
             watched.delete()  # Удаляем из просмотренных, если он уже был
-            create_action(request.user, 'unmark as watched', movie)
             return JsonResponse({'status': 'removed'})
         create_action(request.user, 'mark as watched', movie)
         return JsonResponse({'status': 'added'})
@@ -210,6 +209,10 @@ def movie_list(request):
     elif filter_type == 'added':
         movies = movies.filter(user=user)
 
+    # Получаем список просмотренных фильмов для текущего пользователя
+
+    watched_movies = Watched.objects.filter(user=user).values_list('movie_id', flat=True)
+
     # Пагинация
     paginator = Paginator(movies, 10)  # Показывать 10 фильмов на странице
     page_number = request.GET.get('page')
@@ -224,6 +227,7 @@ def movie_list(request):
         'top_directors': top_directors,
         'top_writers': top_writers,
         'filter_type': filter_type,
+        'watched_movies': watched_movies,  # Передаем список просмотренных фильмов
     })
 
 
