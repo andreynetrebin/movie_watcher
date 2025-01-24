@@ -44,6 +44,13 @@
                                     Пометить как просмотренный
                                 {% endif %}
                             </button>
+                            <button class="recently-watched" data-id="{{ movie.id }}">
+                                {% if movie.id in watched_movies %}
+                                    Пометить как непросмотренный
+                                {% else %}
+                                    Пометить как просмотрен недавно
+                                {% endif %}
+                            </button>
                         </div>
                     </div>
                 </li>
