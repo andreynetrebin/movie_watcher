@@ -35,14 +35,10 @@
                     <button class="dislike" data-id="{{ movie.id }}">
                         <i class="fas fa-thumbs-down {% if request.user in movie.users_dislike.all %}active{% endif %}"></i>
                     </button>
+                        <button class="wishlist" data-id="{{ movie.id }}">
+                            <i class="fas fa-plus {% if movie.id in wishlist_movies %}transparent{% endif %}"></i>
+                        </button>
                 </div>
-                            <button class="wishlist" data-id="{{ movie.id }}">
-                                {% if movie in wishlist_movies %}
-                                    Удалить из списка желаемого
-                                {% else %}
-                                    Добавить в список желаемого
-                                {% endif %}
-                            </button>
                             <button class="watched" data-id="{{ movie.id }}">
                                 {% if movie in watched_movies %}
                                     Пометить как непросмотренный

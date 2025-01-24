@@ -19,6 +19,8 @@ from actions.utils import create_action
 def mark_watched(request):
     if request.method == 'POST':
         movie_id = request.POST.get('id')
+        print("mark_watched")
+        print(movie_id)
         movie = get_object_or_404(Movie, id=movie_id)
         # Проверяем, был ли фильм уже просмотрен
         watched, created = Watched.objects.get_or_create(user=request.user, movie=movie)
@@ -43,21 +45,38 @@ def mark_recently_watched(request):
         return JsonResponse({'status': 'added'})
     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
 
+# views.py
 @login_required
 @require_POST
-def toggle_wishlist(request):
+def add_to_wishlist(request):
     if request.method == 'POST':
         movie_id = request.POST.get('id')
         movie = get_object_or_404(Movie, id=movie_id)
-       # Проверяем, был ли фильм уже в вишлисте
+
+        # Проверяем, добавлен ли фильм в вишлист
         wishlist_item, created = WishList.objects.get_or_create(user=request.user, movie=movie)
-        if not created:
-            wishlist_item.delete()  # Удаляем из вишлиста, если он уже был
-            create_action(request.user, 'remove from watchlist', movie)
+
+        if created:
+            return JsonResponse({'status': 'added'})
+        else:
+            wishlist_item.delete()
             return JsonResponse({'status': 'removed'})
-        create_action(request.user, 'add to watchlist', movie)
-        return JsonResponse({'status': 'added'})
-    return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
+
+    return JsonResponse({'status': 'error'}, status=400)
+
+# def toggle_wishlist(request):
+#     if request.method == 'POST':
+#         movie_id = request.POST.get('id')
+#         movie = get_object_or_404(Movie, id=movie_id)
+#        # Проверяем, был ли фильм уже в вишлисте
+#         wishlist_item, created = WishList.objects.get_or_create(user=request.user, movie=movie)
+#         if not created:
+#             wishlist_item.delete()  # Удаляем из вишлиста, если он уже был
+#             create_action(request.user, 'remove from watchlist', movie)
+#             return JsonResponse({'status': 'removed'})
+#         create_action(request.user, 'add to watchlist', movie)
+#         return JsonResponse({'status': 'added'})
+#     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
 
 
 
@@ -225,7 +244,8 @@ def movie_detail(request, slug):
 def movie_list(request):
     user = request.user
     movies = Movie.objects.all()  # Получаем все фильмы по умолчанию
-
+    wishlist_movies = WishList.objects.filter(user=request.user).values_list('movie_id',
+                                                                             flat=True)
     # Фильтрация по вкладкам
     filter_type = request.GET.get('filter', 'all')  # Получаем тип фильтра из параметров запроса
 
@@ -261,6 +281,7 @@ def movie_list(request):
         'top_writers': top_writers,
         'filter_type': filter_type,
         'watched_movies': watched_movies,  # Передаем список просмотренных фильмов
+        'wishlist_movies': wishlist_movies,
     })
 
 

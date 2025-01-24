@@ -9,6 +9,7 @@ urlpatterns = [
     path('mark_dislike/', views.mark_dislike, name='mark_dislike'),
     path('mark_watched/', views.mark_watched, name='mark_watched'),
     path('mark_recently_watched/', views.mark_recently_watched, name='mark_recently_watched'),
-    path('toggle_wishlist/', views.toggle_wishlist, name='toggle_wishlist'),
+    # path('toggle_wishlist/', views.toggle_wishlist, name='toggle_wishlist'),
+    path('wishlist/', views.add_to_wishlist, name='wishlist'),
     path('', views.movie_list, name='list'),
 ]
