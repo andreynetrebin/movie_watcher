@@ -25,7 +25,21 @@ def mark_watched(request):
         if not created:
             watched.delete()  # Удаляем из просмотренных, если он уже был
             return JsonResponse({'status': 'removed'})
-        create_action(request.user, 'mark as watched', movie)
+        return JsonResponse({'status': 'added'})
+    return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
+
+@login_required
+@require_POST
+def mark_recently_watched(request):
+    if request.method == 'POST':
+        movie_id = request.POST.get('id')
+        movie = get_object_or_404(Movie, id=movie_id)
+        # Проверяем, был ли фильм уже просмотрен
+        watched, created = Watched.objects.get_or_create(user=request.user, movie=movie)
+        if not created:
+            watched.delete()  # Удаляем из просмотренных, если он уже был
+            return JsonResponse({'status': 'removed'})
+        create_action(request.user, 'mark as recently watched', movie)  # Вызываем сигнал для "просмотрен недавно"
         return JsonResponse({'status': 'added'})
     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
 

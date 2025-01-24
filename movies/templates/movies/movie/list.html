@@ -102,6 +102,29 @@ document.querySelectorAll('button.watched').forEach(function(watchedButton) {
     });
 });
 
+
+const url_recently_watched = '{% url "movies:mark_recently_watched" %}';
+document.querySelectorAll('button.recently-watched').forEach(function(watchedRecentlyButton) {
+    watchedRecentlyButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        var formData = new FormData();
+        formData.append('id', watchedRecentlyButton.dataset.id);
+        fetch(url_recently_watched, {
+            method: 'POST',
+            headers: {'X-CSRFToken': csrftoken},
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data['status'] === 'added') {
+                watchedRecentlyButton.innerHTML = 'Mark as Unwatched';
+            } else if (data['status'] === 'removed') {
+                watchedRecentlyButton.innerHTML = 'Mark as Watched';
+            }
+        });
+    });
+});
+
 const url_wishlist = '{% url "movies:toggle_wishlist" %}';
 document.querySelectorAll('button.wishlist').forEach(function(wishlistButton) {
     wishlistButton.addEventListener('click', function(e) {
