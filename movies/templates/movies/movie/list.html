@@ -93,6 +93,38 @@ document.querySelectorAll('button.dislike').forEach(function(dislikeButton) {
     });
 });
 
+const url_wishlist = '{% url "movies:wishlist" %}';
+document.querySelectorAll('button.wishlist').forEach(function(wishlistButton) {
+    wishlistButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        // Подготовка данных для запроса
+        var formData = new FormData();
+        formData.append('id', wishlistButton.dataset.id);
+        formData.append('action', 'toggle'); // Указываем действие "toggle" для добавления/удаления
+        // Отправка HTTP-запроса
+        fetch(url_wishlist, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken') // Получите CSRF-токен
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data['status'] === 'added') {
+                // Обновление состояния кнопки, если фильм добавлен в вишлист
+                wishlistButton.querySelector('i').classList.add('transparent'); // Сделать иконку прозрачной
+            } else if (data['status'] === 'removed') {
+                // Обновление состояния кнопки, если фильм удален из вишлиста
+                wishlistButton.querySelector('i').classList.remove('transparent'); // Вернуть иконку в цвет
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+        });
+    });
+});
+
 // Функция для получения CSRF-токена
 function getCookie(name) {
     let cookieValue = null;
@@ -154,27 +186,6 @@ document.querySelectorAll('button.recently-watched').forEach(function(watchedRec
     });
 });
 
-const url_wishlist = '{% url "movies:toggle_wishlist" %}';
-document.querySelectorAll('button.wishlist').forEach(function(wishlistButton) {
-    wishlistButton.addEventListener('click', function(e) {
-        e.preventDefault();
-        var formData = new FormData();
-        formData.append('id', wishlistButton.dataset.id);
-        fetch(url_wishlist, {
-            method: 'POST',
-            headers: {'X-CSRFToken': csrftoken},
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data['status'] === 'added') {
-                wishlistButton.innerHTML = 'Remove from Wish List';
-            } else if (data['status'] === 'removed') {
-                wishlistButton.innerHTML = 'Add to Wish List';
-            }
-        });
-    });
-});
 
 
 {% endblock %}
