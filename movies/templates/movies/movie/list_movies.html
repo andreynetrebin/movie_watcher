@@ -16,7 +16,7 @@
     <div class="movie-list">
         <ul>
             {% for movie in page_obj %}
-                <li class="movie-item">
+                <li class="movie-item {% if movie.id in watched_movies %}watched{% endif %}">
                     <div class="movie-poster">
                         {% if movie.poster %}
                             <a href="{{ movie.get_absolute_url }}">

@@ -428,3 +428,8 @@ img.user-detail {
     padding-left: 20px; /* Отступ слева для отделения от деталей */
     border-left: 1px solid #ccc; /* Линия для отделения */
 }
+
+.watched {
+    background-color: #d3ffd3; /* Светло-зеленый фон для просмотренных фильмов */
+    font-weight: bold; /* Жирный шрифт для выделения */
+}
