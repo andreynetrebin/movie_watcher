@@ -61,32 +61,51 @@ def toggle_wishlist(request):
 
 
 
-def movie_like(request):
-    movie_id = request.POST.get('id')
-    action = request.POST.get('action')
-    if movie_id and action:
-        try:
-            movie = Movie.objects.get(id=movie_id)
-            if action == 'like':
-                if movie.users_like.filter(id=request.user.id).exists():
-                    return JsonResponse({'status': 'exists'})
-                if movie.users_dislike.filter(id=request.user.id).exists():
-                    movie.users_dislike.remove(request.user)  # Удаляем dislike, если он есть
+@login_required
+@require_POST
+def mark_like(request):
+    if request.method == 'POST':
+        movie_id = request.POST.get('id')
+        movie = get_object_or_404(Movie, id=movie_id)
+        movie.add_like(request.user)
+        create_action(request.user, 'liked', movie)
+        return JsonResponse({'status': 'liked', 'total_likes': movie.total_likes})
+@login_required
+@require_POST
+def mark_dislike(request):
+    if request.method == 'POST':
+        movie_id = request.POST.get('id')
+        movie = get_object_or_404(Movie, id=movie_id)
+        movie.add_dislike(request.user)
+        create_action(request.user, 'disliked', movie)
+        return JsonResponse({'status': 'disliked', 'total_dislikes': movie.total_dislikes})
 
-                movie.users_like.add(request.user)  # Добавляем like
-                create_action(request.user, 'likes', movie)
-
-            if action == 'dislike':
-                if movie.users_dislike.filter(id=request.user.id).exists():
-                    return JsonResponse({'status': 'exists'})
-                if movie.users_like.filter(id=request.user.id).exists():
-                    movie.users_like.remove(request.user)  #  Удаляем like, если он есть
-                movie.users_dislike.add(request.user)  # Добавляем dislike
-                create_action(request.user, 'dislikes', movie)
-            return JsonResponse({'status': 'ok'})
-        except Movie.DoesNotExist:
-            pass
-    return JsonResponse({'status': 'error'})
+# def movie_like(request):
+#     movie_id = request.POST.get('id')
+#     action = request.POST.get('action')
+#     if movie_id and action:
+#         try:
+#             movie = Movie.objects.get(id=movie_id)
+#             if action == 'like':
+#                 if movie.users_like.filter(id=request.user.id).exists():
+#                     return JsonResponse({'status': 'exists'})
+#                 if movie.users_dislike.filter(id=request.user.id).exists():
+#                     movie.users_dislike.remove(request.user)  # Удаляем dislike, если он есть
+#
+#                 movie.users_like.add(request.user)  # Добавляем like
+#                 create_action(request.user, 'likes', movie)
+#
+#             if action == 'dislike':
+#                 if movie.users_dislike.filter(id=request.user.id).exists():
+#                     return JsonResponse({'status': 'exists'})
+#                 if movie.users_like.filter(id=request.user.id).exists():
+#                     movie.users_like.remove(request.user)  #  Удаляем like, если он есть
+#                 movie.users_dislike.add(request.user)  # Добавляем dislike
+#                 create_action(request.user, 'dislikes', movie)
+#             return JsonResponse({'status': 'ok'})
+#         except Movie.DoesNotExist:
+#             pass
+#     return JsonResponse({'status': 'error'})
 
 
 @login_required
