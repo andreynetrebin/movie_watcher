@@ -433,3 +433,24 @@ img.user-detail {
     background-color: #d3ffd3; /* Светло-зеленый фон для просмотренных фильмов */
     font-weight: bold; /* Жирный шрифт для выделения */
 }
+
+.movie-actions button {
+    background: none; /* Убираем фон */
+    border: none; /* Убираем рамку */
+    cursor: pointer; /* Указатель при наведении */
+    font-size: 24px; /* Размер иконок */
+    color: #333; /* Цвет иконок */
+    margin-right: 10px; /* Отступ между кнопками */
+}
+
+.movie-actions button:hover {
+    color: #007bff; /* Цвет при наведении */
+}
+
+.transparent {
+    opacity: 0.5; /* Прозрачные иконки */
+}
+
+.active {
+    color: #007bff; /* Цвет активной иконки */
+}

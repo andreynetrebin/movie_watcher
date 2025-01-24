@@ -28,8 +28,14 @@
                         <h2>{{ movie.title }}</h2>
                         <p>Год выпуска: {{ movie.year }}</p>
                         <div class="movie-actions">
-                            <button class="like" data-id="{{ movie.id }}" data-action="like">Нравится</button>
-                            <button class="dislike" data-id="{{ movie.id }}" data-action="dislike">Не нравится</button>
+                <div class="movie-actions">
+                    <button class="like" data-id="{{ movie.id }}">
+                        <i class="fas fa-thumbs-up {% if request.user in movie.users_like.all %}active{% endif %}"></i>
+                    </button>
+                    <button class="dislike" data-id="{{ movie.id }}">
+                        <i class="fas fa-thumbs-down {% if request.user in movie.users_dislike.all %}active{% endif %}"></i>
+                    </button>
+                </div>
                             <button class="wishlist" data-id="{{ movie.id }}">
                                 {% if movie in wishlist_movies %}
                                     Удалить из списка желаемого

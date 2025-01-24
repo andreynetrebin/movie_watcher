@@ -31,14 +31,11 @@ class Writer(models.Model):
 class Movie(models.Model):
     title = models.CharField(max_length=200)
     title_original = models.CharField(max_length=200)
-    # genre = models.CharField(max_length=200)
     year = models.IntegerField()
     duration = models.IntegerField()
-    # director = models.CharField(max_length=200)
     kinopoisk_id = models.IntegerField()
     kinopoisk_url = models.URLField()
     slug = models.SlugField(max_length=200, blank=True)
-    # url = models.URLField(max_length=2000)
     poster = models.ImageField(upload_to='images/%Y/%m/%d/')
     description = models.TextField(blank=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -61,6 +58,7 @@ class Movie(models.Model):
         blank=True
     )
     total_likes = models.PositiveIntegerField(default=0)
+    total_dislikes = models.PositiveIntegerField(default=0)
 
 
     def save(self, *args, **kwargs):
@@ -68,11 +66,49 @@ class Movie(models.Model):
             self.slug = f"{slugify(self.title)}_{self.kinopoisk_id}"
         super().save(*args, **kwargs)
 
+    def add_like(self, user):
+        if user not in self.users_like.all():
+            self.users_like.add(user)
+            self.total_likes += 1
+            self.save()
+            # Удаляем пользователя из дизлайков, если он там есть
+            if user in self.users_dislike.all():
+                self.users_dislike.remove(user)
+                if self.total_dislikes > 0:
+                    self.total_dislikes -= 1  # Предполагается, что у вас есть поле total_dislikes
+                self.save()
+    def remove_like(self, user):
+        if user in self.users_like.all():
+            self.users_like.remove(user)
+            if self.total_likes > 0:
+                self.total_likes -= 1
+            self.save()
+
+    def add_dislike(self, user):
+        if user not in self.users_dislike.all():
+            self.users_dislike.add(user)
+            # Удаляем пользователя из лайков, если он там есть
+            if user in self.users_like.all():
+                self.users_like.remove(user)
+                if self.total_likes > 0:
+                    self.total_likes -= 1
+                self.save()
+
+
+    def remove_dislike(self, user):
+        if user in self.users_dislike.all():
+            self.users_dislike.remove(user)
+            # Предполагается, что у вас есть поле total_dislikes
+            if self.total_dislikes > 0:
+                self.total_dislikes -= 1
+            self.save()
+
 
     class Meta:
         indexes = [
             models.Index(fields=['-created']),
             models.Index(fields=['-total_likes']),
+            models.Index(fields=['-total_dislikes']),
     ]
         ordering = ['-created']
 
