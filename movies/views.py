@@ -5,7 +5,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404
 from .forms import MovieCreateForm, CommentForm
 from django.db.models import Count
-from .models import Movie, Genre, Country, Director, Writer, Watched, WishList
+from .models import Movie, Genre, Country, Director, Writer, Watched, WishList, MovieList
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.http import HttpResponse
@@ -13,6 +13,40 @@ from django.core.paginator import Paginator, EmptyPage, \
 PageNotAnInteger
 from actions.utils import create_action
 
+@login_required
+def add_movie_to_list(request, list_id, movie_id):
+    movie_list = get_object_or_404(MovieList, id=list_id, user=request.user)
+    movie = get_object_or_404(Movie, id=movie_id)
+
+    if movie not in movie_list.movies.all():
+        movie_list.movies.add(movie)
+        movie_list.add_points(1)  # Награда за добавление фильма
+    return redirect('movies:movie_list_detail', list_id)
+
+@login_required
+def create_movie_list(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        movie_list = MovieList.objects.create(user=request.user, title=title)
+        movie_list.add_points(10)  # Награда за создание списка
+        return redirect('movies:movie_list_detail', movie_list.id)
+    return render(request, 'movies/movie/create_movie_list.html')
+
+@login_required
+def movie_list_detail(request, list_id):
+    movie_list = get_object_or_404(MovieList, id=list_id)
+    all_movies = Movie.objects.all()  # Получаем все фильмы
+    return render(request, 'movies/movie/movie_list_detail.html', {'movie_list': movie_list, 'all_movies': all_movies})
+@login_required
+def like_movie_list(request, list_id):
+    movie_list = get_object_or_404(MovieList, id=list_id)
+    if request.user in movie_list.users_like.all():
+        movie_list.users_like.remove(request.user)
+        movie_list.add_points(-5)  # Уменьшение баллов за удаление лайка
+    else:
+        movie_list.users_like.add(request.user)
+        movie_list.add_points(5)  # Награда за лайк
+    return redirect('movies/movie/movie_list_detail.html', list_id)
 
 @login_required
 @require_POST

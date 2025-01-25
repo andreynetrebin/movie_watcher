@@ -25,8 +25,8 @@
                         {% endif %}
                     </div>
                     <div class="movie-info">
-                        <h2>{{ movie.title }}</h2>
-                        <p>Год выпуска: {{ movie.year }}</p>
+                        <h2>{{ movie.title }} ({{ movie.year }})</h2>
+                        <p>{{ movie.title_original }}</p>
                         <div class="movie-actions">
                 <div class="movie-actions">
                     <button class="like" data-id="{{ movie.id }}">
