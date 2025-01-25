@@ -11,14 +11,27 @@
     <span class="logo">КиноСмотрители</span>
     {% if request.user.is_authenticated %}
       <ul class="menu">
-        <li {% if section == "dashboard" %}class="selected"{% endif %}>
-          <a href="{% url "dashboard" %}">My dashboard</a>
-        </li>
-        <li {% if section == "movies" %}class="selected"{% endif %}>
-          <a href="{% url "movies:list" %}">Movies</a>
+<li {% if section == "movies" %}class="selected"{% endif %}>
+    <a href="{% url "movies:list" %}">Фильмы</a>
+    <ul class="dropdown-content">
+        <li><a href="{% url "movies:list" %}?filter=all">Все фильмы</a></li>
+        <li><a href="{% url "movies:list" %}?filter=watched">Просмотренные</a></li>
+        <li><a href="{% url "movies:list" %}?filter=unwatched">Непросмотренные</a></li>
+        <li><a href="{% url "movies:list" %}?filter=liked">Понравившиеся</a></li>
+        <li><a href="{% url "movies:list" %}?filter=disliked">Непонравившиеся</a></li>
+        <li><a href="{% url "movies:list" %}?filter=watchlist">Буду смотреть</a></li>
+        <li><a href="{% url "movies:list" %}?filter=added">Добавленные</a></li>
+        <li><a href="{% url "movies:create" %}?filter=added">+Добавить фильм</a></li>
+    </ul>
+</li>
+        <li {% if section == "lists" %}class="selected"{% endif %}>
+          <a href="#" %}">Списки</a>
         </li>
         <li {% if section == "people" %}class="selected"{% endif %}>
-          <a href="{% url "user_list" %}">People</a>
+          <a href="{% url "user_list" %}">Киносмотрители</a>
+        </li>
+        <li {% if section == "dashboard" %}class="selected"{% endif %}>
+          <a href="{% url "dashboard" %}">Личный кабинет</a>
         </li>
       </ul>
     {% endif %}
@@ -55,6 +68,26 @@
 document.addEventListener('DOMContentLoaded', (event) => {
 // DOM загружена
 {% block domready %}
+document.querySelectorAll('#header ul.menu li').forEach(function(menuItem) {
+    menuItem.addEventListener('click', function(event) {
+        event.stopPropagation(); // Останавливаем всплытие события
+        const dropdownContent = this.querySelector('.dropdown-content');
+        if (dropdownContent) {
+            dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+        }
+    });
+});
+
+// Закрытие выпадающего меню при клике вне меню
+window.onclick = function(event) {
+    const dropdowns = document.getElementsByClassName("dropdown-content");
+    for (let i = 0; i < dropdowns.length; i++) {
+        const openDropdown = dropdowns[i];
+        if (openDropdown.style.display === 'block') {
+            openDropdown.style.display = 'none';
+        }
+    }
+}
 {% endblock %}
 })
 </script>

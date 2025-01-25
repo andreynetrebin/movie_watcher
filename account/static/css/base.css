@@ -36,12 +36,12 @@ ol {
 }
 
 #header {
-    padding:10px 100px;
-    font-size:14px;
-    background:#12c064;
-    color:#fff;
-    border-bottom:4px solid #1cdf78;
-    overflow:auto;
+    padding: 30px 100px;
+    font-size: 14px;
+    background: #12c064;
+    color: #fff;
+    border-bottom: 4px solid #1cdf78;
+    overflow: visible; /* Позволяем содержимому выходить за пределы */
 }
 
 #header .logo {
@@ -50,22 +50,6 @@ ol {
     color:#f3f7cc;
     font-size:20px;
     margin-right:10%;
-}
-
-#header ul.menu {
-    list-style:none;
-    float:left;
-    margin:0;
-    padding:0;
-}
-#header ul.menu li {
-    float:left;
-    padding:4px 10px;
-}
-
-#header ul.menu li.selected a, #header ul.menu li.selected a:hover {
-    color:#1b6d32;
-    font-weight:bold;
 }
 
 #header a {
@@ -380,8 +364,8 @@ img.user-detail {
 }
 
 .tabs a.active {
-    background-color: #007bff;
-    color: white;
+    background-color: #f3f7cc;
+    color: black;
 }
 
 .tabs a:hover {
@@ -486,3 +470,48 @@ button.wishlist i.transparent {
     opacity: 0.5; /* Прозрачная иконка вишлиста */
 }
 
+/* Стили для выпадающего меню */
+.dropdown-content {
+    display: none; /* Скрываем меню по умолчанию */
+    position: absolute; /* Позиционирование относительно родителя */
+    background-color: white; /* Цвет фона меню */
+    min-width: 160px; /* Минимальная ширина */
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); /* Тень */
+    z-index: 1; /* Устанавливаем на передний план */
+}
+
+/* Показываем меню при наведении на кнопку */
+#header ul.menu li:hover .dropdown-content {
+    display: block; /* Показываем меню */
+}
+
+/* Стили для элементов списка в выпадающем меню */
+.dropdown-content li {
+    display: block; /* Отображение в блоке для вертикального расположения */
+}
+
+/* Стили для ссылок в выпадающем меню */
+#header .dropdown-content a {
+    color: black; /* Цвет текста по умолчанию для выпадающего меню */
+    padding: 12px 16px; /* Отступы */
+    text-decoration: none; /* Убираем подчеркивание */
+    display: block; /* Отображение в блоке */
+}
+
+/* Изменение цвета при наведении */
+.dropdown-content a:hover {
+    background-color: #f1f1f1; /* Цвет фона при наведении */
+}
+
+#header ul.menu {
+    list-style: none; /* Убираем маркеры списка */
+    float: left; /* Выравнивание влево */
+    margin: 0; /* Убираем отступы */
+    padding: 0; /* Убираем внутренние отступы */
+}
+
+#header ul.menu li {
+    float: left; /* Элементы списка располагаются в ряд */
+    padding: 4px 10px; /* Отступы вокруг элементов */
+    position: relative; /* Устанавливаем относительное позиционирование для родителя */
+}
