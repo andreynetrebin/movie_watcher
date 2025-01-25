@@ -12,4 +12,13 @@ urlpatterns = [
     # path('toggle_wishlist/', views.toggle_wishlist, name='toggle_wishlist'),
     path('wishlist/', views.add_to_wishlist, name='wishlist'),
     path('', views.movie_list, name='list'),
+
+    path('create_list/', views.create_movie_list, name='create_movie_list'),
+    path('list/<int:list_id>/', views.movie_list_detail, name='movie_list_detail'),
+    path('list/<int:list_id>/like/', views.like_movie_list, name='like_movie_list'),
+    path('list/<int:list_id>/add/<int:movie_id>/', views.add_movie_to_list, name='add_movie_to_list'),
+
 ]
+
+
+
