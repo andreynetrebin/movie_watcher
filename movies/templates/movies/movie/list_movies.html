@@ -39,20 +39,26 @@
                             <i class="fas fa-plus {% if movie.id in wishlist_movies %}transparent{% endif %}"></i>
                         </button>
                 </div>
-                            <button class="watched" data-id="{{ movie.id }}">
-                                {% if movie in watched_movies %}
-                                    Пометить как непросмотренный
-                                {% else %}
-                                    Пометить как просмотренный
-                                {% endif %}
-                            </button>
-                            <button class="recently-watched" data-id="{{ movie.id }}">
-                                {% if movie.id in watched_movies %}
-                                    Пометить как непросмотренный
-                                {% else %}
-                                    Пометить как просмотрен недавно
-                                {% endif %}
-                            </button>
+    <button class="watched" data-id="{{ movie.id }}">
+        <i class="fas fa-circle {% if movie.id in watched_movies %}fa-check{% endif %}"></i>
+                <span class="action-label">
+            {% if movie.id in watched_movies %}
+                Просмотрен
+            {% else %}
+                Пометить как просмотренный
+            {% endif %}
+        </span>
+    </button>
+    <button class="recently-watched" data-id="{{ movie.id }}">
+        <i class="fas fa-circle {% if movie.id in recently_watched_movies %}fa-check{% endif %}"></i>
+        <span class="action-label">
+            {% if movie.id in recently_watched_movies %}
+                Просмотрен недавно
+            {% else %}
+                Пометить как просмотрен недавно
+            {% endif %}
+        </span>
+    </button>
                         </div>
                     </div>
                 </li>
