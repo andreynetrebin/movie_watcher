@@ -1,0 +1,214 @@
+<!-- templates/writers/writer_detail.html -->
+{% extends "base.html" %}
+{% load thumbnail %}
+{% block title %}{{ writer.name }}{% endblock %}
+{% block content %}
+<h1>{{ writer.name }}</h1>
+<h2>Фильмы:</h2>
+<div class="movie-container">
+    <div class="movie-list">
+        <ul>
+            {% for movie in movies %}
+                <li class="movie-item {% if movie.id in watched_movies %}watched{% endif %}">
+                    <div class="movie-poster">
+                        {% if movie.poster %}
+                            <a href="{{ movie.get_absolute_url }}">
+                                <img src="{% thumbnail movie.poster 300x0 %}" alt="{{ movie.title }} постер" class="movie-poster-img">
+                            </a>
+                        {% endif %}
+                    </div>
+                    <div class="movie-info">
+                        <h2>{{ movie.title }} ({{ movie.year }})</h2>
+                        <p>{{ movie.title_original }}</p>
+                        <div class="movie-actions">
+                            <button class="like" data-id="{{ movie.id }}">
+                                <i class="fas fa-thumbs-up {% if request.user in movie.users_like.all %}active{% endif %}"></i>
+                            </button>
+                            <button class="dislike" data-id="{{ movie.id }}">
+                                <i class="fas fa-thumbs-down {% if request.user in movie.users_dislike.all %}active{% endif %}"></i>
+                            </button>
+                            <button class="wishlist" data-id="{{ movie.id }}">
+                                <i class="fas fa-plus {% if movie.id in wishlist_movies %}transparent{% endif %}"></i>
+                            </button>
+                        </div>
+                        <button class="watched" data-id="{{ movie.id }}">
+                            <i class="fas fa-circle {% if movie.id in watched_movies %}fa-check{% endif %}"></i>
+                            <span class="action-label">
+                                {% if movie.id in watched_movies %}
+                                    Просмотрен
+                                {% else %}
+                                    Пометить как просмотренный
+                                {% endif %}
+                            </span>
+                        </button>
+                        <button class="recently-watched" data-id="{{ movie.id }}">
+                            <i class="fas fa-circle {% if movie.id in recently_watched_movies %}fa-check{% endif %}"></i>
+                            <span class="action-label">
+                                {% if movie.id in recently_watched_movies %}
+                                    Просмотрен недавно
+                                {% else %}
+                                    Пометить как просмотрен недавно
+                                {% endif %}
+                            </span>
+                        </button>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+<a href="{% url 'movies:writer_list' %}">Назад к списку сценаристов</a>
+{% endblock %}
+
+{% block domready %}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var options = {
+        method: 'POST',
+        headers: {'X-CSRFToken': getCookie('csrftoken')},
+        mode: 'same-origin'
+    };
+
+    // Обработчик для кнопки "Like"
+    const url_like = '{% url "movies:mark_like" %}';
+    document.querySelectorAll('button.like').forEach(function(likeButton) {
+        likeButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            var formData = new FormData();
+            formData.append('id', likeButton.dataset.id);
+            fetch(url_like, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data['status'] === 'liked') {
+                    likeButton.classList.add('active');
+                    var likeIcon = likeButton.querySelector('i');
+                    likeIcon.classList.add('active');
+                }
+            });
+        });
+    });
+
+    // Обработчик для кнопки "Dislike"
+    const url_dislike = '{% url "movies:mark_dislike" %}';
+    document.querySelectorAll('button.dislike').forEach(function(dislikeButton) {
+        dislikeButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            var formData = new FormData();
+            formData.append('id', dislikeButton.dataset.id);
+            fetch(url_dislike, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data['status'] === 'disliked') {
+                    dislikeButton.classList.add('active');
+                    var dislikeIcon = dislikeButton.querySelector('i');
+                    dislikeIcon.classList.add('active');
+                }
+            });
+        });
+    });
+
+const url_wishlist = '{% url "movies:wishlist" %}';
+document.querySelectorAll('button.wishlist').forEach(function(wishlistButton) {
+    wishlistButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        // Подготовка данных для запроса
+        var formData = new FormData();
+        formData.append('id', wishlistButton.dataset.id);
+        formData.append('action', 'toggle'); // Указываем действие "toggle" для добавления/удаления
+        // Отправка HTTP-запроса
+        fetch(url_wishlist, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken') // Получите CSRF-токен
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data['status'] === 'added') {
+                // Обновление состояния кнопки, если фильм добавлен в вишлист
+                wishlistButton.querySelector('i').classList.add('transparent'); // Сделать иконку прозрачной
+            } else if (data['status'] === 'removed') {
+                // Обновление состояния кнопки, если фильм удален из вишлиста
+                wishlistButton.querySelector('i').classList.remove('transparent'); // Вернуть иконку в цвет
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+        });
+    });
+});
+
+// Функция для получения CSRF-токена
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+const url_watched = '{% url "movies:mark_watched" %}';
+document.querySelectorAll('button.watched').forEach(function(watchedButton) {
+    watchedButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        var formData = new FormData();
+        formData.append('id', watchedButton.dataset.id);
+        fetch(url_watched, {
+            method: 'POST',
+            headers: {'X-CSRFToken': csrftoken},
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data['status'] === 'added') {
+                watchedButton.innerHTML = '<i class="fas fa-circle"><i class="fas fa-check"></i></i>'; // Кружок с галочкой
+            } else if (data['status'] === 'removed') {
+                watchedButton.innerHTML = '<i class="fas fa-circle"></i>'; // Возвращаем кружок
+            }
+        });
+    });
+});
+
+const url_recently_watched = '{% url "movies:mark_recently_watched" %}';
+document.querySelectorAll('button.recently-watched').forEach(function(watchedRecentlyButton) {
+    watchedRecentlyButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        var formData = new FormData();
+        formData.append('id', watchedRecentlyButton.dataset.id);
+        fetch(url_recently_watched, {
+            method: 'POST',
+            headers: {'X-CSRFToken': csrftoken},
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data['status'] === 'added') {
+                watchedRecentlyButton.innerHTML = '<i class="fas fa-circle"><i class="fas fa-check"></i></i>'; // Кружок с галочкой
+            } else if (data['status'] === 'removed') {
+                watchedRecentlyButton.innerHTML = '<i class="fas fa-circle"></i>'; // Возвращаем кружок
+            }
+        });
+    });
+});
+});
+{% endblock %}

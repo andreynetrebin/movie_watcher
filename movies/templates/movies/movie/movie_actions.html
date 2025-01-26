@@ -55,20 +55,24 @@
 
             <div class="sidebar">
                 <div class="top-directors">
-                    <h3>Топ 10 Режиссеров</h3>
-                    <ul>
-                        {% for director in top_directors %}
-                            <li>{{ director.name }} - {{ director.num_movies }}</li>
-                        {% endfor %}
-                    </ul>
+                    <h3>Топ 10 фильмов по просмотрам</h3>
+<ul>
+    {% for movie in top_movies %}
+                <li>
+
+            <a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a> {{ movie.num_watched }}
+
+        </li>
+    {% endfor %}
+</ul>
                 </div>
                 <div class="top-writers">
-                    <h3>Топ 10 Сценаристов</h3>
-                    <ul>
-                        {% for writer in top_writers %}
-                            <li>{{ writer.name }} - {{ writer.num_movies }}</li>
-                        {% endfor %}
-                    </ul>
+                    <h3>Топ 10 пользователей по количеству просмотренных фильмов</h3>
+<ul>
+    {% for user in top_users %}
+        <li>{{ user.username }} - {{ user.num_watched }}</li>
+    {% endfor %}
+</ul>
                 </div>
             </div>
         </div>

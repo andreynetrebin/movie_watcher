@@ -18,6 +18,10 @@ urlpatterns = [
     path('list/<int:list_id>/like/', views.like_movie_list, name='like_movie_list'),
     path('list/<int:list_id>/add/<int:movie_id>/', views.add_movie_to_list, name='add_movie_to_list'),
     path('movie-actions/', views.movie_actions, name='movie_actions'),
+    path('directors/', views.director_list, name='director_list'),
+    path('writers/', views.writer_list, name='writer_list'),
+    path('directors/<int:pk>/', views.director_detail, name='director_detail'),
+    path('writers/<int:pk>/', views.writer_detail, name='writer_detail'),
 ]
 
 
