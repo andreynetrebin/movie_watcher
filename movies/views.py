@@ -12,6 +12,27 @@ from django.http import HttpResponse
 from django.core.paginator import Paginator, EmptyPage, \
 PageNotAnInteger
 from actions.utils import create_action
+from actions.models import Action
+
+
+def movie_actions(request):
+    # Извлекаем все действия
+    actions = Action.objects.filter(target_ct__model='movie').select_related('user').all()
+    # Пагинация
+    paginator = Paginator(actions, 10)  # 10 действий на странице
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    top_directors = Director.objects.annotate(num_movies=Count('movies_director')).order_by('-num_movies')[:10]
+    top_writers = Writer.objects.annotate(num_movies=Count('movies_writer')).order_by('-num_movies')[:10]
+
+
+    return render(
+        request,
+        'movies/movie/movie_actions.html',
+        {'section': 'movie_actions', 'actions': page_obj, 'top_directors': top_directors,
+        'top_writers': top_writers,
+}
+    )
 
 @login_required
 def add_movie_to_list(request, list_id, movie_id):
@@ -98,21 +119,6 @@ def add_to_wishlist(request):
 
     return JsonResponse({'status': 'error'}, status=400)
 
-# def toggle_wishlist(request):
-#     if request.method == 'POST':
-#         movie_id = request.POST.get('id')
-#         movie = get_object_or_404(Movie, id=movie_id)
-#        # Проверяем, был ли фильм уже в вишлисте
-#         wishlist_item, created = WishList.objects.get_or_create(user=request.user, movie=movie)
-#         if not created:
-#             wishlist_item.delete()  # Удаляем из вишлиста, если он уже был
-#             create_action(request.user, 'remove from watchlist', movie)
-#             return JsonResponse({'status': 'removed'})
-#         create_action(request.user, 'add to watchlist', movie)
-#         return JsonResponse({'status': 'added'})
-#     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
-
-
 
 @login_required
 @require_POST
@@ -132,33 +138,6 @@ def mark_dislike(request):
         movie.add_dislike(request.user)
         create_action(request.user, 'disliked', movie)
         return JsonResponse({'status': 'disliked', 'total_dislikes': movie.total_dislikes})
-
-# def movie_like(request):
-#     movie_id = request.POST.get('id')
-#     action = request.POST.get('action')
-#     if movie_id and action:
-#         try:
-#             movie = Movie.objects.get(id=movie_id)
-#             if action == 'like':
-#                 if movie.users_like.filter(id=request.user.id).exists():
-#                     return JsonResponse({'status': 'exists'})
-#                 if movie.users_dislike.filter(id=request.user.id).exists():
-#                     movie.users_dislike.remove(request.user)  # Удаляем dislike, если он есть
-#
-#                 movie.users_like.add(request.user)  # Добавляем like
-#                 create_action(request.user, 'likes', movie)
-#
-#             if action == 'dislike':
-#                 if movie.users_dislike.filter(id=request.user.id).exists():
-#                     return JsonResponse({'status': 'exists'})
-#                 if movie.users_like.filter(id=request.user.id).exists():
-#                     movie.users_like.remove(request.user)  #  Удаляем like, если он есть
-#                 movie.users_dislike.add(request.user)  # Добавляем dislike
-#                 create_action(request.user, 'dislikes', movie)
-#             return JsonResponse({'status': 'ok'})
-#         except Movie.DoesNotExist:
-#             pass
-#     return JsonResponse({'status': 'error'})
 
 
 @login_required

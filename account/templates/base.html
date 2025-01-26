@@ -11,7 +11,10 @@
     <span class="logo">КиноСмотрители</span>
     {% if request.user.is_authenticated %}
       <ul class="menu">
-<li {% if section == "movies" %}class="selected"{% endif %}>
+        <li {% if section == "dashboard" %}class="selected"{% endif %}>
+          <a href="{% url "movies:movie_actions" %}">Лента</a>
+        </li>
+          <li {% if section == "movies" %}class="selected"{% endif %}>
     <a href="{% url "movies:list" %}">Фильмы</a>
     <ul class="dropdown-content">
         <li><a href="{% url "movies:list" %}?filter=all">Все фильмы</a></li>
@@ -29,9 +32,6 @@
         </li>
         <li {% if section == "people" %}class="selected"{% endif %}>
           <a href="{% url "user_list" %}">Киносмотрители</a>
-        </li>
-        <li {% if section == "dashboard" %}class="selected"{% endif %}>
-          <a href="{% url "dashboard" %}">Личный кабинет</a>
         </li>
       </ul>
     {% endif %}
