@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load static %}
+{% load thumbnail %}
+{% block title %}Лента{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="main-content">
+        <h1>Действия пользователей с фильмами</h1>
+
+        <div class="content-wrapper">
+            <div class="actions">
+                {% for action in actions %}
+                    {% with user=action.user %}
+                    <div class="action">
+                        <div class="action-header">
+                            <div class="user-avatar">
+                                {% if user.profile.photo %}
+                                    {% thumbnail user.profile.photo "80x80" crop="100%" as im %}
+                                    <a href="{{ user.get_absolute_url }}">
+                                        <img src="{{ im.url }}" alt="{{ user.get_full_name }}" class="item-img">
+                                    </a>
+                                {% else %}
+                                    <img src="{% static 'path/to/default/avatar.png' %}" alt="Default Avatar" class="item-img">
+                                {% endif %}
+                            </div>
+                            <div class="user-info">
+                                <div class="user-action">
+                                    <a href="{{ user.get_absolute_url }}">{{ user.first_name }}</a>
+                                    <span class="action-verb">{{ action.verb }}</span>
+                                    {% if action.target %}
+                                        <strong class="movie-title">{{ action.target.title }}</strong>
+                                    {% endif %}
+                                </div>
+                                <span class="date">{{ action.created|timesince }} ago</span>
+                            </div>
+                        </div>
+                        {% if action.target %}
+                            <div class="action-poster">
+                                {% with target=action.target %}
+                                {% if target.poster %}
+                                    {% thumbnail target.poster "50x75" crop="100%" as im %}
+                                    <a href="{{ target.get_absolute_url }}">
+                                        <img src="{{ im.url }}" class="item-img" alt="{{ target.title }} poster">
+                                    </a>
+                                {% endif %}
+                                {% endwith %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    {% endwith %}
+                {% empty %}
+                    <p>Нет действий для отображения.</p>
+                {% endfor %}
+            </div>
+
+            <div class="sidebar">
+                <div class="top-directors">
+                    <h3>Топ 10 Режиссеров</h3>
+                    <ul>
+                        {% for director in top_directors %}
+                            <li>{{ director.name }} - {{ director.num_movies }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="top-writers">
+                    <h3>Топ 10 Сценаристов</h3>
+                    <ul>
+                        {% for writer in top_writers %}
+                            <li>{{ writer.name }} - {{ writer.num_movies }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="pagination">
+            <span class="step-links">
+                {% if actions.has_previous %}
+                    <a href="?page=1">Первая</a>
+                    <a href="?page={{ actions.previous_page_number }}">Предыдущая</a>
+                {% endif %}
+
+                <span class="current">
+                    Страница {{ actions.number }} из {{ actions.paginator.num_pages }}.
+                </span>
+
+                {% if actions.has_next %}
+                    <a href="?page={{ actions.next_page_number }}">Следующая</a>
+                    <a href="?page={{ actions.paginator.num_pages }}">Последняя</a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+</div>
+{% endblock %}

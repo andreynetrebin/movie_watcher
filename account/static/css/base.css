@@ -553,3 +553,110 @@ button.wishlist i.transparent {
 .movie-actions button i.fa-check {
     display: inline; /* Показываем галочку, когда она активна */
 }
+
+.action {
+    display: flex; /* Используем Flexbox для расположения элементов */
+    flex-direction: column; /* Вертикальное расположение для элементов */
+    margin-bottom: 20px; /* Отступ между действиями */
+    padding-bottom: 10px; /* Отступ снизу для визуального отделения */
+    border-bottom: 1px solid #ddd !important; /* Принудительное применение стиля */
+}
+
+.action-header {
+    display: flex; /* Используем Flexbox для выравнивания аватара и информации */
+    align-items: center; /* Выравнивание по центру по вертикали */
+}
+
+.user-avatar {
+    margin-right: 15px; /* Отступ между аватаром и информацией */
+}
+
+.user-avatar img {
+    border-radius: 50%; /* Круглая форма для аватара */
+}
+
+.user-info {
+    display: flex; /* Используем Flexbox для вертикального расположения */
+    flex-direction: column; /* Вертикальное направление для дочерних элементов */
+}
+
+.user-action {
+    display: flex; /* Используем Flexbox для выравнивания в одну строку */
+    align-items: center; /* Выравнивание по центру по вертикали */
+}
+
+.user-action a,
+.user-action .action-verb,
+.user-action .movie-title {
+    margin-right: 5px; /* Отступ между элементами */
+}
+
+.date {
+    margin-top: 5px; /* Отступ сверху для даты */
+    font-size: 12px; /* Размер шрифта для даты */
+    color: #999; /* Цвет для даты */
+}
+
+.action-poster {
+    margin-top: 10px; /* Отступ сверху для постера */
+    text-align: center; /* Центрируем постер */
+}
+
+.action-poster img {
+    max-width: 100%; /* Ограничиваем ширину постера */
+    height: auto; /* Автоматическая высота для сохранения пропорций */
+}
+}
+
+.container {
+    display: flex; /* Используем Flexbox для расположения основного контента и сайдбара */
+}
+
+.main-content {
+    flex: 3; /* Основной контент занимает 3/4 ширины */
+    padding: 20px; /* Отступы вокруг основного контента */
+}
+
+.content-wrapper {
+    display: flex; /* Используем Flexbox для расположения действий и сайдбара */
+}
+
+.actions {
+    flex: 3; /* Действия пользователей занимают 3/4 ширины */
+    margin-right: 20px; /* Отступ между действиями и сайдбаром */
+}
+
+.sidebar {
+    flex: 1; /* Сайдбар занимает 1/4 ширины */
+    padding: 20px; /* Отступы вокруг сайдбара */
+    background-color: #f9f9f9; /* Цвет фона для сайдбара */
+    border-left: 1px solid #ddd; /* Разделительная линия между контентом и сайдбаром */
+}
+
+.sidebar h2 {
+    margin-top: 0; /* Убираем верхний отступ для заголовка */
+}
+
+.sidebar ul {
+    list-style-type: none; /* Убираем маркеры списка */
+    padding: 0; /* Убираем внутренние отступы */
+}
+
+.sidebar ul li {
+    margin-bottom: 5px; /* Отступ между элементами списка */
+}
+
+.pagination {
+    text-align: center; /* Центрируем текст пагинации */
+    margin-top: 20px; /* Отступ сверху для пагинации */
+}
+
+.pagination a {
+    margin: 0 5px; /* Отступы между ссылками */
+    text-decoration: none; /* Убираем подчеркивание */
+    color: #007bff; /* Цвет ссылок */
+}
+
+.pagination .current {
+    font-weight: bold; /* Выделяем текущую страницу */
+}
