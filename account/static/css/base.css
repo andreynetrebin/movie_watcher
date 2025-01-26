@@ -515,3 +515,41 @@ button.wishlist i.transparent {
     padding: 4px 10px; /* Отступы вокруг элементов */
     position: relative; /* Устанавливаем относительное позиционирование для родителя */
 }
+
+.movie-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #333; /* Цвет иконок */
+    position: relative; /* Для позиционирования */
+    display: flex; /* Используем flexbox для выравнивания */
+    align-items: center; /* Выравнивание по центру */
+}
+
+.movie-actions button i {
+    font-size: 24px; /* Размер иконок */
+    margin-right: 5px; /* Отступ между иконкой и текстом */
+}
+
+.movie-actions button .action-label {
+    font-size: 14px; /* Размер шрифта для подписи */
+    color: #333; /* Цвет текста */
+}
+
+.movie-actions button i.fa-circle {
+    color: #ccc; /* Цвет кружка */
+}
+
+.movie-actions button i.fa-check {
+    position: absolute; /* Позиционирование галочки */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Центрирование галочки */
+    color: green; /* Цвет галочки */
+    font-size: 16px; /* Размер галочки */
+    display: none; /* Скрываем галочку по умолчанию */
+}
+
+.movie-actions button i.fa-check {
+    display: inline; /* Показываем галочку, когда она активна */
+}

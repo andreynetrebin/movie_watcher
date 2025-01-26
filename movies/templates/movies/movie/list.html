@@ -155,14 +155,13 @@ document.querySelectorAll('button.watched').forEach(function(watchedButton) {
         .then(response => response.json())
         .then(data => {
             if (data['status'] === 'added') {
-                watchedButton.innerHTML = 'Mark as Unwatched';
+                watchedButton.innerHTML = '<i class="fas fa-circle"><i class="fas fa-check"></i></i>'; // Кружок с галочкой
             } else if (data['status'] === 'removed') {
-                watchedButton.innerHTML = 'Mark as Watched';
+                watchedButton.innerHTML = '<i class="fas fa-circle"></i>'; // Возвращаем кружок
             }
         });
     });
 });
-
 
 const url_recently_watched = '{% url "movies:mark_recently_watched" %}';
 document.querySelectorAll('button.recently-watched').forEach(function(watchedRecentlyButton) {
@@ -178,15 +177,13 @@ document.querySelectorAll('button.recently-watched').forEach(function(watchedRec
         .then(response => response.json())
         .then(data => {
             if (data['status'] === 'added') {
-                watchedRecentlyButton.innerHTML = 'Mark as Unwatched';
+                watchedRecentlyButton.innerHTML = '<i class="fas fa-circle"><i class="fas fa-check"></i></i>'; // Кружок с галочкой
             } else if (data['status'] === 'removed') {
-                watchedRecentlyButton.innerHTML = 'Mark as Watched';
+                watchedRecentlyButton.innerHTML = '<i class="fas fa-circle"></i>'; // Возвращаем кружок
             }
         });
     });
 });
-
-
 
 {% endblock %}
 
