@@ -1,0 +1,13 @@
+<!-- templates/writers/writer_list.html -->
+{% extends "base.html" %}
+{% block title %}Список Сценаристов{% endblock %}
+{% block content %}
+<h1>Список Сценаристов</h1>
+<ul>
+    {% for writer in writers %}
+        <li>
+            <a href="{% url 'movies:writer_detail' writer.pk %}">{{ writer.name }}</a> ({{ writer.num_movies }} фильмов)
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

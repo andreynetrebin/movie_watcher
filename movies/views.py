@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404
@@ -13,8 +14,45 @@ from django.core.paginator import Paginator, EmptyPage, \
 PageNotAnInteger
 from actions.utils import create_action
 from actions.models import Action
+from django.views.generic import ListView, DetailView
 
+def director_list(request):
+    # Получаем всех режиссеров с количеством фильмов, отсортированных по убыванию
+    directors = Director.objects.annotate(num_movies=Count('movies_director')).order_by('-num_movies')
+    return render(request, 'movies/directors/director_list.html', {'directors': directors})
 
+def writer_list(request):
+    # Получаем всех сценаристов с количеством фильмов, отсортированных по убыванию
+    writers = Writer.objects.annotate(num_movies=Count('movies_writer')).order_by('-num_movies')
+    return render(request, 'movies/writers/writer_list.html', {'writers': writers})
+
+# views.py
+
+def director_detail(request, pk):
+    director = get_object_or_404(Director, pk=pk)
+    movies = director.movies_director.all()  # Получаем все фильмы, связанные с этим режиссером
+    watched_movies = Watched.objects.filter(user=request.user).values_list('movie_id', flat=True)  # Получаем просмотренные фильмы
+    wishlist_movies = WishList.objects.filter(user=request.user).values_list('movie_id', flat=True)  # Получаем фильмы в вишлисте
+
+    return render(request, 'movies/directors/director_detail.html', {
+        'director': director,
+        'movies': movies,
+        'watched_movies': watched_movies,
+        'wishlist_movies': wishlist_movies,
+    })
+
+def writer_detail(request, pk):
+    writer = get_object_or_404(Writer, pk=pk)
+    movies = writer.movies_writer.all()  # Получаем все фильмы, связанные с этим сценаристом
+    watched_movies = Watched.objects.filter(user=request.user).values_list('movie_id', flat=True)  # Получаем просмотренные фильмы
+    wishlist_movies = WishList.objects.filter(user=request.user).values_list('movie_id', flat=True)  # Получаем фильмы в вишлисте
+
+    return render(request, 'movies/writers/writer_detail.html', {
+        'writer': writer,
+        'movies': movies,
+        'watched_movies': watched_movies,
+        'wishlist_movies': wishlist_movies,
+    })
 def movie_actions(request):
     # Извлекаем все действия
     actions = Action.objects.filter(target_ct__model='movie').select_related('user').all()
@@ -22,15 +60,19 @@ def movie_actions(request):
     paginator = Paginator(actions, 10)  # 10 действий на странице
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    top_directors = Director.objects.annotate(num_movies=Count('movies_director')).order_by('-num_movies')[:10]
-    top_writers = Writer.objects.annotate(num_movies=Count('movies_writer')).order_by('-num_movies')[:10]
-
+    # Топ-10 фильмов по количеству просмотренных
+    top_movies = Movie.objects.annotate(num_watched=Count('watched')).order_by('-num_watched')[:10]
+    # Топ-10 пользователей по количеству просмотренных фильмов
+    top_users = User.objects.annotate(num_watched=Count('watched')).order_by('-num_watched')[:10]
 
     return render(
         request,
         'movies/movie/movie_actions.html',
-        {'section': 'movie_actions', 'actions': page_obj, 'top_directors': top_directors,
-        'top_writers': top_writers,
+        {
+            'section': 'movie_actions',
+             'actions': page_obj,
+            'top_movies': top_movies,
+            'top_users': top_users,
 }
     )
 

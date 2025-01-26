@@ -1,0 +1,14 @@
+<!-- templates/directors/director_list.html -->
+{% extends "base.html" %}
+{% block title %}Список Режиссеров{% endblock %}
+{% block content %}
+<h1>Список Режиссеров</h1>
+<ul>
+    {% for director in directors %}
+        <li>
+            <a href="{% url 'movies:director_detail' director.pk %}">{{ director.name }}</a> ({{ director.num_movies }} фильмов)
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
