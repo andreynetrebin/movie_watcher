@@ -17,6 +17,7 @@ urlpatterns = [
     path('list/<int:list_id>/', views.movie_list_detail, name='movie_list_detail'),
     path('list/<int:list_id>/like/', views.like_movie_list, name='like_movie_list'),
     path('list/<int:list_id>/add/<int:movie_id>/', views.add_movie_to_list, name='add_movie_to_list'),
+    path('all-movie-lists/', views.all_movie_lists, name='all_movie_lists'),
     path('movie-actions/', views.movie_actions, name='movie_actions'),
     path('directors/', views.director_list, name='director_list'),
     path('writers/', views.writer_list, name='writer_list'),

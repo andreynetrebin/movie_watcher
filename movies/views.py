@@ -77,6 +77,14 @@ def movie_actions(request):
     )
 
 @login_required
+def all_movie_lists(request):
+    # Получаем все списки фильмов, созданные всеми пользователями
+    movie_lists = MovieList.objects.prefetch_related('movies')
+    return render(request, 'movies/user_movies_lists/all_movie_lists.html', {
+        'movie_lists': movie_lists,
+    })
+
+@login_required
 def add_movie_to_list(request, list_id, movie_id):
     movie_list = get_object_or_404(MovieList, id=list_id, user=request.user)
     movie = get_object_or_404(Movie, id=movie_id)
@@ -93,13 +101,13 @@ def create_movie_list(request):
         movie_list = MovieList.objects.create(user=request.user, title=title)
         movie_list.add_points(10)  # Награда за создание списка
         return redirect('movies:movie_list_detail', movie_list.id)
-    return render(request, 'movies/movie/create_movie_list.html')
+    return render(request, 'movies/user_movies_lists/create_movie_list.html')
 
 @login_required
 def movie_list_detail(request, list_id):
     movie_list = get_object_or_404(MovieList, id=list_id)
     all_movies = Movie.objects.all()  # Получаем все фильмы
-    return render(request, 'movies/movie/movie_list_detail.html', {'movie_list': movie_list, 'all_movies': all_movies})
+    return render(request, 'movies/user_movies_lists/movie_list_detail.html', {'movie_list': movie_list, 'all_movies': all_movies})
 @login_required
 def like_movie_list(request, list_id):
     movie_list = get_object_or_404(MovieList, id=list_id)

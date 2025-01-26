@@ -1,0 +1,18 @@
+<!-- templates/movies/user_movies_lists/all_movie_lists.html -->
+{% extends "base.html" %}
+{% block title %}Все списки фильмов{% endblock %}
+{% block content %}
+<h1>Все списки фильмов</h1>
+
+{% if movie_lists %}
+    <ul>
+        {% for movie_list in movie_lists %}
+            <li>
+                <a href="{% url 'movies:movie_list_detail' movie_list.id %}">{{ movie_list.title }}</a> ({{ movie_list.movies.count }} фильмов) - Создано пользователем: {{ movie_list.user.username }}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Нет доступных списков фильмов.</p>
+{% endif %}
+{% endblock %}

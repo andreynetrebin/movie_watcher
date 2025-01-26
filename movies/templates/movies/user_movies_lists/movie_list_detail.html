@@ -14,11 +14,6 @@
 <form action="{% url 'movies:like_movie_list' movie_list.id %}" method="post">
     {% csrf_token %}
     <button type="submit">
-<!--        {% if request.user in movie_list.users_like.all %}-->
-<!--            Убрать лайк-->
-<!--        {% else %}-->
-<!--            Поставить лайк-->
-<!--        {% endif %}-->
     </button>
 </form>
 

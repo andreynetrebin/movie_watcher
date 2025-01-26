@@ -9,11 +9,11 @@
 <body>
   <div id="header">
     <span class="logo">КиноСмотрители</span>
-    {% if request.user.is_authenticated %}
 <ul class="menu">
     <li {% if section == "dashboard" %}class="selected"{% endif %}>
         <a href="{% url "movies:movie_actions" %}">Лента</a>
     </li>
+    {% if request.user.is_authenticated %}
     <li {% if section == "movies" %}class="selected"{% endif %}>
         <a href="{% url "movies:list" %}">Фильмы</a>
         <ul class="dropdown-content">
@@ -33,17 +33,24 @@
     <li {% if section == "writers" %}class="selected"{% endif %}>
         <a href="{% url 'movies:writer_list' %}">Сценаристы</a>
     </li>
-    <li {% if section == "lists" %}class="selected"{% endif %}>
-        <a href="#">Списки</a>
+    <li {% if section == "movies" %}class="selected"{% endif %}>
+        <a href="{% url "movies:all_movie_lists" %}">Списки</a>
+        <ul class="dropdown-content">
+            <li><a href="{% url "movies:all_movie_lists" %}">Все списки</a></li>
+            <li><a href="{% url "movies:create_movie_list" %}">+Создать список</a></li>
+        </ul>
     </li>
     <li {% if section == "people" %}class="selected"{% endif %}>
         <a href="{% url "user_list" %}">Киносмотрители</a>
+    </li>
+    <li {% if section == "dashboard" %}class="selected"{% endif %}>
+        <a href="{% url "dashboard" %}">Профиль</a>
     </li>
 </ul>
     {% endif %}
     <span class="user">
       {% if request.user.is_authenticated %}
-        Hello {{ request.user.first_name|default:request.user.username }},
+        Привет {{ request.user.first_name|default:request.user.username }},
         <form action="{% url "logout" %}" method="post">
           <button type="submit">Logout</button>
           {% csrf_token %}
