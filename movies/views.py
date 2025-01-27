@@ -124,8 +124,6 @@ def like_movie_list(request, list_id):
 def mark_watched(request):
     if request.method == 'POST':
         movie_id = request.POST.get('id')
-        print("mark_watched")
-        print(movie_id)
         movie = get_object_or_404(Movie, id=movie_id)
         # Проверяем, был ли фильм уже просмотрен
         watched, created = Watched.objects.get_or_create(user=request.user, movie=movie)
@@ -146,7 +144,7 @@ def mark_recently_watched(request):
         if not created:
             watched.delete()  # Удаляем из просмотренных, если он уже был
             return JsonResponse({'status': 'removed'})
-        create_action(request.user, 'mark as recently watched', movie)  # Вызываем сигнал для "просмотрен недавно"
+        create_action(request.user, 'отметил как недавно просмотренный', movie)  # Вызываем сигнал для "просмотрен недавно"
         return JsonResponse({'status': 'added'})
     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
 
@@ -162,6 +160,8 @@ def add_to_wishlist(request):
         wishlist_item, created = WishList.objects.get_or_create(user=request.user, movie=movie)
 
         if created:
+            create_action(request.user, 'добавил в вотчлист',
+                          movie)  # Вызываем сигнал для "просмотрен недавно"
             return JsonResponse({'status': 'added'})
         else:
             wishlist_item.delete()
@@ -177,7 +177,7 @@ def mark_like(request):
         movie_id = request.POST.get('id')
         movie = get_object_or_404(Movie, id=movie_id)
         movie.add_like(request.user)
-        create_action(request.user, 'liked', movie)
+        create_action(request.user, 'понравился', movie)
         return JsonResponse({'status': 'liked', 'total_likes': movie.total_likes})
 @login_required
 @require_POST
@@ -186,7 +186,7 @@ def mark_dislike(request):
         movie_id = request.POST.get('id')
         movie = get_object_or_404(Movie, id=movie_id)
         movie.add_dislike(request.user)
-        create_action(request.user, 'disliked', movie)
+        create_action(request.user, 'не понравился', movie)
         return JsonResponse({'status': 'disliked', 'total_dislikes': movie.total_dislikes})
 
 
@@ -238,7 +238,7 @@ def movie_create(request):
             new_movie.movie_staff_json = cd["movie_staff_data"]
 
             new_movie.save()
-            create_action(request.user, 'added movie', new_movie)
+            create_action(request.user, 'добавил', new_movie)
             for genre in cd["genres"]:
                 genre_row = Genre.objects.get(name=genre)
                 new_movie.genres.add(genre_row)
