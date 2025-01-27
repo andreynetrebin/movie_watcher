@@ -12,18 +12,22 @@
             <div class="details">
                 <p><strong>Год выпуска:</strong> {{ movie.year }}</p>
                 <p><strong>Продолжительность:</strong> {{ movie.duration }} минут</p>
-
+                <p><strong>Кинопоиск:</strong> <a href="{{ movie.kinopoisk_url }}" target="_blank">Открыть на Кинопоиске</a></p>
                 <h2>Режиссеры</h2>
                 <ul>
                     {% for director in movie.directors.all %}
-                        <li>{{ director.name }}</li>
+                        <li>
+                            <a href="{% url 'movies:director_detail' director.id %}">{{ director.name }}</a>
+                        </li>
                     {% endfor %}
                 </ul>
 
                 <h2>Сценаристы</h2>
                 <ul>
                     {% for writer in movie.writers.all %}
-                        <li>{{ writer.name }}</li>
+                        <li>
+                            <a href="{% url 'movies:writer_detail' writer.id %}">{{ writer.name }}</a>
+                        </li>
                     {% endfor %}
                 </ul>
 
