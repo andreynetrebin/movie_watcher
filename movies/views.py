@@ -253,9 +253,9 @@ def movie_create(request):
                 writer_row = Writer.objects.get(staff_id=writer["staff_id"])
                 new_movie.writers.add(writer_row)
 
-        messages.success(request, 'Movie added successfully')
+            messages.success(request, 'Movie added successfully')
     # redirect to new created item detail view
-        return redirect(new_movie.get_absolute_url())
+            return redirect(new_movie.get_absolute_url())
     else:
     # build form with data provided by the bookmarklet via GET
         form = MovieCreateForm(data=request.GET)

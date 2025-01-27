@@ -30,7 +30,7 @@ class Writer(models.Model):
 
 class Movie(models.Model):
     title = models.CharField(max_length=200)
-    title_original = models.CharField(max_length=200)
+    title_original = models.CharField(max_length=200, null=True, blank=True)
     year = models.IntegerField()
     duration = models.IntegerField()
     kinopoisk_id = models.IntegerField()
