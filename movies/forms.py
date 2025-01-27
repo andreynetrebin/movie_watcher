@@ -4,6 +4,7 @@ from django.core.files.base import ContentFile
 from django.utils.text import slugify
 from django import forms
 from .models import Movie, Genre, Country, Director, Writer, Comment
+from decouple import config
 import os
 
 class MovieCreateForm(forms.ModelForm):
@@ -25,8 +26,6 @@ class MovieCreateForm(forms.ModelForm):
         pattern = r'^https://www\.kinopoisk\.ru/film/(\d+)/.*$'
         # Проверка соответствия шаблону
         match = re.match(pattern, url)
-        # regex = r'^(https:\/\/www.kinopoisk.ru\/)([A-Za-z0-9-_]+)\/(\d{1,10})'
-        # match = re.search(regex, url.strip())
         if not match:
             raise forms.ValidationError(
                 'Url не валидный, ожидается url в формате https://www.kinopoisk.ru/film/{id фильма}/*'
@@ -39,14 +38,14 @@ class MovieCreateForm(forms.ModelForm):
             movie_staff_url = f"https://kinopoiskapiunofficial.tech/api/v1/staff"
 
             movie_response = requests.get(movie_url, headers={
-                'X-API-KEY': 'e2563c11-1959-48d4-803f-03caeec73ee7',
+                'X-API-KEY': config('X-API-KEY'),
                 "Content-Type": "application/json",
             })
             # "countries": [{"country": "США"}
             movie_data = movie_response.json()
             if movie_data["type"] == "FILM" and movie_data["serial"] is False:
                 movie_staff_response = requests.get(movie_staff_url, headers={
-                    'X-API-KEY': 'e2563c11-1959-48d4-803f-03caeec73ee7',
+                    'X-API-KEY': config('X-API-KEY'),
                     "Content-Type": "application/json",
                 }, params={"filmId": kinopoisk_id}
                                                     )
