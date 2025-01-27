@@ -21,59 +21,72 @@ class MovieCreateForm(forms.ModelForm):
 
     def clean_url(self):
         url = self.cleaned_data['url']
-        regex = r'^(https:\/\/www.kinopoisk.ru\/)([A-Za-z0-9-_]+)\/(\d{1,10})'
-        match = re.search(regex, url.strip())
+
+        pattern = r'^https://www\.kinopoisk\.ru/film/(\d+)/.*$'
+        # Проверка соответствия шаблону
+        match = re.match(pattern, url)
+        # regex = r'^(https:\/\/www.kinopoisk.ru\/)([A-Za-z0-9-_]+)\/(\d{1,10})'
+        # match = re.search(regex, url.strip())
         if not match:
             raise forms.ValidationError(
-                'The given URL does not match valid kinopoisk.'
+                'Url не валидный, ожидается url в формате https://www.kinopoisk.ru/film/{id фильма}/*'
             )
         else:
-            kinopoisk_id = match.group(3)
+            kinopoisk_id = match.group(1)
             if Movie.objects.filter(kinopoisk_id=kinopoisk_id).exists():
-                raise forms.ValidationError("Kinopoisk ID already exists in database")
+                raise forms.ValidationError("Такой фильм уже есть в базе")
             movie_url = f"https://kinopoiskapiunofficial.tech/api/v2.2/films/{kinopoisk_id}"
             movie_staff_url = f"https://kinopoiskapiunofficial.tech/api/v1/staff"
+
             movie_response = requests.get(movie_url, headers={
                 'X-API-KEY': 'e2563c11-1959-48d4-803f-03caeec73ee7',
                 "Content-Type": "application/json",
-                         })
-            movie_staff_response = requests.get(movie_staff_url, headers={
-                'X-API-KEY': 'e2563c11-1959-48d4-803f-03caeec73ee7',
-                "Content-Type": "application/json",
-                         }, params={"filmId":  kinopoisk_id}
-                                    )
+            })
             # "countries": [{"country": "США"}
             movie_data = movie_response.json()
-            movie_staff_data = movie_staff_response.json()
-            # dirpath = os.path.abspath(os.path.dirname(__file__))
-            # with open(os.path.join(dirpath, f"{kinopoisk_id}_staff.json"), "w") as f:
-            #     f.write(response.text)
-            self.cleaned_data.update(
-                {
-                    "kinopoisk_id": kinopoisk_id,
-                    "title": movie_data["nameRu"],
-                    "title_original": movie_data["nameOriginal"],
-                    # "genre": ", ".join([item["genre"] for item in movie_data["genres"]]),
-                    "countries": [item["country"] for item in movie_data["countries"]],
-                    "genres": [item["genre"] for item in movie_data["genres"]],
-                    "directors": [
-                        {"staff_id": item["staffId"], "name": item["nameRu"]} for item in movie_staff_data if item["professionKey"].upper() == "DIRECTOR"
-                    ],
-                    "writers": [
-                        {"staff_id": item["staffId"], "name": item["nameRu"]} for item in movie_staff_data if
-                        item["professionKey"].upper() == "WRITER"
-                    ],
-                    # "": [item["genre"] for item in movie_data["genres"]],
-                    "year": movie_data["year"],
-                    "duration": movie_data["filmLength"],
-                    "kinopoisk_url": movie_data["webUrl"],
-                    "url": movie_data["webUrl"],
-                    "description": movie_data["description"],
-                    "poster_movie_url": movie_data["posterUrl"],
-                    "movie_data": movie_data,
-                    "movie_staff_data": movie_staff_data,
+            if movie_data["type"] == "FILM" and movie_data["serial"] is False:
+                movie_staff_response = requests.get(movie_staff_url, headers={
+                    'X-API-KEY': 'e2563c11-1959-48d4-803f-03caeec73ee7',
+                    "Content-Type": "application/json",
+                }, params={"filmId": kinopoisk_id}
+                                                    )
 
-                })
+                movie_staff_data = movie_staff_response.json()
+                # dirpath = os.path.abspath(os.path.dirname(__file__))
+                # with open(os.path.join(dirpath, f"{kinopoisk_id}_staff.json"), "w") as f:
+                #     f.write(response.text)
+
+                self.cleaned_data.update(
+                    {
+                        "kinopoisk_id": kinopoisk_id,
+                        "title": movie_data["nameRu"],
+                        "title_original": movie_data["nameOriginal"],
+                        # "genre": ", ".join([item["genre"] for item in movie_data["genres"]]),
+                        "countries": [item["country"] for item in movie_data["countries"]],
+                        "genres": [item["genre"] for item in movie_data["genres"]],
+                        "directors": [
+                            {"staff_id": item["staffId"], "name": item["nameRu"]} for item in movie_staff_data if
+                            item["professionKey"].upper() == "DIRECTOR"
+                        ],
+                        "writers": [
+                            {"staff_id": item["staffId"], "name": item["nameRu"]} for item in movie_staff_data if
+                            item["professionKey"].upper() == "WRITER"
+                        ],
+                        # "": [item["genre"] for item in movie_data["genres"]],
+                        "year": movie_data["year"],
+                        "duration": movie_data["filmLength"],
+                        "kinopoisk_url": movie_data["webUrl"],
+                        "url": movie_data["webUrl"],
+                        "description": movie_data["description"],
+                        "poster_movie_url": movie_data["posterUrl"],
+                        "movie_data": movie_data,
+                        "movie_staff_data": movie_staff_data,
+
+                    })
+            else:
+                raise forms.ValidationError(
+                    'Похоже, что по Вашему url находится Сериал. В базу добавляются только Фильмы.'
+                )
 
         # return api_url
 
