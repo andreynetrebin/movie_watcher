@@ -31,27 +31,27 @@ def writer_list(request):
 def director_detail(request, pk):
     director = get_object_or_404(Director, pk=pk)
     movies = director.movies_director.all()  # Получаем все фильмы, связанные с этим режиссером
-    watched_movies = Watched.objects.filter(user=request.user).values_list('movie_id', flat=True)  # Получаем просмотренные фильмы
-    wishlist_movies = WishList.objects.filter(user=request.user).values_list('movie_id', flat=True)  # Получаем фильмы в вишлисте
+    # watched_movies = Watched.objects.filter(user=request.user).values_list('movie_id', flat=True)  # Получаем просмотренные фильмы
+    # wishlist_movies = WishList.objects.filter(user=request.user).values_list('movie_id', flat=True)  # Получаем фильмы в вишлисте
 
     return render(request, 'movies/directors/director_detail.html', {
         'director': director,
         'movies': movies,
-        'watched_movies': watched_movies,
-        'wishlist_movies': wishlist_movies,
+        # 'watched_movies': watched_movies,
+        # 'wishlist_movies': wishlist_movies,
     })
 
 def writer_detail(request, pk):
     writer = get_object_or_404(Writer, pk=pk)
     movies = writer.movies_writer.all()  # Получаем все фильмы, связанные с этим сценаристом
-    watched_movies = Watched.objects.filter(user=request.user).values_list('movie_id', flat=True)  # Получаем просмотренные фильмы
-    wishlist_movies = WishList.objects.filter(user=request.user).values_list('movie_id', flat=True)  # Получаем фильмы в вишлисте
+    # watched_movies = Watched.objects.filter(user=request.user).values_list('movie_id', flat=True)  # Получаем просмотренные фильмы
+    # wishlist_movies = WishList.objects.filter(user=request.user).values_list('movie_id', flat=True)  # Получаем фильмы в вишлисте
 
     return render(request, 'movies/writers/writer_detail.html', {
         'writer': writer,
         'movies': movies,
-        'watched_movies': watched_movies,
-        'wishlist_movies': wishlist_movies,
+        # 'watched_movies': watched_movies,
+        # 'wishlist_movies': wishlist_movies,
     })
 def movie_actions(request):
     # Извлекаем все действия
