@@ -1,0 +1,11 @@
+<!-- templates/movies/movie/bulk_create.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Массовая загрузка фильмов</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Загрузить фильмы</button>
+</form>
+{% endblock %}
