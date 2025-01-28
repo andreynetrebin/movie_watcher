@@ -1,5 +1,46 @@
 @import url(//fonts.googleapis.com/css?family=Muli);
 
+/* Стили для мобильного меню */
+.menu {
+    display: none; /* Скрываем меню по умолчанию */
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu-toggle {
+    display: none; /* Скрываем кнопку по умолчанию */
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* Показываем кнопку на мобильных устройствах */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block; /* Показываем кнопку на мобильных устройствах */
+    }
+
+    .menu {
+        display: none; /* Скрываем меню по умолчанию */
+        flex-direction: column; /* Вертикальное расположение элементов */
+        position: absolute; /* Позиционируем меню */
+        top: 50px; /* Располагаем под заголовком */
+        left: 0;
+        right: 0;
+        background-color: #12c064; /* Цвет фона меню */
+        z-index: 1000; /* Убедитесь, что меню поверх других элементов */
+    }
+
+    .menu.show {
+        display: flex; /* Показываем меню при добавлении класса show */
+    }
+
+    .menu li {
+        padding: 10px; /* Отступы для элементов меню */
+        text-align: center; /* Центрируем текст */
+    }
+}
+
 body {
     margin:0;
     padding:0;
