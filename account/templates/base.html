@@ -13,7 +13,6 @@
     <li {% if section == "dashboard" %}class="selected"{% endif %}>
         <a href="{% url "movies:movie_actions" %}">Лента</a>
     </li>
-    {% if request.user.is_authenticated %}
     <li {% if section == "movies" %}class="selected"{% endif %}>
         <a href="{% url "movies:list" %}">Фильмы</a>
         <ul class="dropdown-content">
@@ -41,13 +40,15 @@
         </ul>
     </li>
     <li {% if section == "people" %}class="selected"{% endif %}>
-        <a href="{% url "user_list" %}">Киносмотрители</a>
+        <a href="{% url "user_list" %}">Сообщество</a>
     </li>
+{% if request.user.is_authenticated %}
     <li {% if section == "dashboard" %}class="selected"{% endif %}>
         <a href="{% url "dashboard" %}">Профиль</a>
     </li>
+{% endif %}
 </ul>
-    {% endif %}
+
     <span class="user">
       {% if request.user.is_authenticated %}
         Привет {{ request.user.first_name|default:request.user.username }},
