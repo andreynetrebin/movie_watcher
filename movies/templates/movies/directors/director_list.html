@@ -1,14 +1,79 @@
 <!-- templates/directors/director_list.html -->
 {% extends "base.html" %}
+{% load custom_filters %}
 {% block title %}Список Режиссеров{% endblock %}
 {% block content %}
 <h1>Список Режиссеров</h1>
-<ul>
-    {% for director in directors %}
-        <li>
-            <a href="{% url 'movies:director_detail' director.pk %}">{{ director.name }}</a> ({{ director.num_movies }} фильмов)
-        </li>
-    {% endfor %}
-</ul>
-{% endblock %}
 
+<table>
+    <thead>
+        <tr>
+            <th style="width: 50px;">Позиция</th> <!-- Сужаем колонку -->
+            <th>Режиссер</th>
+            <th style="width: 100px;">Количество фильмов</th> <!-- Сужаем колонку -->
+        </tr>
+    </thead>
+    <tbody>
+        {% for director in directors %}
+            <tr>
+                <td>{{ directors.number|add:-1|mul:20|add:forloop.counter }}</td> <!-- Номер позиции с учетом страницы -->
+                <td>
+                    <a href="{% url 'movies:director_detail' director.pk %}">{{ director.name }}</a>
+                </td>
+                <td>{{ director.num_movies }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="3">Нет доступных режиссеров.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Пагинация -->
+<div class="pagination">
+    <span class="step-links">
+        {% if directors.has_previous %}
+            <a href="?page=1">&laquo; первая</a>
+            <a href="?page={{ directors.previous_page_number }}">предыдущая</a>
+        {% endif %}
+
+        <span class="current">
+            Страница {{ directors.number }} из {{ directors.paginator.num_pages }}.
+        </span>
+
+        {% if directors.has_next %}
+            <a href="?page={{ directors.next_page_number }}">следующая</a>
+            <a href="?page={{ directors.paginator.num_pages }}">последняя &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    tr:hover {
+        background-color: #f1f1f1;
+    }
+    .pagination {
+        margin-top: 20px;
+        text-align: center;
+    }
+    .pagination a {
+        margin: 0 5px;
+        text-decoration: none;
+        color: #007bff;
+    }
+</style>
+
+{% endblock %}

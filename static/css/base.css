@@ -1,43 +1,68 @@
 @import url(//fonts.googleapis.com/css?family=Muli);
 
-/* Стили для мобильного меню */
-.menu {
-    display: none; /* Скрываем меню по умолчанию */
-    list-style: none;
-    padding: 0;
-    margin: 0;
+
+.container {
+    flex-direction: column; /* Вертикальное расположение для мобильных */
 }
 
-.menu-toggle {
-    display: none; /* Скрываем кнопку по умолчанию */
-    font-size: 24px;
-    cursor: pointer;
+.main-content {
+    padding: 10px; /* Уменьшаем отступы для мобильных */
 }
 
-/* Показываем кнопку на мобильных устройствах */
+/* Стили для мобильных устройств */
 @media (max-width: 768px) {
+    #header {
+        padding: 20px; /* Уменьшаем отступы */
+        font-size: 12px; /* Уменьшаем размер шрифта */
+    }
+
+    #header .logo {
+        font-size: 18px; /* Уменьшаем размер логотипа */
+    }
+
+    #header .menu {
+        flex-direction: column; /* Меню будет вертикальным */
+        display: none; /* Скрыть меню по умолчанию */
+    }
+
+    #header .menu.active {
+        display: flex; /* Показать меню, когда оно активно */
+    }
+
     .menu-toggle {
-        display: block; /* Показываем кнопку на мобильных устройствах */
-    }
-
-    .menu {
-        display: none; /* Скрываем меню по умолчанию */
-        flex-direction: column; /* Вертикальное расположение элементов */
-        position: absolute; /* Позиционируем меню */
-        top: 50px; /* Располагаем под заголовком */
-        left: 0;
-        right: 0;
-        background-color: #12c064; /* Цвет фона меню */
-        z-index: 1000; /* Убедитесь, что меню поверх других элементов */
-    }
-
-    .menu.show {
-        display: flex; /* Показываем меню при добавлении класса show */
+        display: block; /* Показать кнопку для открытия меню */
+        background-color: #12c064; /* Цвет кнопки */
+        color: white; /* Цвет текста кнопки */
+        border: none; /* Убираем рамку */
+        padding: 10px; /* Отступы для кнопки */
+        cursor: pointer; /* Указатель при наведении */
     }
 
     .menu li {
-        padding: 10px; /* Отступы для элементов меню */
-        text-align: center; /* Центрируем текст */
+        margin: 10px 0; /* Увеличиваем отступы между элементами */
+    }
+
+    .sidebar {
+        width: 100%; /* Сайдбар занимает всю ширину */
+        margin-top: 20px; /* Отступ сверху */
+    }
+
+    .movie-item {
+        flex-direction: column; /* Вертикальное расположение для мобильных */
+        align-items: center; /* Центрируем элементы */
+    }
+
+    .movie-poster {
+        margin-right: 0; /* Убираем отступ справа */
+        margin-bottom: 10px; /* Отступ снизу для постера */
+    }
+
+    .movie-poster-img {
+        width: 80%; /* Уменьшаем ширину постера */
+    }
+
+    .movie-info {
+        text-align: center; /* Центрируем текст информации о фильме */
     }
 }
 

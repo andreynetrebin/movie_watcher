@@ -37,13 +37,13 @@ class MovieCreateForm(forms.ModelForm):
             kinopoisk_id = match.group(1)
             print(f"kinopoisk_id - {kinopoisk_id}")
             if Movie.objects.filter(kinopoisk_id=kinopoisk_id).exists():
-                raise forms.ValidationError("Такой фильм уже есть в базе")
+                raise forms.ValidationError(f"С id {kinopoisk_id} фильм уже есть в базе")
 
             movie_url = f"https://kinopoiskapiunofficial.tech/api/v2.2/films/{kinopoisk_id}"
             movie_staff_url = f"https://kinopoiskapiunofficial.tech/api/v1/staff"
             try:
                 movie_response = requests.get(movie_url, headers={
-                    'X-API-KEY': config('X-API-KEY'),
+                    'X-API-KEY': config('X-API-KEY2'),
                     "Content-Type": "application/json",
                 })
             except Exception as e:
@@ -53,15 +53,16 @@ class MovieCreateForm(forms.ModelForm):
             print(f"movie_response - {movie_response.json()}")
             movie_data = movie_response.json()
             print(f"movie_data - {movie_data}")
-            if 'You exceeded the quota' in movie_data['message']:
-                print(f"if You exceeded the quota")
-                raise forms.ValidationError("Превышена квота запросов к API Кинопоиска. Попробуйте выполнить на следующий день")
-            else:
+            try:
+                if 'You exceeded the quota' in movie_data['message']:
+                    print(f"if You exceeded the quota")
+                    raise forms.ValidationError("Превышена квота запросов к API Кинопоиска. Попробуйте выполнить на следующий день")
+            except:
                 print(f"else You exceeded the quota")
                 if movie_data["type"] == "FILM" and movie_data["serial"] is False:
                     try:
                         movie_staff_response = requests.get(movie_staff_url, headers={
-                        'X-API-KEY': config('X-API-KEY'),
+                        'X-API-KEY': config('X-API-KEY2'),
                         "Content-Type": "application/json",
                         }, params={"filmId": kinopoisk_id})
                     except Exception as e:
@@ -69,10 +70,11 @@ class MovieCreateForm(forms.ModelForm):
                         movie_staff_response = None
 
                     movie_staff_data = movie_staff_response.json()
-                    if 'You exceeded the quota' in movie_staff_data['message']:
-                        raise forms.ValidationError(
+                    try:
+                        if 'You exceeded the quota' in movie_staff_data['message']:
+                            raise forms.ValidationError(
                             "Превышена квота запросов к API Кинопоиска. Попробуйте выполнить на следующий день")
-                    else:
+                    except:
                         self.cleaned_data.update(
                             {
                                 "kinopoisk_id": kinopoisk_id,
