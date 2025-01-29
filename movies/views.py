@@ -17,14 +17,26 @@ from actions.models import Action
 from django.views.generic import ListView, DetailView
 
 def director_list(request):
-    # Получаем всех режиссеров с количеством фильмов, отсортированных по убыванию
-    directors = Director.objects.annotate(num_movies=Count('movies_director')).order_by('-num_movies')
-    return render(request, 'movies/directors/director_list.html', {'directors': directors})
+    # Получаем всех режиссеров с количеством фильмов, исключая тех, у кого 0 фильмов
+    directors = Director.objects.annotate(num_movies=Count('movies_director')).filter(num_movies__gt=0).order_by('-num_movies')
+
+    # Пагинация
+    paginator = Paginator(directors, 20)  # 20 режиссеров на странице
+    page_number = request.GET.get('page')
+    directors_page = paginator.get_page(page_number)
+
+    return render(request, 'movies/directors/director_list.html', {'directors': directors_page})
 
 def writer_list(request):
-    # Получаем всех сценаристов с количеством фильмов, отсортированных по убыванию
-    writers = Writer.objects.annotate(num_movies=Count('movies_writer')).order_by('-num_movies')
-    return render(request, 'movies/writers/writer_list.html', {'writers': writers})
+    # Получаем всех сценаристов с количеством фильмов, исключая тех, у кого 0 фильмов
+    writers = Writer.objects.annotate(num_movies=Count('movies_writer')).filter(num_movies__gt=0).order_by('-num_movies')
+
+    # Пагинация
+    paginator = Paginator(writers, 20)  # 20 сценаристов на странице
+    page_number = request.GET.get('page')
+    writers_page = paginator.get_page(page_number)
+
+    return render(request, 'movies/writers/writer_list.html', {'writers': writers_page})
 
 @login_required
 def movie_bulk_create(request):

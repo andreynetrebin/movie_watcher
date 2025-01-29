@@ -3,13 +3,13 @@
 <html>
 <head>
   <title>{% block title %}{% endblock %}</title>
-  <link href="{% static "css/base.css" %}" rel="stylesheet">
+  <link href="{% static 'css/base.css' %}" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
   <div id="header">
     <span class="logo">КиноСмотрители</span>
-    <button class="menu-toggle" aria-label="Toggle menu">&#9776;</button> <!-- Кнопка для открытия меню -->
+    <button class="menu-toggle">Меню</button>
 <ul class="menu">
     <li {% if section == "dashboard" %}class="selected"{% endif %}>
         <a href="{% url "movies:movie_actions" %}">Лента</a>
@@ -103,14 +103,16 @@ window.onclick = function(event) {
         }
     }
 }
-    document.addEventListener('DOMContentLoaded', function() {
-        const menuToggle = document.querySelector('.menu-toggle');
-        const menu = document.querySelector('.menu');
 
-        menuToggle.addEventListener('click', function() {
-            menu.classList.toggle('show'); // Переключаем класс show для отображения/скрытия меню
-        });
+document.addEventListener('DOMContentLoaded', function() {
+    const menuToggle = document.querySelector('.menu-toggle');
+    const menu = document.querySelector('.menu');
+
+    menuToggle.addEventListener('click', function() {
+        menu.classList.toggle('active');
     });
+});
+
 {% endblock %}
 })
 </script>

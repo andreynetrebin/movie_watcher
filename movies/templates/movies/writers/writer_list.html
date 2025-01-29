@@ -1,13 +1,79 @@
 <!-- templates/writers/writer_list.html -->
 {% extends "base.html" %}
+{% load custom_filters %}
 {% block title %}Список Сценаристов{% endblock %}
 {% block content %}
 <h1>Список Сценаристов</h1>
-<ul>
-    {% for writer in writers %}
-        <li>
-            <a href="{% url 'movies:writer_detail' writer.pk %}">{{ writer.name }}</a> ({{ writer.num_movies }} фильмов)
-        </li>
-    {% endfor %}
-</ul>
+
+<table>
+    <thead>
+        <tr>
+            <th style="width: 50px;">Позиция</th> <!-- Сужаем колонку -->
+            <th>Сценарист</th>
+            <th style="width: 100px;">Количество фильмов</th> <!-- Сужаем колонку -->
+        </tr>
+    </thead>
+    <tbody>
+        {% for writer in writers %}
+            <tr>
+                <td>{{ writers.number|add:-1|mul:20|add:forloop.counter }}</td> <!-- Номер позиции с учетом страницы -->
+                <td>
+                    <a href="{% url 'movies:writer_detail' writer.pk %}">{{ writer.name }}</a>
+                </td>
+                <td>{{ writer.num_movies }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="3">Нет доступных сценаристов.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Пагинация -->
+<div class="pagination">
+    <span class="step-links">
+        {% if writers.has_previous %}
+            <a href="?page=1">&laquo; первая</a>
+            <a href="?page={{ writers.previous_page_number }}">предыдущая</a>
+        {% endif %}
+
+        <span class="current">
+            Страница {{ writers.number }} из {{ writers.paginator.num_pages }}.
+        </span>
+
+        {% if writers.has_next %}
+            <a href="?page={{ writers.next_page_number }}">следующая</a>
+            <a href="?page={{ writers.paginator.num_pages }}">последняя &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    tr:hover {
+        background-color: #f1f1f1;
+    }
+    .pagination {
+        margin-top: 20px;
+        text-align: center;
+    }
+    .pagination a {
+        margin: 0 5px;
+        text-decoration: none;
+        color: #007bff;
+    }
+</style>
+
 {% endblock %}
