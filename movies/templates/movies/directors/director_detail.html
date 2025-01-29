@@ -4,6 +4,12 @@
 {% block title %}{{ director.name }}{% endblock %}
 {% block content %}
 <h1>{{ director.name }}</h1>
+
+<!-- Ссылка на Кинопоиск -->
+<p>
+    <a href="https://www.kinopoisk.ru/name/{{ director.staff_id }}/" target="_blank">Посетить страницу на Кинопоиске</a>
+</p>
+
 <h2>Фильмы:</h2>
 <div class="movie-container">
     <div class="movie-list">
@@ -22,10 +28,11 @@
                         <p>{{ movie.title_original }}</p>
                     </div>
                 </li>
+            {% empty %}
+                <li>Нет фильмов для отображения.</li>
             {% endfor %}
         </ul>
     </div>
 </div>
 <a href="{% url 'movies:director_list' %}">Назад к списку режиссеров</a>
 {% endblock %}
-
