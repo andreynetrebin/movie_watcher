@@ -410,13 +410,13 @@ def movie_list(request):
     elif filter_type == 'added':
         movies = movies.filter(user=user)
 
-    # Получаем список просмотренных фильмов для текущего пользователя
-    watched_movies = Watched.objects.filter(user=user).values_list('movie_id', flat=True)
-
     # Фильтрация по названию и оригинальному названию
     title_filter = request.GET.get('title', '')
     if title_filter:
         movies = movies.filter(title__icontains=title_filter) | movies.filter(title_original__icontains=title_filter)
+
+    # Получаем список просмотренных фильмов для текущего пользователя
+    watched_movies = Watched.objects.filter(user=user).values_list('movie_id', flat=True)
 
     # Пагинация
     paginator = Paginator(movies, 10)  # Показывать 10 фильмов на странице
@@ -436,4 +436,3 @@ def movie_list(request):
         'wishlist_movies': wishlist_movies,
         'title_filter': title_filter,  # Передаем фильтр названия в шаблон
     })
-
