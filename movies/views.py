@@ -392,13 +392,13 @@ def movie_detail(request, slug):
 def movie_list(request):
     user = request.user
     movies = Movie.objects.all()  # Получаем все фильмы по умолчанию
-    wishlist_movies = WishList.objects.filter(user=request.user).values_list('movie_id',
-                                                                             flat=True)
+    wishlist_movies = WishList.objects.filter(user=request.user).values_list('movie_id', flat=True)
+
     # Фильтрация по вкладкам
     filter_type = request.GET.get('filter', 'all')  # Получаем тип фильтра из параметров запроса
 
     if filter_type == 'watched':
-        movies = movies.filter(watched__user=user)  # Предполагается, что у вас есть модель Watched
+        movies = movies.filter(watched__user=user)
     elif filter_type == 'unwatched':
         movies = movies.exclude(watched__user=user)
     elif filter_type == 'liked':
@@ -406,13 +406,17 @@ def movie_list(request):
     elif filter_type == 'disliked':
         movies = movies.filter(users_dislike=user)
     elif filter_type == 'watchlist':
-        movies = movies.filter(wishlist__user=user)  # Предполагается, что у вас есть модель WishList
+        movies = movies.filter(wishlist__user=user)
     elif filter_type == 'added':
         movies = movies.filter(user=user)
 
     # Получаем список просмотренных фильмов для текущего пользователя
-
     watched_movies = Watched.objects.filter(user=user).values_list('movie_id', flat=True)
+
+    # Фильтрация по названию и оригинальному названию
+    title_filter = request.GET.get('title', '')
+    if title_filter:
+        movies = movies.filter(title__icontains=title_filter) | movies.filter(title_original__icontains=title_filter)
 
     # Пагинация
     paginator = Paginator(movies, 10)  # Показывать 10 фильмов на странице
@@ -428,8 +432,8 @@ def movie_list(request):
         'top_directors': top_directors,
         'top_writers': top_writers,
         'filter_type': filter_type,
-        'watched_movies': watched_movies,  # Передаем список просмотренных фильмов
+        'watched_movies': watched_movies,
         'wishlist_movies': wishlist_movies,
+        'title_filter': title_filter,  # Передаем фильтр названия в шаблон
     })
-
 
