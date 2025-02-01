@@ -726,3 +726,13 @@ button.wishlist i.transparent {
 .pagination .current {
     font-weight: bold; /* Выделяем текущую страницу */
 }
+
+.kinopoisk-link {
+    display: inline-block; /* Чтобы элемент занимал только необходимое пространство */
+}
+
+.kinopoisk-icon {
+    width: 20px; /* Установите ширину иконки */
+    height: 20px; /* Установите высоту иконки */
+    vertical-align: middle; /* Выравнивание по центру */
+}
