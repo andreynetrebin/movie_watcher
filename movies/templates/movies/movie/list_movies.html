@@ -1,5 +1,5 @@
 {% load thumbnail %}
-
+{% load static %}
 <h1>Список фильмов</h1>
 
 <div class="tabs">
@@ -11,14 +11,23 @@
     <a href="?filter=watchlist" class="{% if filter_type == 'watchlist' %}active{% endif %}">Буду смотреть</a>
     <a href="?filter=added" class="{% if filter_type == 'added' %}active{% endif %}">Добавленные</a>
 </div>
-<div class="filter">
+<div class="sidebar">
+    <div class="filter">
     <form method="GET" action="">
+        <button type="submit">Применить фильтровать по названию</button>
         <input type="text" name="title" placeholder="Фильтр по названию" value="{{ title_filter }}">
-        <button type="submit">Фильтровать</button>
+        <button type="submit">Применить фильтр по жанрам</button>
         <input type="hidden" name="filter" value="{{ filter_type }}">
+        {% for genre in all_genres %}
+            <label>
+                <input type="checkbox" name="genres" value="{{ genre.id }}"
+                {% if genre.id in selected_genres %}checked{% endif %}>
+                {{ genre.name }}
+            </label><br>
+        {% endfor %}
     </form>
+    </div>
 </div>
-
 <div class="movie-container">
     <div class="movie-list">
         <ul>
@@ -87,7 +96,7 @@
         </span>
     </button>
 <a href="{{ movie.kinopoisk_url }}" target="_blank" class="kinopoisk-link">
-    <img src="https://yastatic.net/s3/kinopoisk-frontend/special-static-www/release-912/branding/dist/static/images/icons/icon-kp.png" alt="Кинопоиск" class="kinopoisk-icon">
+    <img src="{% static 'images/icon-kp.png' %}" alt="Кинопоиск" class="kinopoisk-icon">
 </a>
 
                         </div>

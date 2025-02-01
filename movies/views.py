@@ -415,6 +415,11 @@ def movie_list(request):
     if title_filter:
         movies = movies.filter(title__icontains=title_filter) | movies.filter(title_original__icontains=title_filter)
 
+    # Фильтрация по жанрам
+    genre_filter = request.GET.getlist('genres')  # Получаем список выбранных жанров
+    if genre_filter:
+        movies = movies.filter(genres__id__in=genre_filter).annotate(num_genres=Count('genres')).filter(
+            num_genres=len(genre_filter)).distinct()
     # Получаем список просмотренных фильмов для текущего пользователя
     watched_movies = Watched.objects.filter(user=user).values_list('movie_id', flat=True)
 
@@ -427,6 +432,9 @@ def movie_list(request):
     top_directors = Director.objects.annotate(num_movies=Count('movies_director')).order_by('-num_movies')[:10]
     top_writers = Writer.objects.annotate(num_movies=Count('movies_writer')).order_by('-num_movies')[:10]
 
+    # Получаем все жанры для отображения в фильтре
+    all_genres = Genre.objects.all()
+
     return render(request, 'movies/movie/list.html', {
         'page_obj': page_obj,
         'top_directors': top_directors,
@@ -435,4 +443,6 @@ def movie_list(request):
         'watched_movies': watched_movies,
         'wishlist_movies': wishlist_movies,
         'title_filter': title_filter,  # Передаем фильтр названия в шаблон
+        'all_genres': all_genres,  # Передаем все жанры в шаблон
+        'selected_genres': genre_filter,  # Передаем выбранные жанры в шаблон
     })
