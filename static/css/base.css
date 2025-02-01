@@ -736,3 +736,21 @@ button.wishlist i.transparent {
     height: 20px; /* Установите высоту иконки */
     vertical-align: middle; /* Выравнивание по центру */
 }
+
+.sidebar {
+    float: left; /* Размещаем сайдбар слева */
+    width: 15%; /* Ширина сайдбара */
+    padding: 20px; /* Отступы вокруг сайдбара */
+    background-color: #f9f9f9; /* Цвет фона для сайдбара */
+    border: 1px solid #ccc; /* Рамка для сайдбара */
+    border-radius: 5px; /* Закругленные углы */
+}
+
+.movie-container {
+    display: flex; /* Используем Flexbox для расположения элементов */
+}
+
+.movie-list {
+    flex: 3; /* Основной контент занимает 3/4 ширины */
+    margin-left: 20px; /* Отступ между сайдбаром и списком фильмов */
+}
