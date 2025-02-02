@@ -1,8 +1,8 @@
 # telegram_bot/telegram_bot.py
 import logging
 from telegram import Update
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
-from django.conf import settings
+from telegram.ext import Updater, CommandHandler, MessageHandler, CallbackContext
+from telegram.ext import filters  # Измените импорт на filters
 from django.contrib.auth import get_user_model
 from account.models import Profile
 from decouple import config
@@ -40,9 +40,9 @@ def handle_email(update: Update, context: CallbackContext) -> None:
 
 def handle_update(update):
     # Обработка входящего обновления
-    dispatcher = Updater(token=config.TELEGRAM_BOT_TOKEN, use_context=True).dispatcher
+    dispatcher = Updater(token=config('TELEGRAM_BOT_TOKEN'), use_context=True).dispatcher
     dispatcher.add_handler(CommandHandler("start", start))
     dispatcher.add_handler(CommandHandler("connect", connect))
-    dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, handle_email))  # Обработка текстовых сообщений
+    dispatcher.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_email))  # Обработка текстовых сообщений
 
     dispatcher.process_update(Update.de_json(update, None))
