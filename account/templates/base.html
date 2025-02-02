@@ -15,7 +15,7 @@
         <a href="{% url "movies:movie_actions" %}">Лента</a>
     </li>
     <li {% if section == "movies" %}class="selected"{% endif %}>
-        <a href="{% url "movies:list" %}">Фильмы</a>
+        <a href="#">Фильмы</a>
         <ul class="dropdown-content">
             <li><a href="{% url "movies:list" %}?filter=all">Все фильмы</a></li>
             <li><a href="{% url "movies:list" %}?filter=watched">Просмотренные</a></li>
