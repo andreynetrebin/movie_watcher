@@ -43,7 +43,7 @@ class MovieCreateForm(forms.ModelForm):
             movie_staff_url = f"https://kinopoiskapiunofficial.tech/api/v1/staff"
             try:
                 movie_response = requests.get(movie_url, headers={
-                    'X-API-KEY': config('X-API-KEY2'),
+                    'X-API-KEY': config('X-API-KEY'),
                     "Content-Type": "application/json",
                 })
             except Exception as e:
