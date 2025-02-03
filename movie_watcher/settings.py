@@ -189,3 +189,43 @@ THUMBNAIL_DEBUG = True
 INTERNAL_IPS = [
 '127.0.0.1',
 ]
+
+
+# Настройка логирования
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{asctime} {levelname} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{asctime} {levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'django_app.log'),  # Укажите путь к файлу логов
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',  # Уровень логирования
+            'propagate': True,
+        },
+        'myapp': {  # Замените 'myapp' на имя вашего приложения
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',  # Уровень логирования для вашего приложения
+            'propagate': False,
+        },
+    },
+}
