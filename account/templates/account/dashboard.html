@@ -1,13 +1,71 @@
 {% extends "base.html" %}
-{% block title %}Dashboard{% endblock %}
+{% block title %}Профиль{% endblock %}
 {% block content %}
 <h1>Профиль</h1>
 <p>Добро пожаловать, на страницу своего профиля. Вы можете <a href="{% url "edit" %}">редактировать профиль</a> или <a href="{% url "password_change" %}">сменить пароль</a>.</p>
+
 <!--<h2>What's happening</h2>-->
 <!--<div id="action-list">-->
 <!--{% for action in actions %}-->
 <!--{% include "actions/action/detail.html" %}-->
 <!--{% endfor %}-->
 <!--</div>-->
+
+
+<!-- Вкладки -->
+<div class="tabs">
+    <button class="tablink" onclick="openTab(event, 'AboutMe')">Обо мне</button>
+    <button class="tablink" onclick="openTab(event, 'Activity')">Активность</button>
+    <button class="tablink" onclick="openTab(event, 'Comments')">Комментарии</button>
+</div>
+
+<!-- Содержимое вкладок -->
+<div id="AboutMe" class="tabcontent">
+    <h3>Обо мне</h3>
+    <p>Дата присоединения: {{ user.date_joined }}</p>
+    <p>Количество просмотренных фильмов: <a href="{% url 'movies:list' %}?filter=watched">{{ watched_count }}</a></p>
+    <p>Количество понравившихся фильмов: <a href="{% url 'movies:list' %}?filter=liked">{{ liked_count }}</a></p>
+    <p>Количество непонравившихся фильмов: <a href="{% url 'movies:list' %}?filter=disliked">{{ disliked_count }}</a></p>
+    <p>Привязка к Telegram: {% if user.profile.telegram_connected %} Привязано {% else %} <a href="https://t.me/MoviesWatchersBot">Привязать к Telegram</a> {% endif %}</p>
+</div>
+
+<div id="Activity" class="tabcontent">
+    <h3>Активность</h3>
+    <p>Выберите период:</p>
+    <button onclick="filterActivity('hour')">Последний час</button>
+    <button onclick="filterActivity('day')">Последний день</button>
+    <button onclick="filterActivity('month')">Последний месяц</button>
+    <div id="activityContent">
+        <!-- Здесь будет отображаться активность пользователя -->
+    </div>
+</div>
+
+<div id="Comments" class="tabcontent">
+    <h3>Комментарии</h3>
+    <ul>
+        {% for comment in comments %}
+            <li>{{ comment.body }} - {{ comment.created_on }}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<script>
+function openTab(evt, tabName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablink");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.className += " active";
+}
+
+// Открыть вкладку "Обо мне" по умолчанию
+document.getElementsByClassName("tablink")[0].click();
+</script>
 
 {% endblock %}

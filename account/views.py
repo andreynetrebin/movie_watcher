@@ -46,23 +46,33 @@ def user_login(request):
 
 @login_required
 def dashboard(request):
+    # Получаем количество просмотренных, понравившихся и непонравившихся фильмов
+    watched_count = request.user.movies_add.filter(watched__isnull=False).count()
+    liked_count = request.user.movies_add.filter(users_like=request.user).count()
+    disliked_count = request.user.movies_add.filter(users_dislike=request.user).count()
+
+    # Получаем комментарии пользователя
+    comments = request.user.comments.all()  # Предполагается, что у вас есть связь между пользователем и комментариями
+
     # По умолчанию показать все действия
     actions = Action.objects.exclude(user=request.user)
-    following_ids = request.user.following.values_list('id',
-                                                       flat=True)
+    following_ids = request.user.following.values_list('id', flat=True)
     if following_ids:
-    # Если пользователь подписан на других,
-    # то извлечь только их действия
         actions = actions.filter(user_id__in=following_ids)
     actions = actions.select_related('user', 'user__profile')[:10].prefetch_related('target')[:10]
-    # actions = actions[:10]
 
     return render(
         request,
         'account/dashboard.html',
-        {'section': 'dashboard', 'actions': actions}
+        {
+            'section': 'dashboard',
+            'actions': actions,
+            'watched_count': watched_count,
+            'liked_count': liked_count,
+            'disliked_count': disliked_count,
+            'comments': comments,
+        }
     )
-
 
 def register(request):
     if request.method == 'POST':
