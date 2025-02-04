@@ -222,7 +222,7 @@ LOGGING = {
             'level': 'INFO',  # Уровень логирования
             'propagate': True,
         },
-        'myapp': {  # Замените 'myapp' на имя вашего приложения
+        'telegram_bot': {  # Замените 'myapp' на имя вашего приложения
             'handlers': ['console', 'file'],
             'level': 'DEBUG',  # Уровень логирования для вашего приложения
             'propagate': False,
