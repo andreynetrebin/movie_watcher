@@ -762,3 +762,19 @@ button.wishlist i.transparent {
     flex: 3; /* Основной контент занимает 3/4 ширины */
     margin-left: 20px; /* Отступ между сайдбаром и списком фильмов */
 }
+
+
+#header .version-number {
+    color: brown; /* Устанавливаем цвет */
+    font-size: 0.6em; /* Устанавливаем мелкий шрифт */
+    margin-left: 5px; /* Добавляем небольшой отступ слева для отделения от логотипа */
+}
+
+#header .version-number a {
+    color: brown; /* Устанавливаем цвет ссылки */
+    text-decoration: none; /* Убираем подчеркивание */
+}
+
+#header .version-number a:hover {
+    text-decoration: underline; /* Добавляем подчеркивание при наведении */
+}

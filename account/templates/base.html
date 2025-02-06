@@ -8,7 +8,11 @@
 </head>
 <body>
   <div id="header">
-    <span class="logo">КиноСмотрители</span>
+        <span class="logo">КиноСмотрители
+            {% if current_version %}
+                <span class="version-number"><a href="{% url 'changelog' %}">{{ current_version.version_number }}</a></span>
+            {% endif %}
+        </span>
     <button class="menu-toggle">Меню</button>
 <ul class="menu">
     <li {% if section == "dashboard" %}class="selected"{% endif %}>

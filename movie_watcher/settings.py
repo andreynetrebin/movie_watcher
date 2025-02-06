@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'actions.apps.ActionsConfig',
     'debug_toolbar',
     'telegram_bot',
+    'versioning',
 
 ]
 
@@ -74,6 +75,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'versioning.context_processors.current_version',
             ],
         },
     },

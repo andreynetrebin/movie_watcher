@@ -1,0 +1,14 @@
+<!-- templates/changelog.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Changelog</h1>
+<ul>
+    {% for version in versions %}
+        <li>
+            <strong>{{ version.version_number }}</strong> ({{ version.release_date }})<br>
+            <pre>{{ version.changes }}</pre>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
