@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404
 from .forms import MovieCreateForm, CommentForm, MovieBulkCreateForm
 from django.db.models import Count
 from .models import Movie, Genre, Country, Director, Writer, Watched, WishList, MovieList
+from versioning.models import Version
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.http import HttpResponse
@@ -434,6 +435,7 @@ def movie_list(request):
 
     # Получаем все жанры для отображения в фильтре
     all_genres = Genre.objects.all()
+    current_version = Version.objects.last()  # Получаем последнюю версию
 
     return render(request, 'movies/movie/list.html', {
         'page_obj': page_obj,
@@ -445,4 +447,5 @@ def movie_list(request):
         'title_filter': title_filter,  # Передаем фильтр названия в шаблон
         'all_genres': all_genres,  # Передаем все жанры в шаблон
         'selected_genres': genre_filter,  # Передаем выбранные жанры в шаблон
+        'current_version': current_version,
     })

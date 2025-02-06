@@ -30,6 +30,7 @@ urlpatterns = [
     path('movies/', include('movies.urls', namespace='movies')),
     path('telegram_bot/', include('telegram_bot.urls', namespace='telegram_bot')),
     path('__debug__/', include('debug_toolbar.urls')),
+    path('versioning/', include('versioning.urls')),
 ]
 
 if settings.DEBUG:
