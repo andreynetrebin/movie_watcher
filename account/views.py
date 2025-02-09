@@ -10,6 +10,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from actions.utils import create_action
 from actions.models import Action
+from movies.models import Movie, Watched
 
 
 from .forms import (
@@ -46,20 +47,20 @@ def user_login(request):
 
 @login_required
 def dashboard(request):
-    # Получаем количество просмотренных, понравившихся и непонравившихся фильмов
-    watched_count = request.user.movies_add.filter(watched__isnull=False).count()
-    liked_count = request.user.movies_add.filter(users_like=request.user).count()
-    disliked_count = request.user.movies_add.filter(users_dislike=request.user).count()
+    # Получаем количество просмотренных фильмов
+    watched_count = Watched.objects.filter(user=request.user).count()
+
+    # Получаем количество понравившихся фильмов
+    liked_count = request.user.movies_like.count()
+
+    # Получаем количество непонравившихся фильмов
+    disliked_count = request.user.movies_dislike.count()
 
     # Получаем комментарии пользователя
     comments = request.user.comments.all()  # Предполагается, что у вас есть связь между пользователем и комментариями
 
-    # По умолчанию показать все действия
-    actions = Action.objects.exclude(user=request.user)
-    following_ids = request.user.following.values_list('id', flat=True)
-    if following_ids:
-        actions = actions.filter(user_id__in=following_ids)
-    actions = actions.select_related('user', 'user__profile')[:10].prefetch_related('target')[:10]
+    # Получаем действия текущего пользователя
+    actions = Action.objects.filter(user=request.user).select_related('user', 'user__profile').prefetch_related('target')[:10]
 
     return render(
         request,
@@ -73,7 +74,6 @@ def dashboard(request):
             'comments': comments,
         }
     )
-
 def register(request):
     if request.method == 'POST':
         user_form = UserRegistrationForm(request.POST)
@@ -101,15 +101,20 @@ def register(request):
     )
 
 
+from django.shortcuts import get_object_or_404
+
 @login_required
 def edit(request):
+    # Получаем или создаем профиль для пользователя
+    profile, created = Profile.objects.get_or_create(user=request.user)
+
     if request.method == 'POST':
         user_form = UserEditForm(
             instance=request.user,
             data=request.POST
         )
         profile_form = ProfileEditForm(
-            instance=request.user.profile,
+            instance=profile,
             data=request.POST,
             files=request.FILES,
         )
@@ -120,11 +125,13 @@ def edit(request):
                 request,
                 'Profile updated successfully'
             )
+            return redirect('account:profile')  # Перенаправление после успешного обновления
         else:
             messages.error(request, 'Error updating your profile')
     else:
         user_form = UserEditForm(instance=request.user)
-        profile_form = ProfileEditForm(instance=request.user.profile)
+        profile_form = ProfileEditForm(instance=profile)
+
     return render(
         request,
         'account/edit.html',
