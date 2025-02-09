@@ -421,6 +421,10 @@ def movie_list(request):
     if genre_filter:
         movies = movies.filter(genres__id__in=genre_filter).annotate(num_genres=Count('genres')).filter(
             num_genres=len(genre_filter)).distinct()
+
+    # Упорядочиваем фильмы по году (или любому другому полю)
+    movies = movies.order_by('-year')  # Убедитесь, что вы указываете поле, по которому хотите упорядочить
+
     # Получаем список просмотренных фильмов для текущего пользователя
     watched_movies = Watched.objects.filter(user=user).values_list('movie_id', flat=True)
 
