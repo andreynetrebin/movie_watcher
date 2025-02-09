@@ -46,7 +46,7 @@ class Movie(models.Model):
     countries = models.ManyToManyField(Country, related_name='movies_country')
     directors = models.ManyToManyField(Director, related_name='movies_director')
     writers = models.ManyToManyField(Writer, related_name='movies_writer')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='movies_add', on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='movies_add', on_delete=models.SET_NULL, null=True)
     users_like = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         related_name='movies_like',
