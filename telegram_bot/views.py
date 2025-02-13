@@ -27,6 +27,59 @@ def telegram_webhook(request):
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
     return JsonResponse({'status': 'error'}, status=400)
 
+
+def send_movie_action_notification(movie, movie_url, action_user, action):
+    # Получаем всех пользователей, которые связали свои аккаунты с Telegram
+    profiles = Profile.objects.filter(telegram_connected=True)
+    for profile in profiles:
+        chat_id = profile.telegram_user_id
+        if chat_id == "544324614":
+            message = (
+                f"<b>{action_user.username}</b> {action} фильм <b>{movie.title}</b>.\n"
+                f"Ссылка на Кинопоиск: {movie.kinopoisk_url}\n"
+                f"Ссылка на страницу фильма: {movie_url}"
+            )
+            bot.send_message(chat_id, message, parse_mode='HTML')
+
+def send_newuser_registration_notification(username):
+    # Получаем всех пользователей, которые связали свои аккаунты с Telegram
+    profiles = Profile.objects.filter(telegram_connected=True)
+    for profile in profiles:
+        chat_id = profile.telegram_user_id
+        if chat_id == "544324614":
+            message = (
+                f"Зарегистрировался новый пользователь - <b>{username}</b>"
+            )
+            bot.send_message(chat_id, message, parse_mode='HTML')
+
+
+# def send_movie_action_notification(request, movie, action_user, action):
+#     # Получаем всех пользователей, которые связали свои аккаунты с Telegram
+#     profiles = Profile.objects.filter(telegram_connected=True)
+#     for profile in profiles:
+#         chat_id = profile.telegram_user_id
+#         message = (
+#             f"<b>{action_user.username}</b> {action} фильм <b>{movie.title}</b>.\n"
+#             f"Ссылка на Кинопоиск: {movie.kinopoisk_url}\n"
+#             f"Ссылка на страницу фильма: {request.build_absolute_uri(movie.get_absolute_url())}"
+#         )
+#         bot.send_message(chat_id, message, parse_mode='HTML')
+#
+#
+# def send_movie_notification(request, movie, action_user, action):
+#     # Получаем всех пользователей, которые связали свои аккаунты с Telegram
+#     profiles = Profile.objects.filter(telegram_connected=True)
+#     for profile in profiles:
+#         chat_id = profile.telegram_user_id
+#         emoji = '👍' if action == 'liked' else '👎'
+#         message = (
+#             f"<b>{action_user.username}</b> {emoji} "
+#             f"фильм <b>{movie.title}</b>.\n"
+#             f"Ссылка на Кинопоиск: {movie.kinopoisk_url}\n"
+#             f"Ссылка на страницу фильма: {request.build_absolute_uri(movie.get_absolute_url())}"
+#         )
+#         bot.send_message(chat_id, message, parse_mode='HTML')
+
 def process_update(update):
     # Обработка обновления без блокировок
     if 'message' in update:
