@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
-from django.core.paginator import Paginator
+import logging
 from django.shortcuts import get_object_or_404
 from .forms import MovieCreateForm, CommentForm, MovieBulkCreateForm
 from django.db.models import Count
@@ -16,6 +16,9 @@ PageNotAnInteger
 from actions.utils import create_action
 from actions.models import Action
 from django.views.generic import ListView, DetailView
+from telegram_bot.views import send_movie_action_notification  # Импортируйте функцию
+
+logger = logging.getLogger(__name__)
 
 def director_list(request):
     # Получаем всех режиссеров с количеством фильмов, исключая тех, у кого 0 фильмов
@@ -219,6 +222,43 @@ def mark_watched(request):
         return JsonResponse({'status': 'added'})
     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
 
+#@login_required
+#@require_POST
+#def mark_recently_watched(request):
+#    if request.method == 'POST':
+#        movie_id = request.POST.get('id')
+#        movie = get_object_or_404(Movie, id=movie_id)
+        # Проверяем, был ли фильм уже просмотрен
+#        watched, created = Watched.objects.get_or_create(user=request.user, movie=movie)
+#        if not created:
+#            watched.delete()  # Удаляем из просмотренных, если он уже был
+#            return JsonResponse({'status': 'removed'})
+#        create_action(request.user, 'отметил как недавно просмотренный', movie)  # Вызываем сигнал для "просмотрен недавно"
+#        return JsonResponse({'status': 'added'})
+#    return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
+
+#@login_required
+#@require_POST
+#def mark_recently_watched(request):
+#    if request.method == 'POST':
+#        movie_id = request.POST.get('id')
+#        movie = get_object_or_404(Movie, id=movie_id)
+#        # Проверяем, был ли фильм уже просмотрен
+#        watched, created = Watched.objects.get_or_create(user=request.user, movie=movie)
+#        if not created:
+#            watched.delete()  # Удаляем из просмотренных, если он уже был
+#            return JsonResponse({'status': 'removed'})
+
+#        create_action(request.user, 'отметил как недавно просмотренный', movie)  # Вызываем сигнал для "просмотрен недавно"
+
+#        # Отправка уведомления о недавно просмотренном фильме с эмодзи "телевизор"
+#        send_movie_action_notification(request, movie, request.user, '🍿 недавно просмотрел')
+
+#        return JsonResponse({'status': 'added'})
+#    return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
+
+
+
 @login_required
 @require_POST
 def mark_recently_watched(request):
@@ -230,30 +270,72 @@ def mark_recently_watched(request):
         if not created:
             watched.delete()  # Удаляем из просмотренных, если он уже был
             return JsonResponse({'status': 'removed'})
-        create_action(request.user, 'отметил как недавно просмотренный', movie)  # Вызываем сигнал для "просмотрен недавно"
+        movie_url = request.build_absolute_uri(movie.get_absolute_url())
+        create_action(request.user, 'недавно посмотрел', target=movie, movie_url=movie_url)  # Вызываем сигнал для "просмотрен нед>
+        # Отправка уведомления о недавно просмотренном фильме с эмодзи "телевизор"
+#        send_movie_action_notification(request, movie, request.user, '🍿 недавно просмотрел')
         return JsonResponse({'status': 'added'})
     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
 
-# views.py
+
+
+
 @login_required
 @require_POST
 def add_to_wishlist(request):
     if request.method == 'POST':
         movie_id = request.POST.get('id')
         movie = get_object_or_404(Movie, id=movie_id)
-
         # Проверяем, добавлен ли фильм в вишлист
         wishlist_item, created = WishList.objects.get_or_create(user=request.user, movie=movie)
-
         if created:
-            create_action(request.user, 'добавил в вотчлист',
-                          movie)  # Вызываем сигнал для "просмотрен недавно"
+            movie_url = request.build_absolute_uri(movie.get_absolute_url())
+            create_action(request.user, 'добавил в "Буду смотреть"', target=movie, movie_url=movie_url)
             return JsonResponse({'status': 'added'})
         else:
             wishlist_item.delete()
             return JsonResponse({'status': 'removed'})
-
     return JsonResponse({'status': 'error'}, status=400)
+# views.py
+#@login_required
+#@require_POST
+#def add_to_wishlist(request):
+#    if request.method == 'POST':
+#        movie_id = request.POST.get('id')
+#        movie = get_object_or_404(Movie, id=movie_id)
+
+        # Проверяем, добавлен ли фильм в вишлист
+#        wishlist_item, created = WishList.objects.get_or_create(user=request.user, movie=movie)
+
+#        if created:
+#            create_action(request.user, 'добавил в вотчлист',
+#                          movie)  # Вызываем сигнал для "просмотрен недавно"
+#            return JsonResponse({'status': 'added'})
+#        else:
+#            wishlist_item.delete()
+#            return JsonResponse({'status': 'removed'})
+
+#    return JsonResponse({'status': 'error'}, status=400)
+
+
+#@login_required
+#@require_POST
+#def mark_like(request):
+#    if request.method == 'POST':
+#        movie_id = request.POST.get('id')
+#        movie = get_object_or_404(Movie, id=movie_id)
+#        movie.add_like(request.user)
+#        create_action(request.user, 'понравился', movie)
+#        return JsonResponse({'status': 'liked', 'total_likes': movie.total_likes})
+#@login_required
+#@require_POST
+#def mark_dislike(request):
+#    if request.method == 'POST':
+#        movie_id = request.POST.get('id')
+#        movie = get_object_or_404(Movie, id=movie_id)
+#        movie.add_dislike(request.user)
+#        create_action(request.user, 'не понравился', movie)
+#        return JsonResponse({'status': 'disliked', 'total_dislikes': movie.total_dislikes})
 
 
 @login_required
@@ -263,8 +345,11 @@ def mark_like(request):
         movie_id = request.POST.get('id')
         movie = get_object_or_404(Movie, id=movie_id)
         movie.add_like(request.user)
-        create_action(request.user, 'понравился', movie)
+        movie_url = request.build_absolute_uri(movie.get_absolute_url())
+        create_action(request.user, 'понравился', target=movie, movie_url=movie_url)
+
         return JsonResponse({'status': 'liked', 'total_likes': movie.total_likes})
+
 @login_required
 @require_POST
 def mark_dislike(request):
@@ -272,7 +357,9 @@ def mark_dislike(request):
         movie_id = request.POST.get('id')
         movie = get_object_or_404(Movie, id=movie_id)
         movie.add_dislike(request.user)
-        create_action(request.user, 'не понравился', movie)
+        movie_url = request.build_absolute_uri(movie.get_absolute_url())
+        create_action(request.user, 'не понравился', target=movie, movie_url=movie_url)
+
         return JsonResponse({'status': 'disliked', 'total_dislikes': movie.total_dislikes})
 
 
@@ -324,7 +411,8 @@ def movie_create(request):
             new_movie.movie_staff_json = cd["movie_staff_data"]
 
             new_movie.save()
-            create_action(request.user, 'добавил', new_movie)
+#            create_action(request.user, 'добавил', new_movie)
+#            send_movie_action_notification(request, new_movie, request.user, 'добавил 🎬')
             for genre in cd["genres"]:
                 genre_row = Genre.objects.get(name=genre)
                 new_movie.genres.add(genre_row)
@@ -340,6 +428,10 @@ def movie_create(request):
                 new_movie.writers.add(writer_row)
 
             messages.success(request, 'Movie added successfully')
+            movie_url = request.build_absolute_uri(new_movie.get_absolute_url())
+            create_action(request.user, 'добавил', target=new_movie, movie_url=movie_url)
+
+            # send_movie_action_notification(request, new_movie, request.user, 'добавил 🎬')
     # redirect to new created item detail view
             return redirect(new_movie.get_absolute_url())
     else:
@@ -367,7 +459,9 @@ def movie_detail(request, slug):
             comment.movie = movie
             comment.author = request.user
             comment.save()
-            create_action(request.user, 'оставил комментарий', movie)
+            movie_url = request.build_absolute_uri(movie.get_absolute_url())
+            create_action(request.user, 'прокомментировал', movie)
+
             return redirect(movie.get_absolute_url())  # Перенаправление на страницу фильма
     else:
         form = CommentForm()
@@ -382,12 +476,6 @@ def movie_detail(request, slug):
                    'comments': comments,
                    'form': form})
 
-    # return render(request, 'movies/movie_detail.html', {
-    #     'movie': movie,
-    #     'comments': comments,
-    #     'form': form,
-    #
-    # })
 
 @login_required
 def movie_list(request):
@@ -432,7 +520,8 @@ def movie_list(request):
     paginator = Paginator(movies, 10)  # Показывать 10 фильмов на странице
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-
+    # Логирование для диагностики
+    logger.info(f"Page number: {page_number}, Movies on this page: {page_obj.object_list}")
     # Получаем топ-10 режиссеров и сценаристов
     top_directors = Director.objects.annotate(num_movies=Count('movies_director')).order_by('-num_movies')[:10]
     top_writers = Writer.objects.annotate(num_movies=Count('movies_writer')).order_by('-num_movies')[:10]

@@ -7,6 +7,6 @@ class Command(BaseCommand):
     help = 'Устанавливает вебхук для Telegram-бота'
 
     def handle(self, *args, **kwargs):
-        webhook_url = f"{config('SITE_URL')}/telegram_bot/webhook/"  # Замените на ваш URL
+        webhook_url = f"{config('SITE_URL')}/telegram_bot/"  # Замените на ваш URL
         response = requests.get(f"https://api.telegram.org/bot{config('TELEGRAM_BOT_TOKEN')}/setWebhook?url={webhook_url}")
         print(response.json())

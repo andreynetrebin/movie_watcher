@@ -20,7 +20,7 @@
     <p>Просмотренные: <a href="{% url 'movies:list' %}?filter=watched">{{ watched_count }}</a></p>
     <p>Понравившиеся: <a href="{% url 'movies:list' %}?filter=liked">{{ liked_count }}</a></p>
     <p>Непонравившиеся: <a href="{% url 'movies:list' %}?filter=disliked">{{ disliked_count }}</a></p>
-    <p>Привязка к Telegram: {% if user.profile.telegram_connected %} Привязано {% else %} <a href="https://t.me/MoviesWatchersBot">Привязать к Telegram</a> {% endif %}</p>
+    <p>Привязка к Telegram: {% if user.profile.telegram_connected %} Привязано {% else %} <a href="https://t.me/MoviesWatchersTestBot">Привязать к Telegram</a> {% endif %}</p>
 </div>
 
 <div id="Activity" class="tabcontent">

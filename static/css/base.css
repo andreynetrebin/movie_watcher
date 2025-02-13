@@ -778,3 +778,43 @@ button.wishlist i.transparent {
 #header .version-number a:hover {
     text-decoration: underline; /* Добавляем подчеркивание при наведении */
 }
+
+.content-wrapper {
+    display: flex; /* Используем Flexbox для расположения сайдбара и фильтра */
+}
+
+.sidebar {
+    width: 200px; /* Установите ширину сайдбара */
+    margin-right: 20px; /* Отступ между сайдбаром и фильтром */
+}
+
+.filter {
+    flex-grow: 1; /* Фильтр занимает оставшееся пространство */
+}
+
+.movie-container {
+    flex-grow: 1; /* Конт ейнер с фильмами занимает оставшееся пространство */
+}
+
+.movie-list {
+    display: flex; /* Используем Flexbox для расположения фильмов */
+    flex-wrap: wrap; /* Позволяем переносить фильмы на новую строку */
+}
+
+.movie-item {
+    flex: 1 1 calc(33.333% - 20px); /* Три фильма в ряд с отступами */
+    margin: 10px; /* Отступ между фильмами */
+    box-sizing: border-box; /* Учитываем отступы в ширине */
+}
+
+@media (max-width: 768px) {
+    .movie-item {
+        flex: 1 1 calc(50% - 20px); /* Два фильма в ряд на мобильных */
+    }
+}
+
+@media (max-width: 480px) {
+    .movie-item {
+        flex: 1 1 100%; /* Один фильм в ряд на очень маленьких экранах */
+    }
+}
