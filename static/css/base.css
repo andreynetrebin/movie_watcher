@@ -254,7 +254,14 @@ ul.messages li a.close {
     color:#fff;
 }
 .social li.google { background:#de1710; }
+.social li.yandex {
+    background: #FFD300; /* Темно-желтый цвет */
+    color: #000000 !important; /* Черный текст с высоким приоритетом */
+}
 
+.social li a.yandex {
+    color: #000000 !important; /* Убедитесь, что ссылки также имеют черный цвет */
+}
 
 /* images */
 

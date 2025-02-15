@@ -140,7 +140,7 @@ STATICFILES_DIRS = [
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-LOGIN_REDIRECT_URL = 'movies:movie_actions'
+LOGIN_REDIRECT_URL = 'dashboard'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 
@@ -161,7 +161,11 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'account.authentication.EmailAuthBackend',
     'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.yandex.YandexOAuth2',
 ]
+
+SOCIAL_AUTH_YANDEX_OAUTH2_KEY = config('YANDEX_OAUTH2_KEY')  # Ваш Client ID
+SOCIAL_AUTH_YANDEX_OAUTH2_SECRET = config('YANDEX_OAUTH2_SECRET')  # Ваш Client Secret
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config('GOOGLE_OAUTH2_KEY')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('GOOGLE_OAUTH2_SECRET')
