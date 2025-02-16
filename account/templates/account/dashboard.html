@@ -1,149 +1,97 @@
 {% extends "base.html" %}
-{% load thumbnail %}
 {% load static %}
-{% block title %}Профиль{% endblock %}
+{% load thumbnail %}
+{% block title %}Лента{% endblock %}
 {% block content %}
-<h1>Профиль</h1>
-<p>Добро пожаловать на страницу своего профиля. Вы можете <a href="{% url "edit" %}">редактировать профиль</a> или <a href="{% url "password_change" %}">сменить пароль</a>.</p>
+<div class="container">
+    <div class="main-content">
+        <h1>Действия пользователей с фильмами</h1>
 
-<!-- Вкладки -->
-<div class="tabs">
-    <button class="tablink active" onclick="openTab(event, 'AboutMe')">Обо мне</button>
-    <button class="tablink" onclick="openTab(event, 'Activity')">Активность</button>
-    <button class="tablink" onclick="openTab(event, 'Comments')">Комментарии</button>
-</div>
-
-<!-- Содержимое вкладок -->
-<div id="AboutMe" class="tabcontent">
-    <h3>Обо мне</h3>
-    <p>Дата присоединения: {{ user.date_joined }}</p>
-    <p>Просмотренные: <a href="{% url 'movies:list' %}?filter=watched">{{ watched_count }}</a></p>
-    <p>Понравившиеся: <a href="{% url 'movies:list' %}?filter=liked">{{ liked_count }}</a></p>
-    <p>Непонравившиеся: <a href="{% url 'movies:list' %}?filter=disliked">{{ disliked_count }}</a></p>
-    <p>Привязка к Telegram: {% if user.profile.telegram_connected %} Привязано {% else %} <a href="https://t.me/MoviesWatchersTestBot">Привязать к Telegram</a> {% endif %}</p>
-</div>
-
-<div id="Activity" class="tabcontent">
-    <h3>Активность</h3>
-    <div class="actions">
-        {% for action in actions %}
-            {% with user=action.user %}
-            <div class="action">
-                <div class="action-header">
-                    <div class="user-avatar">
-                        {% if user.profile.photo %}
-                            {% thumbnail user.profile.photo "80x80" crop="100%" as im %}
-                            <a href="{{ user.get_absolute_url }}">
-                                <img src="{{ im.url }}" alt="{{ user.get_full_name }}" class="item-img">
-                            </a>
-                        {% else %}
-                            <img src="{% static 'images/default_user_avatar.jpg' %}" alt="Default Avatar" class="item-img" style="width: 80px; height: 80px;">
+        <div class="content-wrapper">
+            <div class="actions">
+                {% for action in actions %}
+                    {% with user=action.user %}
+                    <div class="action">
+                        <div class="action-header">
+                            <div class="user-avatar">
+                                {% if user.profile.photo %}
+                                    {% thumbnail user.profile.photo "80x80" crop="100%" as im %}
+                                    <a href="{{ user.get_absolute_url }}">
+                                        <img src="{{ im.url }}" alt="{{ user.get_full_name }}" class="item-img">
+                                    </a>
+                                {% else %}
+                                    <img src="{% static 'images/default_user_avatar.jpg' %}" alt="Default Avatar" class="item-img" style="width: 80px; height: 80px;">
+                                {% endif %}
+                            </div>
+                            <div class="user-info">
+                                <div class="user-action">
+                                    <a href="{{ user.get_absolute_url }}">{{ user.first_name }}</a>
+                                    <span class="action-verb">{{ action.verb }}</span>
+                                    {% if action.target %}
+                                        <strong class="movie-title">{{ action.target.title }}</strong>
+                                    {% endif %}
+                                </div>
+                                <div class="date">{{ action.created|timesince }} ago</div> <!-- Изменено на div -->
+                            </div>
+                        </div>
+                        {% if action.target %}
+                            <div class="action-poster">
+                                {% with target=action.target %}
+                                {% if target.poster %}
+                                    {% thumbnail target.poster "50x75" crop="100%" as im %}
+                                    <a href="{{ target.get_absolute_url }}">
+                                        <img src="{{ im.url }}" class="item-img" alt="{{ target.title }} poster">
+                                    </a>
+                                {% endif %}
+                                {% endwith %}
+                            </div>
                         {% endif %}
                     </div>
-                    <div class="user-info">
-                        <div class="user-action">
-                            <a href="{{ user.get_absolute_url }}">{{ user.first_name }}</a>
-                            <span class="action-verb">{{ action.verb }}</span>
-                            {% if action.target %}
-                                <strong class="movie-title">{{ action.target.title }}</strong>
-                            {% endif %}
- </div>
-                        <span class="date">{{ action.created|timesince }} ago</span>
-                    </div>
-                </div>
-                {% if action.target %}
-                    <div class="action-poster">
-                        {% with target=action.target %}
-                        {% if target.poster %}
-                            {% thumbnail target.poster "50x75" crop="100%" as im %}
-                            <a href="{{ target.get_absolute_url }}">
-                                <img src="{{ im.url }}" class="item-img" alt="{{ target.title }} poster">
-                            </a>
-                        {% endif %}
-                        {% endwith %}
-                    </div>
-                {% endif %}
+                    {% endwith %}
+                {% empty %}
+                    <p>Нет действий для отображения.</p>
+                {% endfor %}
             </div>
-            {% endwith %}
-        {% empty %}
-            <p>Нет активности для отображения.</p>
-        {% endfor %}
+
+            <div class="sidebar">
+                <div class="top-directors">
+                    <h3>Топ 10 фильмов по просмотрам</h3>
+                    <ul>
+                        {% for movie in top_movies %}
+                            <li>
+                                <a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a> {{ movie.num_watched }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="top-writers">
+                    <h3>Топ 10 пользователей по количеству просмотренных фильмов</h3>
+                    <ul>
+                        {% for user in top_users %}
+                            <li>{{ user.username }} - {{ user.num_watched }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="pagination">
+            <span class="step-links">
+                {% if actions.has_previous %}
+                    <a href="?page=1">Первая</a>
+                    <a href="?page={{ actions.previous_page_number }}">Предыдущая</a>
+                {% endif %}
+
+                <span class="current">
+                    Страница {{ actions.number }} из {{ actions.paginator.num_pages }}.
+                </span>
+
+                {% if actions.has_next %}
+                    <a href="?page={{ actions.next_page_number }}">Следующая</a>
+                    <a href="?page={{ actions.paginator.num_pages }}">Последняя</a>
+                {% endif %}
+            </span>
+        </div>
     </div>
 </div>
-
-<div id="Comments" class="tabcontent">
-    <h3>Комментарии</h3>
-    <ul>
-        {% for comment in comments %}
-            <li>
-                <div class="comment-item">
-                    <strong>{{ comment.movie.title }}</strong>
-                    <a href="{{ comment.movie.get_absolute_url }}">
-                        <img src="{{ comment.movie.poster.url }}" alt="{{ comment.movie.title }} Poster" class="movie-poster" />
-                    </a>
-                    <p>{{ comment.body }}</p>
-                    <small>Комментарий оставлен: {{ comment.created_on }}</small>
-                </div>
-            </li>
-        {% endfor %}
-    </ul>
-</div>
-
-<script>
-function openTab(evt, tabName) {
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";  // Скрыть все вкладки
-    }
-    tablinks = document.getElementsByClassName("tablink");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].classList.remove("active");  // Удалить класс "active" у всех вкладок
-    }
-    document.getElementById(tabName).style.display = "block";  // Показать выбранную вкладку
-    evt.currentTarget.classList.add("active");  // Добавить класс "active" к текущей вкладке
-}
-
-// Открыть вкладку "Обо мне" по умолчанию
-document.addEventListener("DOMContentLoaded", function() {
-    document.getElementsByClassName("tablink")[0].click();
-});
-</script>
-
-<style>
-.tabs {
-    display: flex; /* Используем Flexbox для расположения вкладок */
-    justify-content: space-around; /* Распределяем пространство между вкладками */
-    margin-bottom: 20px; /* Отступ снизу для вкладок */
-}
-
-.tablink {
-    padding: 10px 15px; /* Отступы для вкладок */
-    text-decoration: none; /* Убираем подчеркивание */
-    color: #333; /* Цвет текста */
-    border: 1px solid #ccc; /* Рамка вокруг вкладок */
-    border-radius: 5px; /* Закругленные углы */
-    background-color: #f9f9f9; /* Цвет фона для вкладок */
-    transition: background-color 0.3s; /* Плавный переход цвета */
-}
-
-.tablink.active {
-    background-color: #12c064; /* Цвет фона для активной вкладки */
-    color: white; /* Цвет текста для активной вкладки */
-}
-
-.tabcontent {
-    display: none; /* Скрываем содержимое вкладок по умолчанию */
-    padding: 20px; /* Отступы для содержимого вкладок */
-    border: 1px solid #ccc; /* Рамка вокруг содержимого вкладок */
-    border-radius: 5px; /* Закругленные углы */
-    background-color: #fff; /* Цвет фона для содержимого вкладок */
-}
-.movie-poster {
-    width: 50px; /* Установите ширину постера */
-    height: auto; /* Автоматическая высота для сохранения пропорций */
-    margin-right: 10px; /* Отступ справа от постера */
-    vertical-align: middle; /* Выравнивание по центру */
-}
-</style>
 {% endblock %}
