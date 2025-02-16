@@ -11,6 +11,7 @@
     <a href="?filter=watchlist" class="{% if filter_type == 'watchlist' %}active{% endif %}">Буду смотреть</a>
     <a href="?filter=added" class="{% if filter_type == 'added' %}active{% endif %}">Добавленные</a>
 </div>
+
 <div class="sidebar">
     <div class="filter">
         <form method="GET" action="">
@@ -38,7 +39,23 @@
             </div>
         </form>
     </div>
-</div><div class="movie-container">
+</div>
+
+<div class="sort-options">
+    <h3>Сортировать по:</h3>
+    <form method="GET" action="">
+        <input type="hidden" name="filter" value="{{ filter_type }}">
+        <input type="hidden" name="title" value="{{ title_filter }}">
+        <input type="hidden" name="genres" value="{{ selected_genres|join:',' }}">
+        <select name="sort" onchange="this.form.submit()">
+            <option value="created" {% if sort_by == 'created' %}selected{% endif %}>Дате добавления</option>
+            <option value="year" {% if sort_by == 'year' %}selected{% endif %}>Году</option>
+            <option value="title" {% if sort_by == 'title' %}selected{% endif %}>Названию</option>
+        </select>
+    </form>
+</div>
+
+<div class="movie-container">
     <div class="movie-list">
         <ul>
             {% for movie in page_obj %}
@@ -52,10 +69,9 @@
                     </div>
                     <div class="movie-info">
                         <h2>{{ movie.title }} ({{ movie.year }})</h2>
-                            {% if movie.title_original %}
+                        {% if movie.title_original %}
                             <p>{{ movie.title_original }}</p>
-                            {% endif %}
-                        <!-- Информация о режиссерах и сценаристах -->
+                        {% endif %}
                         <p>
                             Режиссеры:
                             {% for director in movie.directors.all %}
@@ -68,70 +84,65 @@
                                 <a href="{% url 'movies:writer_detail' writer.pk %}">{{ writer.name }}</a>{% if not forloop.last %}, {% endif %}
                             {% endfor %}
                         </p>
-                        <!-- Жанры -->
                         <p>
                             Жанры:
                             {% for genre in movie.genres.all %}
                                 {{ genre.name }}{% if not forloop.last %}, {% endif %}
                             {% endfor %}
                         </p>
-                <div class="movie-actions">
-                    <button class="like" data-id="{{ movie.id }}">
-                        <i class="fas fa-thumbs-up {% if request.user in movie.users_like.all %}active{% endif %}"></i>
-                    </button>
-                    <button class="dislike" data-id="{{ movie.id }}">
-                        <i class="fas fa-thumbs-down {% if request.user in movie.users_dislike.all %}active{% endif %}"></i>
-                    </button>
-                        <button class="wishlist" data-id="{{ movie.id }}">
-                            <i class="fas fa-plus {% if movie.id in wishlist_movies %}transparent{% endif %}"></i>
-                        </button>
-    <button class="watched" data-id="{{ movie.id }}">
-        <i class="fas fa-circle {% if movie.id in watched_movies %}fa-check{% endif %}"></i>
-                <span class="action-label">
-            {% if movie.id in watched_movies %}
-                Просмотрен
-            {% else %}
-                Пометить как просмотренный
-            {% endif %}
-        </span>
-    </button>
-    <button class="recently-watched" data-id="{{ movie.id }}">
-        <i class="fas fa-circle {% if movie.id in recently_watched_movies %}fa-check{% endif %}"></i>
-        <span class="action-label">
-            {% if movie.id in recently_watched_movies %}
-                Просмотрен недавно
-            {% else %}
-                Пометить как просмотрен недавно
-            {% endif %}
-        </span>
-    </button>
-<a href="{{ movie.kinopoisk_url }}" target="_blank" class="kinopoisk-link">
-    <img src="{% static 'images/icon-kp.png' %}" alt="Кинопоиск" class="kinopoisk-icon">
-</a>
-
+                        <div class="movie-actions">
+                            <button class="like" data-id="{{ movie.id }}">
+                                <i class="fas fa-thumbs-up {% if request.user in movie.users_like.all %}active{% endif %}"></i>
+                            </button>
+                            <button class="dislike" data-id="{{ movie.id }}">
+                                <i class="fas fa-thumbs-down {% if request.user in movie.users_dislike.all %}active{% endif %}"></i>
+                            </button>
+                            <button class="wishlist" data-id="{{ movie.id }}">
+                                <i class="fas fa-plus {% if movie.id in wishlist_movies %}transparent{% endif %}"></i>
+                            </button>
+                            <button class="watched" data-id="{{ movie.id }}">
+                                <i class="fas fa-circle {% if movie.id in watched_movies %}fa-check{% endif %}"></i>
+                                <span class="action-label">
+                                    {% if movie.id in watched_movies %}
+                                        Просмотрен
+                                    {% else %}
+                                        Пометить как просмотренный
+                                    {% endif %}
+                                </span>
+                            </button>
+                            <button class="recently-watched" data-id="{{ movie.id }}">
+                                <i class="fas fa-circle {% if movie.id in recently_watched_movies %}fa-check{% endif %}"></i>
+                                <span class="action-label">
+                                    {% if movie.id in recently_watched_movies %}
+                                        Просмотрен недавно
+                                    {% else %}
+                                        Пометить как просмотрен недавно
+                                    {% endif %}
+                                </span>
+                            </button>
+                            <a href="{{ movie.kinopoisk_url }}" target="_blank" class="kinopoisk-link">
+                                <img src="{% static 'images/icon-kp.png' %}" alt="Кинопоиск" class="kinopoisk-icon">
+                            </a>
                         </div>
                     </div>
                 </li>
             {% endfor %}
         </ul>
     </div>
-
-
 </div>
-    <div class="pagination">
-        <span class="step-links">
-            {% if page_obj.has_previous %}
-                <a href="?filter={{ filter_type }}&page=1">Первая</a>
-                <a href="?filter={{ filter_type }}&page={{ page_obj.previous_page_number }}">Предыдущая</a>
-            {% endif %}
 
-            <span class="current">
-                Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
-            </span>
-
-            {% if page_obj.has_next %}
-                <a href="?filter={{ filter_type }}&page={{ page_obj.next_page_number }}">Следующая</a>
-                <a href="?filter={{ filter_type }}&page={{ page_obj.paginator.num_pages }}">Последняя</a>
-            {% endif %}
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?filter={{ filter_type }}&title={{ title_filter }}&sort={{ sort_by }}&page=1">Первая</a>
+            <a href="?filter={{ filter_type }}&title={{ title_filter }}&sort={{ sort_by }}&page={{ page_obj.previous_page_number }}">Предыдущая</a>
+        {% endif %}
+        <span class="current">
+            Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
         </span>
-    </div>
+        {% if page_obj.has_next %}
+            <a href="?filter={{ filter_type }}&title={{ title_filter }}&sort={{ sort_by }}&page={{ page_obj.next_page_number }}">Следующая</a>
+            <a href="?filter={{ filter_type }}&title={{ title_filter }}&sort={{ sort_by }}&page={{ page_obj.paginator.num_pages }}">Последняя</a>
+        {% endif %}
+    </span>
+</div>
