@@ -13,22 +13,32 @@
 </div>
 <div class="sidebar">
     <div class="filter">
-    <form method="GET" action="">
-        <button type="submit">Применить фильтровать по названию</button>
-        <input type="text" name="title" placeholder="Фильтр по названию" value="{{ title_filter }}">
-        <button type="submit">Применить фильтр по жанрам</button>
-        <input type="hidden" name="filter" value="{{ filter_type }}">
-        {% for genre in all_genres %}
-            <label>
-                <input type="checkbox" name="genres" value="{{ genre.id }}"
-                {% if genre.id in selected_genres %}checked{% endif %}>
-                {{ genre.name }}
-            </label><br>
-        {% endfor %}
-    </form>
+        <form method="GET" action="">
+            <div class="filter-group">
+                <input type="text" name="title" placeholder="Фильтр по названию" value="{{ title_filter }}">
+                <button type="submit" class="filter-btn title-filter">
+                    Применить фильтр по названию
+                </button>
+            </div>
+
+            <div class="filter-group">
+                <button type="submit" class="filter-btn genre-filter">
+                    Применить фильтр по жанрам
+                </button>
+                <input type="hidden" name="filter" value="{{ filter_type }}">
+                <div class="genre-checkboxes">
+                    {% for genre in all_genres %}
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="genres" value="{{ genre.id }}"
+                                {% if genre.id in selected_genres %}checked{% endif %}>
+                            {{ genre.name }}
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+        </form>
     </div>
-</div>
-<div class="movie-container">
+</div><div class="movie-container">
     <div class="movie-list">
         <ul>
             {% for movie in page_obj %}
