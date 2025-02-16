@@ -1010,3 +1010,56 @@ button.wishlist i.transparent {
         flex: 1 1 100%; /* Один фильм в ряд на очень маленьких экранах */
     }
 }
+
+/* Стили для кнопок фильтров */
+.filter-btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    margin: 10px 0;
+    display: block;
+    width: 100%;
+}
+
+.title-filter {
+    background-color: #4d7f2a; /* Темно-оливковый */
+    color: white;
+}
+
+.genre-filter {
+    background-color: #556B2F; /* Немного светлее */
+    color: white;
+}
+
+.filter-btn:hover {
+    filter: brightness(110%);
+    transform: translateY(-1px);
+}
+
+/* Стили для группы фильтров */
+.filter-group {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+}
+
+.genre-checkboxes {
+    margin-top: 10px;
+    display: grid;
+    gap: 8px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.checkbox-label input {
+    margin: 0;
+}
