@@ -1,4 +1,6 @@
 {% load static %}
+{% load thumbnail %}
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,65 +10,93 @@
   <script src="https://yastatic.net/s3/passport-sdk/autofill/v1/sdk-suggest-with-polyfills-latest.js"></script>
 </head>
 <body>
-  <div id="header">
-        <span class="logo">КиноСмотрители(Test)
-            {% if current_version %}
-                <span class="version-number"><a href="{% url 'changelog' %}">{{ current_version.version_number }}</a></span>
-            {% endif %}
-        </span>
-    <button class="menu-toggle">Меню</button>
-<ul class="menu">
-    <li {% if section == "dashboard" %}class="selected"{% endif %}>
-        <a href="{% url "movies:movie_actions" %}">Лента</a>
-    </li>
-    <li {% if section == "movies" %}class="selected"{% endif %}>
-        <a href="#">Фильмы</a>
-        <ul class="dropdown-content">
-            <li><a href="{% url "movies:list" %}?filter=all">Все фильмы</a></li>
-            <li><a href="{% url "movies:list" %}?filter=watched">Просмотренные</a></li>
-            <li><a href="{% url "movies:list" %}?filter=unwatched">Непросмотренные</a></li>
-            <li><a href="{% url "movies:list" %}?filter=liked">Понравившиеся</a></li>
-            <li><a href="{% url "movies:list" %}?filter=disliked">Непонравившиеся</a></li>
-            <li><a href="{% url "movies:list" %}?filter=watchlist">Буду смотреть</a></li>
-            <li><a href="{% url "movies:list" %}?filter=added">Добавленные</a></li>
-            <li><a href="{% url "movies:create" %}">+Добавить фильм</a></li>
-        </ul>
-    </li>
-    <li {% if section == "directors" %}class="selected"{% endif %}>
-        <a href="{% url 'movies:director_list' %}">Режиссеры</a>
-    </li>
-    <li {% if section == "writers" %}class="selected"{% endif %}>
-        <a href="{% url 'movies:writer_list' %}">Сценаристы</a>
-    </li>
-    <li {% if section == "movies" %}class="selected"{% endif %}>
-        <a href="{% url "movies:all_movie_lists" %}">Списки</a>
-        <ul class="dropdown-content">
-            <li><a href="{% url "movies:all_movie_lists" %}">Все списки</a></li>
-            <li><a href="{% url "movies:create_movie_list" %}">+Создать список</a></li>
-        </ul>
-    </li>
-    <li {% if section == "people" %}class="selected"{% endif %}>
-        <a href="{% url "user_list" %}">Сообщество</a>
-    </li>
-{% if request.user.is_authenticated %}
-    <li {% if section == "dashboard" %}class="selected"{% endif %}>
-        <a href="{% url "dashboard" %}">Профиль</a>
-    </li>
-{% endif %}
-</ul>
 
-    <span class="user">
-      {% if request.user.is_authenticated %}
-        Привет {{ request.user.first_name|default:request.user.username }},
-        <form action="{% url "logout" %}" method="post">
-          <button type="submit">Logout</button>
-          {% csrf_token %}
-        </form>
-      {% else %}
-        <a href="{% url "login" %}">Log-in</a>
-      {% endif %}
-    </span>
-  </div>
+<div id="header">
+    <div class="header-content">
+        <div class="logo-container">
+            <span class="logo"><a href="{% url "movies:movie_actions" %}">КиноСмотрители</a></span>
+            {% if current_version %}
+                <span class="version-number"><a href="{% url 'changelog' %}">{{ current_version.version_number }} тест</a></span>
+            {% endif %}
+        </div>
+<div class="user-container">
+    {% if request.user.is_authenticated %}
+        <div class="user-info">
+            <!-- Аватар -->
+            {% if user.profile.photo %}
+                {% thumbnail user.profile.photo "20x20" crop="100%" as im %}
+                    <img src="{{ im.url }}" class="user-avatar" alt="{{ user.get_full_name }}">
+            {% else %}
+                <img src="{% static 'images/default_user_avatar.jpg' %}" class="user-avatar" alt="Default Avatar">
+            {% endif %}
+
+            <!-- Имя и меню в одном контейнере -->
+            <div class="user-controls">
+                <span class="username">{{ request.user.first_name|default:request.user.username }}</span>
+                <div class="dropdown">
+                    <button class="dropbtn">▼</button>
+                    <div class="dropdown-content">
+                        <a href="{% url 'dashboard' %}">Дашборд</a>
+                        <form action="{% url 'logout' %}" method="post">
+                            <button type="submit">Выйти</button>
+                            {% csrf_token %}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+
+
+            <div class="search-container">
+                <input type="text" placeholder="Поиск фильма..." id="movie-search">
+                <button class="search-button">🔍</button>
+            </div>
+
+        </div>
+    <div class="menu-container">
+        <button class="menu-toggle">Меню</button>
+        <ul class="menu">
+            {% if request.user.is_authenticated %}
+            <li {% if section == "movies" %}class="selected"{% endif %}>
+                <a href="#">Фильмы</a>
+                <ul class="dropdown-content">
+                    <li><a href="{% url "movies:list" %}?filter=all">Все фильмы</a></li>
+                    <li><a href="{% url "movies:list" %}?filter=watched">Просмотренные</a></li>
+                    <li><a href="{% url "movies:list" %}?filter=unwatched">Непросмотренные</a></li>
+                    <li><a href="{% url "movies:list" %}?filter=liked">Понравившиеся</a></li>
+                    <li><a href="{% url "movies:list" %}?filter=disliked">Непонравившиеся</a></li>
+                    <li><a href="{% url "movies:list" %}?filter=watchlist">Буду смотреть</a></li>
+                    <li><a href="{% url "movies:list" %}?filter=added">Добавленные</a></li>
+                    <li><a href="{% url "movies:create" %}">+Добавить фильм</a></li>
+                </ul>
+            </li>
+            <li {% if section == "lists" %}class="selected"{% endif %}>
+                <a href="#">Списки</a>
+                <ul class="dropdown-content">
+                    <li><a href="{% url "movies:all_movie_lists" %}">Все списки</a></li>
+                    <li><a href="{% url "movies:director_list" %}">Режиссеры</a></li>
+                    <li><a href="{% url "movies:writer_list" %}">Сценаристы</a></li>
+                    <li><a href="{% url "movies:create_movie_list" %}">+Создать список</a></li>
+                </ul>
+            </li>
+            <li {% if section == "people" %}class="selected"{% endif %}>
+                <a href="{% url "user_list" %}">Сообщество</a>
+            </li>
+            {% else %}
+            <li><a href="{% url "login" %}">Войти</a></li>
+            <li><a href="{% url "register" %}">Регистрация</a></li>
+
+            {% endif %}
+        </ul>
+    </div>
+
+    </div>
+
+</div>
+
 {% if messages %}
   <ul class="messages">
 {% for message in messages %}
