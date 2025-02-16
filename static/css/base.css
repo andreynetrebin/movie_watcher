@@ -147,19 +147,8 @@ ol {
     margin-left: auto; /* Сдвигаем пользователя и поиск вправо */
 }
 
-.user-info {
-    display: flex;
-    align-items: center; /* Вертикальное выравнивание по центру */
-    gap: 10px; /* Расстояние между аватаром и текстом */
-}
 
-.user-avatar {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    object-fit: cover;
-    order: 1; /* Гарантирует, что аватар будет первым элементом */
-}
+
 
 .user-controls {
     display: flex;
@@ -168,10 +157,6 @@ ol {
     order: 2; /* Гарантирует, что текст и меню будут после аватара */
 }
 
-/* Если всё ещё есть перенос строки */
-.user-info {
-    flex-wrap: nowrap; /* Запрещаем перенос элементов */
-}
 .username {
     margin-right: 5px; /* Отступ справа от имени пользователя */
 }
@@ -833,12 +818,32 @@ button.wishlist i.transparent {
     align-items: center; /* Выравнивание по центру по вертикали */
 }
 
+.user-info {
+    display: flex; /* Используем Flexbox для расположения информации */
+    flex-direction: column; /* Вертикальное направление для дочерних элементов */
+    margin-left: 10px; /* Отступ слева от аватара */
+    flex-wrap: nowrap; /* Запрещаем перенос элементов */
+    gap: 10px; /* Расстояние между аватаром и текстом */
+}
+
+
+.date {
+    margin-top: 5px; /* Отступ ⬤
+
 .user-avatar {
     margin-right: 15px; /* Отступ между аватаром и информацией */
 }
 
 .user-avatar img {
     border-radius: 50%; /* Круглая форма для аватара */
+}
+
+.user-avatar-header {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    object-fit: cover;
+    order: 1; /* Гарантирует, что аватар будет первым элементом */
 }
 
 .user-info {
