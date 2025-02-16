@@ -102,23 +102,240 @@ h2 {
 ol {
     line-height:1.5;
 }
-
 #header {
-    padding: 30px 100px;
-    font-size: 14px;
-    background: #12c064;
-    color: #fff;
-    border-bottom: 4px solid #1cdf78;
-    overflow: visible; /* Позволяем содержимому выходить за пределы */
+    padding: 20px; /* Отступы вокруг заголовка */
+    background: #12c064; /* Цвет фона заголовка */
+    color: #fff; /* Цвет текста */
+    display: flex; /* Используем flexbox для расположения элементов */
+    flex-direction: column; /* Вертикальное расположение элементов */
 }
 
-#header .logo {
-    font-family: 'Muli', sans-serif;
-    float:left;
-    color:#f3f7cc;
-    font-size:20px;
-    margin-right:10%;
+.header-content {
+    display: flex; /* Используем flexbox для расположения содержимого заголовка */
+    align-items: center; /* Центрируем элементы по вертикали */
+    width: 100%; /* Занимаем всю ширину */
 }
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Отступ между лого и версией */
+}
+
+.logo a {
+    font-family: 'Muli', sans-serif;
+    font-size: 24px; /* Увеличенный размер */
+    color: #f3f7cc;
+    text-decoration: none;
+}
+
+.version-number a {
+    font-size: 14px; /* Размер для версии */
+    color: white;
+}
+
+.version-number {
+    border-left: 1px solid #ccc; /* Вертикальная черта */
+    padding-left: 10px; /* Отступ слева от номера версии */
+    margin-left: 10px; /* Отступ слева от версии */
+    color: white; /* Цвет текста номера версии */
+}
+
+.user-container {
+    display: flex; /* Используем flexbox для расположения пользователя и поиска */
+    align-items: center; /* Центрируем элементы по вертикали */
+    margin-left: auto; /* Сдвигаем пользователя и поиск вправо */
+}
+
+.user-info {
+    display: flex;
+    align-items: center; /* Вертикальное выравнивание по центру */
+    gap: 10px; /* Расстояние между аватаром и текстом */
+}
+
+.user-avatar {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    object-fit: cover;
+    order: 1; /* Гарантирует, что аватар будет первым элементом */
+}
+
+.user-controls {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    order: 2; /* Гарантирует, что текст и меню будут после аватара */
+}
+
+/* Если всё ещё есть перенос строки */
+.user-info {
+    flex-wrap: nowrap; /* Запрещаем перенос элементов */
+}
+.username {
+    margin-right: 5px; /* Отступ справа от имени пользователя */
+}
+
+.dropdown {
+    position: relative; /* Для позиционирования выпадающего меню */
+}
+
+.search-container {
+    display: flex; /* Используем flexbox для расположения поля поиска и кнопки */
+    align-items: center; /* Центрируем элементы по вертикали */
+}
+
+/* 1. Восстановление фона для menu-container */
+.menu-container {
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 4px; /* Опционально: скругление углов */
+}
+
+/* 2. Видимость элементов меню */
+.menu {
+    display: flex !important; /* Принудительное отображение */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 20px; /* Расстояние между пунктами */
+}
+
+.menu > li {
+    position: relative;
+}
+
+/* 3. Стилизация выпадающего меню */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #4d7f2a; /* Цвет фона подменю */
+    min-width: 200px;
+    padding: 10px;
+    border-radius: 4px;
+    top: 100%; /* Позиционирование под родительским пунктом */
+    left: 0;
+    z-index: 1000;
+}
+
+.menu li:hover .dropdown-content {
+    display: block; /* Показываем подменю при наведении */
+}
+
+/* 4. Стилизация ссылок */
+.menu a {
+    color: white !important;
+    text-decoration: none;
+    padding: 8px 12px;
+    display: block;
+    transition: background-color 0.3s;
+}
+
+.menu a:hover {
+    background-color: #3d6520; /* Темный оттенок при наведении */
+}
+.dropdown {
+    position: relative; /* Для позиционирования выпадающего меню */
+}
+
+.dropdown-content {
+    display: none; /* Скрываем меню по умолчанию */
+    position: absolute; /* Позиционирование относительно родителя */
+    background-color: #556B2F; /* Темно-оливковый цвет фона */
+    color: white; /* Цвет текста */
+    min-width: 160px; /* Минимальная ширина */
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); /* Тень */
+    z-index: 1; /* Устанавливаем на передний план */
+}
+/* Общие стили для элементов выпадающего меню */
+.dropdown-content a,
+.dropdown-content button {
+    font-family: 'Muli', sans-serif; /* Используем тот же шрифт */
+    font-size: 14px; /* Размер шрифта */
+    color: white !important; /* Цвет текста */
+    text-decoration: none; /* Убираем подчеркивание */
+    padding: 12px 16px; /* Отступы как у ссылки */
+    display: block; /* Блочное отображение */
+    width: 100%; /* Ширина на всю доступную область */
+    text-align: left; /* Выравнивание текста слева */
+    background: none; /* Убираем фон кнопки */
+    border: none; /* Убираем границу кнопки */
+    cursor: pointer; /* Курсор-указатель */
+}
+
+/* Стиль при наведении */
+.dropdown-content a:hover,
+.dropdown-content button:hover {
+    background-color: #4d7f2a !important; /* Подсветка как у ссылки */
+}
+
+.dropdown:hover .dropdown-content {
+    display: block; /* Показываем меню при наведении на родительский элемент */
+}
+
+.dropdown-content a {
+    color: white; /* Цвет текста по умолчанию для ссылок в выпадающем меню */
+    padding: 12px 16px; /* Отступы */
+    text-decoration: none; /* Убираем подчеркивание */
+    display: block; /* Отображение в блоке */
+}
+
+.dropdown-content a:hover {
+    background-color: #4d7f2a; /* Цвет фона при наведении на ссылку */
+}
+
+/* Подсветка логотипа */
+.logo:hover,
+.logo:hover a {
+    background-color: #4d7f2a; /* Темно-оливковый при наведении */
+    color: white; /* Цвет текста */
+    transition: background-color 0.3s ease; /* Плавный переход */
+}
+
+/* Подсветка номера версии */
+.version-number:hover,
+.version-number:hover a {
+    background-color: #4d7f2a; /* Темно-оливковый при наведении */
+    color: white; /* Цвет текста */
+    transition: background-color 0.3s ease; /* Плавный переход */
+}
+#header a {
+    color: #f3f7cc; /* Цвет ссылок в заголовке */
+}
+
+#header a:hover {
+    color: #fff; /* Цвет ссылок при наведении */
+}
+
+#header .version-number a {
+    color: white; /* Устанавливаем цвет ссылки версии */
+    text-decoration: none; /* Убираем подчеркивание */
+}
+
+#header .version-number a:hover {
+    text-decoration: underline; /* Добавляем подчеркивание при наведении */
+}
+.search-container {
+    display: flex; /* Используем flexbox для расположения поля поиска и кнопки */
+    align-items: center; /* Центрируем элементы по вертикали */
+}
+
+#movie-search {
+    padding: 5px; /* Отступы внутри поля поиска */
+    border: 1px solid #ccc; /* Рамка для поля поиска */
+    border-radius: 4px; /* Закругленные углы */
+    margin-right: 5px; /* Отступ справа от поля поиска */
+}
+
+.search-button {
+    background-color: #12c064; /* Цвет кнопки поиска */
+    color: white; /* Цвет текста кнопки */
+    border: none; /* Убираем рамку */
+    padding: 5px 10px; /* Отступы для кнопки */
+    cursor: pointer; /* Указатель при наведении */
+    border-radius: 4px; /* Закругленные углы */
+}
+
 
 #header a {
     color:#f3f7cc;
@@ -551,38 +768,6 @@ button.wishlist i.transparent {
     opacity: 0.5; /* Прозрачная иконка вишлиста */
 }
 
-/* Стили для выпадающего меню */
-.dropdown-content {
-    display: none; /* Скрываем меню по умолчанию */
-    position: absolute; /* Позиционирование относительно родителя */
-    background-color: white; /* Цвет фона меню */
-    min-width: 160px; /* Минимальная ширина */
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); /* Тень */
-    z-index: 1; /* Устанавливаем на передний план */
-}
-
-/* Показываем меню при наведении на кнопку */
-#header ul.menu li:hover .dropdown-content {
-    display: block; /* Показываем меню */
-}
-
-/* Стили для элементов списка в выпадающем меню */
-.dropdown-content li {
-    display: block; /* Отображение в блоке для вертикального расположения */
-}
-
-/* Стили для ссылок в выпадающем меню */
-#header .dropdown-content a {
-    color: black; /* Цвет текста по умолчанию для выпадающего меню */
-    padding: 12px 16px; /* Отступы */
-    text-decoration: none; /* Убираем подчеркивание */
-    display: block; /* Отображение в блоке */
-}
-
-/* Изменение цвета при наведении */
-.dropdown-content a:hover {
-    background-color: #f1f1f1; /* Цвет фона при наведении */
-}
 
 #header ul.menu {
     list-style: none; /* Убираем маркеры списка */
@@ -772,13 +957,13 @@ button.wishlist i.transparent {
 
 
 #header .version-number {
-    color: brown; /* Устанавливаем цвет */
+    color: white; /* Устанавливаем цвет */
     font-size: 0.6em; /* Устанавливаем мелкий шрифт */
     margin-left: 5px; /* Добавляем небольшой отступ слева для отделения от логотипа */
 }
 
 #header .version-number a {
-    color: brown; /* Устанавливаем цвет ссылки */
+    color: white; /* Устанавливаем цвет ссылки */
     text-decoration: none; /* Убираем подчеркивание */
 }
 
