@@ -477,6 +477,8 @@ def movie_detail(request, slug):
                    'form': form})
 
 
+
+
 @login_required
 def movie_list(request):
     user = request.user
@@ -486,6 +488,7 @@ def movie_list(request):
     # Фильтрация по вкладкам
     filter_type = request.GET.get('filter', 'all')  # Получаем тип фильтра из параметров запроса
 
+    # Фильтрация по статусу
     if filter_type == 'watched':
         movies = movies.filter(watched__user=user)
     elif filter_type == 'unwatched':
@@ -506,12 +509,19 @@ def movie_list(request):
 
     # Фильтрация по жанрам
     genre_filter = request.GET.getlist('genres')  # Получаем список выбранных жанров
+    genre_filter = [genre for genre in genre_filter if genre]  # Удаляем пустые значения
     if genre_filter:
         movies = movies.filter(genres__id__in=genre_filter).annotate(num_genres=Count('genres')).filter(
             num_genres=len(genre_filter)).distinct()
 
-    # Упорядочиваем фильмы по году (или любому другому полю)
-    movies = movies.order_by('-year')  # Убедитесь, что вы указываете поле, по которому хотите упорядочить
+    # Сортировка
+    sort_by = request.GET.get('sort', 'created')  # По умолчанию сортируем по дате создания
+    if sort_by == 'year':
+        movies = movies.order_by('year')
+    elif sort_by == 'created':
+        movies = movies.order_by('-created')
+    elif sort_by == 'title':
+        movies = movies.order_by('title')  # Сортировка по названию
 
     # Получаем список просмотренных фильмов для текущего пользователя
     watched_movies = Watched.objects.filter(user=user).values_list('movie_id', flat=True)
@@ -520,8 +530,10 @@ def movie_list(request):
     paginator = Paginator(movies, 10)  # Показывать 10 фильмов на странице
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+
     # Логирование для диагностики
     logger.info(f"Page number: {page_number}, Movies on this page: {page_obj.object_list}")
+
     # Получаем топ-10 режиссеров и сценаристов
     top_directors = Director.objects.annotate(num_movies=Count('movies_director')).order_by('-num_movies')[:10]
     top_writers = Writer.objects.annotate(num_movies=Count('movies_writer')).order_by('-num_movies')[:10]
@@ -540,5 +552,5 @@ def movie_list(request):
         'title_filter': title_filter,  # Передаем фильтр названия в шаблон
         'all_genres': all_genres,  # Передаем все жанры в шаблон
         'selected_genres': genre_filter,  # Передаем выбранные жанры в шаблон
-        'current_version': current_version,
+        'sort_by': sort_by,  # Передаем выбранный параметр сортировки в шаблон
     })
