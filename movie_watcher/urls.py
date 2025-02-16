@@ -18,10 +18,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
+from movies import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('account/', include('account.urls')),
+    path('', views.movie_actions, name='movie_actions'),  # Добавлено для корневого URL
     path(
         'social-auth/',
         include('social_django.urls', namespace='social'),

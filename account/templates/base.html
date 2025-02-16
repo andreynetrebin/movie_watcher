@@ -14,7 +14,7 @@
 <div id="header">
     <div class="header-content">
         <div class="logo-container">
-            <span class="logo"><a href="{% url "movies:movie_actions" %}">КиноСмотрители</a></span>
+            <span class="logo"><a href="{% url "movie_actions" %}">КиноСмотрители</a></span>
             {% if current_version %}
                 <span class="version-number"><a href="{% url 'changelog' %}">{{ current_version.version_number }} тест</a></span>
             {% endif %}
