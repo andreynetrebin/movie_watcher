@@ -68,7 +68,7 @@
                         {% endif %}
                     </div>
                     <div class="movie-info">
-                        <h2>{{ movie.title }} ({{ movie.year }})</h2>
+                        <h2><a href="{{ movie.get_absolute_url }}">{{ movie.title }} ({{ movie.year }})</a></h2>
                         {% if movie.title_original %}
                             <p>{{ movie.title_original }}</p>
                         {% endif %}
