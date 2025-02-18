@@ -478,7 +478,6 @@ def movie_detail(request, slug):
 
 
 
-
 @login_required
 def movie_list(request):
     user = request.user

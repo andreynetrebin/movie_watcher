@@ -134,15 +134,17 @@
 <div class="pagination">
     <span class="step-links">
         {% if page_obj.has_previous %}
-            <a href="?filter={{ filter_type }}&title={{ title_filter }}&sort={{ sort_by }}&page=1">Первая</a>
-            <a href="?filter={{ filter_type }}&title={{ title_filter }}&sort={{ sort_by }}&page={{ page_obj.previous_page_number }}">Предыдущая</a>
+            <a href="?filter={{ filter_type }}&title={{ title_filter }}&sort={{ sort_by }}&genres={{ selected_genres|join:',' }}&page=1">Первая</a>
+            <a href="?filter={{ filter_type }}&title={{ title_filter }}&sort={{ sort_by }}&genres={{ selected_genres|join:',' }}&page={{ page_obj.previous_page_number }}">Предыдущая</a>
         {% endif %}
+
         <span class="current">
             Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
         </span>
+
         {% if page_obj.has_next %}
-            <a href="?filter={{ filter_type }}&title={{ title_filter }}&sort={{ sort_by }}&page={{ page_obj.next_page_number }}">Следующая</a>
-            <a href="?filter={{ filter_type }}&title={{ title_filter }}&sort={{ sort_by }}&page={{ page_obj.paginator.num_pages }}">Последняя</a>
+            <a href="?filter={{ filter_type }}&title={{ title_filter }}&sort={{ sort_by }}&genres={{ selected_genres|join:',' }}&page={{ page_obj.next_page_number }}">Следующая</a>
+            <a href="?filter={{ filter_type }}&title={{ title_filter }}&sort={{ sort_by }}&genres={{ selected_genres|join:',' }}&page={{ page_obj.paginator.num_pages }}">Последняя</a>
         {% endif %}
     </span>
 </div>
