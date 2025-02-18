@@ -5,7 +5,7 @@ from django.shortcuts import redirect, render
 import logging
 from django.shortcuts import get_object_or_404
 from .forms import MovieCreateForm, CommentForm, MovieBulkCreateForm
-from django.db.models import Count
+from django.db.models import Count, Q, FloatField, ExpressionWrapper
 from .models import Movie, Genre, Country, Director, Writer, Watched, WishList, MovieList
 from versioning.models import Version
 from django.http import JsonResponse
@@ -15,14 +15,23 @@ from django.core.paginator import Paginator, EmptyPage, \
 PageNotAnInteger
 from actions.utils import create_action
 from actions.models import Action
-from django.views.generic import ListView, DetailView
-from telegram_bot.views import send_movie_action_notification  # Импортируйте функцию
 
 logger = logging.getLogger(__name__)
 
+
+@login_required
 def director_list(request):
+    user = request.user
+
     # Получаем всех режиссеров с количеством фильмов, исключая тех, у кого 0 фильмов
-    directors = Director.objects.annotate(num_movies=Count('movies_director')).filter(num_movies__gt=0).order_by('-num_movies')
+    directors = Director.objects.annotate(
+        num_movies=Count('movies_director', distinct=True),  # Количество уникальных фильмов у каждого режиссера
+        num_watched=Count('movies_director__watched', filter=Q(movies_director__watched__user=user)),  # Количество просмотренных фильмов
+        watched_percentage=ExpressionWrapper(
+            Count('movies_director__watched', filter=Q(movies_director__watched__user=user)) * 100.0 / Count('movies_director', distinct=True),
+            output_field=FloatField()
+        )
+    ).filter(num_movies__gt=0).order_by('-num_movies')
 
     # Пагинация
     paginator = Paginator(directors, 20)  # 20 режиссеров на странице
@@ -31,9 +40,19 @@ def director_list(request):
 
     return render(request, 'movies/directors/director_list.html', {'directors': directors_page})
 
+@login_required
 def writer_list(request):
+    user = request.user
+
     # Получаем всех сценаристов с количеством фильмов, исключая тех, у кого 0 фильмов
-    writers = Writer.objects.annotate(num_movies=Count('movies_writer')).filter(num_movies__gt=0).order_by('-num_movies')
+    writers = Writer.objects.annotate(
+        num_movies=Count('movies_writer', distinct=True),  # Количество уникальных фильмов у каждого сценариста
+        num_watched=Count('movies_writer__watched', filter=Q(movies_writer__watched__user=user)),  # Количество просмотренных фильмов
+        watched_percentage=ExpressionWrapper(
+            Count('movies_writer__watched', filter=Q(movies_writer__watched__user=user)) * 100.0 / Count('movies_writer', distinct=True),
+            output_field=FloatField()
+        )
+    ).filter(num_movies__gt=0).order_by('-num_movies')
 
     # Пагинация
     paginator = Paginator(writers, 20)  # 20 сценаристов на странице
@@ -41,7 +60,6 @@ def writer_list(request):
     writers_page = paginator.get_page(page_number)
 
     return render(request, 'movies/writers/writer_list.html', {'writers': writers_page})
-
 @login_required
 def movie_bulk_create(request):
     if request.method == 'POST':

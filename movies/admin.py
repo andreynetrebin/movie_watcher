@@ -13,3 +13,9 @@ class CommentAdmin(admin.ModelAdmin):
     list_display = ['author', 'movie', 'created_on', 'active']
     list_filter = ['active', 'created_on']
     search_fields = ['body']
+
+@admin.register(Watched)
+class WatchedAdmin(admin.ModelAdmin):
+    list_display = ['user', 'movie']
+    list_filter = ['user']
+    search_fields = ['movie']

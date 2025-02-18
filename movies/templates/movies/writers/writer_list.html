@@ -1,4 +1,3 @@
-<!-- templates/writers/writer_list.html -->
 {% extends "base.html" %}
 {% load custom_filters %}
 {% block title %}Рейтинг сценаристов{% endblock %}
@@ -8,23 +7,27 @@
 <table>
     <thead>
         <tr>
-            <th style="width: 50px;">Позиция</th> <!-- Сужаем колонку -->
+            <th style="width: 50px;">Позиция</th>
             <th>Сценарист</th>
-            <th style="width: 100px;">Количество фильмов</th> <!-- Сужаем колонку -->
+            <th style="width: 100px;">Количество фильмов</th>
+            <th style="width: 100px;">Просмотрено</th> <!-- Количество просмотренных фильмов -->
+            <th style="width: 100px;">Процент просмотренных</th> <!-- Новый заголовок для процента -->
         </tr>
     </thead>
     <tbody>
         {% for writer in writers %}
-            <tr>
+            <tr {% if writer.num_watched == writer.num_movies %}style="background-color: #d3ffd3;"{% endif %}> <!-- Выделяем строку зеленым цветом -->
                 <td>{{ writers.number|add:-1|mul:20|add:forloop.counter }}</td> <!-- Номер позиции с учетом страницы -->
                 <td>
                     <a href="{% url 'movies:writer_detail' writer.pk %}">{{ writer.name }}</a>
                 </td>
-                <td>{{ writer.num_movies }}</td>
+                <td>{{ writer.num_movies }}</td> <!-- Количество фильмов -->
+                <td>{{ writer.num_watched }}</td> <!-- Количество просмотренных фильмов -->
+                <td>{{ writer.watched_percentage|floatformat:0 }}%</td> <!-- Процент просмотренных фильмов -->
             </tr>
         {% empty %}
             <tr>
-                <td colspan="3">Нет доступных сценаристов.</td>
+                <td colspan="5">Нет доступных сценаристов.</td>
             </tr>
         {% endfor %}
     </tbody>
