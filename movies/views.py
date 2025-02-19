@@ -140,24 +140,34 @@ def movie_bulk_create(request):
     return render(request, 'movies/movie/bulk_create.html', {'form': form})
 
 
+@login_required
 def director_detail(request, pk):
     director = get_object_or_404(Director, pk=pk)
     # Получаем все фильмы, связанные с этим режиссером, отсортированные по году в порядке убывания
     movies = director.movies_director.all().order_by('-year')
+    wishlist_movies = WishList.objects.filter(user=request.user).values_list('movie_id', flat=True)
+    watched_movies = Watched.objects.filter(user=request.user).values_list('movie_id', flat=True)
 
     return render(request, 'movies/directors/director_detail.html', {
         'director': director,
         'movies': movies,
+        'watched_movies': watched_movies,
+        'wishlist_movies': wishlist_movies,
     })
 
+@login_required
 def writer_detail(request, pk):
     writer = get_object_or_404(Writer, pk=pk)
     # Получаем все фильмы, связанные с этим сценаристом, отсортированные по году в порядке убывания
     movies = writer.movies_writer.all().order_by('-year')
+    wishlist_movies = WishList.objects.filter(user=request.user).values_list('movie_id', flat=True)
+    watched_movies = Watched.objects.filter(user=request.user).values_list('movie_id', flat=True)
 
     return render(request, 'movies/writers/writer_detail.html', {
         'writer': writer,
         'movies': movies,
+        'watched_movies': watched_movies,
+        'wishlist_movies': wishlist_movies,
     })
 
 def movie_actions(request):
