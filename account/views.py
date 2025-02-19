@@ -125,7 +125,7 @@ def edit(request):
             profile_form.save()
             messages.success(
                 request,
-                'Profile updated successfully'
+                'Профиль успешно изменен'
             )
             return redirect('account:profile')  # Перенаправление после успешного обновления
         else:
