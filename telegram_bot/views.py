@@ -33,24 +33,22 @@ def send_movie_action_notification(movie, movie_url, action_user, action):
     profiles = Profile.objects.filter(telegram_connected=True)
     for profile in profiles:
         chat_id = profile.telegram_user_id
-        if chat_id == "544324614":
-            message = (
-                f"<b>{action_user.username}</b> {action} фильм <b>{movie.title}</b>.\n"
-                f"Ссылка на Кинопоиск: {movie.kinopoisk_url}\n"
-                f"Ссылка на страницу фильма: {movie_url}"
-            )
-            bot.send_message(chat_id, message, parse_mode='HTML')
+        message = (
+            f"<b>{action_user.username}</b> {action} фильм <b>{movie.title}</b>.\n"
+            f"Ссылка на Кинопоиск: {movie.kinopoisk_url}\n"
+            f"Ссылка на страницу фильма: {movie_url}"
+        )
+        bot.send_message(chat_id, message, parse_mode='HTML')
 
 def send_newuser_registration_notification(username):
     # Получаем всех пользователей, которые связали свои аккаунты с Telegram
     profiles = Profile.objects.filter(telegram_connected=True)
     for profile in profiles:
         chat_id = profile.telegram_user_id
-        if chat_id == "544324614":
-            message = (
-                f"Зарегистрировался новый пользователь - <b>{username}</b>"
-            )
-            bot.send_message(chat_id, message, parse_mode='HTML')
+        message = (
+            f"Зарегистрировался новый пользователь - <b>{username}</b>"
+        )
+        bot.send_message(chat_id, message, parse_mode='HTML')
 
 
 # def send_movie_action_notification(request, movie, action_user, action):
