@@ -1003,6 +1003,33 @@ button.wishlist i.transparent {
     flex-wrap: wrap; /* Позволяем переносить элементы на новую строку */
 }
 
+.info-block {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+}
+
+.info-left, .info-right {
+    width: 48%;
+}
+
+.info-left h2, .info-right h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.info-left ul, .info-right ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.info-left li, .info-right li {
+    margin-bottom: 5px;
+}
+
 
 
 /* Стили для мобильных устройств */
