@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Войти{% endblock %}
 {% block content %}
 <h1>Войти</h1>
@@ -11,7 +12,9 @@
     <p>
       Пожалуйста, используйте форму ниже для входа в систему.<br>
       Если, вы впервые, то <a href="{% url "register" %}">зарегистрируйтесь</a>.
-      Или воспользуйтесь сервисами социальной аутентификации Yandex или Google
+      Или воспользуйтесь сервисами социальной аутентификации
+      <img src="{% static 'images/Yandex_icon.svg.png' %}" alt="Яндекс" class="icon">Yandex
+      или <img src="{% static 'images/Google_icon.png' %}" alt="Google" class="icon">Google
     </p>
 <br>
 {% endif %}

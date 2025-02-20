@@ -2,13 +2,18 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Changelog</h1>
-<ul>
-    {% for version in versions %}
-        <li>
-            <strong>{{ version.version_number }}</strong> ({{ version.release_date }})<br>
-            <pre>{{ version.changes }}</pre>
+<div class="changelog-container">
+    <h1>История изменений</h1>
+    <ul class="changelog-list">
+        {% for version in versions %}
+        <li class="changelog-item">
+            <div class="version-header">
+                <strong class="version-number">{{ version.version_number }}</strong>
+                <span class="release-date">({{ version.release_date }})</span>
+            </div>
+            <pre class="changes">{{ version.changes }}</pre>
         </li>
-    {% endfor %}
-</ul>
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}
