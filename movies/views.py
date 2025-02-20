@@ -177,8 +177,8 @@ def movie_actions(request):
     paginator = Paginator(actions, 10)  # 10 действий на странице
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    # Топ-10 фильмов по количеству просмотренных
-    top_movies = Movie.objects.annotate(num_watched=Count('watched')).order_by('-num_watched')[:10]
+    # Топ 5 фильмов по количеству лайков
+    top_movies = Movie.objects.annotate(likes_count=Count('users_like')).order_by('-likes_count')[:5]
     # Топ-10 пользователей по количеству просмотренных фильмов
     top_users = User.objects.annotate(num_watched=Count('watched')).order_by('-num_watched')[:10]
 

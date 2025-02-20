@@ -570,6 +570,45 @@ img.user-detail {
     margin-right: 0; /* Убираем отступ справа для каждого четвертого элемента */
 }
 
+.top-movies-sidebar {
+    width: 250px; /* Ширина сайдбара */
+    background-color: #f9f9f9; /* Цвет фона */
+    border: 1px solid #ddd; /* Граница вокруг сайдбара */
+    border-radius: 1px; /* Закругленные углы */
+    padding: 1px; /* Отступы внутри сайдбара */
+    margin-bottom: 1px; /* Отступ снизу для отделения от других элементов */
+}
+
+.top-movies-list {
+    list-style-type: none; /* Убираем маркеры списка */
+    padding: 0; /* Убираем отступы */
+}
+
+.top-movie-item {
+    display: flex; /* Используем flexbox для выравнивания */
+    align-items: center; /* Выравниваем по центру по вертикали */
+    margin-bottom: 1px; /* Уменьшаем отступ между элементами списка */
+}
+
+.movie-info {
+    flex-grow: 1; /* Позволяем этому блоку занимать оставшееся пространство */
+}
+
+.top-movie-item a {
+    display: block; /* Переносим название фильма на новую строку */
+    font-weight: bold; /* Жирный шрифт для названия фильма */
+}
+
+.likes-count {
+    font-size: 0.9em; /* Уменьшаем размер шрифта для количества лайков */
+    color: #666; /* Цвет текста для количества лайков */
+}
+
+.divider {
+    border: none; /* Убираем стандартные стили для hr */
+    border-top: 1px solid #ddd; /* Добавляем верхнюю границу */
+    margin: 1px 0; /* Отступы сверху и снизу */
+}
 
 .sidebar {
     float: right;
@@ -898,7 +937,7 @@ button.wishlist i.transparent {
     display: inline-block; /* Чтобы элемент занимал только необходимое пространство */
 }
 
-.kinopoisk-icon {
+.icon {
     width: 20px; /* Установите ширину иконки */
     height: 20px; /* Установите высоту иконки */
     vertical-align: middle; /* Выравнивание по центру */
@@ -1030,6 +1069,78 @@ button.wishlist i.transparent {
     margin-bottom: 5px;
 }
 
+.activity-table {
+    width: 100%; /* Ширина таблицы */
+    border-collapse: collapse; /* Убираем двойные границы */
+    margin-top: 10px; /* Отступ сверху */
+}
+
+.activity-table th, .activity-table td {
+    border: 1px solid #ddd; /* Граница ячеек */
+    padding: 8px; /* Отступы внутри ячеек */
+    text-align: left; /* Выравнивание текста по левому краю */
+}
+
+.activity-table th {
+    background-color: #f2f2f2; /* Цвет фона для заголовков */
+    font-weight: bold; /* Жирный шрифт для заголовков */
+}
+
+.activity-table tr:nth-child(even) {
+    background-color: #f9f9f9; /* Цвет фона для четных строк */
+}
+
+.activity-table tr:hover {
+    background-color: #f1f1f1; /* Цвет фона при наведении */
+}
+
+.changelog-container {
+    max-width: 800px; /* Максимальная ширина контейнера */
+    margin: 0 auto; /* Центрирование контейнера */
+    padding: 20px; /* Отступы внутри контейнера */
+    background-color: #f9f9f9; /* Цвет фона */
+    border: 1px solid #ddd; /* Граница вокруг контейнера */
+    border-radius: 8px; /* Закругленные углы */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Тень для контейнера */
+}
+
+.changelog-list {
+    list-style-type: none; /* Убираем маркеры списка */
+    padding: 0; /* Убираем отступы */
+}
+
+.changelog-item {
+    margin-bottom: 20px; /* Отступ между элементами списка */
+    padding: 15px; /* Отступы внутри элемента списка */
+    background-color: #fff; /* Цвет фона элемента списка */
+    border: 1px solid #e0e0e0; /* Граница вокруг элемента списка */
+    border-radius: 5px; /* Закругленные углы */
+}
+
+.version-header {
+    display: flex; /* Используем flexbox для выравнивания */
+    justify-content: space-between; /* Распределяем пространство между элементами */
+    align-items: center; /* Выравниваем по центру по вертикали */
+}
+
+.version-number {
+    font-size: 1.2em; /* Увеличиваем размер шрифта для номера версии */
+    color: #333; /* Цвет текста */
+}
+
+.release-date {
+    font-size: 0.9em; /* Уменьшаем размер шрифта для даты */
+    color: #777; /* Цвет текста для даты */
+}
+
+.changes {
+    margin-top: 10px; /* Отступ сверху для изменений */
+    white-space: pre-wrap; /* Сохраняем пробелы и переносы строк */
+    background-color: #f0f0f0; /* Цвет фона для блока изменений */
+    padding: 10px; /* Отступы внутри блока изменений */
+    border-radius: 4px; /* Закругленные углы для блока изменений */
+    overflow-x: auto; /* Добавляем прокрутку по горизонтали, если текст длинный */
+}
 
 
 /* Стили для мобильных устройств */
@@ -1129,4 +1240,32 @@ button.wishlist i.transparent {
         margin: 5px 0; /* Убираем боковые отступы и оставляем только вертикальные */
     }
 
+
+    .top-movies-sidebar {
+        width: 25%; /* Ширина 100% на мобильных устройствах */
+        padding: 1px; /* Уменьшаем отступы */
+    }
+
+    .top-movie-item {
+        flex-direction: column; /* Располагаем элементы в колонку */
+        align-items: flex-start; /* Выравниваем по левому краю */
+    }
+
+}
+
+@media (max-width: 1100px) {
+    .top-movies-sidebar {
+        width: 30%; /* Ширина 100% на мобильных устройствах */
+        padding: 1px; /* Уменьшаем отступы */
+    }
+    .movie-poster {
+        margin-right: 0; /* Убираем отступ справа */
+        margin-bottom: 5px; /* Отступ снизу для постера */
+    }
+
+    .movie-poster-img {
+        width: 80%; /* Уменьшаем ширину постера */
+        margin: 0; /* Убедитесь, что отступы равны 0 */
+        margin-right: 0; /* Отступ справа от постера */
+    }
 }
