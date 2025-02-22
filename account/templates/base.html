@@ -76,10 +76,11 @@
             <li {% if section == "lists" %}class="selected"{% endif %}>
                 <a href="#">Списки</a>
                 <ul class="dropdown-content">
-                    <li><a href="{% url "movies:all_movie_lists" %}">Все списки</a></li>
+                    <li><a href="{% url "movies:all_movie_lists" %}">Пользовательские списки</a></li>
+                    <li><a href="{% url "movies:create_movie_list" %}">+Создать список</a></li>
                     <li><a href="{% url "movies:director_list" %}">Режиссеры</a></li>
                     <li><a href="{% url "movies:writer_list" %}">Сценаристы</a></li>
-                    <li><a href="{% url "movies:create_movie_list" %}">+Создать список</a></li>
+
                 </ul>
             </li>
             <li {% if section == "people" %}class="selected"{% endif %}>
