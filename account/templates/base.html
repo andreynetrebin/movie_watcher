@@ -23,8 +23,8 @@
     {% if request.user.is_authenticated %}
         <div class="user-info">
             <!-- Аватар -->
-            {% if user.profile.photo %}
-                {% thumbnail user.profile.photo "20x20" crop="100%" as im %}
+            {% if request.user.profile.photo %}
+                {% thumbnail request.user.profile.photo "20x20" crop="100%" as im %}
                     <img src="{{ im.url }}" class="user-avatar-header" alt="{{ user.get_full_name }}">
             {% else %}
                 <img src="{% static 'images/default_user_avatar.jpg' %}" class="user-avatar-header" alt="Default Avatar">

@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% load thumbnail %}
 
-{% block title %}People{% endblock %}
+{% block title %}Сообщество{% endblock %}
 {% block content %}
 {% load static %}
 {% load thumbnail %}
-  <h1>People</h1>
+  <h1>Сообщество</h1>
   <div id="people-list">
     {% for user in users %}
       <div class="user">
@@ -15,7 +15,9 @@
                                         <img src="{{ im.url }}" alt="{{ user.get_full_name }}" class="item-img">
                                     </a>
                                 {% else %}
+                                <a href="{{ user.get_absolute_url }}">
                                     <img src="{% static 'images/default_user_avatar.jpg' %}" alt="Default Avatar" class="item-img">
+                                </a>
                                 {% endif %}
         <div class="info">
           <a href="{{ user.get_absolute_url }}" class="title">

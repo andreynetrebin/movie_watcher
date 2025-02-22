@@ -6,11 +6,12 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib import messages
+from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from actions.utils import create_action
 from actions.models import Action
-from movies.models import Movie, Watched
+from movies.models import Movie, Watched, WishList
 from telegram_bot.views import send_newuser_registration_notification
 
 
@@ -57,6 +58,12 @@ def dashboard(request):
     # Получаем количество непонравившихся фильмов
     disliked_count = request.user.movies_dislike.count()
 
+    # Получаем количество добавленных фильмов
+    added_movies_count = request.user.movies_add.count()  # Получаем количество добавленных фильмов
+
+    # Получаем количество фильмов в вишлисте
+    wishlist_count = WishList.objects.filter(user=request.user).count()  # Получаем количество фильмов в вишлисте
+
     # Получаем комментарии пользователя
     comments = request.user.comments.all()  # Предполагается, что у вас есть связь между пользователем и комментариями
 
@@ -72,9 +79,59 @@ def dashboard(request):
             'watched_count': watched_count,
             'liked_count': liked_count,
             'disliked_count': disliked_count,
+            'added_movies_count': added_movies_count,  # Добавлено количество добавленных фильмов
+            'wishlist_count': wishlist_count,  # Добавлено количество фильмов в вишлисте
             'comments': comments,
         }
     )
+
+
+@login_required
+def user_movie_list(request, username):
+    user = get_object_or_404(User, username=username, is_active=True)
+
+    # Получаем все фильмы по умолчанию
+    watched_movies = Movie.objects.filter(watched__user=user)
+    liked_movies = Movie.objects.filter(users_like=user)
+    disliked_movies = Movie.objects.filter(users_dislike=user)
+    wishlist_movies = Movie.objects.filter(wishlist__user=user)
+
+    # Фильтрация по вкладкам
+    filter_type = request.GET.get('filter', 'all')  # Получаем тип фильтра из параметров запроса
+
+    # Определяем, какие фильмы показывать в зависимости от фильтра
+    if filter_type == 'watched':
+        movies = watched_movies
+    elif filter_type == 'liked':
+        movies = liked_movies
+    elif filter_type == 'disliked':
+        movies = disliked_movies
+    elif filter_type == 'wishlist':
+        movies = wishlist_movies
+    else:
+        movies = Movie.objects.none()  # Если фильтр не распознан, не показываем фильмы
+
+    # Фильтрация по названию
+    title_filter = request.GET.get('title', '')
+    if title_filter:
+        movies = movies.filter(title__icontains=title_filter) | movies.filter(title_original__icontains=title_filter)
+
+    # Пагинация
+    paginator = Paginator(movies, 10)  # Показывать 10 фильмов на странице
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'movies/movie/user_movie_list.html', {
+        'page_obj': page_obj,
+        'filter_type': filter_type,
+        'title_filter': title_filter,
+        'user': user,  # Передаем пользователя, чьи фильмы мы отображаем
+        'watched_movies': watched_movies,
+        'liked_movies': liked_movies,
+        'disliked_movies': disliked_movies,
+        'wishlist_movies': wishlist_movies,
+    })
+
 def register(request):
     if request.method == 'POST':
         user_form = UserRegistrationForm(request.POST)
@@ -102,8 +159,6 @@ def register(request):
         {'user_form': user_form}
     )
 
-
-from django.shortcuts import get_object_or_404
 
 @login_required
 def edit(request):
@@ -151,16 +206,51 @@ def user_list(request):
     {'section': 'people',
     'users': users})
 
+
 @login_required
 def user_detail(request, username):
-    user = get_object_or_404(User,
-    username=username,
-    is_active=True)
-    return render(request,
-    'account/user/detail.html',
-    {'section': 'people',
-    'user': user})
+    user = get_object_or_404(User, username=username, is_active=True)
 
+    # Получаем количество просмотренных фильмов
+    watched_count = Watched.objects.filter(user=user).count()
+
+    # Получаем количество понравившихся фильмов
+    liked_count = user.movies_like.count()
+
+    # Получаем количество непонравившихся фильмов
+    disliked_count = user.movies_dislike.filter(user=user).count()
+
+    # Получаем количество фильмов в вишлисте
+    wishlist_count = WishList.objects.filter(user=user).count()
+
+    # Получаем количество добавленных фильмов (если у вас есть такая связь)
+    added_count = Movie.objects.filter(user=user).count()  # Предполагается, что у вас есть связь с добавленными фильмами
+
+    # Получаем недавние действия пользователя (например, лайки, дизлайки и т.д.)
+    actions = user.actions.all()[:10]  # Предполагается, что у вас есть связь с действиями
+
+    # Вычисляем совместимость
+    current_user_liked_movies = request.user.movies_like.values_list('id', flat=True)
+    user_liked_movies = user.movies_like.values_list('id', flat=True)
+
+    # Находим количество совпадений
+    common_movies_count = user.movies_like.filter(id__in=current_user_liked_movies).count()
+
+    # Вычисляем процент совместимости
+    compatibility_score = (common_movies_count / max(liked_count, 1)) * 100  # Избегаем деления на ноль
+
+    return render(request, 'account/user/detail.html', {
+        'section': 'people',
+        'user': user,
+        'watched_count': watched_count,
+        'liked_count': liked_count,
+        'disliked_count': disliked_count,
+        'wishlist_count': wishlist_count,  # Добавлено количество фильмов в вишлисте
+        'added_count': added_count,  # Добавлено количество добавленных фильмов
+        'actions': actions,
+        'common_movies_count': common_movies_count,  # Добавлено количество общих фильмов
+        'compatibility_score': round(compatibility_score, 2),  # Округляем до 2 знаков после запятой
+    })
 @require_POST
 @login_required
 def user_follow(request):
