@@ -5,74 +5,176 @@
 {% block title %}{{ user.get_full_name }}{% endblock %}
 
 {% block content %}
-  <h1>{{ user.get_full_name }}</h1>
-  <div class="profile-info">
-                             {% if user.profile.photo %}
-                                    {% thumbnail user.profile.photo "80x80" crop="100%" as im %}
-                                    <a href="{{ user.get_absolute_url }}">
-                                        <img src="{{ im.url }}" alt="{{ user.get_full_name }}" class="item-img">
-                                    </a>
-                                {% else %}
-                                    <img src="{% static 'images/default_user_avatar.jpg' %}" alt="Default Avatar" class="item-img">
-                                {% endif %}
-  </div>
-  {% with total_followers=user.followers.count %}
-    <span class="count">
-      <span class="total">{{ total_followers }}</span>
-     подписчика{{ total_followers|pluralize }}
-    </span>
-    <a href="#" data-id="{{ user.id }}" data-action="{% if request.user in user.followers.all %}un{% endif %}follow" class="follow button">
-      {% if request.user not in user.followers.all %}
-        Подписаться
-      {% else %}
-        Отписаться
-      {% endif %}
-    </a>
+<h1>{{ user.get_full_name }}</h1>
 
-<!--<div id="movie-list">-->
-<!--{% include "movies/movie/list_movies.html" with movies=user.movies_created.all %}-->
-<!--</div>-->
-  {% endwith %}
-{% endblock %}
+<!-- Аватар пользователя -->
+<div class="profile-info">
+    {% if user.profile.photo %}
+        {% thumbnail user.profile.photo "80x80" crop="100%" as im %}
+        <a href="{{ user.get_absolute_url }}">
+            <img src="{{ im.url }}" alt="{{ user.get_full_name }}" class="item-img">
+        </a>
+    {% else %}
+        <img src="{% static 'images/default_user_avatar.jpg' %}" alt="Default Avatar" class="item-img">
+    {% endif %}
+</div>
 
-{% block domready %}
-  const url = '{% url "user_follow" %}';
-  var options = {
-    method: 'POST',
-    headers: {'X-CSRFToken': csrftoken},
-    mode: 'same-origin'
-  }
+<!-- Вкладки в виде кнопок -->
+<div class="tabs">
+    <button class="tablink active" onclick="openTab(event, 'AboutMe')">Обо мне</button>
+    <button class="tablink" onclick="openTab(event, 'Activity')">Активность</button>
+    <button class="tablink" onclick="openTab(event, 'Comments')">Комментарии</button>
+</div>
 
-  document.querySelector('a.follow')
-          .addEventListener('click', function(e){
-    e.preventDefault();
-    var followButton = this;
+<!-- Содержимое вкладок -->
+<div id="AboutMe" class="tabcontent" style="display: block;">  <!-- Показать по умолчанию -->
+    <h3>Обо мне</h3>
+    <div class="about-me-content">
+<div class="about-me-stats">
+    <h4 style="text-decoration: underline;">Стат данные</h4>
+    <p>Дата присоединения: {{ user.date_joined|date:"d.m.Y" }}</p>
+    <p>Привязка к Telegram: {% if user.profile.telegram_connected %} Привязано {% else %} Не привязано {% endif %}</p>
+    <p>Просмотренные фильмы: <a href="{% url 'user_movie_list' user.username %}?filter=watched">{{ watched_count }}</a></p>
+    <p>Понравившиеся фильмы: <a href="{% url 'user_movie_list' user.username %}?filter=liked">{{ liked_count }}</a></p>
+    <p>Непонравившиеся фильмы: <a href="{% url 'user_movie_list' user.username %}?filter=disliked">{{ disliked_count }}</a></p>
+    <p>Буду смотреть: <a href="{% url 'user_movie_list' user.username %}?filter=wishlist">{{ wishlist_count }}</a></p>
+    <p>Добавленные фильмы: <a href="{% url 'user_movie_list' user.username %}?filter=added">{{ added_count }}</a></p>
+</div>
 
-    // add request body
-    var formData = new FormData();
-    formData.append('id', followButton.dataset.id);
-    formData.append('action', followButton.dataset.action);
-    options['body'] = formData;
+<div class="about-me-compatibility">
+    <h4 style="text-decoration: underline;">Совместимость</h4>
+    <p>Общие понравившиеся фильмы: {{ common_movies_count }}</p>
+    <div class="compatibility-bar">
+        <div class="compatibility-fill" style="width: {{ compatibility_score }}%;"></div>
+    </div>
+    <p>Совместимость: {{ compatibility_score }}%</p>
+</div>
+        <div class="about-me-recently-action">
+            <h4 style="text-decoration: underline;">Недавние действия</h4>
+            {% for action in actions %}
+                {% if forloop.counter <= 3 %}  <!-- Ограничиваем вывод до 3 действий -->
+                    <div class="action-item">
+                        <p>{{ action.verb }}: <strong>{{ action.target.title }}</strong></p>
+                        <p>{{ action.created|timesince }} назад</p>
+                    </div>
+                {% endif %}
+            {% empty %}
+                <p>Нет недавних действий для отображения.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 
-    // send HTTP request
-    fetch(url, options)
-    .then(response => response.json())
-    .then(data => {
-      if (data['status'] === 'ok')
-      {
-        var previousAction = followButton.dataset.action;
+<div id="Activity" class="tabcontent" style="display: none;">  <!-- Скрыть по умолчанию -->
+    <h3>Активность</h3>
+    <div class="actions">
+        {% for action in actions %}
+            <div class="action">
+                <div class="action-header">
+                    <div class="user-info">
+                        <div class="user-action">
+                            <a href="{{ action.user.get_absolute_url }}">{{ action.user.first_name }}</a>
+                            <span class="action-verb">{{ action.verb }}</span>
+                            {% if action.target %}
+                                <strong class="movie-title">{{ action.target.title }}</strong>
+                            {% endif %}
+                        </div>
+                        <span class="date">{{ action.created|timesince }} назад</span>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>Нет активности для отображения.</p>
+        {% endfor %}
+    </div>
+</div>
 
-        // toggle button text and data-action
-        var action = previousAction === 'follow' ? 'unfollow' : 'follow';
-        followButton.dataset.action = action;
-        followButton.innerHTML = action;
+<div id="Comments" class="tabcontent" style="display: none;">  <!-- Скрыть по умолчанию -->
+    <h3>Комментарии</h3>
+    <div class="comments">
+        {% for comment in comments %}
+            <div class="comment">
+                <p><strong>{{ comment.author.get_full_name }}</strong>: {{ comment.body }}</p>
+                <p class="comment-date">{{ comment.created|date:"d.m.Y H:i" }}</p>
+            </div>
+        {% empty %}
+            <p>Нет комментариев для отображения.</p>
+        {% endfor %}
+    </div>
+</div>
 
-        // update follower count
-        var followerCount = document.querySelector('span.count .total');
-        var totalFollowers = parseInt(followerCount.innerHTML);
-        followerCount.innerHTML = previousAction === 'follow' ? totalFollowers + 1 : totalFollowers - 1;
-      }
-    })
-  });
+<style>
+.tabs {
+    display: flex; /* Используем Flexbox для расположения вкладок */
+    margin-bottom: 20px; /* Отступ снизу для вкладок */
+}
+
+.tablink {
+    padding: 10px 15px; /* Отступы для кнопок */
+    text-decoration: none; /* Убираем подчеркивание */
+    color: #333; /* Цвет текста */
+    border: 1px solid #ccc; /* Рамка вокруг кнопок */
+    border-radius: 5px; /* Закругленные углы */
+    background-color: #f9f9f9; /* Цвет фона для кнопок */
+    transition: background-color 0.3s; /* Плавный переход цвета */
+    margin-right: 10px; /* Отступ между кнопками */
+}
+
+.tablink.active {
+    background-color: #12c064; /* Цвет фона для активной кнопки */
+    color: white; /* Цвет текста для активной кнопки */
+}
+
+.tabcontent {
+    display: none; /* Скрываем содержимое вкладок по умолчанию */
+    padding: 20px; /* Отступы для содержимого вкладок */
+    border: 1px solid #ccc; /* Рамка вокруг содержимого вкладок */
+    border-radius: 5px; /* Закругленные углы */
+    background-color: #fff; /* Цвет фона для содержимого вкладок */
+}
+
+.about-me-content {
+    display: flex; /* Используем Flexbox для горизонтального расположения */
+    justify-content: space-between; /* Распределяем пространство между элементами */
+}
+
+.about-me-stats, .about-me-compatibility, .about-me-recently-action {
+    flex: 1; /* Каждый блок занимает равное пространство */
+    margin-right: 20px; /* Отступ между блоками */
+}
+
+.about-me-recently-action {
+    margin-right: 0; /* Убираем отступ у последнего блока */
+}
+
+.compatibility-bar {
+    width: 100%;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.compatibility-fill {
+    height: 20px;
+    background-color: #4caf50; /* Темнозеленый цвет */
+    transition: width 0.3s;
+}
+</style>
+
+<script>
+function openTab(evt, tabName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablink");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.className += " active";
+}
+</script>
 
 {% endblock %}

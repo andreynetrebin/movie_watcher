@@ -35,13 +35,34 @@
             <p>Просмотренные: <a href="{% url 'movies:list' %}?filter=watched">{{ watched_count }}</a></p>
             <p>Понравившиеся: <a href="{% url 'movies:list' %}?filter=liked">{{ liked_count }}</a></p>
             <p>Непонравившиеся: <a href="{% url 'movies:list' %}?filter=disliked">{{ disliked_count }}</a></p>
-            <p>Привязка к Telegram: {% if user.profile.telegram_connected %} Привязано {% else %} <a href="https://t.me/MoviesWatchersTestBot">Привязать к Telegram</a> {% endif %}</p>
         </div>
         <div class="about-me-settings">
             <h4 style="text-decoration: underline;">Настройки</h4>
             <a href="{% url "edit" %}" class="button">Редактировать профиль</a>
             <a href="{% url "password_change" %}" class="button">Сменить пароль</a>
+<p>
+    Привязка к Telegram:
+    {% if user.profile.telegram_connected %}
+        <span style="color: blue;">Да</span>
+    {% else %}
+        <a href="https://t.me/MoviesWatchersTestBot">Привязать к Telegram</a>
+    {% endif %}
+</p>
         </div>
+        <div class="about-me-recently-action">
+            <h4 style="text-decoration: underline;">Недавние действия</h4>
+            {% for action in actions %}
+                {% if forloop.counter <= 3 %}  <!-- Ограничиваем вывод до 3 действий -->
+                    <div class="action-item">
+                        <p>{{ action.verb }}: <strong>{{ action.target.title }}</strong></p>
+                        <p>{{ action.created|timesince }} назад</p>
+                    </div>
+                {% endif %}
+            {% empty %}
+                <p>Нет недавних действий для отображения.</p>
+            {% endfor %}
+        </div>
+
     </div>
 </div>
 
@@ -164,8 +185,20 @@ document.addEventListener("DOMContentLoaded", function() {
     justify-content: space-between; /* Распределяем пространство между блоками */
 }
 
-.about-me-stats, .about-me-settings {
-    width: 48%; /* Устанавливаем ширину блоков */
+.about-me-stats {
+    width: 33%; /* Устанавливаем ширину блоков */
+}
+
+.about-me-settings {
+    width: 20%; /* Устанавливаем ширину блоков */
+}
+
+.about-me-recently-action {
+    width: 33%; /* Устанавливаем ширину блоков */
+}
+
+.about-me-recently-action .action-item p {
+    margin: 0; /* Убираем отступы у <p> элементов внутри .action-item */
 }
 
 .about-me-settings {
@@ -173,7 +206,7 @@ document.addEventListener("DOMContentLoaded", function() {
     flex-direction: column; /* Вертикальное расположение кнопок */
 }
 
-.button {
+.about-me-settings .button {
     display: inline-block; /* Отображение кнопок в виде блочных элементов */
     padding: 10px 15px; /* Отступы для кнопок */
     margin-top: 10px; /* Отступ сверху для кнопок */
@@ -182,9 +215,11 @@ document.addEventListener("DOMContentLoaded", function() {
     text-decoration: none; /* Убираем подчеркивание */
     border-radius: 5px; /* Закругленные углы */
     transition: background-color 0.3s; /* Плавный переход цвета */
+    white-space: nowrap; /* Запрет на перенос текста */
+    width: auto; /* Устанавливаем ширину на авто */
 }
 
-.button:hover {
+.about-me-settings .button:hover {
     background-color: #0056b3; /* Цвет фона при наведении */
 }
 </style>

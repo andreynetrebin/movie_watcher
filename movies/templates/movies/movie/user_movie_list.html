@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% load static %}
+{% block title %}Фильмы {{ user.get_full_name }}{% endblock %}
+{% block content %}
+<h1>Фильмы {{ user.get_full_name }}</h1>
+
+<div class="tabs">
+    <a href="?filter=watched" class="{% if filter_type == 'watched' %}active{% endif %}">Просмотренные</a>
+    <a href="?filter=liked" class="{% if filter_type == 'liked' %}active{% endif %}">Понравившиеся</a>
+    <a href="?filter=disliked" class="{% if filter_type == 'disliked' %}active{% endif %}">Непонравившиеся</a>
+    <a href="?filter=wishlist" class="{% if filter_type == 'wishlist' %}active{% endif %}">Буду смотреть</a>
+    <a href="?filter=added" class="{% if filter_type == 'added' %}active{% endif %}">Добавленные</a>
+</div>
+
+<div class="movie-container">
+    <div class="movie-list">
+        <ul>
+            {% for movie in page_obj %}
+                <li class="movie-item">
+                    <div class="movie-poster">
+                        {% if movie.poster %}
+                            <a href="{{ movie.get_absolute_url }}">
+                                <img src="{% thumbnail movie.poster 300x0 %}" alt="{{ movie.title }} постер" class="movie-poster-img">
+                            </a>
+                        {% endif %}
+                    </div>
+                    <div class="movie-info">
+                        <h2><a href="{{ movie.get_absolute_url }}">{{ movie.title }} ({{ movie.year }})</a></h2>
+                        {% if movie.title_original %}
+                            <p>{{ movie.title_original }}</p>
+                        {% endif %}
+                        <p>
+                            Режиссеры:
+                            {% for director in movie.directors.all %}
+                                <a href="{% url 'movies:director_detail' director.pk %}">{{ director.name }}</a>{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </p>
+                        <p>
+                            Сценаристы:
+                            {% for writer in movie.writers.all %}
+                                <a href="{% url 'movies:writer_detail' writer.pk %}">{{ writer.name }}</a>{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </p>
+                        <p>
+                            Жанры:
+                            {% for genre in movie.genres.all %}
+                                {{ genre.name }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </p>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?filter={{ filter_type }}&title={{ title_filter }}&page=1">Первая</a>
+            <a href="?filter={{ filter_type }}&title={{ title_filter }}&page={{ page_obj.previous_page_number }}">Предыдущая</a>
+        {% endif %}
+
+        <span class="current">
+            Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?filter={{ filter_type }}&title={{ title_filter }}&page={{ page_obj.next_page_number }}">Следующая</a>
+            <a href="?filter={{ filter_type }}&title={{ title_filter }}&page={{ page_obj.paginator.num_pages }}">Последняя</a>
+        {% endif %}
+    </span>
+</div>
+{% endblock %}
