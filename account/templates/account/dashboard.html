@@ -4,7 +4,18 @@
 {% block title %}Дашборд{% endblock %}
 {% block content %}
 <h1>Дашборд</h1>
-<p>Добро пожаловать на страницу своего профиля. Вы можете <a href="{% url "edit" %}">редактировать профиль</a> или <a href="{% url "password_change" %}">сменить пароль</a>.</p>
+
+<!-- Аватар пользователя -->
+<div class="user-avatar">
+    {% if user.profile.photo %}
+        {% thumbnail user.profile.photo "80x80" crop="100%" as im %}
+        <a href="{{ user.get_absolute_url }}">
+            <img src="{{ im.url }}" alt="{{ user.get_full_name }}" class="item-img">
+        </a>
+    {% else %}
+        <img src="{% static 'images/default_user_avatar.jpg' %}" alt="Default Avatar" class="item-img" style="width: 80px; height: 80px;">
+    {% endif %}
+</div>
 
 <!-- Вкладки -->
 <div class="tabs">
@@ -16,11 +27,22 @@
 <!-- Содержимое вкладок -->
 <div id="AboutMe" class="tabcontent">
     <h3>Обо мне</h3>
-    <p>Дата присоединения: {{ user.date_joined }}</p>
-    <p>Просмотренные: <a href="{% url 'movies:list' %}?filter=watched">{{ watched_count }}</a></p>
-    <p>Понравившиеся: <a href="{% url 'movies:list' %}?filter=liked">{{ liked_count }}</a></p>
-    <p>Непонравившиеся: <a href="{% url 'movies:list' %}?filter=disliked">{{ disliked_count }}</a></p>
-    <p>Привязка к Telegram: {% if user.profile.telegram_connected %} Привязано {% else %} <a href="https://t.me/MoviesWatchersTestBot">Привязать к Telegram</a> {% endif %}</p>
+    <div class="about-me-content">
+        <div class="about-me-stats">
+            <h4 style="text-decoration: underline;">Стат данные</h4>
+            <p>Дата присоединения: {{ user.date_joined|date:"d.m.Y" }}</p>
+            <p>Email: {{ user.email }}</p>
+            <p>Просмотренные: <a href="{% url 'movies:list' %}?filter=watched">{{ watched_count }}</a></p>
+            <p>Понравившиеся: <a href="{% url 'movies:list' %}?filter=liked">{{ liked_count }}</a></p>
+            <p>Непонравившиеся: <a href="{% url 'movies:list' %}?filter=disliked">{{ disliked_count }}</a></p>
+            <p>Привязка к Telegram: {% if user.profile.telegram_connected %} Привязано {% else %} <a href="https://t.me/MoviesWatchersTestBot">Привязать к Telegram</a> {% endif %}</p>
+        </div>
+        <div class="about-me-settings">
+            <h4 style="text-decoration: underline;">Настройки</h4>
+            <a href="{% url "edit" %}" class="button">Редактировать профиль</a>
+            <a href="{% url "password_change" %}" class="button">Сменить пароль</a>
+        </div>
+    </div>
 </div>
 
 <div id="Activity" class="tabcontent">
@@ -30,16 +52,6 @@
             {% with user=action.user %}
             <div class="action">
                 <div class="action-header">
-                    <div class="user-avatar">
-                        {% if user.profile.photo %}
-                            {% thumbnail user.profile.photo "80x80" crop="100%" as im %}
-                            <a href="{{ user.get_absolute_url }}">
-                                <img src="{{ im.url }}" alt="{{ user.get_full_name }}" class="item-img">
-                            </a>
-                        {% else %}
-                            <img src="{% static 'images/default_user_avatar.jpg' %}" alt="Default Avatar" class="item-img" style="width: 80px; height: 80px;">
-                        {% endif %}
-                    </div>
                     <div class="user-info">
                         <div class="user-action">
                             <a href="{{ user.get_absolute_url }}">{{ user.first_name }}</a>
@@ -47,7 +59,7 @@
                             {% if action.target %}
                                 <strong class="movie-title">{{ action.target.title }}</strong>
                             {% endif %}
- </div>
+                        </div>
                         <span class="date">{{ action.created|timesince }} ago</span>
                     </div>
                 </div>
@@ -139,11 +151,41 @@ document.addEventListener("DOMContentLoaded", function() {
     border-radius: 5px; /* Закругленные углы */
     background-color: #fff; /* Цвет фона для содержимого вкладок */
 }
+
 .movie-poster {
     width: 50px; /* Установите ширину постера */
     height: auto; /* Автоматическая высота для сохранения пропорций */
     margin-right: 10px; /* Отступ справа от постера */
     vertical-align: middle; /* Выравнивание по центру */
+}
+
+.about-me-content {
+    display: flex; /* Используем Flexbox для расположения блоков */
+    justify-content: space-between; /* Распределяем пространство между блоками */
+}
+
+.about-me-stats, .about-me-settings {
+    width: 48%; /* Устанавливаем ширину блоков */
+}
+
+.about-me-settings {
+    display: flex;
+    flex-direction: column; /* Вертикальное расположение кнопок */
+}
+
+.button {
+    display: inline-block; /* Отображение кнопок в виде блочных элементов */
+    padding: 10px 15px; /* Отступы для кнопок */
+    margin-top: 10px; /* Отступ сверху для кнопок */
+    background-color: #007bff; /* Цвет фона для кнопок */
+    color: white; /* Цвет текста для кнопок */
+    text-decoration: none; /* Убираем подчеркивание */
+    border-radius: 5px; /* Закругленные углы */
+    transition: background-color 0.3s; /* Плавный переход цвета */
+}
+
+.button:hover {
+    background-color: #0056b3; /* Цвет фона при наведении */
 }
 </style>
 {% endblock %}
