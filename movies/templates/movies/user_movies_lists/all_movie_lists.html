@@ -1,17 +1,70 @@
-<!-- templates/movies/user_movies_lists/all_movie_lists.html -->
 {% extends "base.html" %}
-{% block title %}Все списки фильмов{% endblock %}
+{% load thumbnail %}
+{% load static %}
+{% block title %}Пользовательские списки{% endblock %}
 {% block content %}
-<h1>Все списки фильмов</h1>
+<h1>Пользовательские списки</h1>
+
+<style>
+    table {
+        width: 100%; /* Занимает всю ширину контейнера */
+        border-collapse: collapse; /* Убирает двойные границы между ячейками */
+    }
+
+    th, td {
+        border: 1px solid #ddd; /* Добавляет границы ячеек */
+        padding: 8px; /* Добавляет отступы внутри ячеек */
+        text-align: left; /* Выравнивание текста по левому краю */
+    }
+
+    th {
+        background-color: #f2f2f2; /* Цвет фона для заголовков */
+        font-weight: bold; /* Жирный шрифт для заголовков */
+    }
+
+    tr:hover {
+        background-color: #f5f5f5; /* Цвет фона при наведении на строку */
+    }
+
+    .user-avatar {
+        vertical-align: middle; /* Выравнивание аватара по центру */
+        margin-right: 8px; /* Отступ справа от аватара */
+    }
+</style>
 
 {% if movie_lists %}
-    <ul>
-        {% for movie_list in movie_lists %}
-            <li>
-                <a href="{% url 'movies:movie_list_detail' movie_list.id %}">{{ movie_list.title }}</a> ({{ movie_list.movies.count }} фильмов) - Создано пользователем: {{ movie_list.user.username }}
-            </li>
-        {% endfor %}
-    </ul>
+    <table>
+        <thead>
+            <tr>
+                <th>Пользователь</th>
+                <th>Название списка</th>
+                <th>Количество фильмов</th>
+                <th>Просмотренные фильмы</th>
+                <th>Процент просмотренных</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for movie_list in movie_lists %}
+                <tr>
+                    <td>
+                        {% if movie_list.user.profile.photo %}
+                            {% thumbnail movie_list.user.profile.photo "40x40" crop="100%" as im %}
+                            <img src="{{ im.url }}" alt="{{ movie_list.user.username }}" class="user-avatar">
+                        {% else %}
+                            <img src="{% static 'images/default_user_avatar.jpg' %}" alt="Default Avatar" class="user-avatar">
+                        {% endif %}
+                        {{ movie_list.user.username }} <!-- Имя пользователя -->
+                    </td>
+                    <td>
+                        <a href="{% url 'movies:movie_list_detail' movie_list.id %}">{{ movie_list.title }}</a>
+                    </td>
+                    <td>{{ movie_list.total_count }}</td>
+                    <td>{{ movie_list.watched_count }}</td>
+                    <td>{{ movie_list.watched_percentage|floatformat:1 }}%</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% else %}
     <p>Нет доступных списков фильмов.</p>
 {% endif %}

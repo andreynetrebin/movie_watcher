@@ -196,7 +196,17 @@ def movie_actions(request):
 @login_required
 def all_movie_lists(request):
     # Получаем все списки фильмов, созданные всеми пользователями
-    movie_lists = MovieList.objects.prefetch_related('movies')
+    movie_lists = MovieList.objects.prefetch_related('movies', 'user')
+
+    # Получаем список ID фильмов, просмотренных текущим пользователем
+    watched_movies = Watched.objects.filter(user=request.user).values_list('movie_id', flat=True)
+
+    # Подсчитываем количество просмотренных фильмов для каждого списка
+    for movie_list in movie_lists:
+        movie_list.watched_count = sum(1 for movie in movie_list.movies.all() if movie.id in watched_movies)
+        movie_list.total_count = movie_list.movies.count()
+        movie_list.watched_percentage = (movie_list.watched_count / movie_list.total_count * 100) if movie_list.total_count > 0 else 0
+
     return render(request, 'movies/user_movies_lists/all_movie_lists.html', {
         'movie_lists': movie_lists,
     })
@@ -220,11 +230,27 @@ def create_movie_list(request):
         return redirect('movies:movie_list_detail', movie_list.id)
     return render(request, 'movies/user_movies_lists/create_movie_list.html')
 
+
 @login_required
 def movie_list_detail(request, list_id):
     movie_list = get_object_or_404(MovieList, id=list_id)
-    all_movies = Movie.objects.all()  # Получаем все фильмы
-    return render(request, 'movies/user_movies_lists/movie_list_detail.html', {'movie_list': movie_list, 'all_movies': all_movies})
+
+    # Получаем все фильмы в списке
+    movies = movie_list.movies.all().order_by('-year')
+    wishlist_movies = WishList.objects.filter(user=request.user).values_list('movie_id', flat=True)
+    watched_movies = Watched.objects.filter(user=request.user).values_list('movie_id', flat=True)
+
+    # Получаем список ID просмотренных фильмов текущим пользователем
+
+
+    return render(request, 'movies/user_movies_lists/movie_list_detail.html', {
+        'movie_list': movie_list,
+        'movies': movies,
+        'watched_movies': watched_movies,
+        'wishlist_movies': wishlist_movies,
+        'can_edit': request.user == movie_list.user,  # Проверяем, может ли текущий пользователь редактировать список
+    })
+
 @login_required
 def like_movie_list(request, list_id):
     movie_list = get_object_or_404(MovieList, id=list_id)
@@ -250,42 +276,6 @@ def mark_watched(request):
         return JsonResponse({'status': 'added'})
     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
 
-#@login_required
-#@require_POST
-#def mark_recently_watched(request):
-#    if request.method == 'POST':
-#        movie_id = request.POST.get('id')
-#        movie = get_object_or_404(Movie, id=movie_id)
-        # Проверяем, был ли фильм уже просмотрен
-#        watched, created = Watched.objects.get_or_create(user=request.user, movie=movie)
-#        if not created:
-#            watched.delete()  # Удаляем из просмотренных, если он уже был
-#            return JsonResponse({'status': 'removed'})
-#        create_action(request.user, 'отметил как недавно просмотренный', movie)  # Вызываем сигнал для "просмотрен недавно"
-#        return JsonResponse({'status': 'added'})
-#    return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
-
-#@login_required
-#@require_POST
-#def mark_recently_watched(request):
-#    if request.method == 'POST':
-#        movie_id = request.POST.get('id')
-#        movie = get_object_or_404(Movie, id=movie_id)
-#        # Проверяем, был ли фильм уже просмотрен
-#        watched, created = Watched.objects.get_or_create(user=request.user, movie=movie)
-#        if not created:
-#            watched.delete()  # Удаляем из просмотренных, если он уже был
-#            return JsonResponse({'status': 'removed'})
-
-#        create_action(request.user, 'отметил как недавно просмотренный', movie)  # Вызываем сигнал для "просмотрен недавно"
-
-#        # Отправка уведомления о недавно просмотренном фильме с эмодзи "телевизор"
-#        send_movie_action_notification(request, movie, request.user, '🍿 недавно просмотрел')
-
-#        return JsonResponse({'status': 'added'})
-#    return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
-
-
 
 @login_required
 @require_POST
@@ -306,8 +296,6 @@ def mark_recently_watched(request):
     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
 
 
-
-
 @login_required
 @require_POST
 def add_to_wishlist(request):
@@ -324,47 +312,6 @@ def add_to_wishlist(request):
             wishlist_item.delete()
             return JsonResponse({'status': 'removed'})
     return JsonResponse({'status': 'error'}, status=400)
-# views.py
-#@login_required
-#@require_POST
-#def add_to_wishlist(request):
-#    if request.method == 'POST':
-#        movie_id = request.POST.get('id')
-#        movie = get_object_or_404(Movie, id=movie_id)
-
-        # Проверяем, добавлен ли фильм в вишлист
-#        wishlist_item, created = WishList.objects.get_or_create(user=request.user, movie=movie)
-
-#        if created:
-#            create_action(request.user, 'добавил в вотчлист',
-#                          movie)  # Вызываем сигнал для "просмотрен недавно"
-#            return JsonResponse({'status': 'added'})
-#        else:
-#            wishlist_item.delete()
-#            return JsonResponse({'status': 'removed'})
-
-#    return JsonResponse({'status': 'error'}, status=400)
-
-
-#@login_required
-#@require_POST
-#def mark_like(request):
-#    if request.method == 'POST':
-#        movie_id = request.POST.get('id')
-#        movie = get_object_or_404(Movie, id=movie_id)
-#        movie.add_like(request.user)
-#        create_action(request.user, 'понравился', movie)
-#        return JsonResponse({'status': 'liked', 'total_likes': movie.total_likes})
-#@login_required
-#@require_POST
-#def mark_dislike(request):
-#    if request.method == 'POST':
-#        movie_id = request.POST.get('id')
-#        movie = get_object_or_404(Movie, id=movie_id)
-#        movie.add_dislike(request.user)
-#        create_action(request.user, 'не понравился', movie)
-#        return JsonResponse({'status': 'disliked', 'total_dislikes': movie.total_dislikes})
-
 
 @login_required
 @require_POST
