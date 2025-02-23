@@ -30,25 +30,26 @@
 <div id="AboutMe" class="tabcontent" style="display: block;">  <!-- Показать по умолчанию -->
     <h3>Обо мне</h3>
     <div class="about-me-content">
-<div class="about-me-stats">
-    <h4 style="text-decoration: underline;">Стат данные</h4>
-    <p>Дата присоединения: {{ user.date_joined|date:"d.m.Y" }}</p>
-    <p>Привязка к Telegram: {% if user.profile.telegram_connected %} Привязано {% else %} Не привязано {% endif %}</p>
-    <p>Просмотренные фильмы: <a href="{% url 'user_movie_list' user.username %}?filter=watched">{{ watched_count }}</a></p>
-    <p>Понравившиеся фильмы: <a href="{% url 'user_movie_list' user.username %}?filter=liked">{{ liked_count }}</a></p>
-    <p>Непонравившиеся фильмы: <a href="{% url 'user_movie_list' user.username %}?filter=disliked">{{ disliked_count }}</a></p>
-    <p>Буду смотреть: <a href="{% url 'user_movie_list' user.username %}?filter=wishlist">{{ wishlist_count }}</a></p>
-    <p>Добавленные фильмы: <a href="{% url 'user_movie_list' user.username %}?filter=added">{{ added_count }}</a></p>
-</div>
+        <div class="about-me-stats">
+            <h4 style="text-decoration: underline;">Стат данные</h4>
+            <p>Дата присоединения: {{ user.date_joined|date:"d.m.Y" }}</p>
+            <p>Привязка к Telegram: {% if user.profile.telegram_connected %} Привязано {% else %} Не привязано {% endif %}</p>
+            <p>Просмотренные фильмы: <a href="{% url 'user_movie_list' user.username %}?filter=watched">{{ watched_count }}</a></p>
+            <p>Понравившиеся фильмы: <a href="{% url 'user_movie_list' user.username %}?filter=liked">{{ liked_count }}</a></p>
+            <p>Непонравившиеся фильмы: <a href="{% url 'user_movie_list' user.username %}?filter=disliked">{{ disliked_count }}</a></p>
+            <p>Буду смотреть: <a href="{% url 'user_movie_list' user.username %}?filter=wishlist">{{ wishlist_count }}</a></p>
+            <p>Добавленные фильмы: <a href="{% url 'user_movie_list' user.username %}?filter=added">{{ added_count }}</a></p>
+        </div>
 
-<div class="about-me-compatibility">
-    <h4 style="text-decoration: underline;">Совместимость</h4>
-    <p>Общие понравившиеся фильмы: {{ common_movies_count }}</p>
-    <div class="compatibility-bar">
-        <div class="compatibility-fill" style="width: {{ compatibility_score }}%;"></div>
-    </div>
-    <p>Совместимость: {{ compatibility_score }}%</p>
-</div>
+        <div class="about-me-compatibility">
+            <h4 style="text-decoration: underline;">Совместимость</h4>
+            <p>Общие понравившиеся фильмы: {{ common_movies_count }}</p>
+            <div class="compatibility-bar">
+                <div class="compatibility-fill" style="width: {{ compatibility_score }}%;"></div>
+            </div>
+            <p>Совместимость: {{ compatibility_score }}%</p>
+        </div>
+
         <div class="about-me-recently-action">
             <h4 style="text-decoration: underline;">Недавние действия</h4>
             {% for action in actions %}
@@ -73,7 +74,6 @@
                 <div class="action-header">
                     <div class="user-info">
                         <div class="user-action">
-                            <a href="{{ action.user.get_absolute_url }}">{{ action.user.first_name }}</a>
                             <span class="action-verb">{{ action.verb }}</span>
                             {% if action.target %}
                                 <strong class="movie-title">{{ action.target.title }}</strong>
@@ -81,6 +81,12 @@
                         </div>
                         <span class="date">{{ action.created|timesince }} назад</span>
                     </div>
+                    {% if action.target and action.target.poster %}
+                        {% thumbnail action.target.poster "50x75" crop="100%" as im %}
+                        <a href="{{ action.target.get_absolute_url }}">
+                            <img src="{{ im.url }}" class="item-img" alt="{{ action.target.title }} poster">
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         {% empty %}
@@ -91,21 +97,51 @@
 
 <div id="Comments" class="tabcontent" style="display: none;">  <!-- Скрыть по умолчанию -->
     <h3>Комментарии</h3>
-    <div class="comments">
+    <ul>
         {% for comment in comments %}
-            <div class="comment">
-                <p><strong>{{ comment.author.get_full_name }}</strong>: {{ comment.body }}</p>
-                <p class="comment-date">{{ comment.created|date:"d.m.Y H:i" }}</p>
-            </div>
-        {% empty %}
-            <p>Нет комментариев для отображения.</p>
+            <li>
+                <div class="comment-item">
+                    <strong>{{ comment.movie.title }}</strong>
+                    <a href="{{ comment.movie.get_absolute_url }}">
+                        {% if comment.movie.poster %}
+                            <img src="{{ comment.movie.poster.url }}" alt="{{ comment.movie.title }} Poster" class="movie-poster" />
+                        {% else %}
+                            <img src="{% static 'images/default_movie_poster.jpg' %}" alt="Default Poster" class="movie-poster" />
+                        {% endif %}
+                    </a>
+                    <p>{{ comment.body }}</p>
+                    <small>Комментарий оставлен: {{ comment.created_on }}</small>
+                </div>
+            </li>
         {% endfor %}
-    </div>
+    </ul>
 </div>
+
+<script>
+function openTab(evt, tabName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";  // Скрыть все вкладки
+    }
+    tablinks = document.getElementsByClassName("tablink");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].classList.remove("active");  // Удалить класс "active" у всех вкладок
+    }
+    document.getElementById(tabName).style.display = "block";  // Показать выбранную вкладку
+    evt.currentTarget.classList.add("active");  // Добавить класс "active" к текущей вкладке
+}
+
+// Открыть вкладку "Обо мне" по умолчанию
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementsByClassName("tablink")[0].click();
+});
+</script>
 
 <style>
 .tabs {
     display: flex; /* Используем Flexbox для расположения вкладок */
+    justify-content: space-around; /* Распределяем пространство между вкладками */
     margin-bottom: 20px; /* Отступ снизу для вкладок */
 }
 
@@ -117,7 +153,6 @@
     border-radius: 5px; /* Закругленные углы */
     background-color: #f9f9f9; /* Цвет фона для кнопок */
     transition: background-color 0.3s; /* Плавный переход цвета */
-    margin-right: 10px; /* Отступ между кнопками */
 }
 
 .tablink.active {
@@ -133,48 +168,55 @@
     background-color: #fff; /* Цвет фона для содержимого вкладок */
 }
 
-.about-me-content {
-    display: flex; /* Используем Flexbox для горизонтального расположения */
-    justify-content: space-between; /* Распределяем пространство между элементами */
+.movie-poster {
+    width: 50px; /* Установите ширину постера */
+    height: auto; /* Автоматическая высота для сохранения пропорций */
+    margin-right: 10px; /* Отступ справа от постера */
+    vertical-align: middle; /* Выравнивание по центру */
 }
 
-.about-me-stats, .about-me-compatibility, .about-me-recently-action {
-    flex: 1; /* Каждый блок занимает равное пространство */
-    margin-right: 20px; /* Отступ между блоками */
+.about-me-content {
+    display: flex; /* Используем Flexbox для расположения блоков */
+    justify-content: space-between; /* Распределяем пространство между блоками */
+}
+
+.about-me-stats {
+    width: 33%; /* Устанавливаем ширину блоков */
+}
+
+.about-me-compatibility {
+    width: 33%; /* Устанавливаем ширину блоков */
 }
 
 .about-me-recently-action {
-    margin-right: 0; /* Убираем отступ у последнего блока */
+    width: 33%; /* Устанавливаем ширину блоков */
+}
+
+.about-me-recently-action .action-item p {
+    margin: 0; /* Убираем отступы у <p> элементов внутри .action-item */
 }
 
 .compatibility-bar {
-    width: 100%;
-    background-color: #e0e0e0;
-    border-radius: 5px;
-    overflow: hidden;
+    background-color: #e0e0e0; /* Цвет фона для полосы совместимости */
+    border-radius: 5px; /* Закругленные углы */
+    height: 10px; /* Высота полосы */
+    margin: 5px 0; /* Отступы сверху и снизу */
 }
 
 .compatibility-fill {
-    height: 20px;
-    background-color: #4caf50; /* Темнозеленый цвет */
-    transition: width 0.3s;
+    background-color: #12c064; /* Цвет заполнения полосы совместимости */
+    height: 100%; /* Высота заполнения равна высоте полосы */
+    border-radius: 5px; /* Закругленные углы */
+}
+
+@media (max-width: 1100px) {
+    .about-me-content {
+        flex-direction: column; /* Вертикальное расположение блоков */
+    }
+    .about-me-stats, .about-me-compatibility, .about-me-recently-action {
+        width: 100%; /* Устанавливаем ширину блоков на 100% */
+        margin-right: 0; /* Убираем отступы справа */
+    }
 }
 </style>
-
-<script>
-function openTab(evt, tabName) {
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-    tablinks = document.getElementsByClassName("tablink");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-    document.getElementById(tabName).style.display = "block";
-    evt.currentTarget.className += " active";
-}
-</script>
-
 {% endblock %}

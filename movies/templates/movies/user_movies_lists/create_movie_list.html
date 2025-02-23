@@ -13,13 +13,16 @@
 <!-- Сортировка -->
 <div>
     <span>Сортировать по:</span>
-    <a href="?sort=title&title={{ title_filter }}" class="sort-link">Название</a> |
-    <a href="?sort=year&title={{ title_filter }}" class="sort-link">Году</a> |
-    <a href="?sort=created&title={{ title_filter }}" class="sort-link">Дате создания</a>
+    <a href="?sort=title&order=asc&title={{ title_filter }}" class="sort-link {% if sort_by == 'title' and sort_order == 'asc' %}active{% endif %}">Название ↑</a> |
+    <a href="?sort=title&order=desc&title={{ title_filter }}" class="sort-link {% if sort_by == 'title' and sort_order == 'desc' %}active{% endif %}">Название ↓</a> |
+    <a href="?sort=year&order=asc&title={{ title_filter }}" class="sort-link {% if sort_by == 'year' and sort_order == 'asc' %}active{% endif %}">Году ↑</a> |
+    <a href="?sort=year&order=desc&title={{ title_filter }}" class="sort-link {% if sort_by == 'year' and sort_order == 'desc' %}active{% endif %}">Году ↓</a> |
+    <a href="?sort=created&order=asc&title={{ title_filter }}" class="sort-link {% if sort_by == 'created' and sort_order == 'asc' %}active{% endif %}">Дате создания ↑</a> |
+    <a href="?sort=created&order=desc&title={{ title_filter }}" class="sort-link {% if sort_by == 'created' and sort_order == 'desc' %}active{% endif %}">Дате создания ↓</a>
 </div>
 
 <!-- Форма для создания списка -->
-<form method="post">
+<form method="post" class="create-list-form">
     {% csrf_token %}
     <label for="title">Название списка:</label>
     <input type="text" name="title" required>
@@ -44,8 +47,6 @@
             </ul>
         </div>
     </div>
-
-
 </form>
 
 <div class="pagination">
@@ -85,14 +86,32 @@
         background-color: #0056b3; /* Цвет фона при наведении */
     }
 
-    .sort-link {
-        color: #007bff; /* Цвет текста для ссылок сортировки */
-        text-decoration: none; /* Убираем подчеркивание */
-        margin: 0 5px; /* Отступы между ссылками */
+    .sort-container {
+        margin: 20px 0; /* Отступы сверху и снизу */
+        font-size: 16px; /* Размер шрифта */
     }
 
-    .sort-link:hover {
-        text-decoration: underline; /* Подчеркивание при наведении */
+.sort-link {
+    color: #007bff; /* Цвет текста для ссылок сортировки */
+    text-decoration: none; /* Убираем подчеркивание */
+    margin: 0 5px; /* Отступы между ссылками */
+}
+
+.sort-link:hover {
+    text-decoration: underline; /* Подчеркивание при наведении */
+}
+
+.sort-link.active {
+    font-weight: bold; /* Жирный шрифт для активной ссылки */
+    text-decoration: underline; /* Подчеркивание для активной ссылки */
+    color: #0056b3; /* Цвет для активной ссылки */
+}
+    .create-list-form {
+        margin-bottom: 20px; /* Отступ снизу для формы */
+        padding: 15px; /* Отступы внутри формы */
+        border: 1px solid #ccc; /* Граница вокруг формы */
+        border-radius: 5px; /* Закругленные углы */
+        background-color: #f9f9f9; /* Цвет фона для формы */
     }
 
     .pagination-link {
@@ -109,6 +128,24 @@
         width: 150px; /* Ширина постера */
         height: 225px; /* Высота постера */
         object-fit: cover; /* Обеспечивает обрезку изображения, чтобы оно соответствовало заданным размерам */
+    }
+
+    .movie-container {
+        margin-top: 20px; /* Отступ сверху для контейнера фильмов */
+    }
+
+    .movie-list {
+        display: flex; /* Используем Flexbox для расположения фильмов */
+        flex-wrap: wrap; /* Позволяем перенос фильмов на следующую строку */
+    }
+
+    .movie-item {
+        margin: 10px; /* Отступы между элементами списка фильмов */
+        flex: 1 0 30%; /* Устанавливаем базовую ширину для элементов списка */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Тень для элементов списка */
+        border-radius: 5px; /* Закругленные углы */
+        padding: 10px; /* Отступы внутри элемента списка */
+        background-color: #fff; /* Цвет фона для элемента списка */
     }
 </style>
 

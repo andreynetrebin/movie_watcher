@@ -7,7 +7,8 @@
   <title>{% block title %}{% endblock %}</title>
   <link href="{% static 'css/base.css' %}" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <script src="https://yastatic.net/s3/passport-sdk/autofill/v1/sdk-suggest-with-polyfills-latest.js"></script>
+<script src="{% static 'javascript/search_movie.js' %}"></script>
+    <script src="https://yastatic.net/s3/passport-sdk/autofill/v1/sdk-suggest-with-polyfills-latest.js"></script>
 </head>
 <body>
 
@@ -114,11 +115,13 @@
   </div>
 <script src="//cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
   <script>
     const csrftoken = Cookies.get('csrftoken');
 document.addEventListener('DOMContentLoaded', (event) => {
 // DOM загружена
 {% block domready %}
+
 document.querySelectorAll('#header ul.menu li').forEach(function(menuItem) {
     menuItem.addEventListener('click', function(event) {
         event.stopPropagation(); // Останавливаем всплытие события
@@ -148,9 +151,9 @@ document.addEventListener('DOMContentLoaded', function() {
         menu.classList.toggle('active');
     });
 });
-
 {% endblock %}
 })
-</script>
+ </script>
+
 </body>
 </html>

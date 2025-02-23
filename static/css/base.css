@@ -1142,6 +1142,31 @@ button.wishlist i.transparent {
     overflow-x: auto; /* Добавляем прокрутку по горизонтали, если текст длинный */
 }
 
+.search-results {
+    border: 1px solid #ccc;
+    background-color: white;
+    position: absolute; /* Позиционируем результаты относительно поля ввода */
+    z-index: 1000; /* Убедитесь, что результаты отображаются поверх других элементов */
+    width: calc(100% - 20px); /* Ширина результатов */
+    max-height: 200px; /* Максимальная высота */
+    overflow-y: auto; /* Прокрутка, если слишком много результатов */
+}
+
+.result-item {
+    padding: 10px; /* Отступы для элементов результата */
+    cursor: pointer; /* Курсор при наведении */
+    transition: background-color 0.3s; /* Плавный переход для фона */
+}
+
+.result-item:hover {
+    background-color: #f0f0f0; /* Цвет фона при наведении */
+}
+
+.movie-year {
+    color: #666; /* Цвет для года */
+    font-size: 0.9em; /* Уменьшенный размер шрифта для года */
+}
+
 
 /* Стили для мобильных устройств */
 @media (max-width: 768px) {
