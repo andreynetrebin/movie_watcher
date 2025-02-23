@@ -30,6 +30,11 @@
         vertical-align: middle; /* Выравнивание аватара по центру */
         margin-right: 8px; /* Отступ справа от аватара */
     }
+
+    .highlight {
+        background-color: #d4edda; /* Цвет фона для выделенной строки */
+        font-weight: bold; /* Жирный шрифт для выделенной строки */
+    }
 </style>
 
 {% if movie_lists %}
@@ -45,7 +50,7 @@
         </thead>
         <tbody>
             {% for movie_list in movie_lists %}
-                <tr>
+                <tr class="{% if movie_list.watched_percentage == 100 %}highlight{% endif %}">
                     <td>
                         {% if movie_list.user.profile.photo %}
                             {% thumbnail movie_list.user.profile.photo "40x40" crop="100%" as im %}

@@ -221,15 +221,49 @@ def add_movie_to_list(request, list_id, movie_id):
         movie_list.add_points(1)  # Награда за добавление фильма
     return redirect('movies:movie_list_detail', list_id)
 
+
+
 @login_required
 def create_movie_list(request):
+    # Получаем все доступные фильмы
+    movies = Movie.objects.all()
+
+    # Фильтрация по названию фильма
+    title_filter = request.GET.get('title', '')
+    if title_filter:
+        movies = movies.filter(title__icontains=title_filter)
+
+    # Сортировка
+    sort_by = request.GET.get('sort', 'title')  # По умолчанию сортируем по названию
+    if sort_by == 'year':
+        movies = movies.order_by('year')
+    elif sort_by == 'created':
+        movies = movies.order_by('created')
+    else:
+        movies = movies.order_by('title')  # Сортировка по названию
+
+    # Пагинация
+    paginator = Paginator(movies, 10)  # Показывать 10 фильмов на странице
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     if request.method == 'POST':
         title = request.POST.get('title')
+        selected_movies = request.POST.getlist('movies')  # Получаем список выбранных фильмов
         movie_list = MovieList.objects.create(user=request.user, title=title)
         movie_list.add_points(10)  # Награда за создание списка
-        return redirect('movies:movie_list_detail', movie_list.id)
-    return render(request, 'movies/user_movies_lists/create_movie_list.html')
 
+        # Добавляем выбранные фильмы в список
+        for movie_id in selected_movies:
+            movie_list.movies.add(movie_id)
+
+        return redirect('movies:movie_list_detail', movie_list.id)
+
+    return render(request, 'movies/user_movies_lists/create_movie_list.html', {
+        'movies': page_obj,
+        'title_filter': title_filter,
+        'sort_by': sort_by,
+    })
 
 @login_required
 def movie_list_detail(request, list_id):
