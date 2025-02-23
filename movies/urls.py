@@ -20,6 +20,7 @@ urlpatterns = [
     path('writers/', views.writer_list, name='writer_list'),
     path('directors/<int:pk>/', views.director_detail, name='director_detail'),
     path('writers/<int:pk>/', views.writer_detail, name='writer_detail'),
+    path('search/', views.search_movies, name='search_movies'),
 ]
 
 

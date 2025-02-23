@@ -229,6 +229,9 @@ def user_detail(request, username):
     # Получаем недавние действия пользователя (например, лайки, дизлайки и т.д.)
     actions = user.actions.all()[:10]  # Предполагается, что у вас есть связь с действиями
 
+    # Получаем комментарии пользователя
+    comments = user.comments.all()  # Предполагается, что у вас есть связь с комментариями
+
     # Вычисляем совместимость
     current_user_liked_movies = request.user.movies_like.values_list('id', flat=True)
     user_liked_movies = user.movies_like.values_list('id', flat=True)
@@ -248,9 +251,11 @@ def user_detail(request, username):
         'wishlist_count': wishlist_count,  # Добавлено количество фильмов в вишлисте
         'added_count': added_count,  # Добавлено количество добавленных фильмов
         'actions': actions,
+        'comments': comments,  # Передаем комментарии в шаблон
         'common_movies_count': common_movies_count,  # Добавлено количество общих фильмов
         'compatibility_score': round(compatibility_score, 2),  # Округляем до 2 знаков после запятой
     })
+
 @require_POST
 @login_required
 def user_follow(request):

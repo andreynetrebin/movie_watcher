@@ -18,7 +18,13 @@ from actions.models import Action
 
 logger = logging.getLogger(__name__)
 
-
+def search_movies(request):
+    if 'query' in request.GET:
+        query = request.GET['query']
+        movies = Movie.objects.filter(title__icontains=query)[:10]  # Ограничиваем до 10 результатов
+        results = [{'id': movie.id, 'title': movie.title, 'slug': movie.slug, 'year': movie.year} for movie in movies]
+        return JsonResponse(results, safe=False)
+    return JsonResponse([], safe=False)
 @login_required
 def director_list(request):
     user = request.user
@@ -235,12 +241,14 @@ def create_movie_list(request):
 
     # Сортировка
     sort_by = request.GET.get('sort', 'title')  # По умолчанию сортируем по названию
+    sort_order = request.GET.get('order', 'asc')  # По умолчанию по возрастанию
+
     if sort_by == 'year':
-        movies = movies.order_by('year')
+        movies = movies.order_by('year' if sort_order == 'asc' else '-year')
     elif sort_by == 'created':
-        movies = movies.order_by('created')
+        movies = movies.order_by('created' if sort_order == 'asc' else '-created')
     else:
-        movies = movies.order_by('title')  # Сортировка по названию
+        movies = movies.order_by('title' if sort_order == 'asc' else '-title')  # Сортировка по названию
 
     # Пагинация
     paginator = Paginator(movies, 10)  # Показывать 10 фильмов на странице
@@ -263,6 +271,7 @@ def create_movie_list(request):
         'movies': page_obj,
         'title_filter': title_filter,
         'sort_by': sort_by,
+        'sort_order': sort_order,
     })
 
 @login_required
