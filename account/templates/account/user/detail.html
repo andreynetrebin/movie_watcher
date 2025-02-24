@@ -208,11 +208,14 @@ document.addEventListener("DOMContentLoaded", function() {
     height: 100%; /* Высота заполнения равна высоте полосы */
     border-radius: 5px; /* Закругленные углы */
 }
-
-@media (max-width: 1100px) {
-    .about-me-content {
-        flex-direction: column; /* Вертикальное расположение блоков */
+.item-img {
+        vertical-align: middle; /* Выравнивание аватара по центру */
+        margin-right: 8px; /* Отступ справа от аватара */
+    width: 80px; /* Установите ширину иконки */
+    height: 80px; /* Установите высоту иконки */
     }
+@media (max-width: 1100px) {
+
     .about-me-stats, .about-me-compatibility, .about-me-recently-action {
         width: 100%; /* Устанавливаем ширину блоков на 100% */
         margin-right: 0; /* Убираем отступы справа */

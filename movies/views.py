@@ -217,62 +217,73 @@ def all_movie_lists(request):
         'movie_lists': movie_lists,
     })
 
-@login_required
-def add_movie_to_list(request, list_id, movie_id):
-    movie_list = get_object_or_404(MovieList, id=list_id, user=request.user)
-    movie = get_object_or_404(Movie, id=movie_id)
-
-    if movie not in movie_list.movies.all():
-        movie_list.movies.add(movie)
-        movie_list.add_points(1)  # Награда за добавление фильма
-    return redirect('movies:movie_list_detail', list_id)
 
 
 
-@login_required
-def create_movie_list(request):
-    # Получаем все доступные фильмы
+def add_movies_to_list(request, list_id):
+    movie_list = get_object_or_404(MovieList, id=list_id)
     movies = Movie.objects.all()
 
-    # Фильтрация по названию фильма
-    title_filter = request.GET.get('title', '')
-    if title_filter:
-        movies = movies.filter(title__icontains=title_filter)
+    # Фильтрация по названию
+    search_query = request.GET.get('search', '')
+    if search_query:
+        movies = movies.filter(title__icontains=search_query)
 
     # Сортировка
-    sort_by = request.GET.get('sort', 'title')  # По умолчанию сортируем по названию
-    sort_order = request.GET.get('order', 'asc')  # По умолчанию по возрастанию
+    sort_by = request.GET.get('sort', 'created')
+    order = request.GET.get('order', 'asc')
 
-    if sort_by == 'year':
-        movies = movies.order_by('year' if sort_order == 'asc' else '-year')
+    if sort_by == 'title':
+        movies = movies.order_by('title' if order == 'asc' else '-title')
+    elif sort_by == 'year':
+        movies = movies.order_by('year' if order == 'asc' else '-year')
     elif sort_by == 'created':
-        movies = movies.order_by('created' if sort_order == 'asc' else '-created')
-    else:
-        movies = movies.order_by('title' if sort_order == 'asc' else '-title')  # Сортировка по названию
+        movies = movies.order_by('created' if order == 'asc' else '-created')
 
     # Пагинация
-    paginator = Paginator(movies, 10)  # Показывать 10 фильмов на странице
+    paginator = Paginator(movies, 10)  # 10 фильмов на странице
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
     if request.method == 'POST':
-        title = request.POST.get('title')
-        selected_movies = request.POST.getlist('movies')  # Получаем список выбранных фильмов
-        movie_list = MovieList.objects.create(user=request.user, title=title)
-        movie_list.add_points(10)  # Награда за создание списка
-
-        # Добавляем выбранные фильмы в список
+        selected_movies = request.POST.getlist('movies')
         for movie_id in selected_movies:
-            movie_list.movies.add(movie_id)
+            movie_list.movies.add(Movie.objects.get(id=movie_id))
+        # Остаемся на той же странице после добавления
+        return render(request, 'movies/user_movies_lists/add_movies_to_list.html', {
+            'movie_list': movie_list,
+            'page_obj': page_obj,
+            'search_query': search_query,
+        })
 
-        return redirect('movies:movie_list_detail', movie_list.id)
-
-    return render(request, 'movies/user_movies_lists/create_movie_list.html', {
-        'movies': page_obj,
-        'title_filter': title_filter,
-        'sort_by': sort_by,
-        'sort_order': sort_order,
+    return render(request, 'movies/user_movies_lists/add_movies_to_list.html', {
+        'movie_list': movie_list,
+        'page_obj': page_obj,
+        'search_query': search_query,
     })
+@login_required  # Убедитесь, что пользователь аутентифицирован
+def create_movie_list(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        movie_list = MovieList.objects.create(title=title, user=request.user)
+        return redirect('movies:add_movies_to_list', list_id=movie_list.id)
+    return render(request, 'movies/user_movies_lists/create_movie_list.html')
+
+
+
+def view_movie_list(request, list_id):
+    movie_list = get_object_or_404(MovieList, id=list_id)
+
+    if request.method == 'POST':
+        if 'save_list' in request.POST:
+            # Логика для сохранения списка (если это необходимо)
+            return redirect('movies:movie_list_detail', list_id=list_id)  # Перенаправляем на страницу созданного списка
+        elif 'clear_list' in request.POST:
+            # Очистка списка
+            movie_list.movies.clear()  # Удаляем все фильмы из списка
+            return redirect('movies:add_movies_to_list', list_id=movie_list.id)  # Перенаправляем на страницу добавления фильмов
+
+    return render(request, 'movies/user_movies_lists/view_movie_list.html', {'movie_list': movie_list})
 
 @login_required
 def movie_list_detail(request, list_id):

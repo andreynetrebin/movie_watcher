@@ -1,152 +1,63 @@
 {% extends "base.html" %}
-{% load thumbnail %}
 {% load static %}
 {% block content %}
-<h2>Создать новый список фильмов</h2>
-
-<!-- Форма для фильтрации -->
-<form method="get" action="{% url 'movies:create_movie_list' %}">
-    <input type="text" name="title" placeholder="Фильтр по названию" value="{{ title_filter }}">
-    <button type="submit" class="btn">Фильтровать</button>
-</form>
-
-<!-- Сортировка -->
-<div>
-    <span>Сортировать по:</span>
-    <a href="?sort=title&order=asc&title={{ title_filter }}" class="sort-link {% if sort_by == 'title' and sort_order == 'asc' %}active{% endif %}">Название ↑</a> |
-    <a href="?sort=title&order=desc&title={{ title_filter }}" class="sort-link {% if sort_by == 'title' and sort_order == 'desc' %}active{% endif %}">Название ↓</a> |
-    <a href="?sort=year&order=asc&title={{ title_filter }}" class="sort-link {% if sort_by == 'year' and sort_order == 'asc' %}active{% endif %}">Году ↑</a> |
-    <a href="?sort=year&order=desc&title={{ title_filter }}" class="sort-link {% if sort_by == 'year' and sort_order == 'desc' %}active{% endif %}">Году ↓</a> |
-    <a href="?sort=created&order=asc&title={{ title_filter }}" class="sort-link {% if sort_by == 'created' and sort_order == 'asc' %}active{% endif %}">Дате создания ↑</a> |
-    <a href="?sort=created&order=desc&title={{ title_filter }}" class="sort-link {% if sort_by == 'created' and sort_order == 'desc' %}active{% endif %}">Дате создания ↓</a>
-</div>
-
-<!-- Форма для создания списка -->
-<form method="post" class="create-list-form">
-    {% csrf_token %}
-    <label for="title">Название списка:</label>
-    <input type="text" name="title" required>
-    <br>
-    <button type="submit" class="btn">Создать</button>
-    <h3>Выберите фильмы для добавления в список:</h3>
-
-    <div class="movie-container">
-        <div class="movie-list">
-            <ul>
-                {% for movie in movies %}
-                    <li class="movie-item">
-                        <input type="checkbox" name="movies" value="{{ movie.id }}">
-                        <label>
-                            {% if movie.poster %}
-                                <img src="{% thumbnail movie.poster 150x225 %}" alt="{{ movie.title }} постер" class="movie-poster-img">
-                            {% endif %}
-                            {{ movie.title }} ({{ movie.year }})
-                        </label>
-                    </li>
-                {% endfor %}
-            </ul>
+<div class="container">
+    <h2 class="text-center">Создать новый список фильмов</h2>
+    <form method="post" class="form-create-list">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="title" class="form-label">Название списка:</label>
+            <input type="text" name="title" class="form-control" id="title" required placeholder="Введите название списка">
         </div>
-    </div>
-</form>
-
-<div class="pagination">
-    <span class="step-links">
-        {% if movies.has_previous %}
-            <a href="?page=1&title={{ title_filter }}&sort={{ sort_by }}" class="pagination-link">&laquo; Первая</a>
-            <a href="?page={{ movies.previous_page_number }}&title={{ title_filter }}&sort={{ sort_by }}" class="pagination-link">Предыдущая</a>
-        {% endif %}
-
-        <span class="current">
-            Страница {{ movies.number }} из {{ movies.paginator.num_pages }}.
-        </span>
-
-        {% if movies.has_next %}
-            <a href="?page={{ movies.next_page_number }}&title={{ title_filter }}&sort={{ sort_by }}" class="pagination-link">Следующая</a>
-            <a href="?page={{ movies.paginator.num_pages }}&title={{ title_filter }}&sort={{ sort_by }}" class="pagination-link">Последняя &raquo;</a>
-        {% endif %}
-    </span>
+        <button type="submit" class="btn btn-primary">Создать</button>
+    </form>
 </div>
 
 <style>
-    .btn {
-        background-color: #007bff; /* Цвет фона кнопки */
-        color: white; /* Цвет текста */
-        border: none; /* Убираем границу */
-        padding: 10px 15px; /* Отступы */
-        text-align: center; /* Выравнивание текста по центру */
-        text-decoration: none; /* Убираем подчеркивание */
-        display: inline-block; /* Делаем кнопку блочным элементом */
-        font-size: 16px; /* Размер шрифта */
-        margin: 4px 2px; /* Отступы вокруг кнопки */
-        cursor: pointer; /* Курсор при наведении */
-        border-radius: 5px; /* Закругленные углы */
-    }
-
-    .btn:hover {
-        background-color: #0056b3; /* Цвет фона при наведении */
-    }
-
-    .sort-container {
-        margin: 20px 0; /* Отступы сверху и снизу */
-        font-size: 16px; /* Размер шрифта */
-    }
-
-.sort-link {
-    color: #007bff; /* Цвет текста для ссылок сортировки */
-    text-decoration: none; /* Убираем подчеркивание */
-    margin: 0 5px; /* Отступы между ссылками */
+.container {
+    max-width: 600px; /* Максимальная ширина контейнера */
+    margin: 0 auto; /* Центрирование контейнера */
+    padding: 20px; /* Отступы внутри контейнера */
+    background-color: #f8f9fa; /* Светлый фон */
+    border-radius: 8px; /* Закругленные углы */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Тень для контейнера */
 }
 
-.sort-link:hover {
-    text-decoration: underline; /* Подчеркивание при наведении */
+h2 {
+    margin-bottom: 20px; /* Отступ снизу заголовка */
+    color: #343a40; /* Цвет заголовка */
 }
 
-.sort-link.active {
-    font-weight: bold; /* Жирный шрифт для активной ссылки */
-    text-decoration: underline; /* Подчеркивание для активной ссылки */
-    color: #0056b3; /* Цвет для активной ссылки */
+.form-create-list {
+    display: flex;
+    flex-direction: column; /* Вертикальное расположение элементов */
 }
-    .create-list-form {
-        margin-bottom: 20px; /* Отступ снизу для формы */
-        padding: 15px; /* Отступы внутри формы */
-        border: 1px solid #ccc; /* Граница вокруг формы */
-        border-radius: 5px; /* Закругленные углы */
-        background-color: #f9f9f9; /* Цвет фона для формы */
-    }
 
-    .pagination-link {
-        color: #007bff; /* Цвет текста для ссылок пагинации */
-        text-decoration: none; /* Убираем подчеркивание */
-        margin: 0 5px; /* Отступы между ссылками */
-    }
+.form-label {
+    font-weight: bold; /* Жирный шрифт для меток */
+}
 
-    .pagination-link:hover {
-        text-decoration: underline; /* Подчеркивание при наведении */
-    }
+.form-control {
+    margin-bottom: 15px; /* Отступ снизу для поля ввода */
+    padding: 10px; /* Отступы внутри поля ввода */
+    border: 1px solid #ced4da; /* Цвет границы */
+    border-radius: 5px; /* Закругленные углы */
+}
 
-    .movie-poster-img {
-        width: 150px; /* Ширина постера */
-        height: 225px; /* Высота постера */
-        object-fit: cover; /* Обеспечивает обрезку изображения, чтобы оно соответствовало заданным размерам */
-    }
+.btn {
+    padding: 10px 15px; /* Отступы внутри кнопки */
+    font-size: 16px; /* Размер шрифта */
+    border-radius: 5px; /* Закругленные углы */
+}
 
-    .movie-container {
-        margin-top: 20px; /* Отступ сверху для контейнера фильмов */
-    }
+.btn-primary {
+    background-color: #28a745; /* Цвет фона кнопки */
+    color: white; /* Цвет текста */
+    border: none; /* Убираем границу */
+}
 
-    .movie-list {
-        display: flex; /* Используем Flexbox для расположения фильмов */
-        flex-wrap: wrap; /* Позволяем перенос фильмов на следующую строку */
-    }
-
-    .movie-item {
-        margin: 10px; /* Отступы между элементами списка фильмов */
-        flex: 1 0 30%; /* Устанавливаем базовую ширину для элементов списка */
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Тень для элементов списка */
-        border-radius: 5px; /* Закругленные углы */
-        padding: 10px; /* Отступы внутри элемента списка */
-        background-color: #fff; /* Цвет фона для элемента списка */
-    }
+.btn-primary:hover {
+    background-color: #0056b3; /* Цвет фона при наведении */
+}
 </style>
-
 {% endblock %}

@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+{% load static %}
+{% load thumbnail %}
+{% block content %}
+<div class="container">
+    <h2>Добавить фильмы в список: {{ movie_list.title }}</h2>
+
+    <!-- Кнопки для добавления и просмотра списка -->
+    <div class="button-group">
+        <form method="get" action="{% url 'movies:view_movie_list' list_id=movie_list.id %}">
+            <button type="submit" class="btn btn-primary">Просмотреть список</button>
+        </form>
+    </div>
+
+    <!-- Фильтр по названию фильма -->
+    <div class="filter-container">
+        <form method="get" class="filter-form">
+            <input type="text" name="search" placeholder="Фильтр по названию" class="form-control" value="{{ search_query }}">
+            <button type="submit" class="btn btn-secondary">Фильтровать</button>
+        </form>
+    </div>
+
+    <!-- Сортировка -->
+    <div class="sort-options">
+        <span>Сортировать по:</span>
+        <a href="?sort=title&order=asc&page={{ page_obj.number }}&search={{ search_query }}" class="sort-link {% if sort_by == 'title' and order == 'asc' %}active{% endif %}">Название ↑</a> |
+        <a href="?sort=title&order=desc&page={{ page_obj.number }}&search={{ search_query }}" class="sort-link {% if sort_by == 'title' and order == 'desc' %}active{% endif %}">Название ↓</a> |
+        <a href="?sort=year&order=asc&page={{ page_obj.number }}&search={{ search_query }}" class="sort-link {% if sort_by == 'year' and order == 'asc' %}active{% endif %}">Году ↑</a> |
+        <a href="?sort=year&order=desc&page={{ page_obj.number }}&search={{ search_query }}" class="sort-link {% if sort_by == 'year' and order == 'desc' %}active{% endif %}">Году ↓</a> |
+        <a href="?sort=created&order=asc&page={{ page_obj.number }}&search={{ search_query }}" class="sort-link {% if sort_by == 'created' and order == 'asc' %}active{% endif %}">Дате добавления ↑</a> |
+        <a href="?sort=created&order=desc&page={{ page_obj.number }}&search={{ search_query }}" class="sort-link {% if sort_by == 'created' and order == 'desc' %}active{% endif %}">Дате добавления ↓</a>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        <h3>Выберите фильмы для добавления в список:</h3>
+        <button type="submit" class="btn btn-success">Добавить в список</button>
+        <div class="movie-container">
+            <div class="movie-list">
+                <ul>
+                    {% for movie in page_obj %}
+                        <li class="movie-item">
+                            <input type="checkbox" name="movies" value="{{ movie.id }}" id="movie-{{ movie.id }}" class="movie-checkbox">
+                            <label for="movie-{{ movie.id }}">
+                                {% if movie.poster %}
+                                    <img src="{% thumbnail movie.poster "100x150" %}" alt="{{ movie.title }} постер" class="movie-poster-img">
+                                {% endif %}
+                                {{ movie.title }} ({{ movie.year }})
+                            </label>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </form>
+
+    <!-- Пагинация -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1&sort={{ sort_by }}&order={{ order }}&search={{ search_query }}" class="pagination-link">&laquo; Первая</a>
+                <a href="?page={{ page_obj.previous_page_number }}&sort={{ sort_by }}&order={{ order }}&search={{ search_query }}" class="pagination-link">Предыдущая</a>
+            {% endif %}
+
+            <span class="current">
+                Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}&sort={{ sort_by }}&order={{ order }}&search={{ search_query }}" class="pagination-link">Следующая</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}&sort={{ sort_by }}&order={{ order }}&search={{ search_query }}" class="pagination-link">Последняя &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</div>
+
+<style>
+.container {
+    max-width: 800px; /* Максимальная ширина контейнера */
+    margin: 0 auto; /* Центрирование контейнера */
+    padding: 20px; /* Отступы внутри контейнера */
+    background-color: #f8f9fa; /* Светлый фон */
+    border-radius: 8px; /* Закругленные углы */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Тень для контейнера */
+}
+
+.button-group {
+    margin-bottom: 20px;
+}
+
+.filter-container {
+    margin-bottom: 20px;
+}
+
+.filter-form {
+    display: flex;
+    align-items: center; /* Выравнивание по центру */
+}
+
+.form-control {
+    flex: 1; /* Поле ввода занимает оставшееся пространство */
+    margin-right: 10px; /* Отступ справа */
+}
+
+.btn {
+    padding: 10px 15px; /* Отступы внутри кнопки */
+    font-size: 16px; /* Размер шрифта */
+    border-radius: 5px; /* Закругленные углы */
+}
+
+.btn-primary {
+    background-color: #007bff; /* Цвет фона кнопки */
+    color: white; /* Цвет текста */
+    border: none; /* Убираем границу */
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Цвет фона при наведении */
+}
+
+.btn-success {
+    background-color: #28a745; /* Зеленый цвет для кнопки "Добавить в список" */
+    color: white; /* Цвет текста */
+    border: none; /* Убираем границу */
+}
+
+.btn-success:hover {
+    background-color: #218838; /* Цвет фона при наведении */
+}
+
+.sort-options {
+    margin-bottom: 20px;
+}
+
+.sort-link {
+    margin-right: 10px;
+}
+
+.movie-container {
+    margin-top: 20px;
+}
+
+.movie-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.movie-item {
+    margin: 10px;
+    flex: 1 0 30%; /* Ширина элемента списка */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #fff;
+}
+
+.movie-poster-img {
+    width: 50px;
+    height: 75px;
+    object-fit: cover;
+}
+
+.selected-movie {
+    background-color: #d4edda; /* Зелёный фон для добавленных фильмов */
+}
+</style>
+{% endblock %}
