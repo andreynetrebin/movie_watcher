@@ -268,13 +268,14 @@ def user_follow(request):
                         user_from=request.user,
                         user_to=user
                     )
-                    create_action(request.user, 'is following', user)
+                    create_action(request.user, 'подписался', user)
                     return JsonResponse({'status': 'ok'})
                 elif action == 'unfollow':
                     # Удаляем связь "подписка"
                     contact = Contact.objects.filter(user_from=request.user, user_to=user)
                     if contact.exists():
                         contact.delete()
+                        create_action(request.user, 'отписался', user)
                         return JsonResponse({'status': 'ok'})
                     else:
                         return JsonResponse({'status': 'error', 'message': 'Not following this user.'})
@@ -285,3 +286,15 @@ def user_follow(request):
         return JsonResponse({'status': 'error', 'message': 'Invalid request.'})
     except json.JSONDecodeError:
         return JsonResponse({'status': 'error', 'message': 'Invalid JSON.'})
+
+
+@login_required
+def user_followers_list(request, user_id):
+    try:
+        user = User.objects.get(id=user_id)
+        followers = user.followers.all()  # Получаем всех подписчиков
+        followers_data = [{'id': follower.id, 'full_name': follower.get_full_name()} for follower in followers]
+
+        return JsonResponse({'followers': followers_data})
+    except User.DoesNotExist:
+        return JsonResponse({'error': 'Пользователь не найден.'}, status=404)

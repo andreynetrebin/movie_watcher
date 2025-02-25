@@ -10,6 +10,7 @@ urlpatterns = [
     path('edit/', views.edit, name='edit'),
     path('users/', views.user_list, name='user_list'),
     path('users/follow/', views.user_follow, name='user_follow'),
+    path('users/<int:user_id>/followers/', views.user_followers_list, name='user_followers_list'),  # Новый маршрут для получения списка подписчиков
     path('users/<username>/', views.user_detail, name='user_detail'),
     path('users/<str:username>/movies/', views.user_movie_list, name='user_movie_list'),
 ]

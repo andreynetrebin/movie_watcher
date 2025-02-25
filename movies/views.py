@@ -176,15 +176,21 @@ def writer_detail(request, pk):
         'wishlist_movies': wishlist_movies,
     })
 
+
 def movie_actions(request):
-    # Извлекаем все действия
-    actions = Action.objects.filter(target_ct__model='movie').select_related('user').all()
+    # Извлекаем все действия, включая подписки
+    actions = Action.objects.filter(
+        Q(target_ct__model='movie') | Q(verb__in=['подписался', 'отписался'])
+    ).select_related('user').all()
+
     # Пагинация
     paginator = Paginator(actions, 10)  # 10 действий на странице
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+
     # Топ 5 фильмов по количеству лайков
     top_movies = Movie.objects.annotate(likes_count=Count('users_like')).order_by('-likes_count')[:5]
+
     # Топ-10 пользователей по количеству просмотренных фильмов
     top_users = User.objects.annotate(num_watched=Count('watched')).order_by('-num_watched')[:10]
 
@@ -193,10 +199,10 @@ def movie_actions(request):
         'movies/movie/movie_actions.html',
         {
             'section': 'movie_actions',
-             'actions': page_obj,
+            'actions': page_obj,
             'top_movies': top_movies,
             'top_users': top_users,
-}
+        }
     )
 
 @login_required

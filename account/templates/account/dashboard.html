@@ -61,19 +61,25 @@
                 {% endif %}
             </p>
         </div>
-        <div class="about-me-recently-action">
-            <h4 style="text-decoration: underline;">Недавние действия</h4>
-            {% for action in actions %}
-                {% if forloop.counter <= 3 %}  <!-- Ограничиваем вывод до 3 действий -->
-                    <div class="action-item">
-                        <p>{{ action.verb }}: <strong>{{ action.target.title }}</strong></p>
-                        <p>{{ action.created|timesince }} назад</p>
-                    </div>
+<div class="about-me-recently-action">
+    <h4 style="text-decoration: underline;">Недавние действия</h4>
+    {% for action in actions %}
+        {% if forloop.counter <= 3 %}  <!-- Ограничиваем вывод до 3 действий -->
+            <div class="action-item">
+                {% if action.verb == "подписался" %}
+                    <p>{{ action.user.get_full_name }} подписался на <strong>{{ action.target.get_full_name }}</strong></p>
+                {% elif action.verb == "отписался" %}
+                    <p>{{ action.user.get_full_name }} отписался от <strong>{{ action.target.get_full_name }}</strong></p>
+                {% else %}
+                    <p>{{ action.verb }}: <strong>{{ action.target.title }}</strong></p>
                 {% endif %}
-            {% empty %}
-                <p>Нет недавних действий для отображения.</p>
-            {% endfor %}
-        </div>
+                <p>{{ action.created|timesince }} назад</p>
+            </div>
+        {% endif %}
+    {% empty %}
+        <p>Нет недавних действий для отображения.</p>
+    {% endfor %}
+</div>
     </div>
 </div>
 

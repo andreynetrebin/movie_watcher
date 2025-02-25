@@ -42,7 +42,7 @@
             <p>Дата присоединения: {{ user.date_joined|date:"d.m.Y" }}</p>
 
             <!-- Информация о подписчиках -->
-            <h4>Подписчики: {{ user.followers.count }}</h4>
+            <h4 class="followers-count">Подписчики: {{ user.followers.count }}</h4>
             <button class="toggle-followers-btn" onclick="toggleFollowersList()">Показать подписчиков</button>
             <div id="followers-list" class="followers-list" style="display: none;">
                 <ul>
@@ -71,19 +71,25 @@
             <p>Совместимость: {{ compatibility_score }}%</p>
         </div>
 
-        <div class="about-me-recently-action">
-            <h4 style="text-decoration: underline;">Недавние действия</h4>
-            {% for action in actions %}
-                {% if forloop.counter <= 3 %}  <!-- Ограничиваем вывод до 3 действий -->
-                    <div class="action-item">
-                        <p>{{ action.verb }}: <strong>{{ action.target.title }}</strong></p>
-                        <p>{{ action.created|timesince }} назад</p>
-                    </div>
+<div class="about-me-recently-action">
+    <h4 style="text-decoration: underline;">Недавние действия</h4>
+    {% for action in actions %}
+        {% if forloop.counter <= 3 %}  <!-- Ограничиваем вывод до 3 действий -->
+            <div class="action-item">
+                {% if action.verb == "подписался" %}
+                    <p>{{ action.user.get_full_name }} подписался на <strong>{{ action.target.get_full_name }}</strong></p>
+                {% elif action.verb == "отписался" %}
+                    <p>{{ action.user.get_full_name }} отписался от <strong>{{ action.target.get_full_name }}</strong></p>
+                {% else %}
+                    <p>{{ action.verb }}: <strong>{{ action.target.title }}</strong></p>
                 {% endif %}
-            {% empty %}
-                <p>Нет недавних действий для отображения.</p>
-            {% endfor %}
-        </div>
+                <p>{{ action.created|timesince }} назад</p>
+            </div>
+        {% endif %}
+    {% empty %}
+        <p>Нет недавних действий для отображения.</p>
+    {% endfor %}
+</div>
     </div>
 </div>
 
@@ -196,6 +202,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         this.classList.remove('unfollow-btn');
                         this.classList.add('follow-btn');
                     }
+                    updateFollowersList(); // Обновляем список подписчиков
                 } else {
                     alert(data.message || 'Ошибка при выполнении действия.');
                 }
@@ -203,6 +210,33 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+// Функция для обновления списка подписчиков
+function updateFollowersList() {
+    fetch("{% url 'user_followers_list' user.id %}") // Предполагается, что у вас есть URL для получения списка подписчиков
+        .then(response => response.json())
+        .then(data => {
+            const followersList = document.getElementById("followers-list").querySelector("ul");
+            followersList.innerHTML = ''; // Очищаем текущий список
+
+            const followersCountElement = document.querySelector('.followers-count');
+            if (data.followers.length > 0) {
+                data.followers.forEach(follower => {
+                    const li = document.createElement("li");
+                    li.textContent = follower.full_name; // Предполагается, что у вас есть поле full_name
+                    followersList.appendChild(li);
+                });
+                // Обновляем количество подписчиков
+                followersCountElement.textContent = `Подписчики: ${data.followers.length}`;
+            } else {
+                const li = document.createElement("li");
+                li.textContent = "Нет подписчиков.";
+                followersList.appendChild(li);
+                // Обновляем количество подписчиков
+                followersCountElement.textContent = "Подписчики: 0";
+            }
+        });
+}
 </script>
 
 <style>
