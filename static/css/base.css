@@ -1,6 +1,39 @@
 @import url(//fonts.googleapis.com/css?family=Muli);
 
 
+.follow-button {
+    margin: 20px 0; /* Отступ сверху и снизу */
+    text-align: left; /* Выровнять содержимое по левому краю */
+}
+
+.follow-button button {
+    padding: 10px 20px; /* Отступы внутри кнопки */
+    font-size: 16px; /* Размер шрифта */
+    border: none; /* Убираем рамку */
+    border-radius: 5px; /* Закругленные углы */
+    cursor: pointer; /* Указатель при наведении */
+    transition: background-color 0.3s, color 0.3s; /* Плавный переход для фона и цвета */
+}
+
+.follow-button .follow-btn {
+    background-color: #12c064; /* Цвет фона для кнопки подписки */
+    color: white; /* Цвет текста */
+}
+
+.follow-button .unfollow-btn {
+    background-color: #ff4d4d; /* Цвет фона для кнопки отписки */
+    color: white; /* Цвет текста */
+}
+
+.follow-button button:hover {
+    opacity: 0.9; /* Эффект затемнения при наведении */
+}
+
+.follow-button button:focus {
+    outline: none; /* Убираем обводку при фокусе */
+}
+
+
 .container {
     flex-direction: column; /* Вертикальное расположение для мобильных */
 }
