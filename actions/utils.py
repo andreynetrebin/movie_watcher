@@ -2,9 +2,10 @@ import datetime
 from django.utils import timezone
 from django.contrib.contenttypes.models import ContentType
 from .models import Action
-from telegram_bot.views import send_movie_action_notification
+
 
 def create_action(user, verb, target=None, movie_url=None):
+    from telegram_bot.views import send_movie_action_notification
 # проверить, не было ли каких-либо аналогичных
 # действий, совершенных за последнюю минуту
     now = timezone.now()
@@ -19,7 +20,6 @@ def create_action(user, verb, target=None, movie_url=None):
             target_id=target.id)
     if not similar_actions:
 # никаких существующих действий не найдено
-        print(target)
         action = Action(user=user, verb=verb, target=target)
         action.save()
         if verb == "недавно посмотрел":
