@@ -19,6 +19,7 @@ def create_action(user, verb, target=None, movie_url=None):
             target_id=target.id)
     if not similar_actions:
 # никаких существующих действий не найдено
+        print(target)
         action = Action(user=user, verb=verb, target=target)
         action.save()
         if verb == "недавно посмотрел":

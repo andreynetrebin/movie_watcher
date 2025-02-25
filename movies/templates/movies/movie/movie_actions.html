@@ -5,67 +5,67 @@
 {% block content %}
 <div class="container">
     <div class="main-content">
-<!-- Информационный блок для неавторизованных пользователей -->
-{% if not user.is_authenticated %}
-<div class="info-block">
-    <div class="info-left">
-        <h2>С <strong>КиноСмотрители</strong> вы можете...</h2>
-        <ul>
-            <li>...вести личный список фильмов, которые вы посмотрели и которые вам понравились.</li>
-            <li>...оперативно получать информацию о том, кто из сообщества
-            какие фильмы недавно посмотрел или собирается постмотреть.</li>
-            <li>...создавать собственные списки фильмов.</li>
-            <li>...и многое другое.</li>
-        </ul>
-    </div>
-    <div class="info-right">
-        <h2>Виды активностей, за которые можно получить баллы и подняться в рейтинге!</h2>
-        <table class="activity-table">
-            <thead>
-                <tr>
-                    <th>Активность</th>
-                    <th>Баллы</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Отметка о просмотре фильма</td>
-                    <td>1</td>
-                </tr>
-                <tr>
-                    <td>Добавление комментария к фильму</td>
-                    <td>2</td>
-                </tr>
-                <tr>
-                    <td>Добавление фильма</td>
-                    <td>3</td>
-                </tr>
-                <tr>
-                    <td>Создание списка фильмов</td>
-                    <td>5</td>
-                </tr>
-                <tr>
-                    <td>Лайк на Ваш список фильмов</td>
-                    <td>3</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-{% endif %}
+        <!-- Информационный блок для неавторизованных пользователей -->
+        {% if not user.is_authenticated %}
+        <div class="info-block">
+            <div class="info-left">
+                <h2>С <strong>КиноСмотрители</strong> вы можете...</h2>
+                <ul>
+                    <li>...вести личный список фильмов, которые вы посмотрели и которые вам понравились.</li>
+                    <li>...оперативно получать информацию о том, кто из сообщества
+                    какие фильмы недавно посмотрел или собирается постмотреть.</li>
+                    <li>...создавать собственные списки фильмов.</li>
+                    <li>...и многое другое.</li>
+                </ul>
+            </div>
+            <div class="info-right">
+                <h2>Виды активностей, за которые можно получить баллы и подняться в рейтинге!</h2>
+                <table class="activity-table">
+                    <thead>
+                        <tr>
+                            <th>Активность</th>
+                            <th>Баллы</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Отметка о просмотре фильма</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>Добавление комментария к фильму</td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td>Добавление фильма</td>
+                            <td>3</td>
+                        </tr>
+                        <tr>
+                            <td>Создание списка фильмов</td>
+                            <td>5</td>
+                        </tr>
+                        <tr>
+                            <td>Лайк на Ваш список фильмов</td>
+                            <td>3</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+
         <h1>Действия пользователей с фильмами</h1>
 
         <div class="content-wrapper">
             <div class="actions">
                 {% for action in actions %}
-                    {% with user=action.user %}
                     <div class="action">
                         <div class="action-header">
                             <div class="user-avatar">
-                                {% if user.profile.photo %}
-                                    {% thumbnail user.profile.photo "80x80" crop="100%" as im %}
-                                    <a href="{{ user.get_absolute_url }}">
-                                        <img src="{{ im.url }}" alt="{{ user.get_full_name }}" class="item-img">
+                                {% if action.user.profile.photo %}
+                                    {% thumbnail action.user.profile.photo "80x80" crop="100%" as im %}
+                                    <a href="{{ action.user.get_absolute_url }}">
+                                        <img src="{{ im.url }}" alt="{{ action.user.get_full_name }}" class="item-img">
                                     </a>
                                 {% else %}
                                     <img src="{% static 'images/default_user_avatar.jpg' %}" alt="Default Avatar" class="item-img" style="width: 80px; height: 80px;">
@@ -73,16 +73,24 @@
                             </div>
                             <div class="user-info">
                                 <div class="user-action">
-                                    <a href="{{ user.get_absolute_url }}">{{ user.first_name }}</a>
-                                    <span class="action-verb">{{ action.verb }}</span>
-                                    {% if action.target %}
-                                        <strong class="movie-title">{{ action.target.title }}</strong>
+                                    <a href="{{ action.user.get_absolute_url }}">{{ action.user.first_name }}</a>
+                                    {% if action.verb == "подписался" %}
+                                        <span class="action-verb">подписался на</span>
+                                        <a href="{{ action.target.get_absolute_url }}">{{ action.target.get_full_name }}</a>
+                                    {% elif action.verb == "отписался" %}
+                                        <span class="action-verb">отписался от</span>
+                                        <a href="{{ action.target.get_absolute_url }}">{{ action.target.get_full_name }}</a>
+                                    {% else %}
+                                        <span class="action-verb">{{ action.verb }}</span>
+                                        {% if action.target %}
+                                            <strong class="movie-title">{{ action.target.title }}</strong>
+                                        {% endif %}
                                     {% endif %}
                                 </div>
-                                <span class="date">{{ action.created|timesince }} ago</span>
+                                <span class="date">{{ action.created|timesince }} назад</span>
                             </div>
                         </div>
-                        {% if action.target %}
+                        {% if action.target and action.verb not in "подписался, отписался" %}
                             <div class="action-poster">
                                 {% with target=action.target %}
                                 {% if target.poster %}
@@ -95,37 +103,37 @@
                             </div>
                         {% endif %}
                     </div>
-                    {% endwith %}
                 {% empty %}
                     <p>Нет действий для отображения.</p>
                 {% endfor %}
             </div>
 
-<div class="top-movies-sidebar">
-    <h3>Топ 5 фильмов</h3>
-    <ul class="top-movies-list">
-        {% for movie in top_movies %}
-        <li class="top-movie-item">
-            <div class="movie-poster">
-                {% if movie.poster %}
-                    {% thumbnail movie.poster "20x30" crop="100%" as im %}
-                    <a href="{{ movie.get_absolute_url }}">
-                        <img src="{{ im.url }}" alt="{{ movie.title }} poster" class="item-img">
-                    </a>
-                {% else %}
-                    <img src="{% static 'images/default_movie_poster.jpg' %}" alt="Default Poster" class="item-img" style="width: 100px; height: 150px;">
-                {% endif %}
+            <div class="top-movies-sidebar">
+                <h3>Топ 5 фильмов</h3>
+                <ul class="top-movies-list">
+                    {% for movie in top_movies %}
+                    <li class="top-movie-item">
+                        <div class="movie-poster">
+                            {% if movie.poster %}
+                                {% thumbnail movie.poster "20x30" crop="100%" as im %}
+                                <a href="{{ movie.get_absolute_url }}">
+                                    <img src="{{ im.url }}" alt="{{ movie.title }} poster" class="item-img">
+                                </a>
+                            {% else %}
+                                <img src="{% static 'images/default_movie_poster.jpg' %}" alt="Default Poster" class="item-img" style="width: 100px; height: 150px;">
+                            {% endif %}
+                        </div>
+                        <div class="movie-info">
+                            <a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a>
+                            <span class="likes-count">{{ movie.likes_count }} лайков</span>
+                        </div>
+                    </li>
+                    <hr class="divider"> <!-- Разделитель между фильмами -->
+                    {% endfor %}
+                </ul>
             </div>
-            <div class="movie-info">
-                <a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a>
-                <span class="likes-count">{{ movie.likes_count }} лайков</span>
-            </div>
-        </li>
-        <hr class="divider"> <!-- Разделитель между фильмами -->
-        {% endfor %}
-    </ul>
-</div>
-</div>
+        </div>
+
         <div class="pagination">
             <span class="step-links">
                 {% if actions.has_previous %}
@@ -143,6 +151,6 @@
                 {% endif %}
             </span>
         </div>
-
+    </div>
 </div>
 {% endblock %}
