@@ -28,6 +28,24 @@ def telegram_webhook(request):
     return JsonResponse({'status': 'error'}, status=400)
 
 
+def send_version_notification(version_number, release_date, changes):
+    # Эмодзи для сообщения
+    emoji = "📢"  # Вы можете выбрать любой эмодзи, который вам нравится
+
+    # Формируем сообщение в Markdown
+    message = (
+        f"{emoji} *Выпущена версия:* {version_number}\n"
+        f"*Дата:* {release_date}\n"
+        f"*Изменения:*\n{changes}\n\n"
+        f"🔗 [Полный перечень изменений]({config('SITE_URL')}/versioning/changelog/)"
+    )
+
+    # Получаем всех пользователей, которые связали свои аккаунты с Telegram
+    profiles = Profile.objects.filter(telegram_connected=True)
+    for profile in profiles:
+        chat_id = profile.telegram_user_id
+        bot.send_message(chat_id, message, parse_mode='Markdown')
+
 def send_movie_action_notification(movie, movie_url, action_user, action):
     # Получаем всех пользователей, которые связали свои аккаунты с Telegram
     profiles = Profile.objects.filter(telegram_connected=True)
