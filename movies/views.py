@@ -400,15 +400,10 @@ def mark_dislike(request):
 
 @login_required
 def movie_create(request):
-    # print(request)
     if request.method == 'POST':
-    # form is sent
         form = MovieCreateForm(data=request.POST)
         if form.is_valid():
-    # form data is valid
-            print("view")
             cd = form.cleaned_data
-            # genres = []
             for genre in cd["genres"]:
                 if not Genre.objects.filter(name=genre).exists():
                     genre_row = Genre.objects.create(name=genre)
@@ -417,8 +412,6 @@ def movie_create(request):
                 if not Country.objects.filter(name=country).exists():
                     country_row = Country.objects.create(name=country)
                     country_row.save()
-
-
             for director in cd["directors"]:
                 if not Director.objects.filter(staff_id=director["staff_id"]).exists():
                     director_row = Director.objects.create(name=director["name"], staff_id=director["staff_id"])
@@ -427,17 +420,12 @@ def movie_create(request):
                 if not Writer.objects.filter(staff_id=writer["staff_id"]).exists():
                     writer_row = Writer.objects.create(name=writer["name"], staff_id=writer["staff_id"])
                     writer_row.save()
-
-            # print(genres)
-
             new_movie = form.save(commit=False)
-    # # assign current user to the item
             new_movie.user = request.user
             new_movie.title = cd["title"]
             new_movie.title_original = cd["title_original"]
             new_movie.year = cd["year"]
             new_movie.duration = cd["duration"]
-            # new_movie.director = cd["director"]
             new_movie.kinopoisk_id = cd["kinopoisk_id"]
             new_movie.kinopoisk_url = cd["kinopoisk_url"]
             new_movie.url = cd["url"]
@@ -446,31 +434,23 @@ def movie_create(request):
             new_movie.movie_staff_json = cd["movie_staff_data"]
             new_movie.movie_data = cd["movie_data"]
             new_movie.save()
-#            create_action(request.user, 'добавил', new_movie)
-#            send_movie_action_notification(request, new_movie, request.user, 'добавил 🎬')
             for genre in cd["genres"]:
                 genre_row = Genre.objects.get(name=genre)
                 new_movie.genres.add(genre_row)
             for country in cd["countries"]:
                 country_row = Country.objects.get(name=country)
                 new_movie.countries.add(country_row)
-
             for director in cd["directors"]:
                 director_row = Director.objects.get(staff_id=director["staff_id"])
                 new_movie.directors.add(director_row)
             for writer in cd["writers"]:
                 writer_row = Writer.objects.get(staff_id=writer["staff_id"])
                 new_movie.writers.add(writer_row)
-
             messages.success(request, 'Movie added successfully')
             movie_url = request.build_absolute_uri(new_movie.get_absolute_url())
             create_action(request.user, 'добавил', target=new_movie, movie_url=movie_url)
-
-            # send_movie_action_notification(request, new_movie, request.user, 'добавил 🎬')
-    # redirect to new created item detail view
             return redirect(new_movie.get_absolute_url())
     else:
-    # build form with data provided by the bookmarklet via GET
         form = MovieCreateForm(data=request.GET)
     return render(
           request,
