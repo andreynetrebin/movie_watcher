@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import get_user_model
 from movies.models import Movie, Genre, Country, Director, Writer
 from account.models import Profile
+from actions.utils import create_action
 from decouple import config
 from movies.forms import MovieCreateForm  # Импортируйте вашу форму
 import re
@@ -52,7 +53,7 @@ def is_kinopoisk_url(url):
 
 def handle_kinopoisk_url(chat_id, url):
     form = MovieCreateForm(data={'url': url})
-    user = User.objects.get(chat_id=chat_id)
+    user = User.objects.get(telegram_user_id=chat_id)
     if form.is_valid():
         cd = form.cleaned_data
         for genre in cd["genres"]:
@@ -97,7 +98,10 @@ def handle_kinopoisk_url(chat_id, url):
         for writer in cd["writers"]:
             writer_row = Writer.objects.get(staff_id=writer["staff_id"])
             new_movie.writers.add(writer_row)
-        bot.send_message(chat_id, f"Фильм <b>{new_movie.title}</b> успешно добавлен!", parse_mode='HTML')
+        movie_url = new_movie.get_absolute_url()
+        create_action(user, 'добавил', target=new_movie, movie_url=movie_url)
+        bot.send_message(chat_id, f"Фильм <b>{new_movie.title}</b> успешно добавлен!\n"
+                                   f"Ссылка на фильм: {movie_url}", parse_mode='HTML')
     else:
         # Если форма не валидна, отправляем сообщение с ошибкой
         for error in form.errors.values():
@@ -138,19 +142,26 @@ def send_version_notification(version_number, release_date, changes):
         chat_id = profile.telegram_user_id
         bot.send_message(chat_id, message, parse_mode='Markdown')
 
+
 def send_movie_action_notification(movie, movie_url, action_user, action):
-    # Получаем всех пользователей, которые связали свои аккаунты с Telegram
-    profiles = Profile.objects.filter(telegram_connected=True)
-    for profile in profiles:
-        chat_id = profile.telegram_user_id
-        message = (
-            f"<b>{action_user.username}</b> {action} фильм <b>{movie.title}</b>.\n"
-            f"Ссылка на Кинопоиск: {movie.kinopoisk_url}\n"
-            f"Ссылка на страницу фильма: {movie_url}"
-        )
-        bot.send_message(chat_id, message, parse_mode='HTML')
+    # Получаем всех подписчиков пользователя, который совершил действие
+    subscribers = action_user.followers.all()  # Получаем всех подписчиков
+
+    for subscriber in subscribers:
+        # Получаем профиль подписчика
+        subscriber_profile = Profile.objects.get(user=subscriber)
+        chat_id = subscriber_profile.telegram_user_id
+
+        if chat_id:  # Проверяем, что у подписчика есть Telegram ID
+            message = (
+                f"<b>{action_user.username}</b> {action} фильм <b>{movie.title}</b>.\n"
+                f"Ссылка на Кинопоиск: {movie.kinopoisk_url}\n"
+                f"Ссылка на страницу фильма: {movie_url}"
+            )
+            bot.send_message(chat_id, message, parse_mode='HTML')
 
 def send_newuser_registration_notification(username):
+
     # Получаем всех пользователей, которые связали свои аккаунты с Telegram
     profiles = Profile.objects.filter(telegram_connected=True)
     for profile in profiles:
