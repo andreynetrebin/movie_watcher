@@ -28,11 +28,22 @@ class Writer(models.Model):
     def __str__(self):
         return self.name
 
+    from django.db import models
+    from django.conf import settings
+    from django.utils.text import slugify
+
 class Movie(models.Model):
+    FILM = 'FILM'
+    TV_SERIES = 'TV_SERIES'
+    TYPE_CHOICES = [
+        (FILM, 'Film'),
+        (TV_SERIES, 'TV Series'),
+    ]
+
     title = models.CharField(max_length=200)
     title_original = models.CharField(max_length=200, null=True, blank=True)
     year = models.IntegerField()
-    duration = models.IntegerField()
+    duration = models.IntegerField(null=True, blank=True)
     kinopoisk_id = models.IntegerField()
     kinopoisk_url = models.URLField()
     slug = models.SlugField(max_length=200, blank=True)
@@ -46,7 +57,8 @@ class Movie(models.Model):
     countries = models.ManyToManyField(Country, related_name='movies_country')
     directors = models.ManyToManyField(Director, related_name='movies_director')
     writers = models.ManyToManyField(Writer, related_name='movies_writer')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='movies_add', on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='movies_add', on_delete=models.SET_NULL,
+                             null=True)
     users_like = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         related_name='movies_like',
@@ -60,6 +72,8 @@ class Movie(models.Model):
     total_likes = models.PositiveIntegerField(default=0)
     total_dislikes = models.PositiveIntegerField(default=0)
 
+    # Новое поле для типа фильма
+    type_movie = models.CharField(max_length=10, choices=TYPE_CHOICES, default=FILM)
 
     def save(self, *args, **kwargs):
         if not self.slug:

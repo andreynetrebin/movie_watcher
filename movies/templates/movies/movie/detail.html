@@ -12,7 +12,9 @@
         <div class="info-block">
             <div class="details">
                 <p><strong>Год выпуска:</strong> {{ movie.year }}</p>
-                <p><strong>Продолжительность:</strong> {{ movie.duration }} минут</p>
+                {% if movie.duration %}
+                    <p><strong>Продолжительность:</strong> {{ movie.duration }} минут</p>
+                {% endif %}
                 <p><strong>Кинопоиск:</strong> <a href="{{ movie.kinopoisk_url }}" target="_blank">Открыть на Кинопоиске</a></p>
                 <h2>Режиссеры</h2>
                 <ul>
