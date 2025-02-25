@@ -26,7 +26,7 @@ class MovieCreateForm(forms.ModelForm):
     def clean_url(self):
         url = self.cleaned_data['url']
 
-        pattern = r'^https://www\.kinopoisk\.ru/film/(\d+)/.*$'
+        pattern = r'^https://www\.kinopoisk\.ru/(film|series)/(\d+)/.*$'
         # Проверка соответствия шаблону
         match = re.match(pattern, url)
         if not match:
@@ -34,7 +34,7 @@ class MovieCreateForm(forms.ModelForm):
                 'Url не валидный, ожидается url в формате https://www.kinopoisk.ru/film/{id фильма}/*'
             )
         else:
-            kinopoisk_id = match.group(1)
+            kinopoisk_id = match.group(2)
             print(f"kinopoisk_id - {kinopoisk_id}")
             if Movie.objects.filter(kinopoisk_id=kinopoisk_id).exists():
                 raise forms.ValidationError(f"С id {kinopoisk_id} фильм уже есть в базе")
@@ -60,50 +60,56 @@ class MovieCreateForm(forms.ModelForm):
             except:
                 print(f"else You exceeded the quota")
                 if movie_data["type"] == "FILM" and movie_data["serial"] is False:
-                    try:
-                        movie_staff_response = requests.get(movie_staff_url, headers={
-                        'X-API-KEY': config('X-API-KEY2'),
-                        "Content-Type": "application/json",
-                        }, params={"filmId": kinopoisk_id})
-                    except Exception as e:
-                        print(f"Error - {e}")
-                        movie_staff_response = None
-
-                    movie_staff_data = movie_staff_response.json()
-                    try:
-                        if 'You exceeded the quota' in movie_staff_data['message']:
-                            raise forms.ValidationError(
-                            "Превышена квота запросов к API Кинопоиска. Попробуйте выполнить на следующий день")
-                    except:
-                        self.cleaned_data.update(
-                            {
-                                "kinopoisk_id": kinopoisk_id,
-                                "title": movie_data["nameRu"],
-                                "title_original": movie_data["nameOriginal"],
-                                "countries": [item["country"] for item in movie_data["countries"]],
-                                "genres": [item["genre"] for item in movie_data["genres"]],
-                                "directors": [
-                                    {"staff_id": item["staffId"], "name": item["nameRu"]} for item in movie_staff_data if
-                                    item["professionKey"].upper() == "DIRECTOR"
-                                ],
-                                "writers": [
-                                    {"staff_id": item["staffId"], "name": item["nameRu"]} for item in movie_staff_data if
-                                    item["professionKey"].upper() == "WRITER"
-                                ],
-                                "year": movie_data["year"],
-                                "duration": movie_data["filmLength"],
-                                "kinopoisk_url": movie_data["webUrl"],
-                                "url": movie_data["webUrl"],
-                                "description": movie_data["description"],
-                                "poster_movie_url": movie_data["posterUrl"],
-                                "movie_data": movie_data,
-                                "movie_staff_data": movie_staff_data,
-                            })
-
+                    type_movie = "FILM"
+                elif movie_data["type"] == "TV_SERIES" and movie_data["serial"] is True:
+                    type_movie = "TV_SERIES"
                 else:
                     raise forms.ValidationError(
-                        'Похоже, что по Вашему url находится Сериал. В базу добавляются только Фильмы.'
+                        'Похоже, что по Вашему url и не сериал и не фильм. Ничего добавлено не будет'
                     )
+                try:
+                    movie_staff_response = requests.get(movie_staff_url, headers={
+                    'X-API-KEY': config('X-API-KEY2'),
+                    "Content-Type": "application/json",
+                    }, params={"filmId": kinopoisk_id})
+                except Exception as e:
+                    print(f"Error - {e}")
+                    movie_staff_response = None
+
+                movie_staff_data = movie_staff_response.json()
+                try:
+                    if 'You exceeded the quota' in movie_staff_data['message']:
+                        raise forms.ValidationError(
+                        "Превышена квота запросов к API Кинопоиска. Попробуйте выполнить на следующий день")
+                except:
+                    self.cleaned_data.update(
+                        {
+                            "kinopoisk_id": kinopoisk_id,
+                            "title": movie_data["nameRu"],
+                            "title_original": movie_data["nameOriginal"],
+                            "countries": [item["country"] for item in movie_data["countries"]],
+                            "genres": [item["genre"] for item in movie_data["genres"]],
+                            "directors": [
+                                {"staff_id": item["staffId"], "name": item["nameRu"]}
+                                for item in movie_staff_data
+                                if item["professionKey"].upper() == "DIRECTOR" and item["nameRu"]
+                            ],
+                            "writers": [
+                                {"staff_id": item["staffId"], "name": item["nameRu"]}
+                                for item in movie_staff_data
+                                if item["professionKey"].upper() == "WRITER" and item["nameRu"]
+                            ],
+                            "year": movie_data["year"],
+                            "duration": movie_data["filmLength"],
+                            "kinopoisk_url": movie_data["webUrl"],
+                            "url": movie_data["webUrl"],
+                            "description": movie_data["description"],
+                            "poster_movie_url": movie_data["posterUrl"],
+                            "movie_data": movie_data,
+                            "movie_staff_data": movie_staff_data,
+                            "type_movie": type_movie,
+                        })
+
 
     def save(self, force_insert=False, force_update=False, commit=True):
         movie = super().save(commit=False)

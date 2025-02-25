@@ -444,7 +444,7 @@ def movie_create(request):
             new_movie.description = cd["description"]
             new_movie.movie_json = cd["movie_data"]
             new_movie.movie_staff_json = cd["movie_staff_data"]
-
+            new_movie.movie_data = cd["movie_data"]
             new_movie.save()
 #            create_action(request.user, 'добавил', new_movie)
 #            send_movie_action_notification(request, new_movie, request.user, 'добавил 🎬')
