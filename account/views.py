@@ -1,6 +1,9 @@
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from .models import Contact
+import json
+import logging
+from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -22,6 +25,9 @@ from .forms import (
     UserRegistrationForm,
 )
 from .models import Profile
+
+logger = logging.getLogger(__name__)
+User = get_user_model()
 
 
 def user_login(request):
@@ -51,25 +57,18 @@ def user_login(request):
 def dashboard(request):
     # Получаем количество просмотренных фильмов
     watched_count = Watched.objects.filter(user=request.user).count()
-
     # Получаем количество понравившихся фильмов
     liked_count = request.user.movies_like.count()
-
     # Получаем количество непонравившихся фильмов
     disliked_count = request.user.movies_dislike.count()
-
     # Получаем количество добавленных фильмов
     added_movies_count = request.user.movies_add.count()  # Получаем количество добавленных фильмов
-
     # Получаем количество фильмов в вишлисте
     wishlist_count = WishList.objects.filter(user=request.user).count()  # Получаем количество фильмов в вишлисте
-
     # Получаем комментарии пользователя
     comments = request.user.comments.all()  # Предполагается, что у вас есть связь между пользователем и комментариями
-
     # Получаем действия текущего пользователя
     actions = Action.objects.filter(user=request.user).select_related('user', 'user__profile').prefetch_related('target')[:10]
-
     return render(
         request,
         'account/dashboard.html',
@@ -210,35 +209,25 @@ def user_list(request):
 @login_required
 def user_detail(request, username):
     user = get_object_or_404(User, username=username, is_active=True)
-
     # Получаем количество просмотренных фильмов
     watched_count = Watched.objects.filter(user=user).count()
-
     # Получаем количество понравившихся фильмов
     liked_count = user.movies_like.count()
-
     # Получаем количество непонравившихся фильмов
     disliked_count = user.movies_dislike.filter(user=user).count()
-
     # Получаем количество фильмов в вишлисте
     wishlist_count = WishList.objects.filter(user=user).count()
-
     # Получаем количество добавленных фильмов (если у вас есть такая связь)
     added_count = Movie.objects.filter(user=user).count()  # Предполагается, что у вас есть связь с добавленными фильмами
-
     # Получаем недавние действия пользователя (например, лайки, дизлайки и т.д.)
     actions = user.actions.all()[:10]  # Предполагается, что у вас есть связь с действиями
-
     # Получаем комментарии пользователя
     comments = user.comments.all()  # Предполагается, что у вас есть связь с комментариями
-
     # Вычисляем совместимость
     current_user_liked_movies = request.user.movies_like.values_list('id', flat=True)
     user_liked_movies = user.movies_like.values_list('id', flat=True)
-
     # Находим количество совпадений
     common_movies_count = user.movies_like.filter(id__in=current_user_liked_movies).count()
-
     # Вычисляем процент совместимости
     compatibility_score = (common_movies_count / max(liked_count, 1)) * 100  # Избегаем деления на ноль
 
@@ -256,23 +245,43 @@ def user_detail(request, username):
         'compatibility_score': round(compatibility_score, 2),  # Округляем до 2 знаков после запятой
     })
 
+
+
+
 @require_POST
 @login_required
 def user_follow(request):
-    user_id = request.POST.get('id')
-    action = request.POST.get('action')
-    if user_id and action:
-        try:
-            user = User.objects.get(id=user_id)
-            if action == 'follow':
-                Contact.objects.get_or_create(
-                    user_from=request.user,
-                    user_to=user)
-                create_action(request.user, 'is following', user)
-            else:
-                Contact.objects.filter(user_from=request.user,
-                user_to=user).delete()
-            return JsonResponse({'status':'ok'})
-        except User.DoesNotExist:
-            return JsonResponse({'status':'error'})
-    return JsonResponse({'status':'error'})
+    try:
+        # Загружаем данные из тела запроса
+        data = json.loads(request.body)
+        user_id = data.get('id')
+        action = data.get('action')
+
+        logger.info(f"Received follow request: user_id={user_id}, action={action}")
+
+        if user_id and action:
+            try:
+                user = User.objects.get(id=user_id)
+                if action == 'follow':
+                    # Создаем связь "подписка"
+                    Contact.objects.get_or_create(
+                        user_from=request.user,
+                        user_to=user
+                    )
+                    create_action(request.user, 'is following', user)
+                    return JsonResponse({'status': 'ok'})
+                elif action == 'unfollow':
+                    # Удаляем связь "подписка"
+                    contact = Contact.objects.filter(user_from=request.user, user_to=user)
+                    if contact.exists():
+                        contact.delete()
+                        return JsonResponse({'status': 'ok'})
+                    else:
+                        return JsonResponse({'status': 'error', 'message': 'Not following this user.'})
+                return JsonResponse({'status': 'error', 'message': 'Invalid action.'})
+            except User.DoesNotExist:
+                return JsonResponse({'status': 'error', 'message': 'User  does not exist.'})
+
+        return JsonResponse({'status': 'error', 'message': 'Invalid request.'})
+    except json.JSONDecodeError:
+        return JsonResponse({'status': 'error', 'message': 'Invalid JSON.'})

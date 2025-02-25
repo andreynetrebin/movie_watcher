@@ -1,11 +1,18 @@
 {% extends "base.html" %}
 {% load static %}
 {% load thumbnail %}
-
+<meta name="csrf-token" content="{{ csrf_token }}">
 {% block title %}{{ user.get_full_name }}{% endblock %}
 
 {% block content %}
 <h1>{{ user.get_full_name }}</h1>
+<div class="follow-button">
+    {% if request.user in user.followers.all %}
+        <button class="unfollow-btn" data-id="{{ user.id }}">Отписаться</button>
+    {% else %}
+        <button class="follow-btn" data-id="{{ user.id }}">Подписаться</button>
+    {% endif %}
+</div>
 
 <!-- Аватар пользователя -->
 <div class="profile-info">
@@ -33,6 +40,20 @@
         <div class="about-me-stats">
             <h4 style="text-decoration: underline;">Стат данные</h4>
             <p>Дата присоединения: {{ user.date_joined|date:"d.m.Y" }}</p>
+
+            <!-- Информация о подписчиках -->
+            <h4>Подписчики: {{ user.followers.count }}</h4>
+            <button class="toggle-followers-btn" onclick="toggleFollowersList()">Показать подписчиков</button>
+            <div id="followers-list" class="followers-list" style="display: none;">
+                <ul>
+                    {% for follower in user.followers.all %}
+                        <li>{{ follower.get_full_name }}</li>
+                    {% empty %}
+                        <li>Нет подписчиков.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
             <p>Привязка к Telegram: {% if user.profile.telegram_connected %} Привязано {% else %} Не привязано {% endif %}</p>
             <p>Просмотренные фильмы: <a href="{% url 'user_movie_list' user.username %}?filter=watched">{{ watched_count }}</a></p>
             <p>Понравившиеся фильмы: <a href="{% url 'user_movie_list' user.username %}?filter=liked">{{ liked_count }}</a></p>
@@ -136,6 +157,52 @@ function openTab(evt, tabName) {
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementsByClassName("tablink")[0].click();
 });
+
+function toggleFollowersList() {
+    var list = document.getElementById("followers-list");
+    if (list.style.display === "none") {
+        list.style.display = "block";
+    } else {
+        list.style.display = "none";
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const followButtons = document.querySelectorAll('.follow-btn, .unfollow-btn');
+
+    followButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const userId = this.getAttribute('data-id');
+            const action = this.classList.contains('follow-btn') ? 'follow' : 'unfollow';
+
+            fetch("{% url 'user_follow' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ id: userId, action: action })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data); // Логируем ответ сервера
+                if (data.status === 'ok') {
+                    if (action === 'follow') {
+                        this.textContent = 'Отписаться';
+                        this.classList.remove('follow-btn');
+                        this.classList.add('unfollow-btn');
+                    } else {
+                        this.textContent = 'Подписаться';
+                        this.classList.remove('unfollow-btn');
+                        this.classList.add('follow-btn');
+                    }
+                } else {
+                    alert(data.message || 'Ошибка при выполнении действия.');
+                }
+            });
+        });
+    });
+});
 </script>
 
 <style>
@@ -208,14 +275,54 @@ document.addEventListener("DOMContentLoaded", function() {
     height: 100%; /* Высота заполнения равна высоте полосы */
     border-radius: 5px; /* Закругленные углы */
 }
+
 .item-img {
-        vertical-align: middle; /* Выравнивание аватара по центру */
-        margin-right: 8px; /* Отступ справа от аватара */
+    vertical-align: middle; /* Выравнивание аватара по центру */
+    margin-right: 8px; /* Отступ справа от аватара */
     width: 80px; /* Установите ширину иконки */
     height: 80px; /* Установите высоту иконки */
-    }
-@media (max-width: 1100px) {
+}
 
+.followers-list {
+    margin-top: 10px; /* Отступ сверху для списка подписчиков */
+    border: 1px solid #ccc; /* Рамка вокруг списка */
+    border-radius: 5px; /* Закругленные углы */
+    background-color: #f9f9f9; /* Цвет фона для списка */
+    padding: 10px; /* Отступы внутри списка */
+    max-height: 200px; /* Максимальная высота списка */
+    overflow-y: auto; /* Прокрутка по вертикали, если список слишком длинный */
+}
+
+.followers-list ul {
+    list-style-type: none; /* Убираем маркеры списка */
+    padding: 0; /* Убираем отступы */
+    margin: 0; /* Убираем отступы */
+}
+
+.followers-list li {
+    padding: 5px; /* Отступы для элементов списка */
+    border-bottom: 1px solid #ddd; /* Разделительная линия между элементами */
+}
+
+.followers-list li:last-child {
+    border-bottom: none; /* Убираем разделительную линию у последнего элемента */
+}
+
+.toggle-followers-btn {
+    background-color: #12c064; /* Цвет фона для кнопки */
+    color: white; /* Цвет текста для кнопки */
+    border: none; /* Убираем рамку */
+    border-radius: 5px; /* Закругленные углы */
+    padding: 8px 12px; /* Отступы для кнопки */
+    cursor: pointer; /* Указатель при наведении */
+    transition: background-color 0.3s; /* Плавный переход цвета */
+}
+
+.toggle-followers-btn:hover {
+    background-color: #0fa052; /* Цвет фона при наведении */
+}
+
+@media (max-width: 1100px) {
     .about-me-stats, .about-me-compatibility, .about-me-recently-action {
         width: 100%; /* Устанавливаем ширину блоков на 100% */
         margin-right: 0; /* Убираем отступы справа */

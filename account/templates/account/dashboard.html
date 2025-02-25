@@ -31,6 +31,18 @@
         <div class="about-me-stats">
             <h4 style="text-decoration: underline;">Стат данные</h4>
             <p>Дата присоединения: {{ user.date_joined|date:"d.m.Y" }}</p>
+            <!-- Информация о подписчиках -->
+            <h4>Подписчики: {{ user.followers.count }}</h4>
+            <button class="toggle-followers-btn" onclick="toggleFollowersList()">Показать подписчиков</button>
+            <div id="followers-list" class="followers-list" style="display: none;">
+                <ul>
+                    {% for follower in user.followers.all %}
+                        <li>{{ follower.get_full_name }}</li>
+                    {% empty %}
+                        <li>Нет подписчиков.</li>
+                    {% endfor %}
+                </ul>
+            </div>
             <p>Email: {{ user.email }}</p>
             <p>Просмотренные: <a href="{% url 'movies:list' %}?filter=watched">{{ watched_count }}</a></p>
             <p>Понравившиеся: <a href="{% url 'movies:list' %}?filter=liked">{{ liked_count }}</a></p>
@@ -140,6 +152,15 @@ function openTab(evt, tabName) {
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementsByClassName("tablink")[0].click();
 });
+
+function toggleFollowersList() {
+    var list = document.getElementById("followers-list");
+    if (list.style.display === "none") {
+        list.style.display = "block";
+    } else {
+        list.style.display = "none";
+    }
+}
 </script>
 
 <style>
@@ -220,6 +241,49 @@ document.addEventListener("DOMContentLoaded", function() {
 
 .about-me-settings .button:hover {
     background-color: #0056b3; /* Цвет фона при наведении */
+}
+
+.followers-info {
+    margin-bottom: 20px; /* Отступ снизу для информации о подписчиках */
+}
+
+.followers-list {
+    margin-top: 10px; /* Отступ сверху для списка подписчиков */
+    border: 1px solid #ccc; /* Рамка вокруг списка */
+    border-radius: 5px; /* Закругленные углы */
+    background-color: #f9f9f9; /* Цвет фона для списка */
+    padding: 10px; /* Отступы внутри списка */
+    max-height: 200px; /* Максимальная высота списка */
+    overflow-y: auto; /* Прокрутка по вертикали, если список слишком длинный */
+}
+
+.followers-list ul {
+    list-style-type: none; /* Убираем маркеры списка */
+    padding: 0; /* Убираем отступы */
+    margin: 0; /* Убираем отступы */
+}
+
+.followers-list li {
+    padding: 5px; /* Отступы для элементов списка */
+    border-bottom: 1px solid #ddd; /* Разделительная линия между элементами */
+}
+
+.followers-list li:last-child {
+    border-bottom: none; /* Убираем разделительную линию у последнего элемента */
+}
+
+.toggle-followers-btn {
+    background-color: #12c064; /* Цвет фона для кнопки */
+    color: white; /* Цвет текста для кнопки */
+    border: none; /* Убираем рамку */
+    border-radius: 5px; /* Закругленные углы */
+    padding: 8px 12px; /* Отступы для кнопки */
+    cursor: pointer; /* Указатель при наведении */
+    transition: background-color 0.3s; /* Плавный переход цвета */
+}
+
+.toggle-followers-btn:hover {
+    background-color: #0fa052; /* Цвет фона при наведении */
 }
 
 @media (max-width: 1100px) {
