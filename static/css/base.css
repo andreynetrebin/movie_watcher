@@ -1168,6 +1168,53 @@ button.wishlist i.transparent {
 }
 
 
+.comment-form {
+    max-width: 600px;
+    margin: auto;
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.comment-list {
+    list-style-type: none;
+    padding: 0;
+ }
+
+.comment-item {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    background-color: #ffffff;
+}
+
+.comment-item strong {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.comment-item p {
+    margin: 0;
+    color: #555;
+
+
 /* Стили для мобильных устройств */
 @media (max-width: 768px) {
     .movie-item {
@@ -1180,7 +1227,21 @@ button.wishlist i.transparent {
         flex: 1 1 100%; /* Один фильм в ряд на очень маленьких экранах */
     }
 }
+
 @media (max-width: 768px) {
+    .comment-form {
+        padding: 10px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-control {
+        width: 100%;
+        font-size: 14px;
+    }
+
     .sidebar {
         width: 100%; /* Сайдбар занимает всю ширину */
         margin: 0; /* Убираем отступы */

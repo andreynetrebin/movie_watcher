@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load thumbnail %}
+{% load static %}
 {% block title %}{{ movie.title }}{% endblock %}
 {% block content %}
 <div class="movie-detail">
@@ -49,27 +50,31 @@
         </div>
     </div>
 </div>
+
 <h2>Комментарии</h2>
-<ul>
+<ul class="comment-list">
     {% for comment in comments %}
-        <li>
+        <li class="comment-item">
             <strong>{{ comment.author.username }}</strong> ({{ comment.created_on }})<br>
-            {{ comment.body }}
+            <p>{{ comment.body }}</p>
         </li>
     {% empty %}
         <li>Нет комментариев.</li>
     {% endfor %}
 </ul>
+
 {% if user.is_authenticated %}
     <h3>Оставить комментарий</h3>
-    <form method="post">
+    <form method="post" class="comment-form">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Отправить</button>
+        <div class="form-group">
+            <label for="id_body">Ваш комментарий:</label>
+            {{ form.body }}  <!-- Используем form.body для отображения поля -->
+        </div>
+        <button type="submit" class="btn btn-primary">Отправить</button>
     </form>
 {% else %}
     <p>Вы должны <a href="{% url 'login' %}">войти</a>, чтобы оставить комментарий.</p>
 {% endif %}
 
 {% endblock %}
-
