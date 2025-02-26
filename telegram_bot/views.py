@@ -5,7 +5,7 @@ import requests
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import get_user_model
-from movies.models import Movie, Genre, Country, Director, Writer
+from movies.models import Movie, Genre, Country, Director, Writer, Watched, WishList
 from account.models import Profile
 from actions.utils import create_action
 from decouple import config
@@ -32,28 +32,6 @@ def telegram_webhook(request):
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
     return JsonResponse({'status': 'error'}, status=400)
 
-
-def process_update(update):
-    if 'message' in update:
-        message = update['message']
-        chat_id = message['chat']['id']
-        command = message.get('text', '')
-
-        if command.startswith('/start'):
-            start(chat_id)
-        elif command.startswith('/connect'):
-            connect(chat_id)
-        else:
-            kinopoisk_url = is_kinopoisk_url(command)
-            if kinopoisk_url:
-                handle_kinopoisk_url(chat_id, kinopoisk_url)
-            else:
-                # Отправляем сообщение, если URL не распознан
-                bot.send_message(chat_id,
-                                 "В переданном тексте не распознан соответствующий формату URL из Кинопоиска. "
-                                 "Формат URL: https://www.kinopoisk.ru/(film|series)/(\d+)/",
-                                 parse_mode='HTML')
-
 def is_kinopoisk_url(url):
     pattern = r'https://www\.kinopoisk\.ru/(film|series)/(\d+)/'
     match = re.search(pattern, url)
@@ -61,27 +39,19 @@ def is_kinopoisk_url(url):
         return match.group(0)  # Возвращаем полный URL, если он соответствует шаблону
     return None  # Возвращаем None, если URL не соответствует шаблону
 
+
+def get_last_added_movie(user):
+    try:
+        return Movie.objects.filter(user=user).order_by('-created').first()
+    except Movie.DoesNotExist:
+        return None
+
+
 def handle_kinopoisk_url(chat_id, url):
     form = MovieCreateForm(data={'url': url})
     user = User.objects.get(profile__telegram_user_id=chat_id)
     if form.is_valid():
         cd = form.cleaned_data
-        for genre in cd["genres"]:
-            if not Genre.objects.filter(name=genre).exists():
-                genre_row = Genre.objects.create(name=genre)
-                genre_row.save()
-        for country in cd["countries"]:
-            if not Country.objects.filter(name=country).exists():
-                country_row = Country.objects.create(name=country)
-                country_row.save()
-        for director in cd["directors"]:
-            if not Director.objects.filter(staff_id=director["staff_id"]).exists():
-                director_row = Director.objects.create(name=director["name"], staff_id=director["staff_id"])
-                director_row.save()
-        for writer in cd["writers"]:
-            if not Writer.objects.filter(staff_id=writer["staff_id"]).exists():
-                writer_row = Writer.objects.create(name=writer["name"], staff_id=writer["staff_id"])
-                writer_row.save()
         new_movie = form.save(commit=False)
         new_movie.user = user
         new_movie.title = cd["title"]
@@ -96,26 +66,88 @@ def handle_kinopoisk_url(chat_id, url):
         new_movie.movie_staff_json = cd["movie_staff_data"]
         new_movie.movie_data = cd["movie_data"]
         new_movie.save()
+
+        # Добавление жанров, стран, режиссеров и сценаристов
         for genre in cd["genres"]:
-            genre_row = Genre.objects.get(name=genre)
+            genre_row, created = Genre.objects.get_or_create(name=genre)
             new_movie.genres.add(genre_row)
         for country in cd["countries"]:
-            country_row = Country.objects.get(name=country)
+            country_row, created = Country.objects.get_or_create(name=country)
             new_movie.countries.add(country_row)
         for director in cd["directors"]:
-            director_row = Director.objects.get(staff_id=director["staff_id"])
+            director_row, created = Director.objects.get_or_create(staff_id=director["staff_id"], defaults={'name': director["name"]})
             new_movie.directors.add(director_row)
         for writer in cd["writers"]:
-            writer_row = Writer.objects.get(staff_id=writer["staff_id"])
+            writer_row, created = Writer.objects.get_or_create(staff_id=writer["staff_id"], defaults={'name': writer["name"]})
             new_movie.writers.add(writer_row)
+
         movie_url = f"{config('SITE_URL')}{new_movie.get_absolute_url()}"
         create_action(user, 'добавил', target=new_movie, movie_url=movie_url)
+
+        # Отправляем сообщение с вариантами действий
         bot.send_message(chat_id, f"Фильм 🎬<b>{new_movie.title}</b> успешно добавлен!\n"
-                                   f"Ссылка на фильм: {movie_url}", parse_mode='HTML')
+                                   f"Ссылка на фильм: {movie_url}\n"
+                                   "Выберите действие с фильмом:\n"
+                                   "1. Просмотрен недавно\n"
+                                   "2. Просмотрен\n"
+                                   "3. Буду смотреть\n"
+                                   "4. Воздержаться", parse_mode='HTML')
+
     else:
         # Если форма не валидна, отправляем сообщение с ошибкой
         for error in form.errors.values():
             bot.send_message(chat_id, f"Ошибка: {error[0]}", parse_mode='HTML')
+
+
+def process_update(update):
+    if 'message' in update:
+        message = update['message']
+        chat_id = message['chat']['id']
+        command = message.get('text', '')
+
+        if command.startswith('/start'):
+            start(chat_id)
+        elif command.startswith('/connect'):
+            connect(chat_id)
+        elif command.isdigit() and 1 <= int(command) <= 4:
+            handle_user_action(chat_id, int(command))
+        else:
+            kinopoisk_url = is_kinopoisk_url(command)
+            if kinopoisk_url:
+                handle_kinopoisk_url(chat_id, kinopoisk_url)
+            else:
+                bot.send_message(chat_id,
+                                 "В переданном тексте не распознан соответствующий формату URL из Кинопоиска. "
+                                 "Формат URL: https://www.kinopoisk.ru/(film|series)/(\d+)/",
+                                 parse_mode='HTML')
+
+def handle_user_action(chat_id, action):
+    user = User.objects.get(profile__telegram_user_id=chat_id)
+    new_movie = get_last_added_movie(user)  # Получаем последний добавленный фильм
+
+    if new_movie is None:
+        bot.send_message(chat_id, "Не удалось найти последний добавленный фильм.")
+        return
+
+    if action == 1:  # Просмотрен недавно
+        mark_watched(user, new_movie)
+        bot.send_message(chat_id, "Фильм отмечен как просмотренный недавно.")
+    elif action == 2:  # Просмотрен
+        mark_watched(user, new_movie)
+        bot.send_message(chat_id, "Фильм отмечен как просмотренный.")
+    elif action == 3:  # Буду смотреть
+        add_to_wishlist(user, new_movie)
+        bot.send_message(chat_id , 'Фильм добавлен в "Буду смотреть"')
+    elif action == 4:  # Воздержаться
+        bot.send_message(chat_id, "Вы выбрали воздержаться от действий.")
+
+def mark_watched(user, movie):
+    Watched.objects.create(user=user, movie=movie)
+
+def add_to_wishlist(user, movie):
+    WishList.objects.create(user=user, movie=movie)
+
+
 def start(chat_id):
     bot.send_message(chat_id, 'Привет! Используйте команду /connect для связывания вашего аккаунта.')
 
@@ -160,12 +192,12 @@ def send_movie_action_notification(movie, movie_url, action_user, action):
 
     # Список действий с соответствующими хештегами
     actions = [
-        {'action': '📋 добавил в "Буду смотреть"', 'hashtag': 'Будет_смотреть📋'},
-        {'action': '🍿 недавно посмотрел', 'hashtag': 'Недавно_просмотрен🍿'},
-        {'action': '👍 понравился', 'hashtag': 'Понравился👍'},
-        {'action': '👎 не понравился', 'hashtag': 'Не_понравился👎'},
-        {'action': '🎬 добавил', 'hashtag': 'Добавлен🎬'},
-        {'action': '✏️ прокомментировал', 'hashtag': 'Прокомментирован✏️'},
+        {'action': '📋 добавил в "Буду смотреть"', 'hashtag': '📋Будет_смотреть'},
+        {'action': '🍿 недавно посмотрел', 'hashtag': '🍿Недавно_просмотрен'},
+        {'action': '👍 понравился', 'hashtag': '👍Понравился'},
+        {'action': '👎 не понравился', 'hashtag': '👎Не_понравился'},
+        {'action': '🎬 добавил', 'hashtag': '🎬Добавлен'},
+        {'action': '✏️ прокомментировал', 'hashtag': '✏️Прокомментирован'},
     ]
     # Находим хештег для действия
     hashtag = None
@@ -183,9 +215,9 @@ def send_movie_action_notification(movie, movie_url, action_user, action):
             message = (
                 f"<b>{action_user.username}</b> {action} фильм <b>{movie.title}</b>.\n"
                 f"Ссылка на Кинопоиск: {movie.kinopoisk_url}\n"
-                f"Ссылка на страницу фильма: {movie_url}\n\n"
-                f"#{movie.title.replace(' ', '_')}🎥\n"  # Хештег с названием фильма
-                f"#{action_user.username}😊\n"  # Хештег с именем пользователя
+                f"Ссылка на страницу фильма: {movie_url}\n\n\n"
+                f"#🎥{movie.title.replace(' ', '_')}\n"  # Хештег с названием фильма
+                f"#😊{action_user.username}\n"  # Хештег с именем пользователя
                 f"#{hashtag}" if hashtag else ""  # Хештег действия, если найден
             )
             try:
@@ -195,6 +227,7 @@ def send_movie_action_notification(movie, movie_url, action_user, action):
                 logger.error(f"Error sending message to {chat_id}: {e}")
         else:
             logger.warning(f"No Telegram ID for subscriber: {subscriber.username}")
+
 
 def send_newuser_registration_notification(username):
 
@@ -206,4 +239,3 @@ def send_newuser_registration_notification(username):
             f"Зарегистрировался новый пользователь - <b>{username}</b>"
         )
         bot.send_message(chat_id, message, parse_mode='HTML')
-

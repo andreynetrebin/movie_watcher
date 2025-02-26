@@ -350,8 +350,6 @@ def mark_recently_watched(request):
             return JsonResponse({'status': 'removed'})
         movie_url = request.build_absolute_uri(movie.get_absolute_url())
         create_action(request.user, 'недавно посмотрел', target=movie, movie_url=movie_url)  # Вызываем сигнал для "просмотрен нед>
-        # Отправка уведомления о недавно просмотренном фильме с эмодзи "телевизор"
-#        send_movie_action_notification(request, movie, request.user, '🍿 недавно просмотрел')
         return JsonResponse({'status': 'added'})
     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
 
