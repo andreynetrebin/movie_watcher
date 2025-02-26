@@ -7,13 +7,14 @@
 {% block content %}
 <h1>{{ user.get_full_name }}</h1>
 <div class="follow-button">
-    {% if request.user in user.followers.all %}
-        <button class="unfollow-btn" data-id="{{ user.id }}">Отписаться</button>
-    {% else %}
-        <button class="follow-btn" data-id="{{ user.id }}">Подписаться</button>
+    {% if request.user != user %}  <!-- Добавлено условие для проверки, не является ли текущий пользователь владельцем страницы -->
+        {% if request.user in user.followers.all %}
+            <button class="unfollow-btn" data-id="{{ user.id }}">Отписаться</button>
+        {% else %}
+            <button class="follow-btn" data-id="{{ user.id }}">Подписаться</button>
+        {% endif %}
     {% endif %}
 </div>
-
 <!-- Аватар пользователя -->
 <div class="profile-info">
     {% if user.profile.photo %}

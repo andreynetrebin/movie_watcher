@@ -48,7 +48,7 @@ class Movie(models.Model):
     kinopoisk_url = models.URLField()
     slug = models.SlugField(max_length=200, blank=True)
     poster = models.ImageField(upload_to='images/%Y/%m/%d/')
-    description = models.TextField(blank=True)
+    description = models.TextField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     movie_json = models.JSONField(blank=True)
     movie_staff_json = models.JSONField(blank=True)

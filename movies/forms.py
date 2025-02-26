@@ -59,9 +59,10 @@ class MovieCreateForm(forms.ModelForm):
                     raise forms.ValidationError("Превышена квота запросов к API Кинопоиска. Попробуйте выполнить на следующий день")
             except:
                 print(f"else You exceeded the quota")
+                print(movie_data)
                 if movie_data["type"] == "FILM" and movie_data["serial"] is False:
                     type_movie = "FILM"
-                elif movie_data["type"] == "TV_SERIES" and movie_data["serial"] is True:
+                elif movie_data["type"] in ["TV_SERIES", "MINI_SERIES"] and movie_data["serial"] is True:
                     type_movie = "TV_SERIES"
                 else:
                     raise forms.ValidationError(

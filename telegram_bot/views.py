@@ -32,6 +32,7 @@ def telegram_webhook(request):
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
     return JsonResponse({'status': 'error'}, status=400)
 
+
 def process_update(update):
     if 'message' in update:
         message = update['message']
@@ -42,18 +43,27 @@ def process_update(update):
             start(chat_id)
         elif command.startswith('/connect'):
             connect(chat_id)
-        elif is_kinopoisk_url(command):
-            handle_kinopoisk_url(chat_id, command)
         else:
-            handle_email(chat_id, command)
+            kinopoisk_url = is_kinopoisk_url(command)
+            if kinopoisk_url:
+                handle_kinopoisk_url(chat_id, kinopoisk_url)
+            else:
+                # Отправляем сообщение, если URL не распознан
+                bot.send_message(chat_id,
+                                 "В переданном тексте не распознан соответствующий формату URL из Кинопоиска. "
+                                 "Формат URL: https://www.kinopoisk.ru/(film|series)/(\d+)/",
+                                 parse_mode='HTML')
 
 def is_kinopoisk_url(url):
-    pattern = r'^https://www\.kinopoisk\.ru/(film|series)/(\d+)/.*$'
-    return re.match(pattern, url) is not None
+    pattern = r'https://www\.kinopoisk\.ru/(film|series)/(\d+)/'
+    match = re.search(pattern, url)
+    if match:
+        return match.group(0)  # Возвращаем полный URL, если он соответствует шаблону
+    return None  # Возвращаем None, если URL не соответствует шаблону
 
 def handle_kinopoisk_url(chat_id, url):
     form = MovieCreateForm(data={'url': url})
-    user = User.objects.get(telegram_user_id=chat_id)
+    user = User.objects.get(profile__telegram_user_id=chat_id)
     if form.is_valid():
         cd = form.cleaned_data
         for genre in cd["genres"]:
@@ -98,15 +108,14 @@ def handle_kinopoisk_url(chat_id, url):
         for writer in cd["writers"]:
             writer_row = Writer.objects.get(staff_id=writer["staff_id"])
             new_movie.writers.add(writer_row)
-        movie_url = new_movie.get_absolute_url()
+        movie_url = f"{config('SITE_URL')}{new_movie.get_absolute_url()}"
         create_action(user, 'добавил', target=new_movie, movie_url=movie_url)
-        bot.send_message(chat_id, f"Фильм <b>{new_movie.title}</b> успешно добавлен!\n"
+        bot.send_message(chat_id, f"Фильм 🎬<b>{new_movie.title}</b> успешно добавлен!\n"
                                    f"Ссылка на фильм: {movie_url}", parse_mode='HTML')
     else:
         # Если форма не валидна, отправляем сообщение с ошибкой
         for error in form.errors.values():
             bot.send_message(chat_id, f"Ошибка: {error[0]}", parse_mode='HTML')
-
 def start(chat_id):
     bot.send_message(chat_id, 'Привет! Используйте команду /connect для связывания вашего аккаунта.')
 
@@ -143,9 +152,27 @@ def send_version_notification(version_number, release_date, changes):
         bot.send_message(chat_id, message, parse_mode='Markdown')
 
 
+
 def send_movie_action_notification(movie, movie_url, action_user, action):
     # Получаем всех подписчиков пользователя, который совершил действие
     subscribers = action_user.followers.all()  # Получаем всех подписчиков
+    logger.info(f"Found {subscribers.count()} subscribers for {action_user.username}")
+
+    # Список действий с соответствующими хештегами
+    actions = [
+        {'action': '📋 добавил в "Буду смотреть"', 'hashtag': 'Будет_смотреть📋'},
+        {'action': '🍿 недавно посмотрел', 'hashtag': 'Недавно_просмотрен🍿'},
+        {'action': '👍 понравился', 'hashtag': 'Понравился👍'},
+        {'action': '👎 не понравился', 'hashtag': 'Не_понравился👎'},
+        {'action': '🎬 добавил', 'hashtag': 'Добавлен🎬'},
+        {'action': '✏️ прокомментировал', 'hashtag': 'Прокомментирован✏️'},
+    ]
+    # Находим хештег для действия
+    hashtag = None
+    for act in actions:
+        if act['action'] == action:
+            hashtag = act['hashtag']
+            break
 
     for subscriber in subscribers:
         # Получаем профиль подписчика
@@ -156,9 +183,18 @@ def send_movie_action_notification(movie, movie_url, action_user, action):
             message = (
                 f"<b>{action_user.username}</b> {action} фильм <b>{movie.title}</b>.\n"
                 f"Ссылка на Кинопоиск: {movie.kinopoisk_url}\n"
-                f"Ссылка на страницу фильма: {movie_url}"
+                f"Ссылка на страницу фильма: {movie_url}\n\n"
+                f"#{movie.title.replace(' ', '_')}🎥\n"  # Хештег с названием фильма
+                f"#{action_user.username}😊\n"  # Хештег с именем пользователя
+                f"#{hashtag}" if hashtag else ""  # Хештег действия, если найден
             )
-            bot.send_message(chat_id, message, parse_mode='HTML')
+            try:
+                bot.send_message(chat_id, message, parse_mode='HTML')
+                logger.info(f"Message sent to {subscriber.username} ({chat_id})")
+            except Exception as e:
+                logger.error(f"Error sending message to {chat_id}: {e}")
+        else:
+            logger.warning(f"No Telegram ID for subscriber: {subscriber.username}")
 
 def send_newuser_registration_notification(username):
 
@@ -170,3 +206,4 @@ def send_newuser_registration_notification(username):
             f"Зарегистрировался новый пользователь - <b>{username}</b>"
         )
         bot.send_message(chat_id, message, parse_mode='HTML')
+
