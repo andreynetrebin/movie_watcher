@@ -11,7 +11,7 @@ class Profile(models.Model):
     photo = models.ImageField(upload_to='users/%Y/%m/%d/', blank=True)
     telegram_user_id = models.CharField(max_length=255, blank=True, null=True)  # Telegram ID
     telegram_connected = models.BooleanField(default=False)  # Признак привязки к Telegram
-
+    state = models.CharField(max_length=50, default='none')  # Новое поле для состояния
     def __str__(self):
         return f'Profile of {self.user.username}'
 
