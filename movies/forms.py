@@ -16,12 +16,6 @@ class MovieCreateForm(forms.ModelForm):
     class Meta:
         model = Movie
         fields = ['url']
-        # widgets = {
-        #     'url': forms.HiddenInput,
-        # }
-
-    # https://www.kinopoisk.ru/film/441406/
-    # https://www.kinopoisk.ru/series/257386/
 
     def clean_url(self):
         url = self.cleaned_data['url']
@@ -35,7 +29,6 @@ class MovieCreateForm(forms.ModelForm):
             )
         else:
             kinopoisk_id = match.group(2)
-            print(f"kinopoisk_id - {kinopoisk_id}")
             if Movie.objects.filter(kinopoisk_id=kinopoisk_id).exists():
                 raise forms.ValidationError(f"С id {kinopoisk_id} фильм уже есть в базе")
 
@@ -47,19 +40,12 @@ class MovieCreateForm(forms.ModelForm):
                     "Content-Type": "application/json",
                 })
             except Exception as e:
-                print(f"Error - {e}")
                 movie_response = None
-
-            print(f"movie_response - {movie_response.json()}")
             movie_data = movie_response.json()
-            print(f"movie_data - {movie_data}")
             try:
                 if 'You exceeded the quota' in movie_data['message']:
-                    print(f"if You exceeded the quota")
                     raise forms.ValidationError("Превышена квота запросов к API Кинопоиска. Попробуйте выполнить на следующий день")
             except:
-                print(f"else You exceeded the quota")
-                print(movie_data)
                 if movie_data["type"] == "FILM" and movie_data["serial"] is False:
                     type_movie = "FILM"
                 elif movie_data["type"] in ["TV_SERIES", "MINI_SERIES"] and movie_data["serial"] is True:
@@ -74,7 +60,6 @@ class MovieCreateForm(forms.ModelForm):
                     "Content-Type": "application/json",
                     }, params={"filmId": kinopoisk_id})
                 except Exception as e:
-                    print(f"Error - {e}")
                     movie_staff_response = None
 
                 movie_staff_data = movie_staff_response.json()

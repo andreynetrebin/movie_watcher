@@ -493,6 +493,12 @@ def movie_detail(request, slug):
     })
 
 
+from django.shortcuts import render
+from .models import Movie
+from django.db.models import Count
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+
 @login_required
 def movie_list(request):
     user = request.user
@@ -520,6 +526,11 @@ def movie_list(request):
     title_filter = request.GET.get('title', '')
     if title_filter:
         movies = movies.filter(title__icontains=title_filter) | movies.filter(title_original__icontains=title_filter)
+
+    # Фильтрация по Кинопоиск ID
+    kinopoisk_id_filter = request.GET.get('kinopoisk_id', '')
+    if kinopoisk_id_filter:
+        movies = movies.filter(kinopoisk_id=kinopoisk_id_filter)
 
     # Фильтрация по жанрам
     genre_filter = request.GET.getlist('genres')  # Получаем список выбранных жанров
@@ -563,7 +574,8 @@ def movie_list(request):
         'watched_movies': watched_movies,
         'wishlist_movies': wishlist_movies,
         'title_filter': title_filter,  # Передаем фильтр названия в шаблон
+        'kinopoisk_id_filter': kinopoisk_id_filter,  # Передаем фильтр по Кинопоиск ID в шаблон
         'all_genres': all_genres,  # Передаем все жанры в шаблон
-        'selected_genres': genre_filter,  # Передаем выбранные жанры в шаблон
+        'selected_genres': genre_filter,  # Передаем выбранные жан ры в шаблон
         'sort_by': sort_by,  # Передаем выбранный параметр сортировки в шаблон
     })

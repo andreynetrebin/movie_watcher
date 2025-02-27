@@ -192,12 +192,12 @@ def send_movie_action_notification(movie, movie_url, action_user, action):
 
     # Список действий с соответствующими хештегами
     actions = [
-        {'action': '📋 добавил в "Буду смотреть"', 'hashtag': '📋Будет_смотреть'},
-        {'action': '🍿 недавно посмотрел', 'hashtag': '🍿Недавно_просмотрен'},
-        {'action': '👍 понравился', 'hashtag': '👍Понравился'},
-        {'action': '👎 не понравился', 'hashtag': '👎Не_понравился'},
-        {'action': '🎬 добавил', 'hashtag': '🎬Добавлен'},
-        {'action': '✏️ прокомментировал', 'hashtag': '✏️Прокомментирован'},
+        {'action': '📋 добавил в "Буду смотреть"', 'hashtag': 'Будет_смотреть📋'},
+        {'action': '🍿 недавно посмотрел', 'hashtag': 'Недавно_просмотрен🍿'},
+        {'action': '👍 понравился', 'hashtag': 'Понравился👍'},
+        {'action': '👎 не понравился', 'hashtag': 'Не_понравился👎'},
+        {'action': '🎬 добавил', 'hashtag': 'Добавлен🎬'},
+        {'action': '✏️ прокомментировал', 'hashtag': 'Прокомментирован✏️'},
     ]
     # Находим хештег для действия
     hashtag = None
@@ -216,8 +216,8 @@ def send_movie_action_notification(movie, movie_url, action_user, action):
                 f"<b>{action_user.username}</b> {action} фильм <b>{movie.title}</b>.\n"
                 f"Ссылка на Кинопоиск: {movie.kinopoisk_url}\n"
                 f"Ссылка на страницу фильма: {movie_url}\n\n\n"
-                f"#🎥{movie.title.replace(' ', '_')}\n"  # Хештег с названием фильма
-                f"#😊{action_user.username}\n"  # Хештег с именем пользователя
+                f"#{movie.title.replace(' ', '_')}🎥\n"  # Хештег с названием фильма
+                f"#{action_user.username}😊\n"  # Хештег с именем пользователя
                 f"#{hashtag}" if hashtag else ""  # Хештег действия, если найден
             )
             try:
