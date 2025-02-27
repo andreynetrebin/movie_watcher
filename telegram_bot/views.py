@@ -106,32 +106,42 @@ def process_update(update):
         chat_id = message['chat']['id']
         command = message.get('text', '')
 
+        # Получаем профиль пользователя
+        profile = Profile.objects.filter(telegram_user_id=str(chat_id)).first()
+
         if command.startswith('/start'):
             start(chat_id)
         elif command.startswith('/connect'):
             connect(chat_id)
+        elif profile and profile.state == 'waiting_for_email':
+            handle_email(chat_id, command)  # Обрабатываем email
+            profile.state = 'none'  # Сбрасываем состояние
+            profile.save()
         else:
             kinopoisk_url = is_kinopoisk_url(command)
             if kinopoisk_url:
-                handle_kinopoisk_url(chat_id, kinopoisk_url)
+                handle_kinopoisk_url(chat_id, kinopoisk_url)  # Обрабатываем URL Кинопоиска
             else:
                 bot.send_message(chat_id,
                                  "В переданном тексте не распознан соответствующий формату URL из Кинопоиска. "
                                  "Формат URL: https://www.kinopoisk.ru/(film|series)/(\d+)/",
                                  parse_mode='HTML')
-
 def start(chat_id):
     bot.send_message(chat_id, 'Привет! Используйте команду /connect для связывания вашего аккаунта.')
 
 def connect(chat_id):
     bot.send_message(chat_id, 'Пожалуйста, введите ваш email для связывания аккаунта:')
-
+    # Устанавливаем состояние ожидания email
+    profile = Profile.objects.get(telegram_user_id=str(chat_id))
+    profile.state = 'waiting_for_email'
+    profile.save()
 def handle_email(chat_id, email):
     try:
         user = User.objects.get(email=email)
         profile = user.profile
         profile.telegram_connected = True
         profile.telegram_user_id = str(chat_id)
+        profile.state = 'none'  # Сбрасываем состояние
         profile.save()
         bot.send_message(chat_id, 'Ваш аккаунт успешно связан с Telegram!')
     except User.DoesNotExist:
