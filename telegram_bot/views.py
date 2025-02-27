@@ -106,18 +106,18 @@ def process_update(update):
         chat_id = message['chat']['id']
         command = message.get('text', '')
 
-        # Получаем профиль пользователя
-        profile = Profile.objects.filter(telegram_user_id=str(chat_id)).first()
+        # Получаем профиль пользователя или создаем новый, если его нет
+        profile, created = Profile.objects.get_or_create(telegram_user_id=str(chat_id))
 
         if command.startswith('/start'):
             start(chat_id)
         elif command.startswith('/connect'):
             connect(chat_id)
-        elif profile and profile.state == 'waiting_for_email':
+        elif profile.state == 'waiting_for_email':
             handle_email(chat_id, command)  # Обрабатываем email
             profile.state = 'none'  # Сбрасываем состояние после обработки
             profile.save()
-        elif profile:  # Если профиль существует, обрабатываем URL Кинопоиска
+        else:  # Если профиль существует, обрабатываем URL Кинопоиска
             kinopoisk_url = is_kinopoisk_url(command)
             if kinopoisk_url:
                 handle_kinopoisk_url(chat_id, kinopoisk_url)  # Обрабатываем URL Кинопоиска
@@ -126,9 +126,6 @@ def process_update(update):
                                  "В переданном тексте не распознан соответствующий формату URL из Кинопоиска. "
                                  "Формат URL: https://www.kinopoisk.ru/(film|series)/(\d+)/",
                                  parse_mode='HTML')
-        else:
-            # Если профиль не существует, просим пользователя сначала выполнить команду /connect
-            bot.send_message(chat_id, "Сначала выполните команду /connect для связывания вашего аккаунта.")
 def start(chat_id):
     bot.send_message(chat_id, 'Привет! Используйте команду /connect для связывания вашего аккаунта.')
 
@@ -141,14 +138,16 @@ def connect(chat_id):
 def handle_email(chat_id, email):
     try:
         user = User.objects.get(email=email)
-        profile, created = Profile.objects.get_or_create(user=user)  # Создаем профиль, если он не существует
+        profile = Profile.objects.get(telegram_user_id=str(chat_id))  # Получаем профиль по telegram_user_id
+        profile.user = user  # Связываем профиль с пользователем
         profile.telegram_connected = True
-        profile.telegram_user_id = str(chat_id)
         profile.state = 'none'  # Сбрасываем состояние
         profile.save()
         bot.send_message(chat_id, 'Ваш аккаунт успешно связан с Telegram!')
     except User.DoesNotExist:
         bot.send_message(chat_id, 'Такого email нет в базе данных. Пожалуйста, пройдите регистрацию.')
+    except Profile.DoesNotExist:
+        bot.send_message(chat_id, 'Профиль не найден. Пожалуйста, выполните команду /connect.')
 def send_version_notification(version_number, release_date, changes):
     # Эмодзи для сообщения
     emoji = "📢"  # Вы можете выбрать любой эмодзи, который вам нравится
