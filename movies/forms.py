@@ -17,7 +17,11 @@ class MovieCreateForm(forms.ModelForm):
         model = Movie
         fields = ['url']
 
-    def clean_url(self):
+    def __init__(self, *args, **kwargs):
+        self.source = kwargs.pop('source', None)  # Извлекаем source из kwargs
+        super().__init__(*args, **kwargs)
+
+    def clean_url(self, source=None):
         url = self.cleaned_data['url']
 
         pattern = r'^https://www\.kinopoisk\.ru/(film|series)/(\d+)/.*$'
@@ -29,8 +33,17 @@ class MovieCreateForm(forms.ModelForm):
             )
         else:
             kinopoisk_id = match.group(2)
-            if Movie.objects.filter(kinopoisk_id=kinopoisk_id).exists():
-                raise forms.ValidationError(f"С id {kinopoisk_id} фильм уже есть в базе")
+            existing_movie = Movie.objects.filter(kinopoisk_id=kinopoisk_id).first()
+            print(self.source)
+            if existing_movie:
+                if self.source == 'website':
+                    raise forms.ValidationError(f"С id {kinopoisk_id} фильм уже есть в базе")
+                else:
+                    # Возвращаем значение, если фильм уже существует и вызван из Telegram
+                    return {
+                        'exists': True,
+                        'kinopoisk_id': kinopoisk_id,
+                    }
 
             movie_url = f"https://kinopoiskapiunofficial.tech/api/v2.2/films/{kinopoisk_id}"
             movie_staff_url = f"https://kinopoiskapiunofficial.tech/api/v1/staff"
@@ -52,7 +65,7 @@ class MovieCreateForm(forms.ModelForm):
                     type_movie = "TV_SERIES"
                 else:
                     raise forms.ValidationError(
-                        'Похоже, что по Вашему url и не сериал и не фильм. Ничего добавлено не будет'
+                        'Похоже, что по Вашему url и не сериал и не фильм, а Иное. Иное добавлено не будет'
                     )
                 try:
                     movie_staff_response = requests.get(movie_staff_url, headers={

@@ -399,9 +399,10 @@ def mark_dislike(request):
 @login_required
 def movie_create(request):
     if request.method == 'POST':
-        form = MovieCreateForm(data=request.POST)
+        form = MovieCreateForm(data=request.POST, source='website')
         if form.is_valid():
             cd = form.cleaned_data
+
             for genre in cd["genres"]:
                 if not Genre.objects.filter(name=genre).exists():
                     genre_row = Genre.objects.create(name=genre)
