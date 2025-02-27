@@ -48,10 +48,17 @@ def get_last_added_movie(user):
 
 
 def handle_kinopoisk_url(chat_id, url):
-    form = MovieCreateForm(data={'url': url})
+    form = MovieCreateForm(data={'url': url}, source='telegram')
     user = User.objects.get(profile__telegram_user_id=chat_id)
     if form.is_valid():
         cd = form.cleaned_data
+        if 'exists' in cd:
+            kinopoisk_id = cd['kinopoisk_id']
+            movie_list_url = f"{config('SITE_URL')}/movies/?kinopoisk_id={kinopoisk_id}"
+            bot.send_message(chat_id, f"Фильм с ID {kinopoisk_id} уже был добавлен ранее.\n"
+                   f"По ссылке Вы можете проставить отметки фильму: {movie_list_url}",
+                     parse_mode='HTML')
+            return
         new_movie = form.save(commit=False)
         new_movie.user = user
         new_movie.title = cd["title"]
@@ -82,16 +89,14 @@ def handle_kinopoisk_url(chat_id, url):
             new_movie.writers.add(writer_row)
 
         movie_url = f"{config('SITE_URL')}{new_movie.get_absolute_url()}"
+        movie_list_url = f"{config('SITE_URL')}/movies/?kinopoisk_id={new_movie.kinopoisk_id}"
         create_action(user, 'добавил', target=new_movie, movie_url=movie_url)
 
         # Отправляем сообщение с вариантами действий
         bot.send_message(chat_id, f"Фильм 🎬<b>{new_movie.title}</b> успешно добавлен!\n"
-                                   f"Ссылка на фильм: {movie_url}\n"
-                                   "Выберите действие с фильмом:\n"
-                                   "1. Просмотрен недавно\n"
-                                   "2. Просмотрен\n"
-                                   "3. Буду смотреть\n"
-                                   "4. Воздержаться", parse_mode='HTML')
+                                  f"Ссылка на фильм: {movie_url}\n"
+                                  f"По ссылке Вы можете проставить отметки фильму: {movie_list_url}",
+                                  parse_mode='HTML')
 
     else:
         # Если форма не валидна, отправляем сообщение с ошибкой
@@ -109,8 +114,6 @@ def process_update(update):
             start(chat_id)
         elif command.startswith('/connect'):
             connect(chat_id)
-        elif command.isdigit() and 1 <= int(command) <= 4:
-            handle_user_action(chat_id, int(command))
         else:
             kinopoisk_url = is_kinopoisk_url(command)
             if kinopoisk_url:
@@ -120,33 +123,6 @@ def process_update(update):
                                  "В переданном тексте не распознан соответствующий формату URL из Кинопоиска. "
                                  "Формат URL: https://www.kinopoisk.ru/(film|series)/(\d+)/",
                                  parse_mode='HTML')
-
-def handle_user_action(chat_id, action):
-    user = User.objects.get(profile__telegram_user_id=chat_id)
-    new_movie = get_last_added_movie(user)  # Получаем последний добавленный фильм
-
-    if new_movie is None:
-        bot.send_message(chat_id, "Не удалось найти последний добавленный фильм.")
-        return
-
-    if action == 1:  # Просмотрен недавно
-        mark_watched(user, new_movie)
-        bot.send_message(chat_id, "Фильм отмечен как просмотренный недавно.")
-    elif action == 2:  # Просмотрен
-        mark_watched(user, new_movie)
-        bot.send_message(chat_id, "Фильм отмечен как просмотренный.")
-    elif action == 3:  # Буду смотреть
-        add_to_wishlist(user, new_movie)
-        bot.send_message(chat_id , 'Фильм добавлен в "Буду смотреть"')
-    elif action == 4:  # Воздержаться
-        bot.send_message(chat_id, "Вы выбрали воздержаться от действий.")
-
-def mark_watched(user, movie):
-    Watched.objects.create(user=user, movie=movie)
-
-def add_to_wishlist(user, movie):
-    WishList.objects.create(user=user, movie=movie)
-
 
 def start(chat_id):
     bot.send_message(chat_id, 'Привет! Используйте команду /connect для связывания вашего аккаунта.')
@@ -182,7 +158,6 @@ def send_version_notification(version_number, release_date, changes):
     for profile in profiles:
         chat_id = profile.telegram_user_id
         bot.send_message(chat_id, message, parse_mode='Markdown')
-
 
 
 def send_movie_action_notification(movie, movie_url, action_user, action):
