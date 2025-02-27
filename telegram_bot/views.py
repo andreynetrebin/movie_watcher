@@ -1,10 +1,10 @@
 import json
 import logging
 import telebot
-import requests
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 from movies.models import Movie, Genre, Country, Director, Writer, Watched, WishList
 from account.models import Profile
 from actions.utils import create_action
@@ -40,20 +40,15 @@ def is_kinopoisk_url(url):
     return None  # Возвращаем None, если URL не соответствует шаблону
 
 
-def get_last_added_movie(user):
-    try:
-        return Movie.objects.filter(user=user).order_by('-created').first()
-    except Movie.DoesNotExist:
-        return None
-
 
 def handle_kinopoisk_url(chat_id, url):
     form = MovieCreateForm(data={'url': url}, source='telegram')
     user = User.objects.get(profile__telegram_user_id=chat_id)
     if form.is_valid():
         cd = form.cleaned_data
-        if 'exists' in cd:
-            kinopoisk_id = cd['kinopoisk_id']
+        logger.info(f"Cleaned data from form: {cd}")
+        if 'exists' in cd['url']:
+            kinopoisk_id = cd['url']['kinopoisk_id']
             movie_list_url = f"{config('SITE_URL')}/movies/?kinopoisk_id={kinopoisk_id}"
             bot.send_message(chat_id, f"Фильм с ID {kinopoisk_id} уже был добавлен ранее.\n"
                    f"По ссылке Вы можете проставить отметки фильму: {movie_list_url}",
@@ -204,13 +199,20 @@ def send_movie_action_notification(movie, movie_url, action_user, action):
             logger.warning(f"No Telegram ID for subscriber: {subscriber.username}")
 
 
-def send_newuser_registration_notification(username):
 
+def send_new_profile_notification(username):
     # Получаем всех пользователей, которые связали свои аккаунты с Telegram
     profiles = Profile.objects.filter(telegram_connected=True)
     for profile in profiles:
         chat_id = profile.telegram_user_id
+        # Формируем ссылку на профиль пользователя
+        profile_url = reverse('user_detail', kwargs={'username': username})
+        # Обрезаем один символ справа от SITE_URL
+        site_url = config('SITE_URL')[:-1]  # Обрезаем последний символ
         message = (
-            f"Зарегистрировался новый пользователь - <b>{username}</b>"
-        )
+            f"Зарегистрировался новый пользователь - <b>{username}</b>\n"
+            f"Ссылка на профиль🤙: {site_url}{profile_url}\n\n"
+            f"#Новичок🥸"
+                    )
         bot.send_message(chat_id, message, parse_mode='HTML')
+

@@ -1,12 +1,14 @@
 from django.contrib.auth.models import User
 from account.models import Profile
+from telegram_bot.views import send_new_profile_notification
 
 def create_profile(backend, user, *args, **kwargs):
     """
     Create user profile for social authentication
     """
-    Profile.objects.get_or_create(user=user)
-
+    profile, created = Profile.objects.get_or_create(user=user)
+    if created:
+        send_new_profile_notification(user.username)  # Отправляем уведомление с именем пользователя
 
 class EmailAuthBackend:
     """
