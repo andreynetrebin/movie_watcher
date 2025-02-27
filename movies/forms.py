@@ -34,11 +34,10 @@ class MovieCreateForm(forms.ModelForm):
         else:
             kinopoisk_id = match.group(2)
             existing_movie = Movie.objects.filter(kinopoisk_id=kinopoisk_id).first()
-            print(self.source)
             if existing_movie:
                 if self.source == 'website':
                     raise forms.ValidationError(f"С id {kinopoisk_id} фильм уже есть в базе")
-                else:
+                elif self.source == 'telegram':
                     # Возвращаем значение, если фильм уже существует и вызван из Telegram
                     return {
                         'exists': True,

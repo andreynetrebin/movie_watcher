@@ -15,7 +15,7 @@ from django.contrib.auth.models import User
 from actions.utils import create_action
 from actions.models import Action
 from movies.models import Movie, Watched, WishList
-from telegram_bot.views import send_newuser_registration_notification
+from telegram_bot.views import send_new_profile_notification
 
 
 from .forms import (
@@ -143,8 +143,8 @@ def register(request):
             new_user.save()
             # Create the user profile
             Profile.objects.create(user=new_user)
-            create_action(new_user, 'has created an account')
-            send_newuser_registration_notification(new_user.username)
+            create_action(new_user, 'зарегистрировался')
+            send_new_profile_notification(new_user.username)
             return render(
                 request,
                 'account/register_done.html',
