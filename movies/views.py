@@ -432,6 +432,7 @@ def movie_create(request):
             new_movie.movie_json = cd["movie_data"]
             new_movie.movie_staff_json = cd["movie_staff_data"]
             new_movie.movie_data = cd["movie_data"]
+            new_movie.type_movie = cd["type_movie"]
             new_movie.save()
             for genre in cd["genres"]:
                 genre_row = Genre.objects.get(name=genre)
@@ -494,6 +495,7 @@ def movie_detail(request, slug):
     })
 
 
+
 @login_required
 def movie_list(request):
     user = request.user
@@ -536,13 +538,20 @@ def movie_list(request):
 
     # Сортировка
     sort_by = request.GET.get('sort', 'created')  # По умолчанию сортируем по дате создания
-    if sort_by == 'year':
-        movies = movies.order_by('year')
-    elif sort_by == 'created':
-        movies = movies.order_by('-created')
-    elif sort_by == 'title':
-        movies = movies.order_by('title')  # Сортировка по названию
+    sort_order = request.GET.get('order', 'desc')  # Получаем порядок сортировки (asc или desc)
 
+    if sort_by == 'year':
+        movies = movies.order_by('year' if sort_order == 'asc' else '-year')
+    elif sort_by == 'created':
+        movies = movies.order_by('-created' if sort_order == 'desc' else 'created')
+    elif sort_by == 'title':
+        movies = movies.order_by('title' if sort_order == 'asc' else '-title')
+    elif sort_by == 'likes':
+        movies = movies.order_by('-total_likes' if sort_order == 'desc' else 'total_likes')
+    elif sort_by == 'dislikes':
+        movies = movies.order_by('-total_dislikes' if sort_order == 'desc' else 'total_dislikes')
+    elif sort_by == 'type':
+        movies = movies.order_by('type_movie' if sort_order == 'asc' else '-type_movie')
     # Получаем список просмотренных фильмов для текущего пользователя
     watched_movies = Watched.objects.filter(user=user).values_list('movie_id', flat=True)
 
@@ -571,6 +580,7 @@ def movie_list(request):
         'title_filter': title_filter,  # Передаем фильтр названия в шаблон
         'kinopoisk_id_filter': kinopoisk_id_filter,  # Передаем фильтр по Кинопоиск ID в шаблон
         'all_genres': all_genres,  # Передаем все жанры в шаблон
-        'selected_genres': genre_filter,  # Передаем выбранные жан ры в шаблон
+        'selected_genres': genre_filter,  # Передаем выбранные жанры в шаблон
         'sort_by': sort_by,  # Передаем выбранный параметр сортировки в шаблон
+        'sort_order': sort_order,  # Передаем порядок сортировки в шаблон
     })

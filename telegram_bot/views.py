@@ -67,6 +67,7 @@ def handle_kinopoisk_url(chat_id, url):
         new_movie.movie_json = cd["movie_data"]
         new_movie.movie_staff_json = cd["movie_staff_data"]
         new_movie.movie_data = cd["movie_data"]
+        new_movie.type_movie = cd["type_movie"]
         new_movie.save()
 
         # Добавление жанров, стран, режиссеров и сценаристов

@@ -48,17 +48,21 @@
 
 <div class="sort-options">
     <h3>Сортировать по:</h3>
-    <form method="GET" action="">
-        <input type="hidden" name="filter" value="{{ filter_type }}">
-        <input type="hidden" name="title" value="{{ title_filter }}">
-        <input type="hidden" name="genres" value="{{ selected_genres|join:',' }}">
-        <select name="sort" onchange="this.form.submit()">
-            <option value="created" {% if sort_by == 'created' %}selected{% endif %}>Дате добавления</option>
-            <option value="year" {% if sort_by == 'year' %}selected{% endif %}>Году</option>
-            <option value="title" {% if sort_by == 'title' %}selected{% endif %}>Названию</option>
-        </select>
-    </form>
-</div>
+<form method="GET" action="{% url 'movies:list' %}">
+    <select name="sort">
+        <option value="created" {% if sort_by == 'created' %}selected{% endif %}>Дата добавления</option>
+        <option value="year" {% if sort_by == 'year' %}selected{% endif %}>Год</option>
+        <option value="title" {% if sort_by == 'title' %}selected{% endif %}>Название</option>
+        <option value="likes" {% if sort_by == 'likes' %}selected{% endif %}>Лайки</option>
+        <option value="dislikes" {% if sort_by == 'dislikes' %}selected{% endif %}>Дизлайки</option>
+        <option value="type" {% if sort_by == 'type' %}selected{% endif %}>Тип</option>
+    </select>
+    <select name="order">
+        <option value="desc" {% if sort_order == 'desc' %}selected{% endif %}>Убывание</option>
+        <option value="asc" {% if sort_order == 'asc' %}selected{% endif %}>Возрастание</option>
+    </select>
+    <button type="submit">Сортировать</button>
+</form></div>
 
 <div class="movie-container">
     <div class="movie-list">
