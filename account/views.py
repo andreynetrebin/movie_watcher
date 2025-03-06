@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404
@@ -181,9 +181,9 @@ def edit(request):
                 request,
                 'Профиль успешно изменен'
             )
-            return redirect('account:profile')  # Перенаправление после успешного обновления
+            return redirect('dashboard')  # Перенаправление после успешного обновления
         else:
-            messages.error(request, 'Error updating your profile')
+            messages.error(request, 'Ошибка при обновлении профиля')
     else:
         user_form = UserEditForm(instance=request.user)
         profile_form = ProfileEditForm(instance=profile)
@@ -197,10 +197,11 @@ def edit(request):
         },
     )
 
+
 @login_required
 def user_list(request):
     # Получаем всех активных пользователей, кроме текущего
-    users = User.objects.filter(is_active=True).exclude(id=request.user.id)
+    users = User.objects.filter(is_active=True)
     return render(request, 'account/user/list.html', {
         'section': 'people',
         'users': users

@@ -40,65 +40,72 @@ def is_kinopoisk_url(url):
     return None  # Возвращаем None, если URL не соответствует шаблону
 
 
-
 def handle_kinopoisk_url(chat_id, url):
+    # Создаем экземпляр формы с переданным URL
     form = MovieCreateForm(data={'url': url}, source='telegram')
     user = User.objects.get(profile__telegram_user_id=chat_id)
+
+    # Проверяем валидность формы
     if form.is_valid():
         cd = form.cleaned_data
         logger.info(f"Cleaned data from form: {cd}")
-        if 'exists' in cd['url']:
-            kinopoisk_id = cd['url']['kinopoisk_id']
+
+        # Проверка на существование фильма
+        if cd.get('exists'):
+            kinopoisk_id = cd['kinopoisk_id']
             movie_list_url = f"{config('SITE_URL')}/movies/?kinopoisk_id={kinopoisk_id}"
             bot.send_message(chat_id, f"Фильм с ID {kinopoisk_id} уже был добавлен ранее.\n"
-                   f"По ссылке Вы можете проставить отметки фильму: {movie_list_url}",
-                     parse_mode='HTML')
+                                       f"По ссылке Вы можете проставить отметки фильму: {movie_list_url}",
+                             parse_mode='HTML')
             return
+
+        # Проверка на наличие необходимых данных
+        if not cd.get("title") or not cd.get("kinopoisk_id"):
+            bot.send_message(chat_id, "Ошибка: недостающие данные для добавления фильма.", parse_mode='HTML')
+            return
+
+        # Создаем новый объект фильма
         new_movie = form.save(commit=False)
         new_movie.user = user
         new_movie.title = cd["title"]
-        new_movie.title_original = cd["title_original"]
-        new_movie.year = cd["year"]
-        new_movie.duration = cd["duration"]
+        new_movie.title_original = cd.get("title_original", "")
+        new_movie.year = cd.get("year", 0)
+        new_movie.duration = cd.get("duration", 0)
         new_movie.kinopoisk_id = cd["kinopoisk_id"]
         new_movie.kinopoisk_url = cd["kinopoisk_url"]
-        new_movie.url = cd["url"]
-        new_movie.description = cd["description"]
-        new_movie.movie_json = cd["movie_data"]
-        new_movie.movie_staff_json = cd["movie_staff_data"]
-        new_movie.movie_data = cd["movie_data"]
-        new_movie.type_movie = cd["type_movie"]
+        new_movie.url = cd.get("url", "")
+        new_movie.description = cd.get("description", "")
+        new_movie.movie_json = cd.get("movie_data", {})
+        new_movie.movie_staff_json = cd.get("movie_staff_data", {})
+        new_movie.type_movie = cd.get("type_movie", "FILM")  # Убедитесь, что значение по умолчанию установлено
+
+        # Сохраняем новый фильм в базе данных
         new_movie.save()
 
         # Добавление жанров, стран, режиссеров и сценаристов
-        for genre in cd["genres"]:
+        for genre in cd.get("genres", []):
             genre_row, created = Genre.objects.get_or_create(name=genre)
             new_movie.genres.add(genre_row)
-        for country in cd["countries"]:
+        for country in cd.get("countries", []):
             country_row, created = Country.objects.get_or_create(name=country)
             new_movie.countries.add(country_row)
-        for director in cd["directors"]:
+        for director in cd.get("directors", []):
             director_row, created = Director.objects.get_or_create(staff_id=director["staff_id"], defaults={'name': director["name"]})
             new_movie.directors.add(director_row)
-        for writer in cd["writers"]:
+        for writer in cd.get("writers", []):
             writer_row, created = Writer.objects.get_or_create(staff_id=writer["staff_id"], defaults={'name': writer["name"]})
             new_movie.writers.add(writer_row)
-
         movie_url = f"{config('SITE_URL')}{new_movie.get_absolute_url()}"
         movie_list_url = f"{config('SITE_URL')}/movies/?kinopoisk_id={new_movie.kinopoisk_id}"
         create_action(user, 'добавил', target=new_movie, movie_url=movie_url)
-
-        # Отправляем сообщение с вариантами действий
         bot.send_message(chat_id, f"Фильм 🎬<b>{new_movie.title}</b> успешно добавлен!\n"
-                                  f"Ссылка на фильм: {movie_url}\n"
                                   f"По ссылке Вы можете проставить отметки фильму: {movie_list_url}",
-                                  parse_mode='HTML')
+                         parse_mode='HTML')
 
     else:
         # Если форма не валидна, отправляем сообщение с ошибкой
         for error in form.errors.values():
             bot.send_message(chat_id, f"Ошибка: {error[0]}", parse_mode='HTML')
-
 
 def process_update(update):
     if 'message' in update:
@@ -126,8 +133,6 @@ def process_update(update):
                                  "В переданном тексте не распознан соответствующий формату URL из Кинопоиска. "
                                  "Формат URL: https://www.kinopoisk.ru/(film|series)/(\d+)/",
                                  parse_mode='HTML')
-def start(chat_id):
-    bot.send_message(chat_id, 'Привет! Используйте команду /connect для связывания вашего аккаунта.')
 
 def connect(chat_id):
     bot.send_message(chat_id, 'Пожалуйста, введите ваш email для связывания аккаунта:')
@@ -135,10 +140,11 @@ def connect(chat_id):
     profile, created = Profile.objects.get_or_create(telegram_user_id=str(chat_id))
     profile.state = 'waiting_for_email'
     profile.save()
+
 def handle_email(chat_id, email):
     try:
         user = User.objects.get(email=email)
-        profile = Profile.objects.get(telegram_user_id=str(chat_id))  # Получаем профиль по telegram_user_id
+        profile, created = Profile.objects.get_or_create(telegram_user_id=str(chat_id))  # Получаем или создаем профиль
         profile.user = user  # Связываем профиль с пользователем
         profile.telegram_connected = True
         profile.state = 'none'  # Сбрасываем состояние
@@ -146,8 +152,15 @@ def handle_email(chat_id, email):
         bot.send_message(chat_id, 'Ваш аккаунт успешно связан с Telegram!')
     except User.DoesNotExist:
         bot.send_message(chat_id, 'Такого email нет в базе данных. Пожалуйста, пройдите регистрацию.')
-    except Profile.DoesNotExist:
-        bot.send_message(chat_id, 'Профиль не найден. Пожалуйста, выполните команду /connect.')
+    except Exception as e:
+        logger.error(f"Error in handle_email: {e}")
+        bot.send_message(chat_id, 'Произошла ошибка при связывании аккаунта. Пожалуйста, попробуйте еще раз.')
+
+
+def start(chat_id):
+    bot.send_message(chat_id, 'Привет! Используйте команду /connect для связывания вашего аккаунта.')
+
+
 def send_version_notification(version_number, release_date, changes):
     # Эмодзи для сообщения
     emoji = "📢"  # Вы можете выбрать любой эмодзи, который вам нравится
