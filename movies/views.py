@@ -374,14 +374,15 @@ def add_to_wishlist(request):
 @login_required
 @require_POST
 def mark_like(request):
-    if request.method == 'POST':
-        movie_id = request.POST.get('id')
-        movie = get_object_or_404(Movie, id=movie_id)
-        movie.add_like(request.user)
-        movie_url = request.build_absolute_uri(movie.get_absolute_url())
-        create_action(request.user, 'понравился', target=movie, movie_url=movie_url)
+    movie_id = request.POST.get('id')
+    movie = get_object_or_404(Movie, id=movie_id)
+    print(f"Marking like for movie ID {movie_id} by user {request.user.username}")
+    movie.add_like(request.user)  # Вызываем метод добавления лайка
+    movie.refresh_from_db()  # Обновляем состояние объекта из базы данных
+    movie_url = request.build_absolute_uri(movie.get_absolute_url())
+    create_action(request.user, 'понравился', target=movie, movie_url=movie_url)
 
-        return JsonResponse({'status': 'liked', 'total_likes': movie.total_likes})
+    return JsonResponse({'status': 'liked', 'total_likes': movie.total_likes})
 
 @login_required
 @require_POST
@@ -396,6 +397,7 @@ def mark_dislike(request):
         return JsonResponse({'status': 'disliked', 'total_dislikes': movie.total_dislikes})
 
 
+
 @login_required
 def movie_create(request):
     if request.method == 'POST':
@@ -403,37 +405,32 @@ def movie_create(request):
         if form.is_valid():
             cd = form.cleaned_data
 
+            # Обработка жанров
             for genre in cd["genres"]:
                 if not Genre.objects.filter(name=genre).exists():
-                    genre_row = Genre.objects.create(name=genre)
-                    genre_row.save()
+                    Genre.objects.create(name=genre)
+
+            # Обработка стран
             for country in cd["countries"]:
                 if not Country.objects.filter(name=country).exists():
-                    country_row = Country.objects.create(name=country)
-                    country_row.save()
+                    Country.objects.create(name=country)
+
+            # Обработка режиссеров
             for director in cd["directors"]:
                 if not Director.objects.filter(staff_id=director["staff_id"]).exists():
-                    director_row = Director.objects.create(name=director["name"], staff_id=director["staff_id"])
-                    director_row.save()
+                    Director.objects.create(name=director["name"], staff_id=director["staff_id"])
+
+            # Обработка сценаристов
             for writer in cd["writers"]:
                 if not Writer.objects.filter(staff_id=writer["staff_id"]).exists():
-                    writer_row = Writer.objects.create(name=writer["name"], staff_id=writer["staff_id"])
-                    writer_row.save()
-            new_movie = form.save(commit=False)
-            new_movie.user = request.user
-            new_movie.title = cd["title"]
-            new_movie.title_original = cd["title_original"]
-            new_movie.year = cd["year"]
-            new_movie.duration = cd["duration"]
-            new_movie.kinopoisk_id = cd["kinopoisk_id"]
-            new_movie.kinopoisk_url = cd["kinopoisk_url"]
-            new_movie.url = cd["url"]
-            new_movie.description = cd["description"]
-            new_movie.movie_json = cd["movie_data"]
-            new_movie.movie_staff_json = cd["movie_staff_data"]
-            new_movie.movie_data = cd["movie_data"]
-            new_movie.type_movie = cd["type_movie"]
-            new_movie.save()
+                    Writer.objects.create(name=writer["name"], staff_id=writer["staff_id"])
+
+            # Сохранение фильма
+            new_movie = form.save(commit=True)  # Сохраняем объект в БД
+            new_movie.user = request.user  # Устанавливаем пользователя
+            new_movie.save()  # Сохраняем изменения
+
+            # Добавление связей
             for genre in cd["genres"]:
                 genre_row = Genre.objects.get(name=genre)
                 new_movie.genres.add(genre_row)
@@ -446,18 +443,19 @@ def movie_create(request):
             for writer in cd["writers"]:
                 writer_row = Writer.objects.get(staff_id=writer["staff_id"])
                 new_movie.writers.add(writer_row)
-            messages.success(request, 'Movie added successfully')
+
+            messages.success(request, f'Фильм {new_movie.title} успешно добавлен')
             movie_url = request.build_absolute_uri(new_movie.get_absolute_url())
             create_action(request.user, 'добавил', target=new_movie, movie_url=movie_url)
             return redirect(new_movie.get_absolute_url())
     else:
         form = MovieCreateForm(data=request.GET)
-    return render(
-          request,
-            'movies/movie/create.html',
-            {'section': 'movies', 'form': form}
-    )
 
+    return render(
+        request,
+        'movies/movie/create.html',
+        {'section': 'movies', 'form': form}
+    )
 
 def movie_detail(request, slug):
     movie = get_object_or_404(Movie, slug=slug)
