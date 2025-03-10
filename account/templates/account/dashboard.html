@@ -47,6 +47,7 @@
             <p>Просмотренные: <a href="{% url 'movies:list' %}?filter=watched">{{ watched_count }}</a></p>
             <p>Понравившиеся: <a href="{% url 'movies:list' %}?filter=liked">{{ liked_count }}</a></p>
             <p>Непонравившиеся: <a href="{% url 'movies:list' %}?filter=disliked">{{ disliked_count }}</a></p>
+            <p>Добавленные: <a href="{% url 'movies:list' %}?filter=added">{{ added_movies_count }}</a></p>
         </div>
         <div class="about-me-settings">
             <h4 style="text-decoration: underline;">Настройки</h4>

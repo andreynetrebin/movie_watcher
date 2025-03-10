@@ -322,18 +322,27 @@ def like_movie_list(request, list_id):
         movie_list.add_points(5)  # Награда за лайк
     return redirect('movies/movie/movie_list_detail.html', list_id)
 
+
 @login_required
 @require_POST
 def mark_watched(request):
     if request.method == 'POST':
         movie_id = request.POST.get('id')
         movie = get_object_or_404(Movie, id=movie_id)
+
         # Проверяем, был ли фильм уже просмотрен
         watched, created = Watched.objects.get_or_create(user=request.user, movie=movie)
-        if not created:
-            watched.delete()  # Удаляем из просмотренных, если он уже был
+
+        if created:
+            # Если фильм был только что добавлен в просмотренные, увеличиваем счетчик
+            movie.increment_views()
+            return JsonResponse({'status': 'added'})
+        else:
+            # Если фильм уже был просмотрен, удаляем отметку и уменьшаем счетчик
+            watched.delete()
+            movie.decrement_views()
             return JsonResponse({'status': 'removed'})
-        return JsonResponse({'status': 'added'})
+
     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
 
 
@@ -343,16 +352,23 @@ def mark_recently_watched(request):
     if request.method == 'POST':
         movie_id = request.POST.get('id')
         movie = get_object_or_404(Movie, id=movie_id)
+
         # Проверяем, был ли фильм уже просмотрен
         watched, created = Watched.objects.get_or_create(user=request.user, movie=movie)
-        if not created:
-            watched.delete()  # Удаляем из просмотренных, если он уже был
-            return JsonResponse({'status': 'removed'})
-        movie_url = request.build_absolute_uri(movie.get_absolute_url())
-        create_action(request.user, 'недавно посмотрел', target=movie, movie_url=movie_url)  # Вызываем сигнал для "просмотрен нед>
-        return JsonResponse({'status': 'added'})
-    return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
 
+        if created:
+            # Если фильм был только что добавлен в просмотренные, увеличиваем счетчик
+            movie.increment_views()
+            movie_url = request.build_absolute_uri(movie.get_absolute_url())
+            create_action(request.user, 'недавно посмотрел', target=movie, movie_url=movie_url)
+            return JsonResponse({'status': 'added'})
+        else:
+            # Если фильм уже был просмотрен, просто помечаем его как "недавно просмотренный"
+            movie_url = request.build_absolute_uri(movie.get_absolute_url())
+            create_action(request.user, 'недавно посмотрел', target=movie, movie_url=movie_url)
+            return JsonResponse({'status': 'already_marked'})
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
 
 @login_required
 @require_POST

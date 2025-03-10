@@ -94,6 +94,7 @@ def user_movie_list(request, username):
     liked_movies = Movie.objects.filter(users_like=user)
     disliked_movies = Movie.objects.filter(users_dislike=user)
     wishlist_movies = Movie.objects.filter(wishlist__user=user)
+    added_movies = Movie.objects.filter(user=user)  # Фильмы, добавленные пользователем
 
     # Фильтрация по вкладкам
     filter_type = request.GET.get('filter', 'all')  # Получаем тип фильтра из параметров запроса
@@ -107,6 +108,8 @@ def user_movie_list(request, username):
         movies = disliked_movies
     elif filter_type == 'wishlist':
         movies = wishlist_movies
+    elif filter_type == 'added':  # Добавляем новый фильтр
+        movies = added_movies
     else:
         movies = Movie.objects.none()  # Если фильтр не распознан, не показываем фильмы
 
@@ -129,8 +132,8 @@ def user_movie_list(request, username):
         'liked_movies': liked_movies,
         'disliked_movies': disliked_movies,
         'wishlist_movies': wishlist_movies,
+        'added_movies': added_movies,  # Передаем добавленные фильмы
     })
-
 def register(request):
     if request.method == 'POST':
         user_form = UserRegistrationForm(request.POST)

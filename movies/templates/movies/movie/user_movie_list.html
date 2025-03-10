@@ -31,24 +31,69 @@
                         {% if movie.title_original %}
                             <p>{{ movie.title_original }}</p>
                         {% endif %}
-                        <p>
-                            Режиссеры:
-                            {% for director in movie.directors.all %}
-                                <a href="{% url 'movies:director_detail' director.pk %}">{{ director.name }}</a>{% if not forloop.last %}, {% endif %}
-                            {% endfor %}
-                        </p>
-                        <p>
-                            Сценаристы:
-                            {% for writer in movie.writers.all %}
-                                <a href="{% url 'movies:writer_detail' writer.pk %}">{{ writer.name }}</a>{% if not forloop.last %}, {% endif %}
-                            {% endfor %}
-                        </p>
+                    <p>
+                        Режиссеры:
+                        {% for director in movie.directors.all %}
+                            {% if forloop.counter <= 3 %}
+                                <a href="{% url 'movies:director_detail' director.pk %}">{{ director.name }}</a>{% if not forloop.last and forloop.counter < 3 %}, {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if movie.directors.count > 3 %}
+                            и другие
+                        {% endif %}
+                    </p>
+                    <p>
+                        Сценаристы:
+                        {% for writer in movie.writers.all %}
+                            {% if forloop.counter <= 3 %}
+                                <a href="{% url 'movies:writer_detail' writer.pk %}">{{ writer.name }}</a>{% if not forloop.last and forloop.counter < 3 %}, {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if movie.writers.count > 3 %}
+                            и другие
+                        {% endif %}
+                    </p>
                         <p>
                             Жанры:
                             {% for genre in movie.genres.all %}
                                 {{ genre.name }}{% if not forloop.last %}, {% endif %}
                             {% endfor %}
                         </p>
+                        <div class="movie-actions">
+                            <button class="like" data-id="{{ movie.id }}">
+                                <i class="fas fa-thumbs-up {% if request.user in movie.users_like.all %}active{% endif %}"></i>
+                            </button>
+                            <button class="dislike" data-id="{{ movie.id }}">
+                                <i class="fas fa-thumbs-down {% if request.user in movie.users_dislike.all %}active{% endif %}"></i>
+                            </button>
+                            <button class="wishlist" data-id="{{ movie.id }}">
+                                <i class="fas fa-plus {% if movie.id in wishlist_movies %}transparent{% endif %}"></i>
+                            </button>
+                            <button class="watched" data-id="{{ movie.id }}">
+                                <i class="fas fa-circle {% if movie.id in watched_movies %}fa-check{% endif %}"></i>
+                                <span class="action-label">
+                                    {% if movie.id in watched_movies %}
+                                        Просмотрен
+                                    {% else %}
+                                        Пометить как просмотренный
+                                    {% endif %}
+                                </span>
+                            </button>
+                            <button class="recently-watched" data-id="{{ movie.id }}">
+                                <i class="fas fa-circle {% if movie.id in recently_watched_movies %}fa-check{% endif %}"></i>
+                                <span class="action-label">
+                                    {% if movie.id in recently_watched_movies %}
+                                        Просмотрен недавно
+                                    {% else %}
+                                        Пометить как просмотрен недавно
+                                    {% endif %}
+                                </span>
+                            </button>
+                            <a href="{{ movie.kinopoisk_url }}" target="_blank" class="kinopoisk-link">
+                                <img src="{% static 'images/icon-kp.png' %}" alt="Кинопоиск" class="icon">
+                            </a>
+                        </div>
+
                     </div>
                 </li>
             {% endfor %}

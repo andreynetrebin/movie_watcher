@@ -1,7 +1,7 @@
 from .forms import MovieCreateForm
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from .models import Movie, Genre, Director, Writer
+from .models import Movie, Genre, Director, Writer, Watched
 from django import forms
 from unittest.mock import patch
 
@@ -19,8 +19,8 @@ class MovieModelTests(TestCase):
             kinopoisk_url='https://www.kinopoisk.ru/film/123456/',
             description='Test description',
             poster='path/to/poster.jpg',
-            movie_json={},
-            movie_staff_json={}
+            movie_json={},  # Добавьте пустой JSON
+            movie_staff_json={}  # Добавьте пустой JSON
         )
         self.movie.genres.add(self.genre)
         self.movie.directors.add(self.director)
@@ -62,6 +62,61 @@ class MovieModelTests(TestCase):
         self.assertEqual(self.movie.total_likes, 0)
         self.assertEqual(self.movie.total_dislikes, 1)
 
+    def test_increment_views(self):
+        """Проверяем, что количество просмотров увеличивается при добавлении в просмотренные."""
+        self.movie.increment_views()
+        self.assertEqual(self.movie.total_views, 1)
+
+        # Добавляем еще один просмотр
+        self.movie.increment_views()
+        self.assertEqual(self.movie.total_views, 2)
+
+    def test_decrement_views(self):
+        """Проверяем, что количество просмотров уменьшается при удалении из просмотренных."""
+        self.movie.increment_views()  # Увеличиваем количество просмотров
+        self.assertEqual(self.movie.total_views, 1)
+
+        # Удаляем просмотр
+        self.movie.decrement_views()
+        self.assertEqual(self.movie.total_views, 0)
+
+    def test_decrement_views_not_negative(self):
+        """Проверяем, что количество просмотров не становится отрицательным."""
+        self.movie.decrement_views()  # Пытаемся уменьшить, когда просмотров 0
+        self.assertEqual(self.movie.total_views, 0)  # Должно оставаться 0
+
+    def test_mark_watched(self):
+        """Проверяем, что метод mark_watched корректно увеличивает и уменьшает просмотры."""
+        self.client.login(username='testuser', password='testpass')
+
+        # Отметить фильм как просмотренный
+        response = self.client.post('/movies/mark_watched/', {'id': self.movie.id})
+        self.assertEqual(response.status_code, 200)
+        self.movie.refresh_from_db()  # Обновляем объект из базы данных
+        self.assertEqual(self.movie.total_views, 1)
+
+        # Снять отметку о просмотре
+        response = self.client.post('/movies/mark_watched/', {'id': self.movie.id})
+        self.assertEqual(response.status_code, 200)
+        self.movie.refresh_from_db()  # Обновляем объект из базы данных
+        self.assertEqual(self.movie.total_views, 0)
+
+    def test_mark_recently_watched(self):
+        """Проверяем, что метод mark_recently_watched корректно увеличивает и уменьшает просмотры."""
+        self.client.login(username='testuser', password='testpass')
+
+        # Отметить фильм как недавно просмотренный
+        response = self.client.post('/movies/mark_recently_watched/', {'id': self.movie.id})
+        self.assertEqual(response.status_code, 200)
+        self.movie.refresh_from_db()  # Обновляем объект из базы данных
+        self.assertEqual(self.movie.total_views, 1)
+
+        # Снять отметку о просмотре
+        response = self.client.post('/movies/mark_recently_watched/', {'id': self.movie.id})
+        self.assertEqual(response.status_code, 200)
+        self.movie.refresh_from_db()  # Обновляем объект из базы данных
+        # Здесь мы не уменьшаем количество просмотров, так как метод не должен этого делать
+        self.assertEqual(self.movie.total_views, 1)  # Проверяем, что количество просмотров не изменилось
 class MovieCreateFormTests(TestCase):
 
     @patch('requests.get')

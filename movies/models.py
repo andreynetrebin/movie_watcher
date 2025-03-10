@@ -68,6 +68,7 @@ class Movie(models.Model):
     )
     total_likes = models.PositiveIntegerField(default=0)
     total_dislikes = models.PositiveIntegerField(default=0)
+    total_views = models.PositiveIntegerField(default=0)
 
     # Новое поле для типа фильма
     type_movie = models.CharField(max_length=10, choices=TYPE_CHOICES, default=FILM)
@@ -76,6 +77,17 @@ class Movie(models.Model):
         if not self.slug:
             self.slug = f"{slugify(self.title)}_{self.kinopoisk_id}"
         super().save(*args, **kwargs)
+
+    # Метод для увеличения количества просмотров
+    def increment_views(self):
+        self.total_views += 1
+        self.save()
+
+    # Метод для уменьшения количества просмотров
+    def decrement_views(self):
+        if self.total_views > 0:
+            self.total_views -= 1
+            self.save()
 
     def add_like(self, user):
         print(f"Attempting to add like for user {user}. Current total likes: {self.total_likes}")
@@ -133,6 +145,7 @@ class Movie(models.Model):
     class Meta:
         indexes = [
             models.Index(fields=['-created']),
+            models.Index(fields=['-total_views']),
             models.Index(fields=['-total_likes']),
             models.Index(fields=['-total_dislikes']),
     ]

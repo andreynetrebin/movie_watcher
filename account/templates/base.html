@@ -7,8 +7,18 @@
   <title>{% block title %}{% endblock %}</title>
   <link href="{% static 'css/base.css' %}" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<script src="{% static 'javascript/search_movie.js' %}"></script>
     <script src="https://yastatic.net/s3/passport-sdk/autofill/v1/sdk-suggest-with-polyfills-latest.js"></script>
+<script src="{% static 'javascript/search_movie.js' %}"></script>
+{% block extra_js %}
+    <script>
+    const url_like = "{% url 'movies:mark_like' %}";
+    const url_dislike = "{% url 'movies:mark_dislike' %}";
+    const url_watched = "{% url 'movies:mark_watched' %}";
+    const url_recently_watched = "{% url 'movies:mark_recently_watched' %}";
+    const url_wishlist = "{% url 'movies:wishlist' %}";
+</script>
+    <script src="{% static 'javascript/mark_movie.js' %}"></script>
+{% endblock %}
 
 </head>
 <body>
