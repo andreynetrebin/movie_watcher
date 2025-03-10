@@ -392,7 +392,6 @@ def add_to_wishlist(request):
 def mark_like(request):
     movie_id = request.POST.get('id')
     movie = get_object_or_404(Movie, id=movie_id)
-    print(f"Marking like for movie ID {movie_id} by user {request.user.username}")
     movie.add_like(request.user)  # Вызываем метод добавления лайка
     movie.refresh_from_db()  # Обновляем состояние объекта из базы данных
     movie_url = request.build_absolute_uri(movie.get_absolute_url())
@@ -560,6 +559,8 @@ def movie_list(request):
         movies = movies.order_by('-created' if sort_order == 'desc' else 'created')
     elif sort_by == 'title':
         movies = movies.order_by('title' if sort_order == 'asc' else '-title')
+    elif sort_by == 'watched':
+        movies = movies.order_by('-total_views' if sort_order == 'desc' else 'total_views')
     elif sort_by == 'likes':
         movies = movies.order_by('-total_likes' if sort_order == 'desc' else 'total_likes')
     elif sort_by == 'dislikes':
