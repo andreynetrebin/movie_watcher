@@ -7,7 +7,6 @@ from django.shortcuts import get_object_or_404
 from .forms import MovieCreateForm, CommentForm, MovieBulkCreateForm
 from django.db.models import Count, Q, FloatField, ExpressionWrapper
 from .models import Movie, Genre, Country, Director, Writer, Watched, WishList, MovieList
-from versioning.models import Version
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.http import HttpResponse
@@ -66,80 +65,73 @@ def writer_list(request):
     writers_page = paginator.get_page(page_number)
 
     return render(request, 'movies/writers/writer_list.html', {'writers': writers_page})
+
 @login_required
 def movie_bulk_create(request):
     if request.method == 'POST':
         form = MovieBulkCreateForm(data=request.POST)
         if form.is_valid():
             urls = form.cleaned_data['urls'].strip().splitlines()
-            print(urls)
+            success_count = 0  # Счетчик успешно добавленных фильмов
             for url in urls:
                 url = url.strip()
                 if url:  # Проверяем, что строка не пустая
-                    print(url)
                     try:
-                        # Здесь вы можете использовать вашу существующую логику для обработки одного URL
-                        # Например, вы можете создать временный объект формы для обработки URL
-                        movie_form = MovieCreateForm(data={'url': url})
+                        # Создаем временный объект формы для обработки URL
+                        movie_form = MovieCreateForm(data={'url': url}, source='website')
                         if movie_form.is_valid():
                             cd = movie_form.cleaned_data
-                            print(cd)
+
+                            # Обработка жанров
                             for genre in cd["genres"]:
                                 if not Genre.objects.filter(name=genre).exists():
-                                    genre_row = Genre.objects.create(name=genre)
-                                    genre_row.save()
+                                    Genre.objects.create(name=genre)
+
+                            # Обработка стран
                             for country in cd["countries"]:
                                 if not Country.objects.filter(name=country).exists():
-                                    country_row = Country.objects.create(name=country)
-                                    country_row.save()
+                                    Country.objects.create(name=country)
+
+                            # Обработка режиссеров
                             for director in cd["directors"]:
                                 if not Director.objects.filter(staff_id=director["staff_id"]).exists():
-                                    director_row = Director.objects.create(name=director["name"], staff_id=director["staff_id"])
-                                    director_row.save()
+                                    Director.objects.create(name=director["name"], staff_id=director["staff_id"])
+
+                            # Обработка сценаристов
                             for writer in cd["writers"]:
                                 if not Writer.objects.filter(staff_id=writer["staff_id"]).exists():
-                                    writer_row = Writer.objects.create(name=writer["name"], staff_id=writer["staff_id"])
-                                    writer_row.save()
-                            new_movie = movie_form.save(commit=False)
+                                    Writer.objects.create(name=writer["name"], staff_id=writer["staff_id"])
 
-                            new_movie.user = request.user
-                            new_movie.title = cd["title"]
-                            new_movie.title_original = cd["title_original"]
-                            new_movie.year = cd["year"]
-                            new_movie.duration = cd["duration"]
-                            # new_movie.director = cd["director"]
-                            new_movie.kinopoisk_id = cd["kinopoisk_id"]
-                            new_movie.kinopoisk_url = cd["kinopoisk_url"]
-                            new_movie.url = cd["url"]
-                            new_movie.description = cd["description"]
-                            new_movie.movie_json = cd["movie_data"]
-                            new_movie.movie_staff_json = cd["movie_staff_data"]
+                            # Сохранение фильма
+                            new_movie = movie_form.save(commit=False)  # Сохраняем объект, но не в БД
+                            new_movie.user = request.user  # Устанавливаем пользователя
+                            new_movie.save()  # Сохраняем изменения
 
-                            new_movie.save()
+                            # Добавление связей
                             for genre in cd["genres"]:
                                 genre_row = Genre.objects.get(name=genre)
                                 new_movie.genres.add(genre_row)
                             for country in cd["countries"]:
                                 country_row = Country.objects.get(name=country)
                                 new_movie.countries.add(country_row)
-
                             for director in cd["directors"]:
                                 director_row = Director.objects.get(staff_id=director["staff_id"])
                                 new_movie.directors.add(director_row)
                             for writer in cd["writers"]:
                                 writer_row = Writer.objects.get(staff_id=writer["staff_id"])
                                 new_movie.writers.add(writer_row)
-                            print("before message success")
-#                            messages.success(request, f'Фильм из {url} добавлен успешно.')
 
+                            success_count += 1  # Увеличиваем счетчик успешных добавлений
                         else:
-                            print("error")
-
-#                            messages.error(request, f'Ошибка при добавлении фильма из {url}: {movie_form.errors}')
+                            messages.error(request, f'Ошибка при добавлении фильма из {url}: {movie_form.errors}')
                     except Exception as e:
                         print(f'Ошибка при добавлении фильма из {url}: {str(e)}')
                         messages.error(request, f'Ошибка при добавлении фильма из {url}: {str(e)}')
-            return redirect('movies:list')  # Перенаправление на список фильмов или другую страницу
+
+            # Сообщение об успешном добавлении
+            messages.success(request, f'Успешно добавлено {success_count} фильмов.')
+            return redirect('movies:list')  # Перенаправление на список фильмов
+
     else:
         form = MovieBulkCreateForm()
 
