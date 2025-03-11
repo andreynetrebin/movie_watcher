@@ -6,12 +6,10 @@ import logging
 from django.shortcuts import get_object_or_404
 from .forms import MovieCreateForm, CommentForm, MovieBulkCreateForm
 from django.db.models import Count, Q, FloatField, ExpressionWrapper
-from .models import Movie, Genre, Country, Director, Writer, Watched, WishList, MovieList
+from .models import Movie, Genre, Country, Director, Writer, Watched, WishList
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
-from django.http import HttpResponse
-from django.core.paginator import Paginator, EmptyPage, \
-PageNotAnInteger
+from django.core.paginator import Paginator
 from actions.utils import create_action
 from actions.models import Action
 
@@ -196,124 +194,6 @@ def movie_actions(request):
             'top_users': top_users,
         }
     )
-
-@login_required
-def all_movie_lists(request):
-    # Получаем все списки фильмов, созданные всеми пользователями
-    movie_lists = MovieList.objects.prefetch_related('movies', 'user')
-
-    # Получаем список ID фильмов, просмотренных текущим пользователем
-    watched_movies = Watched.objects.filter(user=request.user).values_list('movie_id', flat=True)
-
-    # Подсчитываем количество просмотренных фильмов для каждого списка
-    for movie_list in movie_lists:
-        movie_list.watched_count = sum(1 for movie in movie_list.movies.all() if movie.id in watched_movies)
-        movie_list.total_count = movie_list.movies.count()
-        movie_list.watched_percentage = (movie_list.watched_count / movie_list.total_count * 100) if movie_list.total_count > 0 else 0
-
-    return render(request, 'movies/user_movies_lists/all_movie_lists.html', {
-        'movie_lists': movie_lists,
-    })
-
-
-
-
-def add_movies_to_list(request, list_id):
-    movie_list = get_object_or_404(MovieList, id=list_id)
-    movies = Movie.objects.all()
-
-    # Фильтрация по названию
-    search_query = request.GET.get('search', '')
-    if search_query:
-        movies = movies.filter(title__icontains=search_query)
-
-    # Сортировка
-    sort_by = request.GET.get('sort', 'created')
-    order = request.GET.get('order', 'asc')
-
-    if sort_by == 'title':
-        movies = movies.order_by('title' if order == 'asc' else '-title')
-    elif sort_by == 'year':
-        movies = movies.order_by('year' if order == 'asc' else '-year')
-    elif sort_by == 'created':
-        movies = movies.order_by('created' if order == 'asc' else '-created')
-
-    # Пагинация
-    paginator = Paginator(movies, 10)  # 10 фильмов на странице
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    if request.method == 'POST':
-        selected_movies = request.POST.getlist('movies')
-        for movie_id in selected_movies:
-            movie_list.movies.add(Movie.objects.get(id=movie_id))
-        # Остаемся на той же странице после добавления
-        return render(request, 'movies/user_movies_lists/add_movies_to_list.html', {
-            'movie_list': movie_list,
-            'page_obj': page_obj,
-            'search_query': search_query,
-        })
-
-    return render(request, 'movies/user_movies_lists/add_movies_to_list.html', {
-        'movie_list': movie_list,
-        'page_obj': page_obj,
-        'search_query': search_query,
-    })
-@login_required  # Убедитесь, что пользователь аутентифицирован
-def create_movie_list(request):
-    if request.method == 'POST':
-        title = request.POST.get('title')
-        movie_list = MovieList.objects.create(title=title, user=request.user)
-        return redirect('movies:add_movies_to_list', list_id=movie_list.id)
-    return render(request, 'movies/user_movies_lists/create_movie_list.html')
-
-
-
-def view_movie_list(request, list_id):
-    movie_list = get_object_or_404(MovieList, id=list_id)
-
-    if request.method == 'POST':
-        if 'save_list' in request.POST:
-            # Логика для сохранения списка (если это необходимо)
-            return redirect('movies:movie_list_detail', list_id=list_id)  # Перенаправляем на страницу созданного списка
-        elif 'clear_list' in request.POST:
-            # Очистка списка
-            movie_list.movies.clear()  # Удаляем все фильмы из списка
-            return redirect('movies:add_movies_to_list', list_id=movie_list.id)  # Перенаправляем на страницу добавления фильмов
-
-    return render(request, 'movies/user_movies_lists/view_movie_list.html', {'movie_list': movie_list})
-
-@login_required
-def movie_list_detail(request, list_id):
-    movie_list = get_object_or_404(MovieList, id=list_id)
-
-    # Получаем все фильмы в списке
-    movies = movie_list.movies.all().order_by('-year')
-    wishlist_movies = WishList.objects.filter(user=request.user).values_list('movie_id', flat=True)
-    watched_movies = Watched.objects.filter(user=request.user).values_list('movie_id', flat=True)
-
-    # Получаем список ID просмотренных фильмов текущим пользователем
-
-
-    return render(request, 'movies/user_movies_lists/movie_list_detail.html', {
-        'movie_list': movie_list,
-        'movies': movies,
-        'watched_movies': watched_movies,
-        'wishlist_movies': wishlist_movies,
-        'can_edit': request.user == movie_list.user,  # Проверяем, может ли текущий пользователь редактировать список
-    })
-
-@login_required
-def like_movie_list(request, list_id):
-    movie_list = get_object_or_404(MovieList, id=list_id)
-    if request.user in movie_list.users_like.all():
-        movie_list.users_like.remove(request.user)
-        movie_list.add_points(-5)  # Уменьшение баллов за удаление лайка
-    else:
-        movie_list.users_like.add(request.user)
-        movie_list.add_points(5)  # Награда за лайк
-    return redirect('movies/movie/movie_list_detail.html', list_id)
-
 
 @login_required
 @require_POST
