@@ -8,9 +8,9 @@
 {% endif %}
 <p>Баллы: {{ movie_list.points }}</p>
 <p>Лайки: {{ movie_list.users_like.count }}</p>
-<a href="{% url 'movies:all_movie_lists' %}">Назад к списку фильмов</a>
+<a href="{% url 'lists:users_movie_lists' %}">Назад к списку фильмов</a>
 <div id="movie-list">
-{% include "movies/user_movies_lists/list_movies.html" %}
+{% include "lists/list_movies.html" %}
 </div>
 {% endblock %}
 

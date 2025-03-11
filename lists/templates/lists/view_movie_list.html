@@ -25,13 +25,13 @@
         </div>
     </div>
 
-    <form method="post" action="{% url 'movies:view_movie_list' list_id=movie_list.id %}">
+    <form method="post" action="{% url 'lists:view_movie_list' list_id=movie_list.id %}">
         {% csrf_token %}
         <button type="submit" name="save_list" class="btn btn-success">Сохранить список</button>
         <button type="submit" name="clear_list" class="btn btn-danger">Очистить список</button>
     </form>
 
-    <a href="{% url 'movies:add_movies_to_list' list_id=movie_list.id %}" class="btn btn-primary">Добавить фильмы в список</a>
+    <a href="{% url 'lists:add_movies_to_list' list_id=movie_list.id %}" class="btn btn-primary">Добавить фильмы в список</a>
 </div>
 
 <style>

@@ -7,7 +7,7 @@
 
     <!-- Кнопки для добавления и просмотра списка -->
     <div class="button-group">
-        <form method="get" action="{% url 'movies:view_movie_list' list_id=movie_list.id %}">
+        <form method="get" action="{% url 'lists:view_movie_list' list_id=movie_list.id %}">
             <button type="submit" class="btn btn-primary">Просмотреть список</button>
         </form>
     </div>

@@ -63,7 +63,7 @@
                         {{ movie_list.user.username }} <!-- Имя пользователя -->
                     </td>
                     <td>
-                        <a href="{% url 'movies:movie_list_detail' movie_list.id %}">{{ movie_list.title }}</a>
+                        <a href="{% url 'lists:movie_list_detail' movie_list.id %}">{{ movie_list.title }}</a>
                     </td>
                     <td>{{ movie_list.total_count }}</td>
                     <td>{{ movie_list.watched_count }}</td>
