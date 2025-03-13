@@ -22,6 +22,7 @@
     <button class="tablink active" onclick="openTab(event, 'AboutMe')">Обо мне</button>
     <button class="tablink" onclick="openTab(event, 'Activity')">Активность</button>
     <button class="tablink" onclick="openTab(event, 'Comments')">Комментарии</button>
+    <button class="tablink" onclick="openTab(event, 'PointsHistory')">История начислений</button> <!-- Новая вкладка -->
 </div>
 
 <!-- Содержимое вкладок -->
@@ -31,7 +32,6 @@
         <div class="about-me-stats">
             <h4 style="text-decoration: underline;">Стат данные</h4>
             <p>Дата присоединения: {{ user.date_joined|date:"d.m.Y" }}</p>
-            <!-- Информация о подписчиках -->
             <h4>Подписчики: {{ user.followers.count }}</h4>
             <button class="toggle-followers-btn" onclick="toggleFollowersList()">Показать подписчиков</button>
             <div id="followers-list" class="followers-list" style="display: none;">
@@ -48,13 +48,15 @@
             <p>Понравившиеся: <a href="{% url 'movies:list' %}?filter=liked">{{ liked_count }}</a></p>
             <p>Непонравившиеся: <a href="{% url 'movies:list' %}?filter=disliked">{{ disliked_count }}</a></p>
             <p>Добавленные: <a href="{% url 'movies:list' %}?filter=added">{{ added_movies_count }}</a></p>
+            <p>Ваша позиция в рейтинге: <strong>{{ user_position }}</strong></p> <!-- Позиция пользователя -->
+            <p><a href="{% url 'user_ranking' %}">Посмотреть полный рейтинг пользователей</a></p> <!-- Ссылка на полный рейтинг -->
         </div>
         <div class="about-me-settings">
             <h4 style="text-decoration: underline;">Настройки</h4>
             <a href="{% url "edit" %}" class="button">Редактировать профиль</a>
             <a href="{% url "password_change" %}" class="button">Сменить пароль</a>
             <p>
-                Привязка к Telegram:
+                Привяз ка к Telegram:
                 {% if user.profile.telegram_connected %}
                     <span style="color: blue;">Да</span>
                 {% else %}
@@ -62,28 +64,27 @@
                 {% endif %}
             </p>
         </div>
-<div class="about-me-recently-action">
-    <h4 style="text-decoration: underline;">Недавние действия</h4>
-    {% for action in actions %}
-        {% if forloop.counter <= 3 %}  <!-- Ограничиваем вывод до 3 действий -->
-            <div class="action-item">
-                {% if action.verb == "подписался" %}
-                    <p>{{ action.user.get_full_name }} подписался на <strong>{{ action.target.get_full_name }}</strong></p>
-                {% elif action.verb == "отписался" %}
-                    <p>{{ action.user.get_full_name }} отписался от <strong>{{ action.target.get_full_name }}</strong></p>
-                {% else %}
-                    <p>{{ action.verb }}: <strong>{{ action.target.title }}</strong></p>
+        <div class="about-me-recently-action">
+            <h4 style="text-decoration: underline;">Недавние действия</h4>
+            {% for action in actions %}
+                {% if forloop.counter <= 3 %}  <!-- Ограничиваем вывод до 3 действий -->
+                    <div class="action-item">
+                        {% if action.verb == "подписался" %}
+                            <p>{{ action.user.get_full_name }} подписался на <strong>{{ action.target.get_full_name }}</strong></p>
+                        {% elif action.verb == "отписался" %}
+                            <p>{{ action.user.get_full_name }} отписался от <strong>{{ action.target.get_full_name }}</strong></p>
+                        {% else %}
+                            <p>{{ action.verb }}: <strong>{{ action.target.title }}</strong></p>
+                        {% endif %}
+                        <p>{{ action.created|timesince }} назад</p>
+                    </div>
                 {% endif %}
-                <p>{{ action.created|timesince }} назад</p>
-            </div>
-        {% endif %}
-    {% empty %}
-        <p>Нет недавних действий для отображения.</p>
-    {% endfor %}
-</div>
+            {% empty %}
+                <p>Нет недавних действий для отображения.</p>
+            {% endfor %}
+        </div>
     </div>
 </div>
-
 <div id="Activity" class="tabcontent">
     <h3>Активность</h3>
     <div class="actions">
@@ -140,6 +141,24 @@
     </ul>
 </div>
 
+<div id="PointsHistory" class="tabcontent">
+    <h3>История начислений баллов</h3>
+    <ul>
+        {% for entry in points_history %}
+            <li>
+                <strong>{{ entry.created_at|date:"d.m.Y H:i" }}</strong>:
+                <span style="color: {% if entry.points > 0 %}green{% else %}red{% endif %};">
+                    {% if entry.points > 0 %} +{% endif %}{{ entry.points }}
+                </span> за {{ entry.action }}
+                {% if entry.target %}
+                    ({{ entry.target.title }})
+                {% endif %}
+            </li>
+        {% empty %}
+            <li>Нет истории начислений.</li>
+        {% endfor %}
+    </ul>
+</div>
 <script>
 function openTab(evt, tabName) {
     var i, tabcontent, tablinks;
@@ -172,139 +191,57 @@ function toggleFollowersList() {
 
 <style>
 .tabs {
-    display: flex; /* Используем Flexbox для расположения вкладок */
-    justify-content: space-around; /* Распределяем пространство между вкладками */
-    margin-bottom: 20px; /* Отступ снизу для вкладок */
+    display: flex; /* Используем Flexbox для расположения вкладок в ряд */
+    margin-bottom: 20px;
 }
 
 .tablink {
-    padding: 10px 15px; /* Отступы для вкладок */
-    text-decoration: none; /* Убираем подчеркивание */
-    color: #333; /* Цвет текста */
-    border: 1px solid #ccc; /* Рамка вокруг вкладок */
-    border-radius: 5px; /* Закругленные углы */
-    background-color: #f9f9f9; /* Цвет фона для вкладок */
-    transition: background-color 0.3s; /* Плавный переход цвета */
+    flex: 1; /* Каждая вкладка занимает равное пространство */
+    padding: 10px;
+    cursor: pointer;
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    text-align: center;
 }
 
 .tablink.active {
-    background-color: #12c064; /* Цвет фона для активной вкладки */
-    color: white; /* Цвет текста для активной вкладки */
+    background-color: #fff; /* Выделяем активную вкладку */
+    border-bottom: none; /* Убираем нижнюю границу у активной вкладки */
 }
 
 .tabcontent {
-    display: none; /* Скрываем содержимое вкладок по умолчанию */
-    padding: 20px; /* Отступы для содержимого вкладок */
-    border: 1px solid #ccc; /* Рамка вокруг содержимого вкладок */
-    border-radius: 5px; /* Закругленные углы */
-    background-color: #fff; /* Цвет фона для содержимого вкладок */
+    display: none; /* Скрываем все вкладки по умолчанию */
+    border: 1px solid #ccc;
+    padding: 20px;
+}
+
+.action-item {
+    margin-bottom: 10px;
+}
+
+.action-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.movie-title {
+    font-weight: bold;
+}
+
+.comment-item {
+    margin-bottom: 15px;
 }
 
 .movie-poster {
-    width: 50px; /* Установите ширину постера */
-    height: auto; /* Автоматическая высота для сохранения пропорций */
-    margin-right: 10px; /* Отступ справа от постера */
-    vertical-align: middle; /* Выравнивание по центру */
-}
-
-.about-me-content {
-    display: flex; /* Используем Flexbox для расположения блоков */
-    justify-content: space-between; /* Распределяем пространство между блоками */
-}
-
-.about-me-stats {
-    width: 33%; /* Устанавливаем ширину блоков */
-}
-
-.about-me-settings {
-    width: 20%; /* Устанавливаем ширину блоков */
-}
-
-.about-me-recently-action {
-    width: 33%; /* Устанавливаем ширину блоков */
-}
-
-.about-me-recently-action .action-item p {
-    margin: 0; /* Убираем отступы у <p> элементов внутри .action-item */
-}
-
-.about-me-settings {
-    display: flex;
-    flex-direction: column; /* Вертикальное расположение кнопок */
-}
-
-.about-me-settings .button {
-    display: inline-block; /* Отображение кнопок в виде блочных элементов */
-    padding: 10px 15px; /* Отступы для кнопок */
-    margin-top: 10px; /* Отступ сверху для кнопок */
-    background-color: #007bff; /* Цвет фона для кнопок */
-    color: white; /* Цвет текста для кнопок */
-    text-decoration: none; /* Убираем подчеркивание */
-    border-radius:  5px; /* Закругленные углы */
-    transition: background-color 0.3s; /* Плавный переход цвета */
-    white-space: nowrap; /* Запрет на перенос текста */
-    width: auto; /* Устанавливаем ширину на авто */
-}
-
-.about-me-settings .button:hover {
-    background-color: #0056b3; /* Цвет фона при наведении */
-}
-
-.followers-info {
-    margin-bottom: 20px; /* Отступ снизу для информации о подписчиках */
-}
-
-.followers-list {
-    margin-top: 10px; /* Отступ сверху для списка подписчиков */
-    border: 1px solid #ccc; /* Рамка вокруг списка */
-    border-radius: 5px; /* Закругленные углы */
-    background-color: #f9f9f9; /* Цвет фона для списка */
-    padding: 10px; /* Отступы внутри списка */
-    max-height: 200px; /* Максимальная высота списка */
-    overflow-y: auto; /* Прокрутка по вертикали, если список слишком длинный */
-}
-
-.followers-list ul {
-    list-style-type: none; /* Убираем маркеры списка */
-    padding: 0; /* Убираем отступы */
-    margin: 0; /* Убираем отступы */
-}
-
-.followers-list li {
-    padding: 5px; /* Отступы для элементов списка */
-    border-bottom: 1px solid #ddd; /* Разделительная линия между элементами */
-}
-
-.followers-list li:last-child {
-    border-bottom: none; /* Убираем разделительную линию у последнего элемента */
-}
-
-.toggle-followers-btn {
-    background-color: #12c064; /* Цвет фона для кнопки */
-    color: white; /* Цвет текста для кнопки */
-    border: none; /* Убираем рамку */
-    border-radius: 5px; /* Закругленные углы */
-    padding: 8px 12px; /* Отступы для кнопки */
-    cursor: pointer; /* Указатель при наведении */
-    transition: background-color 0.3s; /* Плавный переход цвета */
-}
-
-.toggle-followers-btn:hover {
-    background-color: #0fa052; /* Цвет фона при наведении */
-}
-
-@media (max-width: 1100px) {
-    .about-me-content {
-        flex-direction: row; /* Горизонтальное расположение блоков */
-        flex-wrap: wrap; /* Позволяем перенос блоков на следующую строку */
-    }
-    .about-me-stats, .about-me-settings, .about-me-recently-action {
-        width: 30%; /* Устанавливаем ширину блоков на 30% */
-        margin-right: 10px; /* Отступ справа для блоков */
-    }
-    .about-me-settings {
-        margin-right: 0; /* Убираем отступ справа для последнего блока */
-    }
+    width: 50px;
+    height: auto;
+    margin-right: 10px;
 }
 </style>
 {% endblock %}

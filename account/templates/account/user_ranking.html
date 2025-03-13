@@ -1,0 +1,29 @@
+<!-- account/user_ranking.html -->
+{% extends "base.html" %}
+{% block title %}Рейтинг пользователей{% endblock %}
+{% block content %}
+<h1>Рейтинг пользователей</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Позиция</th>
+            <th>Пользователь</th>
+            <th>Баллы</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for profile in users %}
+            <tr>
+                <td>{{ forloop.counter }}</td> <!-- Позиция пользователя -->
+                <td><a href="{{ profile.user.get_absolute_url }}">{{ profile.user.username }}</a></td>
+                <td>{{ profile.points }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="3">Нет пользователей для отображения.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
