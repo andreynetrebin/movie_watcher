@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
-from .models import Contact
+from .models import Contact, PointsHistory
 import json
 import logging
 from django.contrib.auth import get_user_model
@@ -53,6 +53,8 @@ def user_login(request):
     return render(request, 'account/login.html', {'form': form})
 
 
+
+
 @login_required
 def dashboard(request):
     # Получаем количество просмотренных фильмов
@@ -69,6 +71,15 @@ def dashboard(request):
     comments = request.user.comments.all()  # Предполагается, что у вас есть связь между пользователем и комментариями
     # Получаем действия текущего пользователя
     actions = Action.objects.filter(user=request.user).select_related('user', 'user__profile').prefetch_related('target')[:10]
+
+    # Получаем историю начислений баллов
+    points_history = PointsHistory.objects.filter(user=request.user).order_by('-created_at')  # Сортируем по дате
+
+    # Получаем всех пользователей и сортируем по баллам
+    users = Profile.objects.select_related('user').order_by('-points')
+    # Определяем позицию текущего пользователя
+    user_position = list(users).index(request.user.profile) + 1  # Позиция начинается с 1
+
     return render(
         request,
         'account/dashboard.html',
@@ -81,6 +92,8 @@ def dashboard(request):
             'added_movies_count': added_movies_count,  # Добавлено количество добавленных фильмов
             'wishlist_count': wishlist_count,  # Добавлено количество фильмов в вишлисте
             'comments': comments,
+            'points_history': points_history,  # Передаем историю начислений
+            'user_position': user_position,  # Передаем позицию пользователя
         }
     )
 
@@ -302,3 +315,18 @@ def user_followers_list(request, user_id):
         return JsonResponse({'followers': followers_data})
     except User.DoesNotExist:
         return JsonResponse({'error': 'Пользователь не найден.'}, status=404)
+
+
+
+@login_required
+def user_ranking(request):
+    # Получаем всех пользователей и сортируем по баллам
+    users = Profile.objects.select_related('user').order_by('-points')
+
+    # Определяем позицию текущего пользователя
+    user_position = list(users).index(request.user.profile) + 1  # Позиция начинается с 1
+
+    return render(request, 'account/user_ranking.html', {
+        'users': users,
+        'user_position': user_position,
+    })

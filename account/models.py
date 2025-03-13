@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
 
 class Profile(models.Model):
     user = models.OneToOneField(
@@ -12,10 +14,24 @@ class Profile(models.Model):
     telegram_user_id = models.CharField(max_length=255, blank=True, null=True)  # Telegram ID
     telegram_connected = models.BooleanField(default=False)  # Признак привязки к Telegram
     state = models.CharField(max_length=50, default='none')  # Новое поле для состояния
+    points = models.IntegerField(default=0)  # Поле для хранения текущих баллов
+
     def __str__(self):
         return f'Profile of {self.user.username}'
 
 
+
+class PointsHistory(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    points = models.IntegerField()
+    action = models.CharField(max_length=255)  # Описание действия
+    target_content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True)
+    target_object_id = models.PositiveIntegerField(null=True)
+    target = GenericForeignKey('target_content_type', 'target_object_id')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.points} points for {self.action} on {self.created_at}"
 class Contact(models.Model):
     user_from = models.ForeignKey('auth.User',
         related_name='rel_from_set',

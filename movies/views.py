@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
+from account.points_manager import PointsManager
 import logging
 from django.shortcuts import get_object_or_404
 from .forms import MovieCreateForm, CommentForm, MovieBulkCreateForm
@@ -195,25 +196,35 @@ def movie_actions(request):
         }
     )
 
+
+
 @login_required
 @require_POST
 def mark_watched(request):
-    if request.method == 'POST':
-        movie_id = request.POST.get('id')
-        movie = get_object_or_404(Movie, id=movie_id)
+    movie_id = request.POST.get('id')
+    movie = get_object_or_404(Movie, id=movie_id)
 
-        # Проверяем, был ли фильм уже просмотрен
-        watched, created = Watched.objects.get_or_create(user=request.user, movie=movie)
+    # Проверяем, был ли фильм уже просмотрен
+    watched, created = Watched.objects.get_or_create(user=request.user, movie=movie)
 
-        if created:
-            # Если фильм был только что добавлен в просмотренные, увеличиваем счетчик
-            movie.increment_views()
-            return JsonResponse({'status': 'added'})
-        else:
-            # Если фильм уже был просмотрен, удаляем отметку и уменьшаем счетчик
-            watched.delete()
-            movie.decrement_views()
-            return JsonResponse({'status': 'removed'})
+    if created:
+        # Если фильм был только что добавлен в просмотренные, увеличиваем счетчик
+        movie.increment_views()
+
+        # Начисляем 1 балл за просмотр
+        PointsManager.add_points(request.user, PointsManager.POINTS_FOR_WATCHING, 'Просмотр фильма', target=movie)
+
+        return JsonResponse({'status': 'added'})
+    else:
+        # Если фильм уже был просмотрен, удаляем отметку
+        watched.delete()
+        movie.decrement_views()
+
+        # Снимаем 1 балл за отмену просмотра
+        PointsManager.deduct_points(request.user, PointsManager.POINTS_FOR_WATCHING, 'Снятие просмотра фильма',
+                                    target=movie)
+
+        return JsonResponse({'status': 'removed'})
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
 
