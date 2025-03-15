@@ -1,3 +1,4 @@
+<!-- account/dashboard.html -->
 {% extends "base.html" %}
 {% load thumbnail %}
 {% load static %}
@@ -22,7 +23,7 @@
     <button class="tablink active" onclick="openTab(event, 'AboutMe')">Обо мне</button>
     <button class="tablink" onclick="openTab(event, 'Activity')">Активность</button>
     <button class="tablink" onclick="openTab(event, 'Comments')">Комментарии</button>
-    <button class="tablink" onclick="openTab(event, 'PointsHistory')">История начислений</button> <!-- Новая вкладка -->
+    <button class="tablink" onclick="openTab(event, 'PointsHistory')">История начислений</button>
 </div>
 
 <!-- Содержимое вкладок -->
@@ -48,15 +49,17 @@
             <p>Понравившиеся: <a href="{% url 'movies:list' %}?filter=liked">{{ liked_count }}</a></p>
             <p>Непонравившиеся: <a href="{% url 'movies:list' %}?filter=disliked">{{ disliked_count }}</a></p>
             <p>Добавленные: <a href="{% url 'movies:list' %}?filter=added">{{ added_movies_count }}</a></p>
-            <p>Ваша позиция в рейтинге: <strong>{{ user_position }}</strong></p> <!-- Позиция пользователя -->
-            <p><a href="{% url 'user_ranking' %}">Посмотреть полный рейтинг пользователей</a></p> <!-- Ссылка на полный рейтинг -->
+            <p>Ваша позиция в рейтинге: <strong>{{ user_position }}</strong></p>
+            <p><a href="{% url 'user_ranking' %}">Посмотреть полный рейтинг пользователей</a></p>
         </div>
         <div class="about-me-settings">
             <h4 style="text-decoration: underline;">Настройки</h4>
-            <a href="{% url "edit" %}" class="button">Редактировать профиль</a>
-            <a href="{% url "password_change" %}" class="button">Сменить пароль</a>
+            <div class="settings-buttons">
+                <a href="{% url "edit" %}" class="button">Редактировать профиль</a>
+                <a href="{% url "password_change" %}" class="button">Сменить пароль</a>
+            </div>
             <p>
-                Привяз ка к Telegram:
+                Привязка к Telegram:
                 {% if user.profile.telegram_connected %}
                     <span style="color: blue;">Да</span>
                 {% else %}
@@ -67,7 +70,7 @@
         <div class="about-me-recently-action">
             <h4 style="text-decoration: underline;">Недавние действия</h4>
             {% for action in actions %}
-                {% if forloop.counter <= 3 %}  <!-- Ограничиваем вывод до 3 действий -->
+                {% if forloop.counter <= 3 %}
                     <div class="action-item">
                         {% if action.verb == "подписался" %}
                             <p>{{ action.user.get_full_name }} подписался на <strong>{{ action.target.get_full_name }}</strong></p>
@@ -85,6 +88,7 @@
         </div>
     </div>
 </div>
+
 <div id="Activity" class="tabcontent">
     <h3>Активность</h3>
     <div class="actions">
@@ -159,6 +163,7 @@
         {% endfor %}
     </ul>
 </div>
+
 <script>
 function openTab(evt, tabName) {
     var i, tabcontent, tablinks;
@@ -215,6 +220,33 @@ function toggleFollowersList() {
     padding: 20px;
 }
 
+.about-me-content {
+    display: flex; /* Используем Flexbox для расположения блоков в ряд */
+    justify-content: space-between; /* Распределяем пространство между блоками */
+    margin-top: 20px; /* Отступ сверху для блока */
+}
+
+.about-me-stats, .about-me-settings, .about-me-recently-action {
+    flex: 1; /* Каждому блоку выделяем равное пространство */
+    margin-right: 20px; /* Отступ справа для блоков */
+    border-radius: 10px; /* Закругляем углы */
+    border: 1px solid #ccc; /* Добавляем рамку */
+    padding: 15px; /* Отступ внутри блока */
+}
+
+.about-me-stats:last-child, .about-me-settings:last-child, .about-me-recently-action:last-child {
+    margin-right: 0; /* Убираем отступ справа у последнего блока */
+}
+
+.about-me-settings .settings-buttons {
+    display: flex; /* Используем Flexbox для вертикального расположения кнопок */
+    flex-direction: column; /* Вертикальное расположение кнопок */
+}
+
+.settings-buttons .button {
+    margin-bottom: 10px; /* Отступ между кнопками */
+}
+
 .action-item {
     margin-bottom: 10px;
 }
@@ -242,6 +274,30 @@ function toggleFollowersList() {
     width: 50px;
     height: auto;
     margin-right: 10px;
+}
+
+/* Медиа-запросы для адаптации под мобильные устройства */
+@media (max-width: 1100px) {
+    h1 {
+        font-size: 24px; /* Уменьшаем размер заголовка */
+    }
+    h3 {
+        font-size: 20px; /* Уменьшаем размер заголовков секций */
+    }
+    h4 {
+        font-size: 18px; /* Уменьшаем размер подз аголовков */
+    }
+    p, .button {
+        font-size: 16px; /* Уменьшаем размер текста в параграфах и кнопках */
+    }
+    .about-me-content {
+        flex-direction: column; /* Изменяем расположение блоков на вертикальное */
+    }
+    .about-me-stats, .about-me-settings, .about-me-recently-action {
+        margin-right: 0; /* Убираем отступ справа у блоков */
+        margin-bottom: 20px; /* Добавляем отступ снизу для блоков */
+        border-radius: 10px; /* Закругляем углы для мобильных устройств */
+    }
 }
 </style>
 {% endblock %}

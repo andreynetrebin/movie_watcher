@@ -13,6 +13,7 @@ from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator
 from actions.utils import create_action
 from actions.models import Action
+from account.models import Profile
 
 logger = logging.getLogger(__name__)
 
@@ -182,8 +183,8 @@ def movie_actions(request):
     # Топ 5 фильмов по количеству лайков
     top_movies = Movie.objects.annotate(likes_count=Count('users_like')).order_by('-likes_count')[:5]
 
-    # Топ-10 пользователей по количеству просмотренных фильмов
-    top_users = User.objects.annotate(num_watched=Count('watched')).order_by('-num_watched')[:10]
+    # Топ 3 пользователей по баллам
+    top_users = Profile.objects.select_related('user').order_by('-points')[:3]
 
     return render(
         request,
@@ -192,10 +193,9 @@ def movie_actions(request):
             'section': 'movie_actions',
             'actions': page_obj,
             'top_movies': top_movies,
-            'top_users': top_users,
+            'top_users': top_users,  # Передаем топ-3 пользователей
         }
     )
-
 
 
 @login_required

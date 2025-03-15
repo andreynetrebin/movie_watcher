@@ -603,19 +603,7 @@ img.user-detail {
     margin-right: 0; /* Убираем отступ справа для каждого четвертого элемента */
 }
 
-.top-movies-sidebar {
-    width: 250px; /* Ширина сайдбара */
-    background-color: #f9f9f9; /* Цвет фона */
-    border: 1px solid #ddd; /* Граница вокруг сайдбара */
-    border-radius: 1px; /* Закругленные углы */
-    padding: 1px; /* Отступы внутри сайдбара */
-    margin-bottom: 1px; /* Отступ снизу для отделения от других элементов */
-}
 
-.top-movies-list {
-    list-style-type: none; /* Убираем маркеры списка */
-    padding: 0; /* Убираем отступы */
-}
 
 .top-movie-item {
     display: flex; /* Используем flexbox для выравнивания */
@@ -1246,6 +1234,25 @@ button.wishlist i.transparent {
 .comment-item p {
     margin: 0;
     color: #555;
+}
+
+
+
+
+.combined-sidebar {
+    margin-top: 20px; /* Отступ сверху для объединенного сайдбара */
+    padding: 15px;
+    border: 1px solid #ccc; /* Рамка вокруг блока */
+    border-radius: 5px; /* Закругленные углы */
+    background-color: #f9f9f9; /* Цвет фона для блока */
+}
+
+.top-movies-list, .top-users-list {
+    list-style-type: none; /* Убираем маркеры списка */
+    padding: 0; /* Убираем отступы */
+    margin: 0; /* Убираем отступы */
+}
+
 
 
 /* Стили для мобильных устройств */
@@ -1373,10 +1380,6 @@ button.wishlist i.transparent {
 }
 
 @media (max-width: 1100px) {
-    .top-movies-sidebar {
-        width: 30%; /* Ширина 100% на мобильных устройствах */
-        padding: 1px; /* Уменьшаем отступы */
-    }
     .movie-poster {
         margin-right: 0; /* Убираем отступ справа */
         margin-bottom: 5px; /* Отступ снизу для постера */
@@ -1387,4 +1390,19 @@ button.wishlist i.transparent {
         margin: 0; /* Убедитесь, что отступы равны 0 */
         margin-right: 0; /* Отступ справа от постера */
     }
+
+     .content-wrapper {
+        display: flex; /* Используем Flexbox для расположения блоков */
+    }
+
+    .actions {
+        margin-bottom: 20px; /* Отступ снизу для блока действий */
+    }
+
+    .combined-sidebar {
+        width: 30%; /* Ширина 100% на мобильных устройствах */
+        margin-top: 0; /* Убираем отступ сверху для объединенного сайдбара на мобильных устройствах */
+    }
+
+
 }

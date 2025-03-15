@@ -1,10 +1,11 @@
 <!-- account/user_ranking.html -->
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Рейтинг пользователей{% endblock %}
 {% block content %}
 <h1>Рейтинг пользователей</h1>
 
-<table>
+<table class="ranking-table">
     <thead>
         <tr>
             <th>Позиция</th>
@@ -14,9 +15,18 @@
     </thead>
     <tbody>
         {% for profile in users %}
-            <tr>
+            <tr class="{% if profile.user == request.user %}current-user{% endif %}">
                 <td>{{ forloop.counter }}</td> <!-- Позиция пользователя -->
-                <td><a href="{{ profile.user.get_absolute_url }}">{{ profile.user.username }}</a></td>
+                <td>
+                    <div class="user-info">
+                        {% if profile.user.profile.photo %}
+                            <img src="{{ profile.user.profile.photo.url }}" alt="{{ profile.user.username }}'s avatar" class="user-avatar">
+                        {% else %}
+                            <img src="{% static 'images/default_user_avatar.jpg' %}" alt="Default Avatar" class="user-avatar">
+                        {% endif %}
+                        <a href="{{ profile.user.get_absolute_url }}">{{ profile.user.username }}</a>
+                    </div>
+                </td>
                 <td>{{ profile.points }}</td>
             </tr>
         {% empty %}
@@ -26,4 +36,44 @@
         {% endfor %}
     </tbody>
 </table>
+
+<style>
+    .ranking-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .ranking-table th, .ranking-table td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+
+    .ranking-table th {
+        background-color: #f2f2f2;
+    }
+
+    .ranking-table tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .current-user {
+        background-color: #d1e7dd; /* Цвет фона для текущего пользователя */
+        font-weight: bold; /* Выделение текста */
+    }
+
+    .user-info {
+        display: flex;
+        align-items: center; /* Центрируем аватар и текст по вертикали */
+    }
+
+    .user-avatar {
+        width: 40px; /* Ширина аватара */
+        height: 40px; /* Высота аватара */
+        border-radius: 50%; /* Закругляем аватар */
+        margin-right: 10px; /* Отступ справа от аватара */
+    }
+</style>
+
 {% endblock %}
