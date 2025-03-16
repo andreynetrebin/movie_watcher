@@ -179,50 +179,50 @@ def send_version_notification(version_number, release_date, changes):
         chat_id = profile.telegram_user_id
         bot.send_message(chat_id, message, parse_mode='Markdown')
 
-
-def send_movie_action_notification(movie, movie_url, action_user, action):
-    # Получаем всех подписчиков пользователя, который совершил действие
-    subscribers = action_user.followers.all()  # Получаем всех подписчиков
-    logger.info(f"Found {subscribers.count()} subscribers for {action_user.username}")
-
-    # Список действий с соответствующими хештегами
-    actions = [
-        {'action': '📋 добавил в "Буду смотреть"', 'hashtag': 'Будет_смотреть📋'},
-        {'action': '🍿 недавно посмотрел', 'hashtag': 'Недавно_просмотрен🍿'},
-        {'action': '👍 понравился', 'hashtag': 'Понравился👍'},
-        {'action': '👎 не понравился', 'hashtag': 'Не_понравился👎'},
-        {'action': '🎬 добавил', 'hashtag': 'Добавлен🎬'},
-        {'action': '✏️ прокомментировал', 'hashtag': 'Прокомментирован✏️'},
-    ]
-    # Находим хештег для действия
-    hashtag = None
-    for act in actions:
-        if act['action'] == action:
-            hashtag = act['hashtag']
-            break
-
-    for subscriber in subscribers:
-        # Получаем профиль подписчика
-        subscriber_profile = Profile.objects.get(user=subscriber)
-        chat_id = subscriber_profile.telegram_user_id
-
-        if chat_id:  # Проверяем, что у подписчика есть Telegram ID
-            message = (
-                f"<b>{action_user.username}</b> {action} фильм <b>{movie.title}</b>.\n"
-                f"Ссылка на Кинопоиск: {movie.kinopoisk_url}\n"
-                f"Ссылка на страницу фильма: {movie_url}\n\n\n"
-                f"#{movie.title.replace(' ', '_')}🎥\n"  # Хештег с названием фильма
-                f"#{action_user.username}😊\n"  # Хештег с именем пользователя
-                f"#{hashtag}" if hashtag else ""  # Хештег действия, если найден
-            )
-            try:
-                bot.send_message(chat_id, message, parse_mode='HTML')
-                logger.info(f"Message sent to {subscriber.username} ({chat_id})")
-            except Exception as e:
-                logger.error(f"Error sending message to {chat_id}: {e}")
+def send_movie_action_notification(movie, movie_url, action_user, action, notify_all=False):
+    if action in ["добавил", "понравился", "не понравился", "прокомментировал", "добавил в список", "недавно посмотрел", 'добавил в "Буду смотреть"']:
+        if notify_all:
+            # Получаем всех пользователей, кроме текущего
+            subscribers = User.objects.exclude(id=action_user.id)  # Все пользователи, кроме текущего
         else:
-            logger.warning(f"No Telegram ID for subscriber: {subscriber.username}")
+            # Получаем всех подписчиков текущего пользователя
+            subscribers = action_user.followers.all()  # Получаем всех подписчиков
 
+        logger.info(f"Found {subscribers.count()} subscribers for {action_user.username}")
+
+        # Список действий с соответствующими хештегами
+        actions = {
+            'недавно посмотрел': 'Недавно_просмотрен🍿',
+            'добавил': 'Добавлен🎬',
+            'добавил в "Буду смотреть"': 'Будет_смотреть📋',
+            'добавил в список': 'Добавил_в_список🎞',
+            'понравился': 'Понравился👍',
+            'не понравился': 'Не_понравился👎',
+            'прокомментировал': 'Прокомментировал✏️',
+        }
+
+        hashtag = actions.get(action)
+
+        for subscriber in subscribers:
+            # Получаем профиль подписчика
+            subscriber_profile = Profile.objects.get(user=subscriber)
+            chat_id = subscriber_profile.telegram_user_id
+
+            if chat_id:  # Проверяем, что у подписчика есть Telegram ID
+                message = (
+                    f"<b>{action_user.first_name} {action_user.last_name}</b> {action} <b>{movie.title}</b>.\n"
+                    f"Ссылка на Кинопоиск: {movie.kinopoisk_url}\n"
+                    f"Ссылка на страницу фильма: {movie_url}\n\n\n"
+                    f"#{action_user.username}😊\n"  # Хештег с именем пользователя
+                    f"#{hashtag}" if hashtag else ""  # Хештег действия, если найден
+                )
+                try:
+                    bot.send_message(chat_id, message, parse_mode='HTML')
+                    logger.info(f"Message sent to {subscriber.username} ({chat_id})")
+                except Exception as e:
+                    logger.error(f"Error sending message to {chat_id}: {e}")
+            else:
+                logger.warning(f"No Telegram ID for subscriber: {subscriber.username}")
 
 
 def send_new_profile_notification(username):
@@ -237,7 +237,7 @@ def send_new_profile_notification(username):
         message = (
             f"Зарегистрировался новый пользователь - <b>{username}</b>\n"
             f"Ссылка на профиль🤙: {site_url}{profile_url}\n\n"
-            f"#Новичок🥸"
+            f"#новый_пользователь"
                     )
         bot.send_message(chat_id, message, parse_mode='HTML')
 

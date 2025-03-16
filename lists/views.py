@@ -6,6 +6,8 @@ from movies.models import Movie, Watched, WishList
 from django.core.paginator import Paginator
 from account.points_manager import PointsManager
 from django.db.models import Count
+from actions.models import Action
+from actions.utils import create_action
 
 @login_required
 def create_movie_list(request):
