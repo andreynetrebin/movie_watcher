@@ -108,58 +108,85 @@
                 {% endfor %}
             </div>
 
-            <!-- Объединенный сайдбар для топ-5 фильмов и топ-3 пользователей -->
-            <div class="combined-sidebar">
-                <div class="top-movies-sidebar">
-                    <h3>Топ 5 фильмов</h3>
-                    <ul class="top-movies-list">
-                        {% for movie in top_movies %}
-                        <li class="top-movie-item">
-                            <div class="movie-poster">
-                                {% if movie.poster %}
-                                    {% thumbnail movie.poster "20x30" crop="100%" as im %}
-                                    <a href="{{ movie.get_absolute_url }}">
-                                        <img src="{{ im.url }}" alt="{{ movie.title }} poster" class="item-img">
-                                    </a>
-                                {% else %}
-                                    <img src="{% static 'images/default_movie_poster.jpg' %}" alt="Default Poster" class="item-img" style="width: 20px; height: 30px;">
-                                {% endif %}
-                            </div>
-                            <div class="movie-info">
-                                <a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a>
-                                <span class="likes-count">{{ movie.likes_count }} лайков</span>
-                            </div>
-                        </li>
-                        <hr class="divider"> <!-- Разделитель между фильмами -->
-                        {% endfor %}
-                    </ul>
+<div class="combined-sidebar">
+    <div class="top-movies-sidebar">
+        <h3>Топ 5 фильмов</h3>
+        <ul class="top-movies-list">
+            {% for movie in top_movies %}
+            <li class="top-movie-item">
+                <div class="movie-poster">
+                    {% if movie.poster %}
+                        {% thumbnail movie.poster "20x30" crop="100%" as im %}
+                        <a href="{{ movie.get_absolute_url }}">
+                            <img src="{{ im.url }}" alt="{{ movie.title }} poster" class="item-img">
+                        </a>
+                    {% else %}
+                        <img src="{% static 'images/default_movie_poster.jpg' %}" alt="Default Poster" class="item-img" style="width: 20px; height: 30px;">
+                    {% endif %}
                 </div>
+                <div class="movie-info">
+                    <a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a>
+                    <span class="likes-count">{{ movie.likes_count }} лайков</span>
+                </div>
+            </li>
+            <hr class="divider"> <!-- Разделитель между фильмами -->
+            {% endfor %}
+        </ul>
+        <p><a href="{% url 'movies:list' %}?sort=likes&order=desc">Посмотреть полный рейтинг фильмов</a></p> <!-- Ссылка на полный рейтинг -->
+    </div>
 
-                <div class="top-users-sidebar">
-                    <h3>Топ 3 пользователя</h3>
-                    <ul class="top-users-list">
-                        {% for profile in top_users %}
-                        <li class="top-user-item">
-                            <div class="user-avatar">
-                                {% if profile.user.profile.photo %}
-                                    {% thumbnail profile.user.profile.photo "40x40" crop="100%" as im %}
-                                    <a href="{{ profile.user.get_absolute_url }}">
-                                        <img src="{{ im.url }}" alt="{{ profile.user.get_full_name }}" class="item-img">
-                                    </a>
-                                {% else %}
-                                    <img src="{% static 'images/default_user_avatar.jpg' %}" alt="Default Avatar" class="item-img" style="width: 40px; height: 40px;">
-                                {% endif %}
-                            </div>
-                            <div class="user-info">
-                                <a href="{{ profile.user.get_absolute_url }}">{{ profile.user.username }}</a>
-                                <span class="points">{{ profile.points }} баллов</span>
-                            </div>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                    <p><a href="{% url 'user_ranking' %}">Посмотреть полный рейтинг пользователей</a></p>
+    <div class="top-users-sidebar">
+        <h3>Топ 3 пользователя</h3>
+        <ul class="top-users-list">
+            {% for profile in top_users %}
+            <li class="top-user-item">
+                <div class="user-avatar">
+                    {% if profile.user.profile.photo %}
+                        {% thumbnail profile.user.profile.photo "40x40" crop="100%" as im %}
+                        <a href="{{ profile.user.get_absolute_url }}">
+                            <img src="{{ im.url }}" alt="{{ profile.user.get_full_name }}" class="item-img">
+                        </a>
+                    {% else %}
+                        <img src="{% static 'images/default_user_avatar.jpg' %}" alt="Default Avatar" class="item-img" style="width: 40px; height: 40px;">
+                    {% endif %}
                 </div>
-            </div>
+                <div class="user-info">
+                    <a href="{{ profile.user.get_absolute_url }}">{{ profile.user.username }}</a>
+                    <span class="points">{{ profile.points }} баллов</span>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        <p><a href="{% url 'user_ranking' %}">Посмотреть полный рейтинг пользователей</a></p>
+    </div>
+
+    <div class="top-lists-sidebar">
+        <h3>Топ 3 списков фильмов</h3>
+        <ul class="top-users-lists">
+            {% for movie_list in top_lists %}
+                <li class="top-list-item">
+                    <div class="user-avatar">
+                        {% if movie_list.user.profile.photo %}
+                            {% thumbnail movie_list.user.profile.photo "40x40" crop="100%" as im %}
+                            <a href="{{ movie_list.user.get_absolute_url }}">
+                                <img src="{{ im.url }}" alt="{{ movie_list.user.get_full_name }}" class="item-img">
+                            </a>
+                        {% else %}
+                            <img src="{% static 'images/default_user_avatar.jpg' %}" alt="Default Avatar" class="item-img" style="width: 40px; height: 40px;">
+                        {% endif %}
+                    </div>
+                    <div class="list-info">
+                        <a href="{% url 'lists:movie_list_detail' movie_list.id %}">{{ movie_list.title }}</a> - {{ movie_list.likes_count }} лайков
+                    </div>
+                </li>
+            {% empty %}
+                <li>Нет доступных списков.</li>
+            {% endfor %}
+        </ul>
+        <p><a href="{% url 'lists:users_movie_lists' %}">Посмотреть полный рейтинг списков</a></p>
+    </div>
+</div>
+
         </div>
 
         <div class="pagination">

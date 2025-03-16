@@ -8,6 +8,7 @@ from django.core.paginator import Paginator
 import logging
 from .forms import MovieCreateForm, CommentForm, MovieBulkCreateForm
 from .models import Movie, Genre, Country, Director, Writer, Watched, WishList
+from lists.models import MovieList
 from actions.utils import create_action
 from actions.models import Action
 from account.models import Profile
@@ -167,6 +168,7 @@ def writer_detail(request, pk):
     })
 
 
+
 def movie_actions(request):
     # Извлекаем все действия, включая подписки
     actions = Action.objects.filter(
@@ -184,6 +186,9 @@ def movie_actions(request):
     # Топ 3 пользователей по баллам
     top_users = Profile.objects.select_related('user').order_by('-points')[:3]
 
+    # Топ 3 списков фильмов по количеству лайков
+    top_lists = MovieList.objects.annotate(likes_count=Count('users_like')).order_by('-likes_count')[:3]
+
     return render(
         request,
         'movies/movie/movie_actions.html',
@@ -192,6 +197,7 @@ def movie_actions(request):
             'actions': page_obj,
             'top_movies': top_movies,
             'top_users': top_users,  # Передаем топ-3 пользователей
+            'top_lists': top_lists,  # Передаем топ-3 списков
         }
     )
 
