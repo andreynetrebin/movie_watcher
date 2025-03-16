@@ -1237,8 +1237,6 @@ button.wishlist i.transparent {
 }
 
 
-
-
 .combined-sidebar {
     margin-top: 20px; /* Отступ сверху для объединенного сайдбара */
     padding: 15px;
@@ -1247,12 +1245,30 @@ button.wishlist i.transparent {
     background-color: #f9f9f9; /* Цвет фона для блока */
 }
 
-.top-movies-list, .top-users-list {
+.top-movies-list, .top-users-list, .top-users-lists {
     list-style-type: none; /* Убираем маркеры списка */
     padding: 0; /* Убираем отступы */
     margin: 0; /* Убираем отступы */
 }
 
+.top-user-item, .top-list-item {
+    display: flex; /* Используем flexbox для выравнивания */
+    align-items: center; /* Выравнивание по центру */
+    margin-bottom: 10px; /* Отступ между элементами списка */
+}
+
+.user-avatar {
+    margin-right: 10px; /* Отступ между аватаром и информацией о пользователе */
+}
+
+.movie-poster {
+    margin-right: 10px; /* Отступ между постером и информацией о фильме */
+}
+
+.likes-count {
+    font-size: 0.9em; /* Уменьшаем размер шрифта для количества лайков */
+    color: #666; /* Цвет для текста количества лайков */
+}
 
 
 /* Стили для мобильных устройств */
