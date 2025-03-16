@@ -4,8 +4,10 @@
 {% block title %}{{ movie.title }}{% endblock %}
 {% block content %}
 <div class="movie-detail">
+
     <div class="movie-poster">
-        <img src="{{ movie.poster.url }}" alt="{{ movie.title }} постер" class="poster-img">
+        {% thumbnail movie.poster "80x120" crop="100%" as im %}
+        <img src="{{ im.url }}" alt="{{ movie.title }} постер" class="poster-img">
     </div>
     <div class="movie-info">
         <h1>{{ movie.title }}</h1>

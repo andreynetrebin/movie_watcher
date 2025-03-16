@@ -1,4 +1,4 @@
-# movie_lists/urls.py
+# lists/urls.py
 from django.urls import path
 from . import views
 

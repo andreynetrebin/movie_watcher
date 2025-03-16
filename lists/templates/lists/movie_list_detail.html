@@ -5,7 +5,7 @@
 {% block content %}
 <h2>{{ movie_list.title }}</h2>
 {% if can_edit %}
-    <a href="#">Редактировать список</a>
+    <a href="{% url 'lists:view_movie_list' movie_list.id %}?edit=true">Редактировать список</a> <!-- Ссылка на редактирование -->
 {% endif %}
 <p>Баллы: {{ movie_list.points }}</p>
 <p>Лайки: {{ movie_list.users_like.count }}</p>

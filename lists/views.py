@@ -5,6 +5,7 @@ from .models import MovieList
 from movies.models import Movie, Watched, WishList
 from django.core.paginator import Paginator
 from account.points_manager import PointsManager
+from django.db.models import Count
 
 @login_required
 def create_movie_list(request):
@@ -111,9 +112,6 @@ def view_movie_list(request, list_id):
             return redirect('lists:add_movies_to_list', list_id=movie_list.id)  # Перенаправляем на страницу добавления фильмов
 
     return render(request, 'lists/view_movie_list.html', {'movie_list': movie_list})
-
-# lists/views.py
-from django.db.models import Count
 
 @login_required
 def users_movie_lists(request):

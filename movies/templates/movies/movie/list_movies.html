@@ -73,7 +73,7 @@
                     <div class="movie-poster">
                         {% if movie.poster %}
                             <a href="{{ movie.get_absolute_url }}">
-                                <img src="{% thumbnail movie.poster 300x0 %}" alt="{{ movie.title }} постер" class="movie-poster-img">
+                                <img src="{% thumbnail movie.poster "50x75" crop="100%" %}" alt="{{ movie.title }} постер" class="movie-poster-img">
                             </a>
                         {% endif %}
                     </div>
