@@ -1,6 +1,7 @@
+<!-- lists/movie_list_detail.html -->
 {% extends "base.html" %}
 {% load thumbnail %}
-{% block title %}{{ movie_list.name }}{% endblock %}
+{% block title %}{{ movie_list.title }}{% endblock %}
 {% block content %}
 <h2>{{ movie_list.title }}</h2>
 {% if can_edit %}
@@ -9,8 +10,21 @@
 <p>Баллы: {{ movie_list.points }}</p>
 <p>Лайки: {{ movie_list.users_like.count }}</p>
 <a href="{% url 'lists:users_movie_lists' %}">Назад к списку фильмов</a>
+
+<!-- Кнопка "Нравится" -->
+{% if request.user.is_authenticated and request.user not in movie_list.users_like.all %}
+    <form action="{% url 'lists:like_movie_list' movie_list.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Нравится</button>
+    </form>
+{% elif request.user.is_authenticated and request.user in movie_list.users_like.all %}
+    <form action="{% url 'lists:like_movie_list' movie_list.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Уже не нравится</button>
+    </form>
+{% endif %}
+
 <div id="movie-list">
-{% include "lists/list_movies.html" %}
+    {% include "lists/list_movies.html" %}
 </div>
 {% endblock %}
-

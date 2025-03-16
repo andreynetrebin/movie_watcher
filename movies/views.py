@@ -1,19 +1,17 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from django.shortcuts import redirect, render
-from account.points_manager import PointsManager
-import logging
-from django.shortcuts import get_object_or_404
-from .forms import MovieCreateForm, CommentForm, MovieBulkCreateForm
+from django.shortcuts import redirect, render, get_object_or_404
 from django.db.models import Count, Q, FloatField, ExpressionWrapper
-from .models import Movie, Genre, Country, Director, Writer, Watched, WishList
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator
+import logging
+from .forms import MovieCreateForm, CommentForm, MovieBulkCreateForm
+from .models import Movie, Genre, Country, Director, Writer, Watched, WishList
 from actions.utils import create_action
 from actions.models import Action
 from account.models import Profile
+from account.points_manager import PointsManager
 
 logger = logging.getLogger(__name__)
 
@@ -242,6 +240,9 @@ def mark_recently_watched(request):
         if created:
             # Если фильм был только что добавлен в просмотренные, увеличиваем счетчик
             movie.increment_views()
+            # Начисляем 1 балл за просмотр
+            PointsManager.add_points(request.user, PointsManager.POINTS_FOR_WATCHING, 'Просмотр фильма', target=movie)
+
             movie_url = request.build_absolute_uri(movie.get_absolute_url())
             create_action(request.user, 'недавно посмотрел', target=movie, movie_url=movie_url)
             return JsonResponse({'status': 'added'})
@@ -327,7 +328,8 @@ def movie_create(request):
             new_movie = form.save(commit=True)  # Сохраняем объект в БД
             new_movie.user = request.user  # Устанавливаем пользователя
             new_movie.save()  # Сохраняем изменения
-
+            PointsManager.add_points(request.user, PointsManager.POINTS_FOR_ADDING_MOVIE, 'Добавил фильм',
+                                     target=new_movie)
             # Добавление связей
             for genre in cd["genres"]:
                 genre_row = Genre.objects.get(name=genre)
@@ -373,8 +375,9 @@ def movie_detail(request, slug):
             comment.movie = movie
             comment.author = request.user
             comment.save()
+            PointsManager.add_points(request.user, PointsManager.POINTS_FOR_COMMENT, 'Прокомментировал фильм', target=movie)
             movie_url = request.build_absolute_uri(movie.get_absolute_url())
-            create_action(request.user, 'прокомментировал', movie)
+            create_action(request.user, 'прокомментировал', movie_url)
 
             return redirect(movie.get_absolute_url())  # Перенаправление на страницу фильма
     else:
