@@ -194,7 +194,7 @@ class MovieList(models.Model):
     movies = models.ManyToManyField(Movie, related_name='movie_lists')
     points = models.PositiveIntegerField(default=0)
     created = models.DateTimeField(auto_now_add=True)
-    users_like = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked_movie_lists', blank=True)
+    users_like = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked_lists', blank=True)
 
     def __str__(self):
         return self.title

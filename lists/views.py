@@ -3,12 +3,14 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render, get_object_or_404
 from movies.models import MovieList, Movie, Watched, WishList
 from django.core.paginator import Paginator
+from account.points_manager import PointsManager
 
 @login_required
 def create_movie_list(request):
     if request.method == 'POST':
         title = request.POST.get('title')
         movie_list = MovieList.objects.create(title=title, user=request.user)
+        PointsManager.add_points(request.user, PointsManager.POINTS_FOR_CREATING_LIST, 'Создание списка', target=movie_list)
         return redirect('lists:add_movies_to_list', list_id=movie_list.id)
     return render(request, 'lists/create_movie_list.html')
 
@@ -27,15 +29,27 @@ def movie_list_detail(request, list_id):
         'can_edit': request.user == movie_list.user,
     })
 
+
+# lists/views.py
 @login_required
 def like_movie_list(request, list_id):
     movie_list = get_object_or_404(MovieList, id=list_id)
+
     if request.user in movie_list.users_like.all():
+        # Если пользователь уже лайкнул, убираем лайк
         movie_list.users_like.remove(request.user)
-        movie_list.add_points(-5)
+        # Снимаем 3 балла
+        PointsManager.deduct_points(request.user, PointsManager.POINTS_FOR_LIKING_LIST, 'Убрал лайк с списка',
+                                    target=movie_list)
+        movie_list.add_points(-3)  # Снимаем баллы со списка
     else:
+        # Если пользователь не лайкнул, добавляем лайк
         movie_list.users_like.add(request.user)
-        movie_list.add_points(5)
+        # Начисляем 3 балла
+        PointsManager.add_points(request.user, PointsManager.POINTS_FOR_LIKING_LIST, 'Поставил лайк на список',
+                                 target=movie_list)
+        movie_list.add_points(3)  # Начисляем баллы со списка
+
     return redirect('lists:movie_list_detail', list_id=list_id)
 
 @login_required
