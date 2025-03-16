@@ -1,6 +1,7 @@
 # account/points_manager.py
 from .models import PointsHistory, Profile
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
 
 class PointsManager:
     POINTS_FOR_WATCHING = 1
@@ -17,7 +18,15 @@ class PointsManager:
         profile.save()
 
         # Сохраняем запись о начислении баллов
-        PointsHistory.objects.create(user=user, points=points, action=action, target=target)
+        points_history = PointsHistory(
+            user=user,
+            points=points,
+            action=action,
+        )
+        if target:
+            points_history.target_content_type = ContentType.objects.get_for_model(target)
+            points_history.target_object_id = target.id
+        points_history.save()
 
     @staticmethod
     def deduct_points(user: User, points: int, action: str, target=None):
@@ -27,4 +36,13 @@ class PointsManager:
         profile.save()
 
         # Сохраняем запись о снятии баллов
-        PointsHistory.objects.create(user=user, points=-points, action=action, target=target)
+
+        points_history = PointsHistory(
+            user=user,
+            points=-points,
+            action=action,
+        )
+        if target:
+            points_history.target_content_type = ContentType.objects.get_for_model(target)
+            points_history.target_object_id = target.id
+        points_history.save()

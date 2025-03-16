@@ -12,19 +12,49 @@
 <a href="{% url 'lists:users_movie_lists' %}">Назад к списку фильмов</a>
 
 <!-- Кнопка "Нравится" -->
-{% if request.user.is_authenticated and request.user not in movie_list.users_like.all %}
-    <form action="{% url 'lists:like_movie_list' movie_list.id %}" method="post">
-        {% csrf_token %}
-        <button type="submit">Нравится</button>
-    </form>
-{% elif request.user.is_authenticated and request.user in movie_list.users_like.all %}
-    <form action="{% url 'lists:like_movie_list' movie_list.id %}" method="post">
-        {% csrf_token %}
-        <button type="submit">Уже не нравится</button>
-    </form>
+{% if request.user.is_authenticated and can_like %}
+    {% if request.user in movie_list.users_like.all %}
+        <form action="{% url 'lists:like_movie_list' movie_list.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Уже не нравится</button>
+        </form>
+    {% else %}
+        <form action="{% url 'lists:like_movie_list' movie_list.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Нравится</button>
+        </form>
+    {% endif %}
 {% endif %}
 
 <div id="movie-list">
     {% include "lists/list_movies.html" %}
 </div>
+
+<style>
+    .btn {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .btn-primary {
+        background-color: #007bff; /* Синий цвет для кнопки "Нравится" */
+    }
+
+    .btn-danger {
+        background-color: #dc3545; /* Красный цвет для кнопки "Уже не нравится" */
+    }
+
+    .btn:hover {
+        opacity: 0.8; /* Плавный эффект при наведении */
+    }
+
+    #movie-list {
+        margin-top: 20px; /* Отступ сверху для списка фильмов */
+    }
+</style>
+
 {% endblock %}

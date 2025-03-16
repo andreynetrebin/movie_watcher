@@ -32,6 +32,7 @@ class PointsHistory(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.points} points for {self.action} on {self.created_at}"
+
 class Contact(models.Model):
     user_from = models.ForeignKey('auth.User',
         related_name='rel_from_set',
