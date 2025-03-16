@@ -1,3 +1,4 @@
+<!-- lists/view_movie_list.html -->
 {% extends "base.html" %}
 {% load static %}
 {% load thumbnail %}
@@ -13,7 +14,7 @@
                     <li class="movie-item">
                         <div class="movie-info">
                             {% if movie.poster %}
-                                <img src="{% thumbnail movie.poster "100x150" %}" alt="{{ movie.title }} постер" class="movie-poster-img">
+                                <img src="{% thumbnail movie.poster "50x75" crop="100%" %}" alt="{{ movie.title }} постер" class="movie-poster-img">
                             {% endif %}
                             <div class="movie-details">
                                 <span class="movie-title">{{ movie.title }} ({{ movie.year }})</span>

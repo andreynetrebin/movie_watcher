@@ -43,7 +43,7 @@
                             <input type="checkbox" name="movies" value="{{ movie.id }}" id="movie-{{ movie.id }}" class="movie-checkbox">
                             <label for="movie-{{ movie.id }}">
                                 {% if movie.poster %}
-                                    <img src="{% thumbnail movie.poster "100x150" %}" alt="{{ movie.title }} постер" class="movie-poster-img">
+                                    <img src="{% thumbnail movie.poster "50x75" crop="100%" %}" alt="{{ movie.title }} постер" class="movie-poster-img">
                                 {% endif %}
                                 {{ movie.title }} ({{ movie.year }})
                             </label>
