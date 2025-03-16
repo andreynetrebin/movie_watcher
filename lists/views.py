@@ -1,7 +1,8 @@
 # lists/views.py
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render, get_object_or_404
-from movies.models import MovieList, Movie, Watched, WishList
+from .models import MovieList
+from movies.models import Movie, Watched, WishList
 from django.core.paginator import Paginator
 from account.points_manager import PointsManager
 
@@ -27,6 +28,7 @@ def movie_list_detail(request, list_id):
         'watched_movies': watched_movies,
         'wishlist_movies': wishlist_movies,
         'can_edit': request.user == movie_list.user,
+        'can_like': request.user != movie_list.user,  # Добавляем переменную для проверки возможности лайка
     })
 
 
@@ -38,19 +40,20 @@ def like_movie_list(request, list_id):
     if request.user in movie_list.users_like.all():
         # Если пользователь уже лайкнул, убираем лайк
         movie_list.users_like.remove(request.user)
-        # Снимаем 3 балла
-        PointsManager.deduct_points(request.user, PointsManager.POINTS_FOR_LIKING_LIST, 'Убрал лайк с списка',
+        # Снимаем 3 балла у создателя списка
+        PointsManager.deduct_points(movie_list.user, PointsManager.POINTS_FOR_LIKING_LIST, 'Убрал лайк с списка',
                                     target=movie_list)
         movie_list.add_points(-3)  # Снимаем баллы со списка
     else:
         # Если пользователь не лайкнул, добавляем лайк
         movie_list.users_like.add(request.user)
-        # Начисляем 3 балла
-        PointsManager.add_points(request.user, PointsManager.POINTS_FOR_LIKING_LIST, 'Поставил лайк на список',
+        # Начисляем 3 балла создателю списка
+        PointsManager.add_points(movie_list.user, PointsManager.POINTS_FOR_LIKING_LIST, 'Поставил лайк на список',
                                  target=movie_list)
         movie_list.add_points(3)  # Начисляем баллы со списка
 
     return redirect('lists:movie_list_detail', list_id=list_id)
+
 
 @login_required
 def add_movies_to_list(request, list_id):
@@ -109,10 +112,13 @@ def view_movie_list(request, list_id):
 
     return render(request, 'lists/view_movie_list.html', {'movie_list': movie_list})
 
+# lists/views.py
+from django.db.models import Count
+
 @login_required
 def users_movie_lists(request):
-    # Получаем все списки фильмов, созданные всеми пользователями
-    movie_lists = MovieList.objects.prefetch_related('movies', 'user')
+    # Получаем все списки фильмов, созданные всеми пользователями, и аннотируем количество лайков
+    movie_lists = MovieList.objects.prefetch_related('movies', 'user').annotate(likes_count=Count('users_like')).order_by('-likes_count')
 
     # Получаем список ID фильмов, просмотренных текущим пользователем
     watched_movies = Watched.objects.filter(user=request.user).values_list('movie_id', flat=True)
