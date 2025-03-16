@@ -383,7 +383,7 @@ def movie_detail(request, slug):
             comment.save()
             PointsManager.add_points(request.user, PointsManager.POINTS_FOR_COMMENT, 'Прокомментировал фильм', target=movie)
             movie_url = request.build_absolute_uri(movie.get_absolute_url())
-            create_action(request.user, 'прокомментировал', movie_url)
+            create_action(request.user, 'прокомментировал', target=movie, movie_url=movie_url)
 
             return redirect(movie.get_absolute_url())  # Перенаправление на страницу фильма
     else:
