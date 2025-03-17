@@ -9,8 +9,14 @@
         {% thumbnail movie.poster "80x120" crop="100%" as im %}
         <img src="{{ im.url }}" alt="{{ movie.title }} постер" class="poster-img">
     </div>
+
+<!-- Кнопка для перехода на страницу со списком фильмов по Кинопоиск ID -->
+
     <div class="movie-info">
         <h1>{{ movie.title }}</h1>
+        <div class="filter-button">
+        <a href="{% url 'movies:list' %}?kinopoisk_id={{ movie.kinopoisk_id }}" class="btn btn-secondary">Переход для проставления отметок</a>
+        </div>
         <div class="info-block">
             <div class="details">
                 <p><strong>Год выпуска:</strong> {{ movie.year }}</p>

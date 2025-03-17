@@ -65,6 +65,7 @@ def writer_list(request):
 
     return render(request, 'movies/writers/writer_list.html', {'writers': writers_page})
 
+
 @login_required
 def movie_bulk_create(request):
     if request.method == 'POST':
@@ -80,6 +81,12 @@ def movie_bulk_create(request):
                         movie_form = MovieCreateForm(data={'url': url}, source='website')
                         if movie_form.is_valid():
                             cd = movie_form.cleaned_data
+
+                            # Проверяем, существует ли фильм
+                            if isinstance(cd['url'], dict) and 'exists' in cd['url']:
+                                existing_movie = cd['url']['movie']
+                                messages.info(request, f'Фильм {existing_movie.title} уже есть в базе данных.')
+                                continue  # Переходим к следующему URL
 
                             # Обработка жанров
                             for genre in cd["genres"]:
@@ -135,7 +142,6 @@ def movie_bulk_create(request):
         form = MovieBulkCreateForm()
 
     return render(request, 'movies/movie/bulk_create.html', {'form': form})
-
 
 @login_required
 def director_detail(request, pk):
@@ -310,25 +316,35 @@ def movie_create(request):
         if form.is_valid():
             cd = form.cleaned_data
 
+            # Проверяем, существует ли фильм
+            if isinstance(cd['url'], dict) and 'exists' in cd['url']:
+                existing_movie = cd['url']['movie']
+                messages.info(request, f'Фильм {existing_movie.title} уже есть в базе данных.')
+                return redirect(existing_movie.get_absolute_url())
+
             # Обработка жанров
-            for genre in cd["genres"]:
-                if not Genre.objects.filter(name=genre).exists():
-                    Genre.objects.create(name=genre)
+            if 'genres' in cd:  # Проверяем, существует ли ключ 'genres'
+                for genre in cd["genres"]:
+                    if not Genre.objects.filter(name=genre).exists():
+                        Genre.objects.create(name=genre)
 
             # Обработка стран
-            for country in cd["countries"]:
-                if not Country.objects.filter(name=country).exists():
-                    Country.objects.create(name=country)
+            if 'countries' in cd:  # Проверяем, существует ли ключ 'countries'
+                for country in cd["countries"]:
+                    if not Country.objects.filter(name=country).exists():
+                        Country.objects.create(name=country)
 
             # Обработка режиссеров
-            for director in cd["directors"]:
-                if not Director.objects.filter(staff_id=director["staff_id"]).exists():
-                    Director.objects.create(name=director["name"], staff_id=director["staff_id"])
+            if 'directors' in cd:  # Проверяем, существует ли ключ 'directors'
+                for director in cd["directors"]:
+                    if not Director.objects.filter(staff_id=director["staff_id"]).exists():
+                        Director.objects.create(name=director["name"], staff_id=director["staff_id"])
 
             # Обработка сценаристов
-            for writer in cd["writers"]:
-                if not Writer.objects.filter(staff_id=writer["staff_id"]).exists():
-                    Writer.objects.create(name=writer["name"], staff_id=writer["staff_id"])
+            if 'writers' in cd:  # Проверяем, существует ли ключ 'writers'
+                for writer in cd["writers"]:
+                    if not Writer.objects.filter(staff_id=writer["staff_id"]).exists():
+                        Writer.objects.create(name=writer["name"], staff_id=writer["staff_id"])
 
             # Сохранение фильма
             new_movie = form.save(commit=True)  # Сохраняем объект в БД
@@ -337,16 +353,16 @@ def movie_create(request):
             PointsManager.add_points(request.user, PointsManager.POINTS_FOR_ADDING_MOVIE, 'Добавил фильм',
                                      target=new_movie)
             # Добавление связей
-            for genre in cd["genres"]:
+            for genre in cd.get("genres", []):  # Используем get с пустым списком по умолчанию
                 genre_row = Genre.objects.get(name=genre)
                 new_movie.genres.add(genre_row)
-            for country in cd["countries"]:
+            for country in cd.get("countries", []):  # Используем get с пустым списком по умолчанию
                 country_row = Country.objects.get(name=country)
                 new_movie.countries.add(country_row)
-            for director in cd["directors"]:
+            for director in cd.get("directors", []):  # Используем get с пустым списком по умолчанию
                 director_row = Director.objects.get(staff_id=director["staff_id"])
                 new_movie.directors.add(director_row)
-            for writer in cd["writers"]:
+            for writer in cd.get("writers", []):  # Используем get с пустым списком по умолчанию
                 writer_row = Writer.objects.get(staff_id=writer["staff_id"])
                 new_movie.writers.add(writer_row)
 
@@ -362,6 +378,7 @@ def movie_create(request):
         'movies/movie/create.html',
         {'section': 'movies', 'form': form}
     )
+
 
 def movie_detail(request, slug):
     movie = get_object_or_404(Movie, slug=slug)
