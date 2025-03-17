@@ -4,7 +4,6 @@ import telebot
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import get_user_model
-from django.urls import reverse
 from movies.models import Movie, Genre, Country, Director, Writer, Watched, WishList
 from account.models import Profile
 from actions.utils import create_action
@@ -39,22 +38,23 @@ def is_kinopoisk_url(url):
         return match.group(0)  # Возвращаем полный URL, если он соответствует шаблону
     return None  # Возвращаем None, если URL не соответствует шаблону
 
+def is_email_address(email):
+    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    return re.match(pattern, email) is not None
 
 def handle_kinopoisk_url(chat_id, url):
-    # Создаем экземпляр формы с переданным URL
     form = MovieCreateForm(data={'url': url}, source='telegram')
     user = User.objects.get(profile__telegram_user_id=chat_id)
 
-    # Проверяем валидность формы
     if form.is_valid():
         cd = form.cleaned_data
         logger.info(f"Cleaned data from form: {cd}")
 
         # Проверка на существование фильма
-        if cd.get('exists'):
-            kinopoisk_id = cd['kinopoisk_id']
-            movie_list_url = f"{config('SITE_URL')}/movies/?kinopoisk_id={kinopoisk_id}"
-            bot.send_message(chat_id, f"Фильм с ID {kinopoisk_id} уже был добавлен ранее.\n"
+        if isinstance(cd['url'], dict) and 'exists' in cd['url']:
+            existing_movie = cd['url']['movie']
+            movie_list_url = f"{config('SITE_URL')}/movies/?kinopoisk_id={existing_movie.kinopoisk_id}"
+            bot.send_message(chat_id, f"Фильм с ID {existing_movie.kinopoisk_id} уже был добавлен ранее.\n"
                                        f"По ссылке Вы можете проставить отметки фильму: {movie_list_url}",
                              parse_mode='HTML')
             return
@@ -65,8 +65,8 @@ def handle_kinopoisk_url(chat_id, url):
             return
 
         # Создаем новый объект фильма
-        new_movie = form.save(commit=False)
-        new_movie.user = user
+        new_movie = form.save(commit=False)  # Сохраняем объект, но не в БД
+        new_movie.user = user  # Устанавливаем пользователя
         new_movie.title = cd["title"]
         new_movie.title_original = cd.get("title_original", "")
         new_movie.year = cd.get("year", 0)
@@ -77,7 +77,7 @@ def handle_kinopoisk_url(chat_id, url):
         new_movie.description = cd.get("description", "")
         new_movie.movie_json = cd.get("movie_data", {})
         new_movie.movie_staff_json = cd.get("movie_staff_data", {})
-        new_movie.type_movie = cd.get("type_movie", "FILM")  # Убедитесь, что значение по умолчанию установлено
+        new_movie.type_movie = cd.get("type_movie", "FILM")
 
         # Сохраняем новый фильм в базе данных
         new_movie.save()
@@ -95,6 +95,7 @@ def handle_kinopoisk_url(chat_id, url):
         for writer in cd.get("writers", []):
             writer_row, created = Writer.objects.get_or_create(staff_id=writer["staff_id"], defaults={'name': writer["name"]})
             new_movie.writers.add(writer_row)
+
         movie_url = f"{config('SITE_URL')}{new_movie.get_absolute_url()}"
         movie_list_url = f"{config('SITE_URL')}/movies/?kinopoisk_id={new_movie.kinopoisk_id}"
         create_action(user, 'добавил', target=new_movie, movie_url=movie_url)
@@ -116,38 +117,34 @@ def process_update(update):
         # Получаем профиль пользователя или создаем новый, если его нет
         profile, created = Profile.objects.get_or_create(telegram_user_id=str(chat_id))
 
+        # Проверяем, является ли сообщение email-адресом
+        if is_email_address(command):
+            handle_email(chat_id, command)  # Обрабатываем email
+            return
+
+        # Проверяем, является ли сообщение URL Кинопоиска
+        kinopoisk_url = is_kinopoisk_url(command)
+        if kinopoisk_url:
+            handle_kinopoisk_url(chat_id, kinopoisk_url)  # Обрабатываем URL Кинопоиска
+            return
+
+        # Обработка команд
         if command.startswith('/start'):
             start(chat_id)
         elif command.startswith('/connect'):
             connect(chat_id)
-        elif profile.state == 'waiting_for_email':
-            handle_email(chat_id, command)  # Обрабатываем email
-            profile.state = 'none'  # Сбрасываем состояние после обработки
-            profile.save()
-        else:  # Если профиль существует, обрабатываем URL Кинопоиска
-            kinopoisk_url = is_kinopoisk_url(command)
-            if kinopoisk_url:
-                handle_kinopoisk_url(chat_id, kinopoisk_url)  # Обрабатываем URL Кинопоиска
-            else:
-                bot.send_message(chat_id,
-                                 "В переданном тексте не распознан соответствующий формату URL из Кинопоиска. "
-                                 "Формат URL: https://www.kinopoisk.ru/(film|series)/(\d+)/",
-                                 parse_mode='HTML')
-
-def connect(chat_id):
-    bot.send_message(chat_id, 'Пожалуйста, введите ваш email для связывания аккаунта:')
-    # Устанавливаем состояние ожидания email
-    profile, created = Profile.objects.get_or_create(telegram_user_id=str(chat_id))
-    profile.state = 'waiting_for_email'
-    profile.save()
+        else:
+            bot.send_message(chat_id, "Неизвестная команда. Пожалуйста, используйте /start или /connect.")
 
 def handle_email(chat_id, email):
     try:
         user = User.objects.get(email=email)
         profile, created = Profile.objects.get_or_create(telegram_user_id=str(chat_id))  # Получаем или создаем профиль
+        if profile.user:  # Проверяем, есть ли уже привязка
+            bot.send_message(chat_id, 'По данному email уже выполнена привязка к аккаунту.')
+            return
         profile.user = user  # Связываем профиль с пользователем
         profile.telegram_connected = True
-        profile.state = 'none'  # Сбрасываем состояние
         profile.save()
         bot.send_message(chat_id, 'Ваш аккаунт успешно связан с Telegram!')
     except User.DoesNotExist:
@@ -156,88 +153,5 @@ def handle_email(chat_id, email):
         logger.error(f"Error in handle_email: {e}")
         bot.send_message(chat_id, 'Произошла ошибка при связывании аккаунта. Пожалуйста, попробуйте еще раз.')
 
-
 def start(chat_id):
     bot.send_message(chat_id, 'Привет! Используйте команду /connect для связывания вашего аккаунта.')
-
-
-def send_version_notification(version_number, release_date, changes):
-    # Эмодзи для сообщения
-    emoji = "📢"  # Вы можете выбрать любой эмодзи, который вам нравится
-
-    # Формируем сообщение в Markdown
-    message = (
-        f"{emoji} *Выпущена версия:* {version_number}\n"
-        f"*Дата:* {release_date}\n"
-        f"*Изменения:*\n{changes}\n\n"
-        f"🔗 [Полный перечень изменений]({config('SITE_URL')}/versioning/changelog/)"
-    )
-
-    # Получаем всех пользователей, которые связали свои аккаунты с Telegram
-    profiles = Profile.objects.filter(telegram_connected=True)
-    for profile in profiles:
-        chat_id = profile.telegram_user_id
-        bot.send_message(chat_id, message, parse_mode='Markdown')
-
-def send_movie_action_notification(movie, movie_url, action_user, action, notify_all=False):
-    if action in ["добавил", "понравился", "не понравился", "прокомментировал", "добавил в список", "недавно посмотрел", 'добавил в "Буду смотреть"']:
-        if notify_all:
-            # Получаем всех пользователей, кроме текущего
-            subscribers = User.objects.exclude(id=action_user.id)  # Все пользователи, кроме текущего
-        else:
-            # Получаем всех подписчиков текущего пользователя
-            subscribers = action_user.followers.all()  # Получаем всех подписчиков
-
-        logger.info(f"Found {subscribers.count()} subscribers for {action_user.username}")
-
-        # Список действий с соответствующими хештегами
-        actions = {
-            'недавно посмотрел': 'Недавно_просмотрен🍿',
-            'добавил': 'Добавлен🎬',
-            'добавил в "Буду смотреть"': 'Будет_смотреть📋',
-            'добавил в список': 'Добавил_в_список🎞',
-            'понравился': 'Понравился👍',
-            'не понравился': 'Не_понравился👎',
-            'прокомментировал': 'Прокомментировал✏️',
-        }
-
-        hashtag = actions.get(action)
-
-        for subscriber in subscribers:
-            # Получаем профиль подписчика
-            subscriber_profile = Profile.objects.get(user=subscriber)
-            chat_id = subscriber_profile.telegram_user_id
-
-            if chat_id:  # Проверяем, что у подписчика есть Telegram ID
-                message = (
-                    f"<b>{action_user.first_name} {action_user.last_name}</b> {action} <b>{movie.title}</b>.\n"
-                    f"Ссылка на Кинопоиск: {movie.kinopoisk_url}\n"
-                    f"Ссылка на страницу фильма: {movie_url}\n\n\n"
-                    f"#{action_user.username}😊\n"  # Хештег с именем пользователя
-                    f"#{hashtag}" if hashtag else ""  # Хештег действия, если найден
-                )
-                try:
-                    bot.send_message(chat_id, message, parse_mode='HTML')
-                    logger.info(f"Message sent to {subscriber.username} ({chat_id})")
-                except Exception as e:
-                    logger.error(f"Error sending message to {chat_id}: {e}")
-            else:
-                logger.warning(f"No Telegram ID for subscriber: {subscriber.username}")
-
-
-def send_new_profile_notification(username):
-    # Получаем всех пользователей, которые связали свои аккаунты с Telegram
-    profiles = Profile.objects.filter(telegram_connected=True)
-    for profile in profiles:
-        chat_id = profile.telegram_user_id
-        # Формируем ссылку на профиль пользователя
-        profile_url = reverse('user_detail', kwargs={'username': username})
-        # Обрезаем один символ справа от SITE_URL
-        site_url = config('SITE_URL')[:-1]  # Обрезаем последний символ
-        message = (
-            f"Зарегистрировался новый пользователь - <b>{username}</b>\n"
-            f"Ссылка на профиль🤙: {site_url}{profile_url}\n\n"
-            f"#новый_пользователь"
-                    )
-        bot.send_message(chat_id, message, parse_mode='HTML')
-

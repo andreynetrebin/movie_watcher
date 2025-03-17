@@ -4,8 +4,9 @@ from django.contrib.contenttypes.models import ContentType
 from .models import Action
 
 
+
 def create_action(user, verb, target=None, movie_url=None):
-    from telegram_bot.views import send_movie_action_notification
+    from telegram_bot.notifications import send_movie_action_notification
     # Проверяем, не было ли каких-либо аналогичных действий, совершенных за последнюю минуту
     now = timezone.now()
     last_minute = now - datetime.timedelta(seconds=60)
