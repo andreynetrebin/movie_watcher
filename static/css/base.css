@@ -292,10 +292,6 @@ ol {
 #header .version-number a:hover {
     text-decoration: underline; /* Добавляем подчеркивание при наведении */
 }
-.search-container {
-    display: flex; /* Используем flexbox для расположения поля поиска и кнопки */
-    align-items: center; /* Центрируем элементы по вертикали */
-}
 
 #movie-search {
     padding: 5px; /* Отступы внутри поля поиска */
@@ -623,6 +619,25 @@ img.user-detail {
 .likes-count {
     font-size: 0.9em; /* Уменьшаем размер шрифта для количества лайков */
     color: #666; /* Цвет текста для количества лайков */
+}
+
+.filter-button {
+    margin: 20px 0; /* Отступ сверху и снизу */
+}
+
+.filter-button .btn {
+    background-color: #007bff; /* Цвет фона */
+    color: white; /* Цвет текста */
+    padding: 10px 20px; /* Отступы внутри кнопки */
+    border: none; /* Убираем границу */
+    border-radius: 5px; /* Закругленные углы */
+    text-decoration: none; /* Убираем подчеркивание */
+    display: inline-block; /* Чтобы кнопка вела себя как блок */
+    transition: background-color 0.3s; /* Плавный переход цвета фона */
+}
+
+.filter-button .btn:hover {
+    background-color: #0056b3; /* Цвет фона при наведении */
 }
 
 .divider {
@@ -1164,21 +1179,28 @@ button.wishlist i.transparent {
 }
 
 .search-results {
-    border: 1px solid #ccc;
-    background-color: white;
-    position: absolute; /* Позиционируем результаты относительно поля ввода */
+    position: absolute; /* Позволяет позиционировать результаты поиска */
+    background-color: white; /* Фон для контейнера результатов */
+    border: 1px solid #ccc; /* Граница для контейнера результатов */
     z-index: 1000; /* Убедитесь, что результаты отображаются поверх других элементов */
-    width: calc(100% - 20px); /* Ширина результатов */
-    max-height: 200px; /* Максимальная высота */
-    overflow-y: auto; /* Прокрутка, если слишком много результатов */
+    width: 100%; /* Ширина контейнера результатов */
 }
 
 .result-item {
-    padding: 10px; /* Отступы для элементов результата */
-    cursor: pointer; /* Курсор при наведении */
-    transition: background-color 0.3s; /* Плавный переход для фона */
+    padding: 10px; /* Отступы для элементов результатов */
+    cursor: pointer; /* Указатель при наведении */
 }
 
+.result-item strong {
+    color: black; /* Цвет текста названия фильма */
+    text-decoration: none; /* Убираем подчеркивание */
+}
+
+.result-item .movie-year {
+    color: gray; /* Цвет для года фильма (можно изменить по желанию) */
+}
+
+/* Добавьте эффект при наведении на элемент результата */
 .result-item:hover {
     background-color: #f0f0f0; /* Цвет фона при наведении */
 }
