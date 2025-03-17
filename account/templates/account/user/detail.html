@@ -84,7 +84,7 @@
                 {% else %}
                     <p>{{ action.verb }}: <strong>{{ action.target.title }}</strong></p>
                 {% endif %}
-                <p>{{ action.created|timesince }} назад</p>
+                <p>{{ action.created|date:"DATETIME_FORMAT" }}</p>
             </div>
         {% endif %}
     {% empty %}
@@ -107,7 +107,7 @@
                                 <strong class="movie-title">{{ action.target.title }}</strong>
                             {% endif %}
                         </div>
-                        <span class="date">{{ action.created|timesince }} назад</span>
+                        <span class="date">{{ action.created|date:"DATETIME_FORMAT" }}</span>
                     </div>
                     {% if action.target and action.target.poster %}
                         {% thumbnail action.target.poster "50x75" crop="100%" as im %}
