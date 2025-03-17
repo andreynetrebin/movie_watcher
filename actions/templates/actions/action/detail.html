@@ -22,7 +22,7 @@ class="item-img">
 </div>
 <div class="info">
 <p>
-<span class="date">{{ action.created|timesince }} ago</span>
+<span class="date">{{ action.created|date:"DATETIME_FORMAT" }}</span>
     <br />
 <a href="{{ user.get_absolute_url }}">
 {{ user.first_name }}

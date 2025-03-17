@@ -87,7 +87,7 @@
                                         {% endif %}
                                     {% endif %}
                                 </div>
-                                <span class="date">{{ action.created|timesince }} назад</span>
+                                <span class="date">{{ action.created|date:"DATETIME_FORMAT" }}</span>
                             </div>
                         </div>
                         {% if action.target and action.verb not in "подписался, отписался" %}
