@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from account.models import Profile
-from telegram_bot.views import send_new_profile_notification
+from telegram_bot.notifications import send_new_profile_notification
+
 
 def create_profile(backend, user, *args, **kwargs):
     """

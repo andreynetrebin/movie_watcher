@@ -43,7 +43,7 @@ class MovieCreateForm(forms.ModelForm):
                 elif self.source == 'telegram':
                     return {
                         'exists': True,
-                        'kinopoisk_id': kinopoisk_id,
+                        'movie': existing_movie,
                     }
 
             movie_url = f"https://kinopoiskapiunofficial.tech/api/v2.2/films/{kinopoisk_id}"

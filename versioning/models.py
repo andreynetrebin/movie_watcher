@@ -3,7 +3,8 @@ from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from account.models import Profile
-from telegram_bot.views import send_version_notification  # Импортируем функцию
+from telegram_bot.notifications import send_version_notification  # Импортируем функцию
+
 
 class Version(models.Model):
     version_number = models.CharField(max_length=10)

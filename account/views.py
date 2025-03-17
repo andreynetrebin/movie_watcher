@@ -15,7 +15,7 @@ from django.contrib.auth.models import User
 from actions.utils import create_action
 from actions.models import Action
 from movies.models import Movie, Watched, WishList
-from telegram_bot.views import send_new_profile_notification
+from telegram_bot.notifications import send_new_profile_notification
 
 
 from .forms import (
