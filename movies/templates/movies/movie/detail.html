@@ -15,7 +15,7 @@
     <div class="movie-info">
         <h1>{{ movie.title }}</h1>
         <div class="filter-button">
-        <a href="{% url 'movies:list' %}?kinopoisk_id={{ movie.kinopoisk_id }}" class="btn btn-secondary">Переход для проставления отметок</a>
+        <a href="{% url 'movies:list' %}?kinopoisk_id={{ movie.kinopoisk_id }}" class="btn btn-secondary">Проставить отметки</a>
         </div>
         <div class="info-block">
             <div class="details">
@@ -51,9 +51,9 @@
             </div>
             <div class="metrics">
                 <h2>Показатели</h2>
-                <p><strong>Просмотрен:</strong> {{ watched_count }}</p>
-                <p><strong>Лайки:</strong> {{ movie.users_like.count }}</p>
-                <p><strong>Дизлайки:</strong> {{ movie.users_dislike.count }}</p>
+                <p><strong>Просмотрен:</strong> {{ movie.total_views }}</p>
+                <p><strong>Лайки:</strong> {{ movie.total_likes }}</p>
+                <p><strong>Дизлайки:</strong> {{ movie.total_dislikes }}</p>
                 <p><strong>Лайки/Просмотры:</strong> {{ like_ratio|floatformat:2 }}</p>
                 <p><strong>Лайки/Дизлайки:</strong> {{ dislike_ratio|floatformat:2 }}</p>
             </div>

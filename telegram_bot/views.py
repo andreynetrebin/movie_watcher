@@ -10,6 +10,7 @@ from actions.utils import create_action
 from decouple import config
 from movies.forms import MovieCreateForm  # Импортируйте вашу форму
 import re
+from account.points_manager import PointsManager
 
 User  = get_user_model()
 logger = logging.getLogger(__name__)
@@ -99,6 +100,8 @@ def handle_kinopoisk_url(chat_id, url):
         movie_url = f"{config('SITE_URL')}{new_movie.get_absolute_url()}"
         movie_list_url = f"{config('SITE_URL')}/movies/?kinopoisk_id={new_movie.kinopoisk_id}"
         create_action(user, 'добавил', target=new_movie, movie_url=movie_url)
+        PointsManager.add_points(user, PointsManager.POINTS_FOR_ADDING_MOVIE, 'Добавил фильм',
+                                     target=new_movie)
         bot.send_message(chat_id, f"Фильм 🎬<b>{new_movie.title}</b> успешно добавлен!\n"
                                   f"По ссылке Вы можете проставить отметки фильму: {movie_list_url}",
                          parse_mode='HTML')

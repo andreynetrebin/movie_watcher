@@ -866,6 +866,7 @@ button.wishlist i.transparent {
 
 .date {
     margin-top: 5px; /* Отступ ⬤
+}
 
 .user-avatar {
     margin-right: 15px; /* Отступ между аватаром и информацией */
@@ -883,10 +884,7 @@ button.wishlist i.transparent {
     order: 1; /* Гарантирует, что аватар будет первым элементом */
 }
 
-.user-info {
-    display: flex; /* Используем Flexbox для вертикального расположения */
-    flex-direction: column; /* Вертикальное направление для дочерних элементов */
-}
+
 
 .user-action {
     display: flex; /* Используем Flexbox для выравнивания в одну строку */
@@ -1183,7 +1181,10 @@ button.wishlist i.transparent {
     background-color: white; /* Фон для контейнера результатов */
     border: 1px solid #ccc; /* Граница для контейнера результатов */
     z-index: 1000; /* Убедитесь, что результаты отображаются поверх других элементов */
-    width: 100%; /* Ширина контейнера результатов */
+    width: 40%; /* Ширина контейнера результатов (можно изменить по желанию) */
+    right: 10px; /* Устанавливаем отступ справа, чтобы не выступал за границу */
+    left: 50%; /* Устанавливаем левую границу на 50% от ширины экрана */
+    margin-top: 55px; /* Отступ сверху для отделения от элемента поиска */
 }
 
 .result-item {
@@ -1261,10 +1262,26 @@ button.wishlist i.transparent {
 
 .combined-sidebar {
     margin-top: 20px; /* Отступ сверху для объединенного сайдбара */
-    padding: 15px;
+    padding: 10px;
     border: 1px solid #ccc; /* Рамка вокруг блока */
     border-radius: 5px; /* Закругленные углы */
     background-color: #f9f9f9; /* Цвет фона для блока */
+}
+
+.top-movies-sidebar,
+.top-users-sidebar,
+.top-lists-sidebar {
+    background-color: #f9f9f9; /* Цвет фона для боковых панелей */
+    border: 1px solid #ddd; /* Цвет и стиль границы */
+    border-radius: 10px; /* Закругление углов */
+    padding: 5px; /* Отступ внутри блока */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Легкая тень для глубины */
+}
+
+.top-movies-sidebar h3,
+.top-users-sidebar h3,
+.top-lists-sidebar h3 {
+    margin-top: 0; /* Убираем верхний отступ у заголовков */
 }
 
 .top-movies-list, .top-users-list, .top-users-lists {
@@ -1449,6 +1466,18 @@ button.wishlist i.transparent {
         width: 30%; /* Ширина 100% на мобильных устройствах */
         margin-top: 0; /* Убираем отступ сверху для объединенного сайдбара на мобильных устройствах */
     }
+    .metrics {
+        font-size: 10px; /* Уменьшаем размер шрифта в блоке metrics */
+    }
+
+    .metrics h2 {
+        font-size: 14px; /* Уменьшаем размер заголовка в блоке metrics */
+    }
+
+    .metrics p {
+        font-size: 10px; /* Уменьшаем размер текста в параграфах блока metrics */
+    }
+}
 
 
 }
