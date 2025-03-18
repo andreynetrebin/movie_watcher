@@ -384,12 +384,9 @@ def movie_detail(request, slug):
     movie = get_object_or_404(Movie, slug=slug)
     comments = movie.comments.filter(active=True)
 
-    # Получаем количество пользователей, пометивших фильм как просмотренный
-    watched_count = Watched.objects.filter(movie=movie).count()
-
     # Вычисляем соотношения
-    like_ratio = movie.total_likes / watched_count if watched_count > 0 else 0
-    dislike_ratio = movie.users_dislike.count() / movie.users_like.count() if movie.users_like.count() > 0 else 0
+    like_ratio = movie.total_likes / movie.total_views if movie.total_views > 0 else 0
+    dislike_ratio = movie.total_dislikes / movie.total_views if movie.total_views > 0 else 0
 
     if request.method == 'POST':
         form = CommentForm(data=request.POST)
@@ -409,7 +406,6 @@ def movie_detail(request, slug):
     return render(request, 'movies/movie/detail.html', {
         'section': 'movies',
         'movie': movie,
-        'watched_count': watched_count,
         'like_ratio': like_ratio,
         'dislike_ratio': dislike_ratio,
         'comments': comments,
@@ -453,11 +449,29 @@ def movie_list(request):
 
     # Фильтрация по жанрам
     genre_filter = request.GET.getlist('genres')  # Получаем список выбранных жанров
-    genre_filter = [genre for genre in genre_filter if genre]  # Удаляем пустые значения
-    if genre_filter:
-        movies = movies.filter(genres__id__in=genre_filter).annotate(num_genres=Count('genres')).filter(
-            num_genres=len(genre_filter)).distinct()
+    print("Полученные жанры:", genre_filter)  # Отладочный вывод
 
+    # Удаляем пустые значения
+    genre_filter = [genre for genre in genre_filter if genre]
+    print("Жанры после удаления пустых значений:", genre_filter)  # Отладочный вывод
+
+    # Преобразуем жанры в целые числа, игнорируя некорректные значения
+    valid_genres = []
+    for genre in genre_filter:
+        try:
+            # Пробуем преобразовать в целое число
+            genre_id = int(genre)
+            valid_genres.append(genre_id)
+        except ValueError:
+            # Игнорируем некорректные значения
+            print(f"Игнорируем некорректное значение: {genre}")  # Отладочный вывод
+
+    # Проверяем, есть ли валидные жанры
+    if valid_genres:
+        movies = movies.filter(genres__id__in=valid_genres).annotate(num_genres=Count('genres')).filter(
+            num_genres=len(valid_genres)).distinct()
+    else:
+        print("Нет валидных жанров для фильтрации.")  # Отладочный вывод
     # Сортировка
     sort_by = request.GET.get('sort', 'created')  # По умолчанию сортируем по дате создания
     sort_order = request.GET.get('order', 'desc')  # Получаем порядок сортировки (asc или desc)

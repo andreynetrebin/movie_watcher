@@ -70,7 +70,7 @@ def send_new_profile_notification(username):
     for profile in profiles:
         chat_id = profile.telegram_user_id
         profile_url = reverse('user_detail', kwargs={'username': username})
-        site_url = config('SITE_URL')[:-1]
+        site_url = config('SITE_URL')
         message = (
             f"Зарегистрировался новый пользователь - <b>{username}</b>\n"
             f"Ссылка на профиль🤙: {site_url}{profile_url}\n\n"

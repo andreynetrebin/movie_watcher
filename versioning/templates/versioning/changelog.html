@@ -1,6 +1,4 @@
-<!-- templates/changelog.html -->
 {% extends 'base.html' %}
-
 {% block content %}
 <div class="changelog-container">
     <h1>История изменений</h1>
@@ -13,7 +11,28 @@
             </div>
             <pre class="changes">{{ version.changes }}</pre>
         </li>
+        {% empty %}
+        <li>Нет изменений для отображения.</li>
         {% endfor %}
     </ul>
+
+    <!-- Пагинация -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if versions.has_previous %}
+                <a href="?page=1">&laquo; Первая</a>
+                <a href="?page={{ versions.previous_page_number }}">Предыдущая</a>
+            {% endif %}
+
+            <span class="current">
+                Страница {{ versions.number }} из {{ versions.paginator.num_pages }}.
+            </span>
+
+            {% if versions.has_next %}
+                <a href="?page={{ versions.next_page_number }}">Следующая</a>
+                <a href="?page={{ versions.paginator.num_pages }}">Последняя &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
 </div>
 {% endblock %}

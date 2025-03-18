@@ -62,7 +62,7 @@
                         {% else %}
                             <img src="{% static 'images/default_user_avatar.jpg' %}" alt="Default Avatar" class="user-avatar">
                         {% endif %}
-                        {{ movie_list.user.username }} <!-- Имя пользователя -->
+                        {{ movie_list.user.get_full_name }} <!-- Имя пользователя -->
                     </td>
                     <td>
                         <a href="{% url 'lists:movie_list_detail' movie_list.id %}">{{ movie_list.title }}</a>

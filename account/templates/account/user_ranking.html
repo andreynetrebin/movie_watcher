@@ -1,6 +1,7 @@
 <!-- account/user_ranking.html -->
 {% extends "base.html" %}
 {% load static %}
+{% load thumbnail %}
 {% block title %}Рейтинг пользователей{% endblock %}
 {% block content %}
 <h1>Рейтинг пользователей</h1>
@@ -18,13 +19,14 @@
             <tr class="{% if profile.user == request.user %}current-user{% endif %}">
                 <td>{{ forloop.counter }}</td> <!-- Позиция пользователя -->
                 <td>
-                    <div class="user-info">
+                    <div class="user-info-rank">
                         {% if profile.user.profile.photo %}
-                            <img src="{{ profile.user.profile.photo.url }}" alt="{{ profile.user.username }}'s avatar" class="user-avatar">
+                        {% thumbnail profile.user.profile.photo "40x40" crop="100%" as im %}
+                            <img src="{{ im.url }}" alt="{{ profile.user.username }}'s avatar" class="user-avatar">
                         {% else %}
                             <img src="{% static 'images/default_user_avatar.jpg' %}" alt="Default Avatar" class="user-avatar">
                         {% endif %}
-                        <a href="{{ profile.user.get_absolute_url }}">{{ profile.user.username }}</a>
+                        <a href="{{ profile.user.get_absolute_url }}">{{ profile.user.get_full_name }}</a>
                     </div>
                 </td>
                 <td>{{ profile.points }}</td>
@@ -63,9 +65,10 @@
         font-weight: bold; /* Выделение текста */
     }
 
-    .user-info {
+    .user-info-rank {
         display: flex;
         align-items: center; /* Центрируем аватар и текст по вертикали */
+        flex-wrap: nowrap; /* Запрещаем перенос элементов */
     }
 
     .user-avatar {

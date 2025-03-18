@@ -29,14 +29,14 @@
 
 <!-- Вкладки в виде кнопок -->
 <div class="tabs">
-    <button class="tablink active" onclick="openTab(event, 'AboutMe')">Обо мне</button>
+    <button class="tablink active" onclick="openTab(event, 'AboutMe')">О пользователе</button>
     <button class="tablink" onclick="openTab(event, 'Activity')">Активность</button>
     <button class="tablink" onclick="openTab(event, 'Comments')">Комментарии</button>
 </div>
 
 <!-- Содержимое вкладок -->
 <div id="AboutMe" class="tabcontent" style="display: block;">  <!-- Показать по умолчанию -->
-    <h3>Обо мне</h3>
+    <h3>О пользователе</h3>
     <div class="about-me-content">
         <div class="about-me-stats">
             <h4 style="text-decoration: underline;">Стат данные</h4>
@@ -48,7 +48,19 @@
             <div id="followers-list" class="followers-list" style="display: none;">
                 <ul>
                     {% for follower in user.followers.all %}
-                        <li>{{ follower.get_full_name }}</li>
+                        <li>
+                            <div class="follower-item">
+                                {% if follower.profile.photo %}
+                                    {% thumbnail follower.profile.photo "20x20" crop="100%" as im %}
+                                    <a href="{{ follower.get_absolute_url }}">
+                                        <img src="{{ im.url }}" alt="{{ follower.get_full_name }}" class="follower-avatar">
+                                    </a>
+                                {% else %}
+                                    <img src="{% static 'images/default_user_avatar.jpg' %}" alt="Default Avatar" class="follower-avatar">
+                                {% endif %}
+                                <a href="{{ follower.get_absolute_url }}">{{ follower.get_full_name }}</a>
+                            </div>
+                        </li>
                     {% empty %}
                         <li>Нет подписчиков.</li>
                     {% endfor %}
@@ -78,11 +90,12 @@
         {% if forloop.counter <= 3 %}  <!-- Ограничиваем вывод до 3 действий -->
             <div class="action-item">
                 {% if action.verb == "подписался" %}
-                    <p>{{ action.user.get_full_name }} подписался на <strong>{{ action.target.get_full_name }}</strong></p>
+                    <p>подписался на <strong><a href="{{ action.target.get_absolute_url }}">{{ action.target.get_full_name }}</a></strong></p>
                 {% elif action.verb == "отписался" %}
-                    <p>{{ action.user.get_full_name }} отписался от <strong>{{ action.target.get_full_name }}</strong></p>
+                    <p>отписался от <strong><a href="{{ action.target.get_absolute_url }}">{{ action.target.get_full_name }}</a></strong></p>
                 {% else %}
-                    <p>{{ action.verb }}: <strong>{{ action.target.title }}</strong></p>
+                    <p>{{ action.verb }}: <strong><a href="{{ action.target.get_absolute_url }}">{{ action.target.title }}</a></strong></p>
+
                 {% endif %}
                 <p>{{ action.created|date:"DATETIME_FORMAT" }}</p>
             </div>
@@ -102,9 +115,17 @@
                 <div class="action-header">
                     <div class="user-info">
                         <div class="user-action">
-                            <span class="action-verb">{{ action.verb }}</span>
-                            {% if action.target %}
-                                <strong class="movie-title">{{ action.target.title }}</strong>
+                            {% if action.verb == "подписался" %}
+                                <span class="action-verb">подписался на</span>
+                                <strong><a href="{{ action.target.get_absolute_url }}">{{ action.target.get_full_name }}</a></strong>
+                            {% elif action.verb == "отписался" %}
+                                <span class="action-verb">отписался от</span>
+                                <strong><a href="{{ action.target.get_absolute_url }}">{{ action.target.get_full_name }}</a></strong>
+                            {% else %}
+                                <span class="action-verb">{{ action.verb }}</span>
+                                {% if action.target %}
+                                    <strong class="movie-title"><a href="{{ action.target.get_absolute_url }}">{{ action.target.title }}</a></strong>
+                                {% endif %}
                             {% endif %}
                         </div>
                         <span class="date">{{ action.created|date:"DATETIME_FORMAT" }}</span>
@@ -132,7 +153,8 @@
                     <strong>{{ comment.movie.title }}</strong>
                     <a href="{{ comment.movie.get_absolute_url }}">
                         {% if comment.movie.poster %}
-                            <img src="{{ comment.movie.poster.url }}" alt="{{ comment.movie.title }} Poster" class="movie-poster" />
+			{% thumbnail comment.movie.poster "50x75" crop="100%" as im %}
+                            <img src="{{ im.url }}" alt="{{ comment.movie.title }} Poster" class="movie-poster" />
                         {% else %}
                             <img src="{% static 'images/default_movie_poster.jpg' %}" alt="Default Poster" class="movie-poster" />
                         {% endif %}
@@ -282,16 +304,21 @@ function updateFollowersList() {
     justify-content: space-between; /* Распределяем пространство между блоками */
 }
 
-.about-me-stats {
-    width: 33%; /* Устанавливаем ширину блоков */
-}
-
-.about-me-compatibility {
-    width: 33%; /* Устанавливаем ширину блоков */
-}
-
+.about-me-stats,
+.about-me-compatibility,
 .about-me-recently-action {
     width: 33%; /* Устанавливаем ширину блоков */
+    background-color: #f9f9f9; /* Цвет фона для блоков */
+    border: 1px solid #ddd; /* Цвет и стиль границы */
+    border-radius: 10px; /* Закругление углов */
+    padding: 15px; /* Отступ внутри блока */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Легкая тень для глубины */
+}
+
+.about-me-stats h4,
+.about-me-compatibility h4,
+.about-me-recently-action h4 {
+    margin-top: 0; /* Убираем верхний отступ у заголовков */
 }
 
 .about-me-recently-action .action-item p {
@@ -318,50 +345,73 @@ function updateFollowersList() {
     height: 80px; /* Установите высоту иконки */
 }
 
+.toggle-followers-btn {
+    background-color: #007bff; /* Цвет фона кнопки */
+    color: white; /* Цвет текста кнопки */
+    border: none; /* Убираем рамку */
+    padding: 10px 15px; /* Отступы внутри кнопки */
+    border-radius: 5px; /* Закругление углов кнопки */
+    cursor: pointer; /* Указатель при наведении */
+    transition: background-color 0.3s; /* Плавный переход цвета фона */
+}
+
+.toggle-followers-btn:hover {
+    background-color: #0056b3; /* Цвет фона при наведении */
+}
+
 .followers-list {
     margin-top: 10px; /* Отступ сверху для списка подписчиков */
-    border: 1px solid #ccc; /* Рамка вокруг списка */
-    border-radius: 5px; /* Закругленные углы */
-    background-color: #f9f9f9; /* Цвет фона для списка */
-    padding: 10px; /* Отступы внутри списка */
-    max-height: 200px; /* Максимальная высота списка */
-    overflow-y: auto; /* Прокрутка по вертикали, если список слишком длинный */
 }
 
 .followers-list ul {
     list-style-type: none; /* Убираем маркеры списка */
     padding: 0; /* Убираем отступы */
-    margin: 0; /* Убираем отступы */
+    margin: 0; /* Убираем внешние отступы */
 }
 
-.followers-list li {
-    padding: 5px; /* Отступы для элементов списка */
-    border-bottom: 1px solid #ddd; /* Разделительная линия между элементами */
+.follower-item {
+    display: flex; /* Используем Flexbox для расположения аватара и имени */
+    align-items: center; /* Выравниваем по центру по вертикали */
+    margin-bottom: 10px; /* Отступ между подписчиками */
 }
 
-.followers-list li:last-child {
-    border-bottom: none; /* Убираем разделительную линию у последнего элемента */
-}
-
-.toggle-followers-btn {
-    background-color: #12c064; /* Цвет фона для кнопки */
-    color: white; /* Цвет текста для кнопки */
-    border: none; /* Убираем рамку */
-    border-radius: 5px; /* Закругленные углы */
-    padding: 8px 12px; /* Отступы для кнопки */
-    cursor: pointer; /* Указатель при наведении */
-    transition: background-color 0.3s; /* Плавный переход цвета */
-}
-
-.toggle-followers-btn:hover {
-    background-color: #0fa052; /* Цвет фона при наведении */
+.follower-avatar {
+    width: 20px; /* Ширина аватара */
+    height: 20px; /* Высота аватара */
+    border-radius: 50%; /* Делаем аватар круглыми */
+    margin-right: 10px; /* Отступ между аватаром и именем */
 }
 
 @media (max-width: 1100px) {
+    h1 {
+        font-size: 24px; /* Уменьшаем размер заголовка */
+    }
+    h3 {
+        font-size: 20px; /* Уменьшаем размер заголовков секций */
+    }
+    h4 {
+        font-size: 18px; /* Уменьшаем размер подз аголовков */
+    }
+    p, .button {
+        font-size: 16px; /* Уменьшаем размер текста в параграфах и кнопках */
+    }
+    .about-me-content {
+        flex-direction: column; /* Изменяем расположение блоков на вертикальное */
+    }
     .about-me-stats, .about-me-compatibility, .about-me-recently-action {
-        width: 100%; /* Устанавливаем ширину блоков на 100% */
-        margin-right: 0; /* Убираем отступы справа */
+        width: 100%; /* Устанавливаем ширину блоков */
+        margin-right: 0; /* Убираем отступ справа у блоков */
+        margin-bottom: 20px; /* Добавляем отступ снизу для блоков */
+        border-radius: 10px; /* Закругляем углы для мобильных устройств */
     }
 }
+
+
+
+
+
+
+
+
 </style>
 {% endblock %}
