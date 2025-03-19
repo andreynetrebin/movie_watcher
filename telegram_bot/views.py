@@ -4,11 +4,10 @@ import telebot
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import get_user_model
-from movies.models import Movie, Genre, Country, Director, Writer, Watched, WishList
 from account.models import Profile
 from actions.utils import create_action
 from decouple import config
-from movies.forms import MovieCreateForm  # Импортируйте вашу форму
+from movies.forms import MovieCreateForm
 import re
 from account.points_manager import PointsManager
 
@@ -35,9 +34,7 @@ def telegram_webhook(request):
 def is_kinopoisk_url(url):
     pattern = r'https://www\.kinopoisk\.ru/(film|series)/(\d+)/'
     match = re.search(pattern, url)
-    if match:
-        return match.group(0)  # Возвращаем полный URL, если он соответствует шаблону
-    return None  # Возвращаем None, если URL не соответствует шаблону
+    return match.group(0) if match else None
 
 def is_email_address(email):
     pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
@@ -110,18 +107,22 @@ def handle_kinopoisk_url(chat_id, url):
         # Если форма не валидна, отправляем сообщение с ошибкой
         for error in form.errors.values():
             bot.send_message(chat_id, f"Ошибка: {error[0]}", parse_mode='HTML')
-
 def process_update(update):
     if 'message' in update:
         message = update['message']
         chat_id = message['chat']['id']
         command = message.get('text', '')
 
-        # Получаем профиль пользователя или создаем новый, если его нет
-        profile, created = Profile.objects.get_or_create(telegram_user_id=str(chat_id))
+        logger.info(f"Received command: {command} from chat_id: {chat_id}")
+
+        # Обработка команды /start
+        if command.startswith('/start'):
+            start(chat_id)
+            return
 
         # Проверяем, является ли сообщение email-адресом
         if is_email_address(command):
+            logger.info(f"Processing email: {command} from chat_id: {chat_id}")
             handle_email(chat_id, command)  # Обрабатываем email
             return
 
@@ -131,30 +132,42 @@ def process_update(update):
             handle_kinopoisk_url(chat_id, kinopoisk_url)  # Обрабатываем URL Кинопоиска
             return
 
-        # Обработка команд
-        if command.startswith('/start'):
-            start(chat_id)
-        elif command.startswith('/connect'):
-            connect(chat_id)
-        else:
-            bot.send_message(chat_id, "Неизвестная команда. Пожалуйста, используйте /start или /connect.")
+        bot.send_message(chat_id, "Неизвестная команда. Пожалуйста, используйте /start для начала.")
+
 
 def handle_email(chat_id, email):
     try:
-        user = User.objects.get(email=email)
-        profile, created = Profile.objects.get_or_create(telegram_user_id=str(chat_id))  # Получаем или создаем профиль
-        if profile.user:  # Проверяем, есть ли уже привязка
-            bot.send_message(chat_id, 'По данному email уже выполнена привязка к аккаунту.')
+        logger.info(f"Attempting to get profile for email: {email}")
+        # Попытка получить профиль по email
+        profile = Profile.objects.get(user__email=email)
+
+        logger.info(f"Profile found for email: {email}, chat_id: {chat_id}")
+        logger.info(f"telegram_user_id:{profile.telegram_user_id}")
+
+        # Проверяем состояние привязки
+        if profile.telegram_connected and profile.telegram_user_id == str(chat_id):
+            logger.info(f"Existing binding found for chat_id: {chat_id}")
+            bot.send_message(chat_id, "Привязка уже существует. Можете присылать мне ссылки на фильмы из Кинопоиска.")
             return
-        profile.user = user  # Связываем профиль с пользователем
-        profile.telegram_connected = True
-        profile.save()
-        bot.send_message(chat_id, 'Ваш аккаунт успешно связан с Telegram!')
-    except User.DoesNotExist:
-        bot.send_message(chat_id, 'Такого email нет в базе данных. Пожалуйста, пройдите регистрацию.')
+
+        if not profile.telegram_connected and profile.telegram_user_id is None:
+            logger.info(f"Binding account for chat_id: {chat_id}")
+            # Устанавливаем привязку
+            profile.telegram_connected = True
+            profile.telegram_user_id = str(chat_id)
+            profile.save()
+            logger.info(f"Account successfully bound for chat_id: {chat_id}")
+            bot.send_message(chat_id, "Ваш аккаунт успешно связан с Telegram! Теперь можете присылать мне ссылки на фильмы из Кинопоиска.")
+            return
+
+    except Profile.DoesNotExist:
+        logger.warning(f"No profile found for email: {email}")
+        bot.send_message(chat_id, "Такого email нет в базе данных. Пожалуйста, введите email, который указали при регистрации на сайте.")
     except Exception as e:
         logger.error(f"Error in handle_email: {e}")
-        bot.send_message(chat_id, 'Произошла ошибка при связывании аккаунта. Пожалуйста, попробуйте еще раз.')
+        bot.send_message(chat_id, "Произошла ошибка при связывании аккаунта. Пожалуйста, попробуйте еще раз.")
+
 
 def start(chat_id):
-    bot.send_message(chat_id, 'Привет! Используйте команду /connect для связывания вашего аккаунта.')
+    logger.info(f"Starting interaction with chat_id: {chat_id}")
+    bot.send_message(chat_id, 'Привет! Пожалуйста, введите ваш email для привязки аккаунта.')
