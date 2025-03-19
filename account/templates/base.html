@@ -28,7 +28,7 @@
         <div class="logo-container">
             <span class="logo"><a href="{% url "movie_actions" %}">КиноСмотрители</a></span>
             {% if current_version %}
-                <span class="version-number"><a href="{% url 'changelog' %}">{{ current_version.version_number }} тест</a></span>
+                <span class="version-number"><a href="{% url 'changelog' %}">{{ current_version.version_number }}</a></span>
             {% endif %}
         </div>
 <div class="user-container">

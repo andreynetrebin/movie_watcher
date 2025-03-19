@@ -75,7 +75,7 @@
                 {% if user.profile.telegram_connected %}
                     <span style="color: blue;">Да</span>
                 {% else %}
-                    <a href="https://t.me/MoviesWatchersTestBot">Привязать к Telegram</a>
+                    <a href={{ bot_url }}>Привязать к Telegram</a>
                 {% endif %}
             </p>
         </div>
@@ -363,14 +363,14 @@ function toggleFollowersList() {
 
     /* Стили для блока PointsHistory */
     #PointsHistory {
-        font-size: 10px; /* Уменьшаем размер текста в блоке PointsHistory */
+        font-size: 12px; /* Уменьшаем размер текста в блоке PointsHistory */
     }
     #PointsHistory h3 {
-        font-size: 12px; /* Уменьшаем размер заголовков секций */
+        font-size: 14px; /* Уменьшаем размер заголовков секций */
     }
 
     #PointsHistory li {
-        margin-bottom: 10px; /* Добавляем отступ между элементами списка */
+        margin-bottom: 12px; /* Добавляем отступ между элементами списка */
     }
 
     #PointsHistory strong {

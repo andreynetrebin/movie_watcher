@@ -16,6 +16,7 @@ from actions.utils import create_action
 from actions.models import Action
 from movies.models import Movie, Watched, WishList
 from telegram_bot.notifications import send_new_profile_notification
+from decouple import config
 
 
 from .forms import (
@@ -86,6 +87,7 @@ def dashboard(request):
         {
             'section': 'dashboard',
             'actions': actions,
+            'bot_url': config('BOT_URL'),
             'watched_count': watched_count,
             'liked_count': liked_count,
             'disliked_count': disliked_count,

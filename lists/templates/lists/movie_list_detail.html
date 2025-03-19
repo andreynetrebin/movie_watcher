@@ -1,36 +1,98 @@
 <!-- lists/movie_list_detail.html -->
 {% extends "base.html" %}
+{% load static %}
 {% load thumbnail %}
 {% block title %}{{ movie_list.title }}{% endblock %}
 {% block content %}
-<h2>{{ movie_list.title }}</h2>
-{% if can_edit %}
-    <a href="{% url 'lists:view_movie_list' movie_list.id %}?edit=true">Редактировать список</a> <!-- Ссылка на редактирование -->
-{% endif %}
-<p>Баллы: {{ movie_list.points }}</p>
-<p>Лайки: {{ movie_list.users_like.count }}</p>
-<a href="{% url 'lists:users_movie_lists' %}">Назад к списку фильмов</a>
+<div class="movie-list-detail">
+    <h2>Название списка: {{ movie_list.title }}</h2>
+    <h3>Автор: {{ movie_list.user.get_full_name }}</h3>
+    <hr>
+    <div class="movie-list-info">
+        {% if can_edit %}
+            <a href="{% url 'lists:view_movie_list' movie_list.id %}?edit=true" class="btn btn-secondary">Редактировать список</a> <!-- Ссылка на редактирование -->
+        {% endif %}
+        <p>Баллы: {{ movie_list.points }}</p>
+        <p>Лайки: {{ movie_list.users_like.count }}</p>
+        <!-- Кнопка "Нравится" -->
+        {% if request.user.is_authenticated and can_like %}
+            {% if request.user in movie_list.users_like.all %}
+                <form action="{% url 'lists:like_movie_list' movie_list.id %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Уже не нравится</button>
+                </form>
+            {% else %}
+                <form action="{% url 'lists:like_movie_list' movie_list.id %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">Нравится</button>
+                </form>
+            {% endif %}
+        {% endif %}
+        <br>
+        <br>
+        <a href="{% url 'lists:users_movie_lists' %}" class="btn btn-light">Назад к списку фильмов</a>
+    </div>
+</div>
 
-<!-- Кнопка "Нравится" -->
-{% if request.user.is_authenticated and can_like %}
-    {% if request.user in movie_list.users_like.all %}
-        <form action="{% url 'lists:like_movie_list' movie_list.id %}" method="post">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Уже не нравится</button>
-        </form>
-    {% else %}
-        <form action="{% url 'lists:like_movie_list' movie_list.id %}" method="post">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-primary">Нравится</button>
-        </form>
-    {% endif %}
-{% endif %}
+<!-- Кнопки для переключения представления -->
+<div class="view-toggle">
+    <button id="grid-view" class="active">Сеткой</button>
+    <button id="table-view">Таблицей</button>
+</div>
 
-<div id="movie-list">
+<div id="movie-list" class="grid-view">
     {% include "lists/list_movies.html" %}
 </div>
 
+<div id="movie-list-table" class="table-view" style="display: none;">
+    <table>
+        <thead>
+            <tr>
+                <th>#</th> <!-- Нумерация -->
+                <th>Постер</th>
+                <th>Название фильма</th>
+                <th>Оригинальное название</th>
+                <th>Год выпуска</th>
+                <th>Адрес в <img src="{% static 'images/icon-kp.png' %}" alt="Кинопоиск" class="icon"> Кинопоиске</th> <!-- Новая колонка -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for movie in movies %}
+                <tr class="{% if movie.id in watched_movies %}watched{% endif %}">
+                    <td>{{ forloop.counter }}</td> <!-- Нумерация -->
+                    <td>
+                        {% if movie.poster %}
+                            <img src='{% thumbnail movie.poster 50x75 crop="100%" %}' alt="{{ movie.title }} постер" class="movie-poster-img">
+                        {% endif %}
+                    </td>
+                    <td><a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></td>
+                    <td>{{ movie.title_original }}</td>
+                    <td>{{ movie.year }}</td>
+                    <td><a href="{{ movie.kinopoisk_url }}" target="_blank">{{ movie.kinopoisk_url }}</a></td> <!-- Ссылка на Кинопоиск -->
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
 <style>
+    .movie-list-detail {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        background-color: #f9f9f9;
+    }
+
+    .movie-list-detail h2 {
+        margin: 0;
+        font-size: 24px;
+    }
+
+    .movie-list-info {
+        margin-top: 15px;
+    }
+
     .btn {
         padding: 10px 15px;
         border: none;
@@ -38,6 +100,7 @@
         color: white;
         cursor: pointer;
         transition: background-color 0.3s;
+        text-decoration: none;
     }
 
     .btn-primary {
@@ -48,6 +111,15 @@
         background-color: #dc3545; /* Красный цвет для кнопки "Уже не нравится" */
     }
 
+    .btn-secondary {
+        background-color: #6c757d; /* Серый цвет для кнопки "Редактировать" */
+    }
+
+    .btn-light {
+        background-color: #f8f9fa; /* Светлый цвет для кнопки "Назад" */
+        color: #000;
+    }
+
     .btn:hover {
         opacity: 0.8; /* Плавный эффект при наведении */
     }
@@ -55,6 +127,66 @@
     #movie-list {
         margin-top: 20px; /* Отступ сверху для списка фильмов */
     }
+
+    .view-toggle {
+        margin: 20px 0;
+    }
+
+    .view-toggle button {
+        margin-right: 10px;
+        padding: 10px;
+        cursor: pointer;
+    }
+
+    .table-view {
+        margin-top: 20px;
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table-view th, .table-view td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: left;
+    }
+
+    .table-view th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+
+    .table-view tr:nth-child(even) {
+        background-color: #f9f9f9; /* Светлый фон для четных строк */
+    }
+
+    .table-view tr:hover {
+        background-color: #e9ecef; /* Цвет фона при наведении на строку */
+    }
+
+    .table-view tr.watched {
+        background-color: #d4edda; /* Цвет фона для просмотренных фильмов */
+    }
+
+    .movie-poster-img {
+        border-radius: 5px; /* Закругление углов постера */
+    }
 </style>
+
+<script>
+    // По умолчанию показываем сетку
+    document.getElementById('grid-view').addEventListener('click', function() {
+        document.getElementById('movie-list').style.display = 'block';
+        document.getElementById('movie-list-table').style.display = 'none';
+        this.classList.add('active');
+        document.getElementById('table-view').classList.remove('active');
+    });
+
+    document.getElementById('table-view').addEventListener('click', function() {
+        document.getElementById('movie-list').style.display = 'none';
+        document.getElementById('movie-list-table').style.display = 'block';
+        this.classList.add('active');
+        document.getElementById('grid-view').classList.remove('active');
+    });
+</script>
 
 {% endblock %}

@@ -1262,10 +1262,8 @@ button.wishlist i.transparent {
 
 .combined-sidebar {
     margin-top: 20px; /* Отступ сверху для объединенного сайдбара */
-    padding: 10px;
-    border: 1px solid #ccc; /* Рамка вокруг блока */
+    padding: 5px;
     border-radius: 5px; /* Закругленные углы */
-    background-color: #f9f9f9; /* Цвет фона для блока */
 }
 
 .top-movies-sidebar,
@@ -1276,6 +1274,7 @@ button.wishlist i.transparent {
     border-radius: 10px; /* Закругление углов */
     padding: 5px; /* Отступ внутри блока */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Легкая тень для глубины */
+    margin-bottom: 10px; /* Отступ снизу для создания пространства между элементами */
 }
 
 .top-movies-sidebar h3,
