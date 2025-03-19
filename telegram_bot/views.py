@@ -9,6 +9,7 @@ from actions.utils import create_action
 from decouple import config
 from movies.forms import MovieCreateForm
 import re
+from movies.models import Movie, Genre, Country, Director, Writer, Watched, WishList
 from account.points_manager import PointsManager
 
 User  = get_user_model()
