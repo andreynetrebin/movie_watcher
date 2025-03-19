@@ -219,7 +219,7 @@ def edit(request):
 @login_required
 def user_list(request):
     # Получаем всех активных пользователей, кроме текущего
-    users = User.objects.filter(is_active=True)
+    users = User.objects.filter(is_active=True).exclude(is_superuser=True)
     return render(request, 'account/user/list.html', {
         'section': 'people',
         'users': users
