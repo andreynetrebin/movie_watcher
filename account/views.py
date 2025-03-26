@@ -110,7 +110,8 @@ def user_movie_list(request, username):
     disliked_movies = Movie.objects.filter(users_dislike=user)
     wishlist_movies = Movie.objects.filter(wishlist__user=user)
     added_movies = Movie.objects.filter(user=user)  # Фильмы, добавленные пользователем
-
+    wishlist_movies_curuser = WishList.objects.filter(user=request.user).values_list('movie_id', flat=True)
+    watched_movies_curuser = Watched.objects.filter(user=request.user).values_list('movie_id', flat=True)
     # Фильтрация по вкладкам
     filter_type = request.GET.get('filter', 'all')  # Получаем тип фильтра из параметров запроса
 
@@ -148,7 +149,10 @@ def user_movie_list(request, username):
         'disliked_movies': disliked_movies,
         'wishlist_movies': wishlist_movies,
         'added_movies': added_movies,  # Передаем добавленные фильмы
+        'watched_movies_curuser': watched_movies_curuser,
+        'wishlist_movies_curuser': wishlist_movies_curuser,
     })
+
 def register(request):
     if request.method == 'POST':
         user_form = UserRegistrationForm(request.POST)
