@@ -26,7 +26,12 @@ a также создавать собственные списки фильмо
 
 
 ## Архитектурная диаграмма
-![Архитектурная-диаграмма]([images/architecture_diagram.png](https://github.com/user-attachments/assets/a6da646c-0829-42cd-9de2-105fed5793ab))
+![arch_diagram](https://github.com/user-attachments/assets/91198fcb-e4e2-4700-8758-89fdfb8ac754)
+
+## Установка
+
+
+Здесь будет про установку...
 
 ## Использование
 
