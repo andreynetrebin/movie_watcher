@@ -82,13 +82,13 @@
             <label for="action_type">Фильтр по видам действий:</label>
             <select name="action_type" id="action_type" onchange="this.form.submit()">
                 <option value="">Все действия</option>
-                <option value="подписался" {% if action_type == "подписался" %}selected{% endif %}>Подписался</option>
                 <option value="добавил" {% if action_type == "добавил" %}selected{% endif %}>Добавил</option>
-                <option value="отписался" {% if action_type == "отписался" %}selected{% endif %}>Отписался</option>
                 <option value="недавно посмотрел" {% if action_type == "недавно посмотрел" %}selected{% endif %}>Недавно посмотрел</option>
+                <option value='добавил в "Буду смотреть"' {% if action_type == 'добавил в "Буду смотреть"' %}selected{% endif %}>Буду смотреть</option>
                 <option value="понравился" {% if action_type == "понравился" %}selected{% endif %}>Понравился</option>
                 <option value="не понравился" {% if action_type == "не понравился" %}selected{% endif %}>Не понравился</option>
-                <option value='добавил в "Буду смотреть"' {% if action_type == 'добавил в "Буду смотреть"' %}selected{% endif %}>Буду смотреть</option>
+                <option value="подписался" {% if action_type == "подписался" %}selected{% endif %}>Подписался</option>
+                <option value="отписался" {% if action_type == "отписался" %}selected{% endif %}>Отписался</option>
                 <!-- Добавьте другие виды действий, если необходимо -->
             </select>
         </form>
