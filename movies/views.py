@@ -66,12 +66,18 @@ def writer_list(request):
     return render(request, 'movies/writers/writer_list.html', {'writers': writers_page})
 
 
+
 @login_required
 def movie_bulk_create(request):
     if request.method == 'POST':
         form = MovieBulkCreateForm(data=request.POST)
         if form.is_valid():
             urls = form.cleaned_data['urls'].strip().splitlines()
+            # Ограничиваем количество добавляемых фильмов до 5
+            if len(urls) > 5:
+                messages.error(request, 'Вы можете добавить не более 5 фильмов за раз.')
+                return redirect('movies:movie_bulk_create')  # Перенаправление на форму
+
             success_count = 0  # Счетчик успешно добавленных фильмов
             for url in urls:
                 url = url.strip()
@@ -112,7 +118,8 @@ def movie_bulk_create(request):
                             new_movie = movie_form.save(commit=False)  # Сохраняем объект, но не в БД
                             new_movie.user = request.user  # Устанавливаем пользователя
                             new_movie.save()  # Сохраняем изменения
-
+                            PointsManager.add_points(request.user, PointsManager.POINTS_FOR_ADDING_MOVIE, 'Добавил фильм',
+                                     target=new_movie)
                             # Добавление связей
                             for genre in cd["genres"]:
                                 genre_row = Genre.objects.get(name=genre)
@@ -128,6 +135,8 @@ def movie_bulk_create(request):
                                 new_movie.writers.add(writer_row)
 
                             success_count += 1  # Увеличиваем счетчик успешных добавлений
+                            movie_url = request.build_absolute_uri(new_movie.get_absolute_url())
+                            create_action(request.user, 'добавил', target=new_movie, movie_url=movie_url)
                         else:
                             messages.error(request, f'Ошибка при добавлении фильма из {url}: {movie_form.errors}')
                     except Exception as e:
@@ -175,14 +184,23 @@ def writer_detail(request, pk):
 
 
 
+
+
 def movie_actions(request):
+    # Получаем тип действия из GET-параметров
+    action_type = request.GET.get('action_type', None)
+
+    # Формируем фильтр для действий
+    action_filter = Q(target_ct__model='movie') | Q(verb__in=['подписался', 'отписался'])
+
+    if action_type and action_type != "":
+        action_filter &= Q(verb=action_type)
+
     # Извлекаем все действия, включая подписки
-    actions = Action.objects.filter(
-        Q(target_ct__model='movie') | Q(verb__in=['подписался', 'отписался'])
-    ).select_related('user').all()
+    actions = Action.objects.filter(action_filter).select_related('user')
 
     # Пагинация
-    paginator = Paginator(actions, 10)  # 10 действий на странице
+    paginator = Paginator(actions, 5)  # 5 действий на странице
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -195,6 +213,9 @@ def movie_actions(request):
     # Топ 3 списков фильмов по количеству лайков
     top_lists = MovieList.objects.annotate(likes_count=Count('users_like')).order_by('-likes_count')[:3]
 
+    # 5 последних добавленных фильмов
+    latest_movies = Movie.objects.order_by('-created')[:5]  # Предполагается, что есть поле created
+
     return render(
         request,
         'movies/movie/movie_actions.html',
@@ -202,8 +223,10 @@ def movie_actions(request):
             'section': 'movie_actions',
             'actions': page_obj,
             'top_movies': top_movies,
-            'top_users': top_users,  # Передаем топ-3 пользователей
-            'top_lists': top_lists,  # Передаем топ-3 списков
+            'top_users': top_users,
+            'top_lists': top_lists,
+            'latest_movies': latest_movies,  # Передаем последние добавленные фильмы
+            'action_type': action_type,
         }
     )
 

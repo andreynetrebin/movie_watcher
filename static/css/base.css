@@ -540,8 +540,8 @@ img.user-detail {
 
 .movie-poster {
     margin-right: 5px; /* Отступ между постером и информацией о фильме */
-    width: 80px; /* Фиксированная ширина */
-    height: 120px; /* Фиксированная высота */
+    width: 40px; /* Фиксированная ширина */
+    height: 60px; /* Фиксированная высота */
     overflow: hidden; /* Скрываем переполнение, если изображение больше */
     display: flex; /* Используем flexbox для центрирования изображения */
     justify-content: center; /* Центрируем изображение по горизонтали */
@@ -1316,6 +1316,72 @@ button.wishlist i.transparent {
     text-decoration: underline; /* Добавляем подчеркивание при наведении */
 }
 
+
+.latest-movies-slider {
+    margin: 20px 0;
+    text-align: center; /* Центрируем заголовок */
+}
+
+.slider {
+    display: flex; /* Используем Flexbox для горизонтального расположения */
+    overflow-x: auto; /* Позволяет прокручивать слайдер */
+    scroll-snap-type: x mandatory; /* Для плавного скроллинга */
+    padding: 10px 0; /* Отступы сверху и снизу */
+    gap: 15px; /* Промежуток между элементами */
+}
+
+.slider-item {
+    flex: 0 0 auto; /* Не позволяет элементам сжиматься */
+    width: 200px; /* Ширина каждого элемента */
+    scroll-snap-align: start; /* Привязывает элементы к началу при прокрутке */
+    position: relative; /* Для позиционирования заголовка */
+    transition: transform 0.3s; /* Плавный эффект при наведении */
+}
+
+.slider-item:hover {
+    transform: scale(1.05); /* Увеличение элемента при наведении */
+}
+
+.slider-img {
+    width: 100%; /* Ширина изображения */
+    height: auto; /* Высота изображения */
+    border-radius: 10px; /* Закругленные углы */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень для изображения */
+}
+
+.slider-title {
+    margin-top: 5px; /* Отступ сверху */
+    font-weight: bold; /* Жирный шрифт для заголовка */
+    color: #333; /* Цвет текста заголовка */
+    font-size: 1.1em; /* Размер шрифта заголовка */
+}
+
+
+.action-filter-container {
+    margin: 20px 0; /* Отступы сверху и снизу */
+    display: flex; /* Используем Flexbox для выравнивания */
+    align-items: center; /* Центрируем элементы по вертикали */
+}
+
+.action-filter-label {
+    margin-right: 10px; /* Отступ справа от метки */
+    font-weight: bold; /* Жирный шрифт для метки */
+    color: #333; /* Цвет текста метки */
+}
+
+.action-filter-select {
+    padding: 10px; /* Внутренние отступы */
+    border: 1px solid #ccc; /* Цвет рамки */
+    border-radius: 5px; /* Закругленные углы */
+    font-size: 1em; /* Размер шрифта */
+    transition: border-color 0.3s; /* Плавный переход цвета рамки */
+    outline: none; /* Убираем обводку при фокусе */
+}
+
+.action-filter-select:focus {
+    border-color: #007bff; /* Цвет рамки при фокусе */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Тень при фокусе */
+}
 
 /* Стили для мобильных устройств */
 @media (max-width: 768px) {

@@ -83,9 +83,7 @@
                     <li><a href="{% url "movies:list" %}?filter=watchlist">Буду смотреть</a></li>
                     <li><a href="{% url "movies:list" %}?filter=added">Добавленные</a></li>
                     <li><a href="{% url "movies:create" %}">+Добавить фильм</a></li>
-                    {% if request.user.is_staff %}  {# Проверяем, является ли пользователь администратором #}
                     <li><a href="{% url 'movies:movie_bulk_create' %}">+Массовая загрузка</a></li>
-                    {% endif %}
                 </ul>
             </li>
             <li {% if section == "lists" %}class="selected"{% endif %}>
