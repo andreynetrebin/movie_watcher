@@ -460,6 +460,13 @@ def movie_list(request):
     elif filter_type == 'added':
         movies = movies.filter(user=user)
 
+    # Фильтрация по типу
+    type_filter = request.GET.get('type', '')
+    if type_filter == 'movie':
+        movies = movies.filter(type_movie='FILM')  # Предполагается, что 'movie' - это значение для фильмов
+    elif type_filter == 'series':
+        movies = movies.filter(type_movie='TV_SERIES')  # Предполагается, что 'series' - это значение для сериалов
+
     # Фильтрация по названию и оригинальному названию
     title_filter = request.GET.get('title', '')
     if title_filter:
@@ -472,29 +479,21 @@ def movie_list(request):
 
     # Фильтрация по жанрам
     genre_filter = request.GET.getlist('genres')  # Получаем список выбранных жанров
-    print("Полученные жанры:", genre_filter)  # Отладочный вывод
-
-    # Удаляем пустые значения
-    genre_filter = [genre for genre in genre_filter if genre]
-    print("Жанры после удаления пустых значений:", genre_filter)  # Отладочный вывод
+    genre_filter = [genre for genre in genre_filter if genre]  # Удаляем пустые значения
 
     # Преобразуем жанры в целые числа, игнорируя некорректные значения
     valid_genres = []
     for genre in genre_filter:
         try:
-            # Пробуем преобразовать в целое число
             genre_id = int(genre)
             valid_genres.append(genre_id)
         except ValueError:
-            # Игнорируем некорректные значения
-            print(f"Игнорируем некорректное значение: {genre}")  # Отладочный вывод
+            pass
 
-    # Проверяем, есть ли валидные жанры
     if valid_genres:
         movies = movies.filter(genres__id__in=valid_genres).annotate(num_genres=Count('genres')).filter(
             num_genres=len(valid_genres)).distinct()
-    else:
-        print("Нет валидных жанров для фильтрации.")  # Отладочный вывод
+
     # Сортировка
     sort_by = request.GET.get('sort', 'created')  # По умолчанию сортируем по дате создания
     sort_order = request.GET.get('order', 'desc')  # Получаем порядок сортировки (asc или desc)
@@ -511,8 +510,7 @@ def movie_list(request):
         movies = movies.order_by('-total_likes' if sort_order == 'desc' else 'total_likes')
     elif sort_by == 'dislikes':
         movies = movies.order_by('-total_dislikes' if sort_order == 'desc' else 'total_dislikes')
-    elif sort_by == 'type':
-        movies = movies.order_by('type_movie' if sort_order == 'asc' else '-type_movie')
+
     # Получаем список просмотренных фильмов для текущего пользователя
     watched_movies = Watched.objects.filter(user=user).values_list('movie_id', flat=True)
 
@@ -521,27 +519,19 @@ def movie_list(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    # Логирование для диагностики
-    logger.info(f"Page number: {page_number}, Movies on this page: {page_obj.object_list}")
-
-    # Получаем топ-10 режиссеров и сценаристов
-    top_directors = Director.objects.annotate(num_movies=Count('movies_director')).order_by('-num_movies')[:10]
-    top_writers = Writer.objects.annotate(num_movies=Count('movies_writer')).order_by('-num_movies')[:10]
-
     # Получаем все жанры для отображения в фильтре
     all_genres = Genre.objects.all()
 
     return render(request, 'movies/movie/list.html', {
         'page_obj': page_obj,
-        'top_directors': top_directors,
-        'top_writers': top_writers,
         'filter_type': filter_type,
         'watched_movies': watched_movies,
         'wishlist_movies': wishlist_movies,
-        'title_filter': title_filter,  # Передаем фильтр названия в шаблон
-        'kinopoisk_id_filter': kinopoisk_id_filter,  # Передаем фильтр по Кинопоиск ID в шаблон
-        'all_genres': all_genres,  # Передаем все жанры в шаблон
-        'selected_genres': genre_filter,  # Передаем выбранные жанры в шаблон
-        'sort_by': sort_by,  # Передаем выбранный параметр сортировки в шаблон
-        'sort_order': sort_order,  # Передаем порядок сортировки в шаблон
+        'title_filter': title_filter,
+        'kinopoisk_id_filter': kinopoisk_id_filter,
+        'all_genres': all_genres,
+        'selected_genres': genre_filter,
+        'sort_by': sort_by,
+        'sort_order': sort_order,
+        'type_filter': type_filter,  # Передаем выбранный тип в шаблон
     })

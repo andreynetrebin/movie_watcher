@@ -14,22 +14,36 @@
 
 <div class="sidebar">
     <div class="filter">
+        <h4>Фильтры</h4>
         <form method="GET" action="">
+            <div class="filter-group">
+                <label>
+                    <input type="radio" name="type" value="movie" {% if type_filter == 'movie' %}checked{% endif %}>
+                    Фильмы
+                </label>
+                <label>
+                    <input type="radio" name="type" value="series" {% if type_filter == 'series' %}checked{% endif %}>
+                    Сериалы
+                </label>
+                <button type="submit" class="filter-btn title-filter">
+                    Применить по типу
+                </button>
+            </div>
             <div class="filter-group">
                 <input type="text" name="title" placeholder="Фильтр по названию" value="{{ title_filter }}">
                 <button type="submit" class="filter-btn title-filter">
-                    Применить фильтр по названию
+                    Применить по названию
                 </button>
             </div>
             <div class="filter-group">
                 <input type="text" name="kinopoisk_id" placeholder="Фильтр по Кинопоиск ID" value="{{ kinopoisk_id_filter }}">
                 <button type="submit" class="filter-btn title-filter">
-                    Применить фильтр по Кинопоиск ID
+                    Применить по Кинопоиск ID
                 </button>
             </div>
             <div class="filter-group">
                 <button type="submit" class="filter-btn genre-filter">
-                    Применить фильтр по жанрам
+                    Применить по жанрам
                 </button>
                 <input type="hidden" name="filter" value="{{ filter_type }}">
                 <div class="genre-checkboxes">
@@ -42,6 +56,7 @@
                     {% endfor %}
                 </div>
             </div>
+
         </form>
     </div>
 </div>
