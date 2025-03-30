@@ -88,56 +88,39 @@ class Movie(models.Model):
             self.save()
 
     def add_like(self, user):
-        print(f"Attempting to add like for user {user}. Current total likes: {self.total_likes}")
-        print(f"Current users who liked: {[u.id for u in self.users_like.all()]}")
-
-        if not self.users_like.filter(id=user.id).exists():
-            self.users_like.add(user)
-            self.total_likes += 1
-            print(f"Added like for user {user}. Total likes: {self.total_likes}")
-            self.save()
-
-            if self.users_dislike.filter(id=user.id).exists():
-                self.users_dislike.remove(user)
-                if self.total_dislikes > 0:
-                    self.total_dislikes -= 1
-                    print(f"Removed dislike for user {user}. Total dislikes: {self.total_dislikes}")
-                self.save()
+        if self.has_liked(user):  # Проверяем, есть ли уже лайк
+            self.remove_like(user)  # Снимаем лайк
         else:
-            print(f"User  {user} already liked this movie. No changes made.")
-
-    def add_dislike(self, user):
-        print(f"Attempting to add dislike for user {user}. Current total dislikes: {self.total_dislikes}")
-
-        if not self.users_dislike.filter(id=user.id).exists():  # Проверяем, находится ли пользователь в дизлайках
-            self.users_dislike.add(user)  # Добавляем пользователя в дизлайки
-            self.total_dislikes += 1  # Увеличиваем счетчик дизлайков
-            print(f"Added dislike for user {user}. Total dislikes: {self.total_dislikes}")
+            self.users_like.add(user)  # Добавляем пользователя в лайки
+            self.total_likes += 1  # Увеличиваем счетчик лайков
             self.save()  # Сохраняем изменения
 
-            # Проверяем, находится ли пользователь в лайках
-            if self.users_like.filter(id=user.id).exists():
-                self.users_like.remove(user)  # Удаляем пользователя из лайков
-                if self.total_likes > 0:  # Проверяем, что total_likes больше 0
-                    self.total_likes -= 1  # Уменьшаем счетчик лайков
-                    print(f"Removed like for user {user}. Total likes: {self.total_likes}")
-                self.save()  # Сохраняем изменения
+    def add_dislike(self, user):
+        if self.has_disliked(user):  # Проверяем, есть ли уже дизлайк
+            self.remove_dislike(user)  # Снимаем дизлайк
+        else:
+            self.users_dislike.add(user)  # Добавляем пользователя в дизлайки
+            self.total_dislikes += 1  # Увеличиваем счетчик дизлайков
+            self.save()  # Сохраняем изменения
 
     def remove_like(self, user):
-        if user in self.users_like.all():
-            self.users_like.remove(user)
+        if self.has_liked(user):  # Проверяем, есть ли лайк
+            self.users_like.remove(user)  # Удаляем пользователя из лайков
             if self.total_likes > 0:
-                self.total_likes -= 1
-            self.save()
-
+                self.total_likes -= 1  # Уменьшаем счетчик лайков
+            self.save()  # Сохраняем изменения
 
     def remove_dislike(self, user):
-        if user in self.users_dislike.all():
-            self.users_dislike.remove(user)
-            # Предполагается, что у вас есть поле total_dislikes
+        if self.has_disliked(user):  # Проверяем, есть ли дизлайк
+            self.users_dislike.remove(user)  # Удаляем пользователя из дизлайков
             if self.total_dislikes > 0:
-                self.total_dislikes -= 1
-            self.save()
+                self.total_dislikes -= 1  # Уменьшаем счетчик дизлайков
+            self.save()  # Сохраняем изменения
+    def has_liked(self, user):
+        return self.users_like.filter(id=user.id).exists()
+
+    def has_disliked(self, user):
+        return self.users_dislike.filter(id=user.id).exists()
 
 
     class Meta:

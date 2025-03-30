@@ -184,8 +184,6 @@ def writer_detail(request, pk):
 
 
 
-
-
 def movie_actions(request):
     # Получаем тип действия из GET-параметров
     action_type = request.GET.get('action_type', None)
@@ -193,7 +191,8 @@ def movie_actions(request):
     # Формируем фильтр для действий
     action_filter = Q(target_ct__model='movie') | Q(verb__in=['подписался', 'отписался'])
 
-    if action_type and action_type != "":
+    # Если action_type задан и не пустой, добавляем фильтр
+    if action_type and action_type != "Все действия":
         action_filter &= Q(verb=action_type)
 
     # Извлекаем все действия, включая подписки
@@ -311,26 +310,28 @@ def add_to_wishlist(request):
 def mark_like(request):
     movie_id = request.POST.get('id')
     movie = get_object_or_404(Movie, id=movie_id)
-    movie.add_like(request.user)  # Вызываем метод добавления лайка
+
+    movie.add_like(request.user)  # Добавляем или снимаем лайк
     movie.refresh_from_db()  # Обновляем состояние объекта из базы данных
     movie_url = request.build_absolute_uri(movie.get_absolute_url())
-    create_action(request.user, 'понравился', target=movie, movie_url=movie_url)
+    status = 'liked' if movie.has_liked(request.user) else 'unliked'
+    create_action(request.user, status, target=movie, movie_url=movie_url)
 
-    return JsonResponse({'status': 'liked', 'total_likes': movie.total_likes})
+    return JsonResponse({'status': status, 'total_likes': movie.total_likes})
 
 @login_required
 @require_POST
 def mark_dislike(request):
-    if request.method == 'POST':
-        movie_id = request.POST.get('id')
-        movie = get_object_or_404(Movie, id=movie_id)
-        movie.add_dislike(request.user)
-        movie_url = request.build_absolute_uri(movie.get_absolute_url())
-        create_action(request.user, 'не понравился', target=movie, movie_url=movie_url)
+    movie_id = request.POST.get('id')
+    movie = get_object_or_404(Movie, id=movie_id)
 
-        return JsonResponse({'status': 'disliked', 'total_dislikes': movie.total_dislikes})
+    movie.add_dislike(request.user)  # Добавляем или снимаем дизлайк
+    movie.refresh_from_db()  # Обновляем состояние объекта из базы данных
+    status = 'disliked' if movie.has_disliked(request.user) else 'undisliked'
+    movie_url = request.build_absolute_uri(movie.get_absolute_url())
+    create_action(request.user, status, target=movie, movie_url=movie_url)
 
-
+    return JsonResponse({'status': status, 'total_dislikes': movie.total_dislikes})
 
 @login_required
 def movie_create(request):
