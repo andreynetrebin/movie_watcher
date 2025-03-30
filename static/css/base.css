@@ -1316,7 +1316,6 @@ button.wishlist i.transparent {
     text-decoration: underline; /* Добавляем подчеркивание при наведении */
 }
 
-
 .latest-movies-slider {
     margin: 20px 0;
     text-align: center; /* Центрируем заголовок */
@@ -1328,6 +1327,7 @@ button.wishlist i.transparent {
     scroll-snap-type: x mandatory; /* Для плавного скроллинга */
     padding: 10px 0; /* Отступы сверху и снизу */
     gap: 15px; /* Промежуток между элементами */
+    -webkit-overflow-scrolling: touch; /* Для плавного скроллинга на мобильных устройствах */
 }
 
 .slider-item {
@@ -1355,6 +1355,7 @@ button.wishlist i.transparent {
     color: #333; /* Цвет текста заголовка */
     font-size: 1.1em; /* Размер шрифта заголовка */
 }
+
 
 
 .action-filter-container {
@@ -1542,7 +1543,26 @@ button.wishlist i.transparent {
     .metrics p {
         font-size: 10px; /* Уменьшаем размер текста в параграфах блока metrics */
     }
-}
 
+   .pagination {
+        font-size: 12px; /* Уменьшаем размер шрифта */
+    }
+
+    .step-links a {
+        padding: 3px 6px; /* Уменьшаем отступы внутри ссылок */
+        font-size: 10px; /* Уменьшаем размер шрифта для ссылок */
+    }
+
+    .current {
+        font-size: 10px; /* Уменьшаем размер шрифта для текущей страницы */
+    }
+
+    .slider {
+        padding: 5px 0; /* Уменьшаем отступы для меньших экранов */
+    }
+
+    .slider-item {
+        width: 150px; /* Уменьшаем ширину элементов для меньших экранов */
+    }
 
 }

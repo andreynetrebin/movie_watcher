@@ -87,6 +87,7 @@
                 <option value='добавил в "Буду смотреть"' {% if action_type == 'добавил в "Буду смотреть"' %}selected{% endif %}>Буду смотреть</option>
                 <option value="понравился" {% if action_type == "понравился" %}selected{% endif %}>Понравился</option>
                 <option value="не понравился" {% if action_type == "не понравился" %}selected{% endif %}>Не понравился</option>
+                <option value="прокомментировал" {% if action_type == "прокомментировал" %}selected{% endif %}>Прокомментировал</option>
                 <option value="подписался" {% if action_type == "подписался" %}selected{% endif %}>Подписался</option>
                 <option value="отписался" {% if action_type == "отписался" %}selected{% endif %}>Отписался</option>
                 <!-- Добавьте другие виды действий, если необходимо -->
@@ -144,6 +145,25 @@
                 {% empty %}
                     <p>Нет действий для отображения.</p>
                 {% endfor %}
+
+        <div class="pagination">
+            <span class="step-links">
+                {% if actions.has_previous %}
+                    <a href="?page=1{% if action_type %}&action_type={{ action_type }}{% endif %}">Первая</a>
+                    <a href="?page={{ actions.previous_page_number }}{% if action_type %}&action_type={{ action_type }}{% endif %}">Назад</a>
+                {% endif %}
+
+                <span class="current">
+                    Страница {{ actions.number }} из {{ actions.paginator.num_pages }}.
+                </span>
+
+                {% if actions.has_next %}
+                    <a href="?page={{ actions.next_page_number }}{% if action_type %}&action_type={{ action_type }}{% endif %}">Вперед</a>
+                    <a href="?page={{ actions.paginator.num_pages }}{% if action_type %}&action_type={{ action_type }}{% endif %}">Последняя</a>
+                {% endif %}
+            </span>
+        </div>
+
             </div>
 
             <!-- Остальная часть шаблона остается без изменений -->
@@ -231,23 +251,7 @@
 
         </div>
 
-        <div class="pagination">
-            <span class="step-links">
-                {% if actions.has_previous %}
-                    <a href="?page=1&action_type={{ action_type }}">Первая</a>
-                    <a href="?page={{ actions.previous_page_number }}&action_type={{ action_type }}">Предыдущая</a>
-                {% endif %}
 
-                <span class="current">
-                    Страница {{ actions.number }} из {{ actions.paginator.num_pages }}.
-                </span>
-
-                {% if actions.has_next %}
-                    <a href="?page={{ actions.next_page_number }}&action_type={{ action_type }}">Следующая</a>
-                    <a href="?page={{ actions.paginator.num_pages }}&action_type={{ action_type }}">Последняя</a>
-                {% endif %}
-            </span>
-        </div>
     </div>
 </div>
 {% endblock %}

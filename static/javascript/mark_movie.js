@@ -13,14 +13,13 @@ document.querySelectorAll('button.like').forEach(function(likeButton) {
         // Подготовка данных для запроса
         var formData = new FormData();
         formData.append('id', likeButton.dataset.id);
-        formData.append('action', 'like'); // Указываем действие "like"
 
         // Отправка HTTP-запроса
-        fetch(url_like, { // Убедитесь, что URL соответствует вашему представлению
+        fetch(url_like, {
             method: 'POST',
             body: formData,
             headers: {
-                'X-CSRFToken': getCookie('csrftoken') // Получите CSRF-токен
+                'X-CSRFToken': getCookie('csrftoken')
             }
         })
         .then(response => response.json())
@@ -29,15 +28,20 @@ document.querySelectorAll('button.like').forEach(function(likeButton) {
                 // Обновление состояния кнопки
                 likeButton.classList.add('active');
                 var likeIcon = likeButton.querySelector('i');
-                likeIcon.classList.add('active'); // Добавляем активный класс к иконке
+                likeIcon.classList.add('active');
 
                 // Если dislike был ранее, отключаем его
                 var dislikeButton = document.querySelector('button.dislike[data-id="' + likeButton.dataset.id + '"]');
                 if (dislikeButton) {
                     dislikeButton.classList.remove('active');
                     var dislikeIcon = dislikeButton.querySelector('i');
-                    dislikeIcon.classList.remove('active'); // Убираем активный класс у иконки
+                    dislikeIcon.classList.remove('active');
                 }
+            } else if (data['status'] === 'unliked') {
+                // Снятие лайка
+                likeButton.classList.remove('active');
+                var likeIcon = likeButton.querySelector('i');
+                likeIcon.classList.remove('active');
             }
         });
     });
@@ -51,14 +55,13 @@ document.querySelectorAll('button.dislike').forEach(function(dislikeButton) {
         // Подготовка данных для запроса
         var formData = new FormData();
         formData.append('id', dislikeButton.dataset.id);
-        formData.append('action', 'dislike'); // Указываем действие "dislike"
 
         // Отправка HTTP-запроса
-        fetch(url_dislike, { // Убедитесь, что URL соответствует вашему представлению
+        fetch(url_dislike, {
             method: 'POST',
             body: formData,
             headers: {
-                'X-CSRFToken': getCookie('csrftoken') // Получите CSRF-токен
+                'X-CSRFToken': getCookie('csrftoken')
             }
         })
         .then(response => response.json())
@@ -67,15 +70,20 @@ document.querySelectorAll('button.dislike').forEach(function(dislikeButton) {
                 // Обновление состояния кнопки
                 dislikeButton.classList.add('active');
                 var dislikeIcon = dislikeButton.querySelector('i');
-                dislikeIcon.classList.add('active'); // Добавляем активный класс к иконке
+                dislikeIcon.classList.add('active');
 
                 // Если like был ранее, отключаем его
                 var likeButton = document.querySelector('button.like[data-id="' + dislikeButton.dataset.id + '"]');
                 if (likeButton) {
                     likeButton.classList.remove('active');
                     var likeIcon = likeButton.querySelector('i');
-                    likeIcon.classList.remove('active'); // Убираем активный класс у иконки
+                    likeIcon.classList.remove('active');
                 }
+            } else if (data['status'] === 'undisliked') {
+                // Снятие дизлайка
+                dislikeButton.classList.remove('active');
+                var dislikeIcon = dislikeButton.querySelector('i');
+                dislikeIcon.classList.remove('active');
             }
         });
     });
