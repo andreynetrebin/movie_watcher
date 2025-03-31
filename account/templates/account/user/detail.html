@@ -1,3 +1,4 @@
+<!-- account/detail.html -->
 {% extends "base.html" %}
 {% load static %}
 {% load thumbnail %}
@@ -6,28 +7,20 @@
 
 {% block content %}
 <h1>{{ user.get_full_name }}</h1>
-<div class="follow-button">
-    {% if request.user != user %}  <!-- Добавлено условие для проверки, не является ли текущий пользователь владельцем страницы -->
-        {% if request.user in user.followers.all %}
-            <button class="unfollow-btn" data-id="{{ user.id }}">Отписаться</button>
-        {% else %}
-            <button class="follow-btn" data-id="{{ user.id }}">Подписаться</button>
-        {% endif %}
-    {% endif %}
-</div>
+
 <!-- Аватар пользователя -->
-<div class="profile-info">
+<div class="user-avatar">
     {% if user.profile.photo %}
         {% thumbnail user.profile.photo "80x80" crop="100%" as im %}
         <a href="{{ user.get_absolute_url }}">
             <img src="{{ im.url }}" alt="{{ user.get_full_name }}" class="item-img">
         </a>
     {% else %}
-        <img src="{% static 'images/default_user_avatar.jpg' %}" alt="Default Avatar" class="item-img">
+        <img src="{% static 'images/default_user_avatar.jpg' %}" alt="Default Avatar" class="item-img" style="width: 80px; height: 80px;">
     {% endif %}
 </div>
 
-<!-- Вкладки в виде кнопок -->
+<!-- Вкладки -->
 <div class="tabs">
     <button class="tablink active" onclick="openTab(event, 'AboutMe')">О пользователе</button>
     <button class="tablink" onclick="openTab(event, 'Activity')">Активность</button>
@@ -84,65 +77,75 @@
             <p>Совместимость: {{ compatibility_score }}%</p>
         </div>
 
-<div class="about-me-recently-action">
-    <h4 style="text-decoration: underline;">Недавние действия</h4>
-    {% for action in actions %}
-        {% if forloop.counter <= 3 %}  <!-- Ограничиваем вывод до 3 действий -->
-            <div class="action-item">
-                {% if action.verb == "подписался" %}
-                    <p>подписался на <strong><a href="{{ action.target.get_absolute_url }}">{{ action.target.get_full_name }}</a></strong></p>
-                {% elif action.verb == "отписался" %}
-                    <p>отписался от <strong><a href="{{ action.target.get_absolute_url }}">{{ action.target.get_full_name }}</a></strong></p>
-                {% else %}
-                    <p>{{ action.verb }}: <strong><a href="{{ action.target.get_absolute_url }}">{{ action.target.title }}</a></strong></p>
-
+        <div class="about-me-recently-action">
+            <h ```html
+            <h4 style="text-decoration: underline;">Недавние действия</h4>
+            {% for action in actions %}
+                {% if forloop.counter <= 3 %}  <!-- Ограничиваем вывод до 3 действий -->
+                    <div class="action-item">
+                        {% if action.verb == "подписался" %}
+                            <p>подписался на <strong><a href="{{ action.target.get_absolute_url }}">{{ action.target.get_full_name }}</a></strong></p>
+                        {% elif action.verb == "отписался" %}
+                            <p>отписался от <strong><a href="{{ action.target.get_absolute_url }}">{{ action.target.get_full_name }}</a></strong></p>
+                        {% else %}
+                            <p>{{ action.verb }}: <strong><a href="{{ action.target.get_absolute_url }}">{{ action.target.title }}</a></strong></p>
+                        {% endif %}
+                        <p>{{ action.created|date:"DATETIME_FORMAT" }}</p>
+                    </div>
                 {% endif %}
-                <p>{{ action.created|date:"DATETIME_FORMAT" }}</p>
-            </div>
-        {% endif %}
-    {% empty %}
-        <p>Нет недавних действий для отображения.</p>
-    {% endfor %}
-</div>
+            {% empty %}
+                <p>Нет недавних действий для отображения.</p>
+            {% endfor %}
+        </div>
     </div>
 </div>
 
-<div id="Activity" class="tabcontent" style="display: none;">  <!-- Скрыть по умолчанию -->
+<div id="Activity" class="tabcontent" style="display: none;">
     <h3>Активность</h3>
     <div class="actions">
         {% for action in actions %}
+            {% with user=action.user %}
             <div class="action">
                 <div class="action-header">
                     <div class="user-info">
                         <div class="user-action">
                             {% if action.verb == "подписался" %}
                                 <span class="action-verb">подписался на</span>
-                                <strong><a href="{{ action.target.get_absolute_url }}">{{ action.target.get_full_name }}</a></strong>
+                                <a href="{{ action.target.get_absolute_url }}">{{ action.target.get_full_name }}</a>
                             {% elif action.verb == "отписался" %}
                                 <span class="action-verb">отписался от</span>
-                                <strong><a href="{{ action.target.get_absolute_url }}">{{ action.target.get_full_name }}</a></strong>
+                                <a href="{{ action.target.get_absolute_url }}">{{ action.target.get_full_name }}</a>
                             {% else %}
                                 <span class="action-verb">{{ action.verb }}</span>
                                 {% if action.target %}
-                                    <strong class="movie-title"><a href="{{ action.target.get_absolute_url }}">{{ action.target.title }}</a></strong>
+                                    <strong class="movie-title">{{ action.target.title }}</strong>
                                 {% endif %}
                             {% endif %}
                         </div>
                         <span class="date">{{ action.created|date:"DATETIME_FORMAT" }}</span>
                     </div>
-                    {% if action.target and action.target.poster %}
-                        {% thumbnail action.target.poster "50x75" crop="100%" as im %}
-                        <a href="{{ action.target.get_absolute_url }}">
-                            <img src="{{ im.url }}" class="item-img" alt="{{ action.target.title }} poster">
-                        </a>
-                    {% endif %}
                 </div>
+                {% if action.target %}
+                    <div class="action-poster">
+                        {% with target=action.target %}
+                        {% if target.poster %}
+                            {% thumbnail target.poster "50x75" crop="100%" as im %}
+                            <a href="{{ target.get_absolute_url }}">
+                                <img src="{{ im.url }}" class="item-img" alt="{{ target.title }} poster">
+                            </a>
+                        {% endif %}
+                        {% endwith %}
+                    </div>
+                {% endif %}
             </div>
+            {% endwith %}
         {% empty %}
             <p>Нет активности для отображения.</p>
         {% endfor %}
     </div>
 </div>
+
+
 
 <div id="Comments" class="tabcontent" style="display: none;">  <!-- Скрыть по умолчанию -->
     <h3>Комментарии</h3>
@@ -153,7 +156,7 @@
                     <strong>{{ comment.movie.title }}</strong>
                     <a href="{{ comment.movie.get_absolute_url }}">
                         {% if comment.movie.poster %}
-			{% thumbnail comment.movie.poster "50x75" crop="100%" as im %}
+                            {% thumbnail comment.movie.poster "50x75" crop="100%" as im %}
                             <img src="{{ im.url }}" alt="{{ comment.movie.title }} Poster" class="movie-poster" />
                         {% else %}
                             <img src="{% static 'images/default_movie_poster.jpg' %}" alt="Default Poster" class="movie-poster" />
@@ -182,7 +185,7 @@ function openTab(evt, tabName) {
     evt.currentTarget.classList.add("active");  // Добавить класс "active" к текущей вкладке
 }
 
-// Открыть вкладку "Обо мне" по умолчанию
+// Открыть вкладку "О пользователе" по умолчанию
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementsByClassName("tablink")[0].click();
 });
@@ -195,154 +198,50 @@ function toggleFollowersList() {
         list.style.display = "none";
     }
 }
-
-document.addEventListener('DOMContentLoaded', function() {
-    const followButtons = document.querySelectorAll('.follow-btn, .unfollow-btn');
-
-    followButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const userId = this.getAttribute('data-id');
-            const action = this.classList.contains('follow-btn') ? 'follow' : 'unfollow';
-
-            fetch("{% url 'user_follow' %}", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                body: JSON.stringify({ id: userId, action: action })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data); // Логируем ответ сервера
-                if (data.status === 'ok') {
-                    if (action === 'follow') {
-                        this.textContent = 'Отписаться';
-                        this.classList.remove('follow-btn');
-                        this.classList.add('unfollow-btn');
-                    } else {
-                        this.textContent = 'Подписаться';
-                        this.classList.remove('unfollow-btn');
-                        this.classList.add('follow-btn');
-                    }
-                    updateFollowersList(); // Обновляем список подписчиков
-                } else {
-                    alert(data.message || 'Ошибка при выполнении действия.');
-                }
-            });
-        });
-    });
-});
-
-// Функция для обновления списка подписчиков
-function updateFollowersList() {
-    fetch("{% url 'user_followers_list' user.id %}") // Предполагается, что у вас есть URL для получения списка подписчиков
-        .then(response => response.json())
-        .then(data => {
-            const followersList = document.getElementById("followers-list").querySelector("ul");
-            followersList.innerHTML = ''; // Очищаем текущий список
-
-            const followersCountElement = document.querySelector('.followers-count');
-            if (data.followers.length > 0) {
-                data.followers.forEach(follower => {
-                    const li = document.createElement("li");
-                    li.textContent = follower.full_name; // Предполагается, что у вас есть поле full_name
-                    followersList.appendChild(li);
-                });
-                // Обновляем количество подписчиков
-                followersCountElement.textContent = `Подписчики: ${data.followers.length}`;
-            } else {
-                const li = document.createElement("li");
-                li.textContent = "Нет подписчиков.";
-                followersList.appendChild(li);
-                // Обновляем количество подписчиков
-                followersCountElement.textContent = "Подписчики: 0";
-            }
-        });
-}
 </script>
 
 <style>
 .tabs {
-    display: flex; /* Используем Flexbox для расположения вкладок */
-    justify-content: space-around; /* Распределяем пространство между вкладками */
-    margin-bottom: 20px; /* Отступ снизу для вкладок */
+    display: flex; /* Используем Flexbox для расположения вкладок в ряд */
+    margin-bottom: 20px;
 }
 
 .tablink {
-    padding: 10px 15px; /* Отступы для кнопок */
-    text-decoration: none; /* Убираем подчеркивание */
-    color: #333; /* Цвет текста */
-    border: 1px solid #ccc; /* Рамка вокруг кнопок */
-    border-radius: 5px; /* Закругленные углы */
-    background-color: #f9f9f9; /* Цвет фона для кнопок */
-    transition: background-color 0.3s; /* Плавный переход цвета */
+    flex: 1; /* Каждая вкладка занимает равное пространство */
+    padding: 10px;
+    cursor: pointer;
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    text-align: center;
 }
 
 .tablink.active {
-    background-color: #12c064; /* Цвет фона для активной кнопки */
-    color: white; /* Цвет текста для активной кнопки */
+    background-color: #fff; /* Выделяем активную вкладку */
+    border-bottom: none; /* Убираем нижнюю границу у активной вкладки */
 }
 
 .tabcontent {
-    display: none; /* Скрываем содержимое вкладок по умолчанию */
-    padding: 20px; /* Отступы для содержимого вкладок */
-    border: 1px solid #ccc; /* Рамка вокруг содержимого вкладок */
-    border-radius: 5px; /* Закругленные углы */
-    background-color: #fff; /* Цвет фона для содержимого вкладок */
-}
-
-.movie-poster {
-    width: 50px; /* Установите ширину постера */
-    height: auto; /* Автоматическая высота для сохранения пропорций */
-    margin-right: 10px; /* Отступ справа от постера */
-    vertical-align: middle; /* Выравнивание по центру */
+    display: none; /* Скрываем все вкладки по умолчанию */
+    border: 1px solid #ccc;
+    padding: 20px;
 }
 
 .about-me-content {
-    display: flex; /* Используем Flexbox для расположения блоков */
+    display: flex; /* Используем Flexbox для расположения блоков в ряд */
     justify-content: space-between; /* Распределяем пространство между блоками */
+    margin-top: 20px; /* Отступ сверху для блока */
 }
 
-.about-me-stats,
-.about-me-compatibility,
-.about-me-recently-action {
-    width: 33%; /* Устанавливаем ширину блоков */
-    background-color: #f9f9f9; /* Цвет фона для блоков */
-    border: 1px solid #ddd; /* Цвет и стиль границы */
-    border-radius: 10px; /* Закругление углов */
+.about-me-stats, .about-me-compatibility, .about-me-recently-action {
+    flex: 1; /* Каждому блоку выделяем равное пространство */
+    margin-right: 20px; /* Отступ справа для блоков */
+    border-radius: 10px; /* Закругляем углы */
+    border: 1px solid #ccc; /* Добавляем рамку */
     padding: 15px; /* Отступ внутри блока */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Легкая тень для глубины */
 }
 
-.about-me-stats h4,
-.about-me-compatibility h4,
-.about-me-recently-action h4 {
-    margin-top: 0; /* Убираем верхний отступ у заголовков */
-}
-
-.about-me-recently-action .action-item p {
-    margin: 0; /* Убираем отступы у <p> элементов внутри .action-item */
-}
-
-.compatibility-bar {
-    background-color: #e0e0e0; /* Цвет фона для полосы совместимости */
-    border-radius: 5px; /* Закругленные углы */
-    height: 10px; /* Высота полосы */
-    margin: 5px 0; /* Отступы сверху и снизу */
-}
-
-.compatibility-fill {
-    background-color: #12c064; /* Цвет заполнения полосы совместимости */
-    height: 100%; /* Высота заполнения равна высоте полосы */
-    border-radius: 5px; /* Закругленные углы */
-}
-
-.item-img {
-    vertical-align: middle; /* Выравнивание аватара по центру */
-    margin-right: 8px; /* Отступ справа от аватара */
-    width: 80px; /* Установите ширину иконки */
-    height: 80px; /* Установите высоту иконки */
+.about-me-stats:last-child, .about-me-compatibility:last-child, .about-me-recently-action:last-child {
+    margin-right: 0; /* Убираем отступ справа у последнего блока */
 }
 
 .toggle-followers-btn {
@@ -382,6 +281,51 @@ function updateFollowersList() {
     margin-right: 10px; /* Отступ между аватаром и именем */
 }
 
+.movie-poster {
+    width: 50px; /* Установите ширину постера */
+    height: auto; /* Автоматическая высота для сохранения пропорций */
+    margin-right: 10px; /* Отступ справа от постера */
+}
+
+
+.action-item {
+    margin-bottom: 10px;
+}
+
+.action-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.movie-title {
+    font-weight: bold;
+}
+
+
+.compatibility-bar {
+    background-color: #e0e0e0; /* Цвет фона для полосы совместимости */
+    border-radius: 5px; /* Закругленные углы */
+    height: 20px; /* Высота полосы */
+    margin: 5px 0; /* Отступы сверху и снизу */
+    overflow: hidden; /* Скрываем переполнение */
+}
+
+.compatibility-fill {
+    background-color: #12c064; /* Цвет заполнения полосы совместимости */
+    height: 100%; /* Высота заполнения равна высоте полосы */
+    border-radius: 5px; /* Закругленные углы */
+}
+
+
+
+
+/* Медиа-запросы для адаптации под мобильные устройства */
 @media (max-width: 1300px) {
     h1 {
         font-size: 24px; /* Уменьшаем размер заголовка */
@@ -390,7 +334,7 @@ function updateFollowersList() {
         font-size: 20px; /* Уменьшаем размер заголовков секций */
     }
     h4 {
-        font-size: 18px; /* Уменьшаем размер подз аголовков */
+        font-size: 18px; /* Уменьшаем размер подзаголовков */
     }
     p, .button {
         font-size: 16px; /* Уменьшаем размер текста в параграфах и кнопках */
@@ -398,14 +342,12 @@ function updateFollowersList() {
     .about-me-content {
         flex-direction: column; /* Изменяем расположение блоков на вертикальное */
     }
-    .about-me-stats, .about-me-compatibility, .about-me-recently-action {
+ .about-me-stats, .about-me-compatibility, .about-me-recently-action {
         width: 100%; /* Устанавливаем ширину блоков */
         margin-right: 0; /* Убираем отступ справа у блоков */
         margin-bottom: 20px; /* Добавляем отступ снизу для блоков */
         border-radius: 10px; /* Закругляем углы для мобильных устройств */
     }
 }
-
-
 </style>
 {% endblock %}

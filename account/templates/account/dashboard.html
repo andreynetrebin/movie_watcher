@@ -18,13 +18,13 @@
     {% endif %}
 </div>
 
-<!-- Вкладки -->
 <div class="tabs">
-    <button class="tablink active" onclick="openTab(event, 'AboutMe')">Обо мне</button>
-    <button class="tablink" onclick="openTab(event, 'Activity')">Активность</button>
-    <button class="tablink" onclick="openTab(event, 'Comments')">Комментарии</button>
-    <button class="tablink" onclick="openTab(event, 'PointsHistory')">История начислений</button>
+    <button class="tablink" data-tab="aboutme" onclick="openTab(event, 'AboutMe')">Обо мне</button>
+    <button class="tablink" data-tab="activity" onclick="openTab(event, 'Activity')">Активность</button>
+    <button class="tablink" data-tab="comments" onclick="openTab(event, 'Comments')">Комментарии</button>
+    <button class="tablink" data-tab="points" onclick="openTab(event, 'PointsHistory')">История начислений</button>
 </div>
+
 
 <!-- Содержимое вкладок -->
 <div id="AboutMe" class="tabcontent">
@@ -80,7 +80,7 @@
             </p>
         </div>
         <div class="about-me-recently-action">
-            <h4 style="text-decoration: underline;">Недавние действия</h4>
+            <h4 style="text-decoration: underline;">Недавние действия </h4>
             {% for action in actions %}
                 {% if forloop.counter <= 3 %}
                     <div class="action-item">
@@ -101,11 +101,23 @@
     </div>
 </div>
 
-<div id="Activity" class="tabcontent">
+<div id="Activity" class="tabcontent {% if active_tab == 'activity' %}active{% endif %}">
     <h3>Активность</h3>
+
+    <!-- Фильтрация -->
+    <div>
+        <label for="activity-filter">Фильтр по времени:</label>
+        <select id="activity-filter" onchange="filterActions()">
+            <option value="all" {% if filter_option == 'all' %}selected{% endif %}>Все</option>
+            <option value="day" {% if filter_option == 'day' %}selected{% endif %}>За сутки</option>
+            <option value="week" {% if filter_option == 'week' %}selected{% endif %}>За неделю</option>
+            <option value="month" {% if filter_option == 'month' %}selected{% endif %}>За месяц</option>
+            <option value="year" {% if filter_option == 'year' %}selected{% endif %}>За год</option>
+        </select>
+    </div>
+
     <div class="actions">
         {% for action in actions %}
-            {% with user=action.user %}
             <div class="action">
                 <div class="action-header">
                     <div class="user-info">
@@ -139,15 +151,43 @@
                     </div>
                 {% endif %}
             </div>
-            {% endwith %}
         {% empty %}
             <p>Нет активности для отображения.</p>
         {% endfor %}
     </div>
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if actions.has_previous %}
+                <a href="?page=1&filter={{ filter_option }}&tab=activity">&laquo; Первая</a>
+                <a href="?page={{ actions.previous_page_number }}&filter={{ filter_option }}&tab=activity">Предыдущая</a>
+            {% endif %}
+            <span class="current">Страница {{ actions.number }} из {{ actions.paginator.num_pages }}.</span>
+            {% if actions.has_next %}
+                <a href="?page={{ actions.next_page_number }}&filter={{ filter_option }}&tab=activity">Следующая</a>
+                <a href="?page={{ actions.paginator.num_pages }}&filter={{ filter_option }}&tab=activity">Последняя &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
 </div>
 
-<div id="Comments" class="tabcontent">
+
+
+<div id="Comments" class="tabcontent {% if active_tab == 'comments' %}active {% endif %}">
     <h3>Комментарии</h3>
+
+    <!-- Фильтрация -->
+    <div>
+        <label for="comments-filter">Фильтр по времени:</label>
+        <select id="comments-filter" onchange="filterComments()">
+            <option value="all" {% if filter_option == 'all' %}selected{% endif %}>Все</option>
+            <option value="day" {% if filter_option == 'day' %}selected{% endif %}>За сутки</option>
+            <option value="week" {% if filter_option == 'week' %}selected{% endif %}>За неделю</option>
+            <option value="month" {% if filter_option == 'month' %}selected{% endif %}>За месяц</option>
+            <option value="year" {% if filter_option == 'year' %}selected{% endif %}>За год</option>
+        </select>
+    </div>
+
     <ul>
         {% for comment in comments %}
             <li>
@@ -165,12 +205,43 @@
                     <small>Комментарий оставлен: {{ comment.created_on }}</small>
                 </div>
             </li>
+        {% empty %}
+            <li>Нет комментариев для отображения.</li>
         {% endfor %}
     </ul>
+
+    <!-- Пагинация для комментариев -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if comments.has_previous %}
+                <a href="?comments_page=1&filter={{ filter_option }}&tab=comments">&laquo; Первая</a>
+                <a href="?comments_page={{ comments.previous_page_number }}&filter={{ filter_option }}&tab=comments">Предыдущая</a>
+            {% endif %}
+            <span class="current">Страница {{ comments.number }} из {{ comments.paginator.num_pages }}.</span>
+            {% if comments.has_next %}
+                <a href="?comments_page={{ comments.next_page_number }}&filter={{ filter_option }}&tab=comments">Следующая</a>
+                <a href="?comments_page={{ comments.paginator.num_pages }}&filter={{ filter_option }}&tab=comments">Последняя &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
 </div>
 
-<div id="PointsHistory" class="tabcontent">
-    <h3>История начислений баллов</h3>
+
+<div id="PointsHistory" class="tabcontent {% if active_tab == 'points' %}active{% endif %}">
+    <h3>История начислений</h3>
+
+    <!-- Фильтрация -->
+    <div>
+        <label for="points-filter">Фильтр по времени:</label>
+        <select id="points-filter" onchange="filterPoints()">
+            <option value="all" {% if filter_option == 'all' %}selected{% endif %}>Все</option>
+            <option value="day" {% if filter_option == 'day' %}selected{% endif %}>За сутки</option>
+            <option value="week" {% if filter_option == 'week' %}selected{% endif %}>За неделю</option>
+            <option value="month" {% if filter_option == 'month' %}selected{% endif %}>За месяц</option>
+            <option value="year" {% if filter_option == 'year' %}selected{% endif %}>За год</option>
+        </select>
+    </div>
+
     <ul>
         {% for entry in points_history %}
             <li>
@@ -186,7 +257,23 @@
             <li>Нет истории начислений.</li>
         {% endfor %}
     </ul>
+
+    <!-- Пагинация для истории начислений -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if points_history.has_previous %}
+                <a href="?points_page=1&filter={{ filter_option }}&tab=points">&laquo; Первая</a>
+                <a href="?points_page={{ points_history.previous_page_number }}&filter={{ filter_option }}&tab=points">Предыдущая</a>
+            {% endif %}
+            <span class="current">Страница {{ points_history.number }} из {{ points_history.paginator.num_pages }}.</span>
+            {% if points_history.has_next %}
+                <a href="?points_page={{ points_history.next_page_number }}&filter={{ filter_option }}&tab=points">Следующая</a>
+                <a href="?points_page={{ points_history.paginator.num_pages }}&filter={{ filter_option }}&tab=points">Последняя &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
 </div>
+
 
 <script>
 function openTab(evt, tabName) {
@@ -201,11 +288,23 @@ function openTab(evt, tabName) {
     }
     document.getElementById(tabName).style.display = "block";  // Показать выбранную вкладку
     evt.currentTarget.classList.add("active");  // Добавить класс "active" к текущей вкладке
+
+    // Обновить URL с параметром tab
+    const url = new URL(window.location);
+    url.searchParams.set('tab', tabName.toLowerCase()); // Убедитесь, что имя вкладки в нижнем регистре
+    window.history.pushState({}, '', url); // Обновить URL без перезагрузки страницы
 }
 
-// Открыть вкладку "Обо мне" по умолчанию
+// Открыть вкладку в зависимости от параметра tab в URL
 document.addEventListener("DOMContentLoaded", function() {
-    document.getElementsByClassName("tablink")[0].click();
+    const urlParams = new URLSearchParams(window.location.search);
+    const tab = urlParams.get('tab') || 'aboutme'; // По умолчанию 'aboutme'
+    const tabLink = document.querySelector(`.tablink[data-tab="${tab}"]`);
+    if (tabLink) {
+        tabLink.click(); // Кликнуть на вкладку, чтобы открыть её
+    } else {
+        document.getElementsByClassName("tablink")[0].click(); // Открыть первую вкладку по умолчанию
+    }
 });
 
 function toggleFollowersList() {
@@ -216,7 +315,28 @@ function toggleFollowersList() {
         list.style.display = "none";
     }
 }
+
+function filterActions() {
+    const filterValue = document.getElementById("activity-filter").value; // Исправлено
+    window.location.href = `?filter=${filterValue}&tab=activity`; // Обновляем URL для активности
+}
+
+function filterComments() {
+    const filter = document.getElementById('comments-filter').value;
+    window.location.href = `?comments_page=1&filter=${filter}&tab=comments`;
+}
+
+function filterPoints() {
+    const filter = document.getElementById('points-filter').value;
+    window.location.href = `?points_page=1&filter=${filter}&tab=points`;
+}
+
+function filterActivity() {
+    const filter = document.getElementById('activity-filter').value;
+    window.location.href = `?filter=${filter}&tab=activity`; // Обновляем URL для активности
+}
 </script>
+
 
 <style>
 .tabs {
@@ -266,7 +386,6 @@ function toggleFollowersList() {
     display: flex; /* Используем Flexbox для вертикального расположения кнопок */
     flex-direction: column; /* Вертикальное расположение кнопок */
 }
-
 
 .toggle-followers-btn {
     background-color: #007bff; /* Цвет фона кнопки */
@@ -338,6 +457,30 @@ function toggleFollowersList() {
     margin-right: 10px;
 }
 
+.pagination {
+    margin: 20px 0; /* Отступы сверху и снизу */
+}
+
+
+h3, h4, p, span, .movie-title, li {
+    color: black; /* Устанавливаем цвет текста для заголовков и параграфов */
+}
+
+.pagination a {
+    color: #007bff; /* Цвет ссылок */
+    text-decoration: none; /* Убираем подчеркивание */
+    margin: 0 5px; /* Отступы между ссылками */
+}
+
+.pagination a:hover {
+    text-decoration: underline; /* Добавляем подчеркивание при наведении */
+}
+
+.pagination .current {
+    font-weight: bold; /* Выделяем текущую страницу */
+    color: black; /* Устанавливаем цвет текста для текущей страницы */
+}
+
 /* Медиа-запросы для адаптации под мобильные устройства */
 @media (max-width: 1300px) {
     h1 {
@@ -381,6 +524,5 @@ function toggleFollowersList() {
         font-size: 10px; /* Уменьшаем размер текста для значений баллов */
     }
 }
-
 </style>
 {% endblock %}

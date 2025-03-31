@@ -2,6 +2,10 @@ from django.conf import settings
 from django.db import models
 from django.urls import reverse
 from pytils.translit import slugify
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class Genre(models.Model):
     name = models.CharField(max_length=200, unique=True)
@@ -88,20 +92,56 @@ class Movie(models.Model):
             self.save()
 
     def add_like(self, user):
-        if self.has_liked(user):  # Проверяем, есть ли уже лайк
+        logger.info(f"User  {user.id} is trying to add a like to movie {self.id}.")
+
+        # Если пользователь уже поставил дизлайк, снимаем дизлайк
+        if self.has_disliked(user):
+            self.remove_dislike(user)
+            if self.total_dislikes > 0:
+                self.total_dislikes -= 1
+
+        # Если пользователь уже поставил лайк, снимаем лайк
+        if self.has_liked(user):
             self.remove_like(user)  # Снимаем лайк
+            logger.info(f"User  {user.id} removed like from movie {self.id}. Total likes: {self.total_likes}")
         else:
-            self.users_like.add(user)  # Добавляем пользователя в лайки
-            self.total_likes += 1  # Увеличиваем счетчик лайков
-            self.save()  # Сохраняем изменения
+            # Если пользователь еще не поставил лайк, добавляем его
+            self.users_like.add(user)
+            self.total_likes += 1
+            logger.info(f"User  {user.id} added a like to movie {self.id}. Total likes: {self.total_likes}")
+
+        self.save()  # Сохраняем изменения
 
     def add_dislike(self, user):
-        if self.has_disliked(user):  # Проверяем, есть ли уже дизлайк
+        logger.info(f"User  {user.id} is trying to add a dislike to movie {self.id}.")
+
+        # Если пользователь уже поставил лайк, снимаем лайк
+        if self.has_liked(user):
+            self.remove_like(user)
+            if self.total_likes > 0:
+                self.total_likes -= 1
+
+        # Если пользователь уже поставил дизлайк, снимаем дизлайк
+        if self.has_disliked(user):
             self.remove_dislike(user)  # Снимаем дизлайк
+            logger.info(f"User  {user.id} removed dislike from movie {self.id}. Total dislikes: {self.total_dislikes}")
         else:
-            self.users_dislike.add(user)  # Добавляем пользователя в дизлайки
-            self.total_dislikes += 1  # Увеличиваем счетчик дизлайков
-            self.save()  # Сохраняем изменения
+            # Если пользователь еще не поставил дизлайк, добавляем его
+            self.users_dislike.add(user)
+            self.total_dislikes += 1
+            logger.info(f"User  {user.id} added a dislike to movie {self.id}. Total dislikes: {self.total_dislikes}")
+
+        self.save()  # Сохраняем изменения
+
+    def has_liked(self, user):
+        result = self.users_like.filter(id=user.id).exists()
+        logger.info(f"User  {user.id} has liked movie {self.id}: {result}")
+        return result
+
+    def has_disliked(self, user):
+        result = self.users_dislike.filter(id=user.id).exists()
+        logger.info(f"User  {user.id} has disliked movie {self.id}: {result}")
+        return result
 
     def remove_like(self, user):
         if self.has_liked(user):  # Проверяем, есть ли лайк
@@ -111,16 +151,14 @@ class Movie(models.Model):
             self.save()  # Сохраняем изменения
 
     def remove_dislike(self, user):
-        if self.has_disliked(user):  # Проверяем, есть ли дизлайк
-            self.users_dislike.remove(user)  # Удаляем пользователя из дизлайков
+        if self.has_disliked(user):
+            self.users_dislike.remove(user)
             if self.total_dislikes > 0:
-                self.total_dislikes -= 1  # Уменьшаем счетчик дизлайков
-            self.save()  # Сохраняем изменения
-    def has_liked(self, user):
-        return self.users_like.filter(id=user.id).exists()
-
-    def has_disliked(self, user):
-        return self.users_dislike.filter(id=user.id).exists()
+                self.total_dislikes -= 1
+            logger.info(f"User  {user.id} removed dislike from movie {self.id}. Total dislikes: {self.total_dislikes}")
+            self.save()
+        else:
+            logger.info(f"User  {user.id} tried to remove dislike from movie {self.id}, but no dislike was found.")
 
 
     class Meta:
