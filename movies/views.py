@@ -313,11 +313,14 @@ def mark_like(request):
 
     movie.add_like(request.user)  # Добавляем или снимаем лайк
     movie.refresh_from_db()  # Обновляем состояние объекта из базы данных
+    action_status = {
+        'status': 'liked' if movie.has_liked(request.user) else 'unliked',
+        'action': 'понравился' if movie.has_liked(request.user) else 'отмена лайка'
+    }
     movie_url = request.build_absolute_uri(movie.get_absolute_url())
-    status = 'liked' if movie.has_liked(request.user) else 'unliked'
-    create_action(request.user, status, target=movie, movie_url=movie_url)
+    create_action(request.user, action_status['action'], target=movie, movie_url=movie_url)
 
-    return JsonResponse({'status': status, 'total_likes': movie.total_likes})
+    return JsonResponse({'status': action_status['status'], 'total_likes': movie.total_likes})
 
 @login_required
 @require_POST
@@ -327,11 +330,14 @@ def mark_dislike(request):
 
     movie.add_dislike(request.user)  # Добавляем или снимаем дизлайк
     movie.refresh_from_db()  # Обновляем состояние объекта из базы данных
-    status = 'disliked' if movie.has_disliked(request.user) else 'undisliked'
+    action_status = {
+        'status': 'disliked' if movie.has_disliked(request.user) else 'undisliked',
+        'action': 'не понравился' if movie.has_disliked(request.user) else 'отмена дизлайка'
+    }
     movie_url = request.build_absolute_uri(movie.get_absolute_url())
-    create_action(request.user, status, target=movie, movie_url=movie_url)
+    create_action(request.user, action_status['action'], target=movie, movie_url=movie_url)
 
-    return JsonResponse({'status': status, 'total_dislikes': movie.total_dislikes})
+    return JsonResponse({'status': action_status['status'], 'total_dislikes': movie.total_dislikes})
 
 @login_required
 def movie_create(request):

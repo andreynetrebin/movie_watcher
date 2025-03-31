@@ -1,17 +1,16 @@
-from django.http import JsonResponse
-from django.views.decorators.http import require_POST
-from .models import Contact, PointsHistory
-import json
-import logging
-from django.contrib.auth import get_user_model
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.core.paginator import Paginator
-from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
+from django.http import HttpResponse, JsonResponse
+from django.views.decorators.http import require_POST
+from django.utils import timezone
+import json
+import logging
+from datetime import timedelta
+from .models import Contact, PointsHistory
 from actions.utils import create_action
 from actions.models import Action
 from movies.models import Movie, Watched, WishList
@@ -54,8 +53,6 @@ def user_login(request):
     return render(request, 'account/login.html', {'form': form})
 
 
-
-
 @login_required
 def dashboard(request):
     # Получаем количество просмотренных фильмов
@@ -65,40 +62,79 @@ def dashboard(request):
     # Получаем количество непонравившихся фильмов
     disliked_count = request.user.movies_dislike.count()
     # Получаем количество добавленных фильмов
-    added_movies_count = request.user.movies_add.count()  # Получаем количество добавленных фильмов
+    added_movies_count = request.user.movies_add.count()
     # Получаем количество фильмов в вишлисте
-    wishlist_count = WishList.objects.filter(user=request.user).count()  # Получаем количество фильмов в вишлисте
-    # Получаем комментарии пользователя
-    comments = request.user.comments.all()  # Предполагается, что у вас есть связь между пользователем и комментариями
-    # Получаем действия текущего пользователя
-    actions = Action.objects.filter(user=request.user).select_related('user', 'user__profile').prefetch_related('target')[:10]
+    wishlist_count = WishList.objects.filter(user=request.user).count()
 
-    # Получаем историю начислений баллов
-    points_history = PointsHistory.objects.filter(user=request.user).order_by('-created_at')  # Сортируем по дате
+    # Фильтрация действий
+    filter_option = request.GET.get('filter', 'all')
+    if filter_option == 'day':
+        start_date = timezone.now() - timedelta(days=1)
+    elif filter_option == 'week':
+        start_date = timezone.now() - timedelta(weeks=1)
+    elif filter_option == 'month':
+        start_date = timezone.now() - timedelta(days=30)
+    elif filter_option == 'year':
+        start_date = timezone.now() - timedelta(days=365)
+    else:
+        start_date = None
+
+    # Фильтрация действий
+    actions = Action.objects.filter(user=request.user)
+    if start_date:
+        actions = actions.filter(created__gte=start_date)
+
+    # Пагинация для действий
+    paginator = Paginator(actions.order_by('-created'), 10)  # 10 действий на страницу
+    page_number = request.GET.get('page')
+    actions_page = paginator.get_page(page_number)
+
+    # Фильтрация комментариев
+    comments = request.user.comments.all()
+    if start_date:
+        comments = comments.filter(created_on__gte=start_date)
+
+    # Пагинация для комментариев
+    comments_paginator = Paginator(comments.order_by('-created_on'), 10)
+    comments_page_number = request.GET.get('comments_page')
+    comments_page = comments_paginator.get_page(comments_page_number)
+
+    # Фильтрация истории начислений
+    points_history = PointsHistory.objects.filter(user=request.user)
+    if start_date:
+        points_history = points_history.filter(created_at__gte=start_date)
+
+    # Пагинация для истории начислений
+    points_paginator = Paginator(points_history.order_by('-created_at'), 10)
+    points_page_number = request.GET.get('points_page')
+    points_page = points_paginator.get_page(points_page_number)
 
     # Получаем всех пользователей и сортируем по баллам
     users = Profile.objects.select_related('user').order_by('-points')
-    # Определяем позицию текущего пользователя
     user_position = list(users).index(request.user.profile) + 1  # Позиция начинается с 1
+
+    # Определяем активную вкладку
+    active_tab = request.GET.get('tab', 'activity')  # По умолчанию активна вкладка "Активность"
 
     return render(
         request,
         'account/dashboard.html',
         {
             'section': 'dashboard',
-            'actions': actions,
+            'actions': actions_page,
+            'comments': comments_page,
+            'points_history': points_page,
             'bot_url': config('BOT_URL'),
             'watched_count': watched_count,
             'liked_count': liked_count,
             'disliked_count': disliked_count,
-            'added_movies_count': added_movies_count,  # Добавлено количество добавленных фильмов
-            'wishlist_count': wishlist_count,  # Добавлено количество фильмов в вишлисте
-            'comments': comments,
-            'points_history': points_history,  # Передаем историю начислений
-            'user_position': user_position,  # Передаем позицию пользователя
+            'added_movies_count': added_movies_count,
+            'wishlist_count': wishlist_count,
+            'user_position': user_position,
+            'filter_option': filter_option,  # Передаем выбранный фильтр
+            'active_tab': active_tab,  # Передаем активную вкладку
         }
     )
-
 
 @login_required
 def user_movie_list(request, username):
@@ -253,6 +289,7 @@ def user_detail(request, username):
     common_movies_count = user.movies_like.filter(id__in=current_user_liked_movies).count()
     # Вычисляем процент совместимости
     compatibility_score = (common_movies_count / max(liked_count, 1)) * 100  # Избегаем деления на ноль
+    print(f"Compatibility Score: {compatibility_score}")
 
     return render(request, 'account/user/detail.html', {
         'section': 'people',
