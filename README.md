@@ -1,5 +1,5 @@
 # КиноСмотрители
-
+![moviewatchers](https://github.com/user-attachments/assets/9274ce46-9e84-4af6-8a6a-a7aa29cb2ebd)
 Это веб-приложение для обмена информацией о просмотренных фильмах, разработанное с использованием Django и MySQL.
 
 ## Содержание
