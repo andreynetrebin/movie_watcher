@@ -204,7 +204,8 @@ def movie_actions(request):
     page_obj = paginator.get_page(page_number)
 
     # Топ 5 фильмов по количеству лайков
-    top_movies = Movie.objects.annotate(likes_count=Count('users_like')).order_by('-likes_count')[:5]
+    # top_movies = Movie.objects.annotate(likes_count=Count('users_like')).order_by('-likes_count')[:5]
+    top_movies = Movie.objects.order_by('-total_likes')[:5]
 
     # Топ 3 пользователей по баллам
     top_users = Profile.objects.select_related('user').order_by('-points')[:3]
