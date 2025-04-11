@@ -9,15 +9,36 @@ from django.db.models import Count
 from actions.models import Action
 from actions.utils import create_action
 
+
+
 @login_required
 def create_movie_list(request):
     if request.method == 'POST':
         title = request.POST.get('title')
         movie_list = MovieList.objects.create(title=title, user=request.user)
-        PointsManager.add_points(request.user, PointsManager.POINTS_FOR_CREATING_LIST, 'Создание списка', target=movie_list)
+        # PointsManager.add_points(request.user, PointsManager.POINTS_FOR_CREATING_LIST, 'Создание списка', target=movie_list)
         return redirect('lists:add_movies_to_list', list_id=movie_list.id)
     return render(request, 'lists/create_movie_list.html')
 
+# POINTS_FOR_PUBLIC_LIST
+@login_required
+def update_movie_list(request, list_id):
+    movie_list = get_object_or_404(MovieList, id=list_id, user=request.user)
+
+    if movie_list.is_public:
+        # Если список уже публичный, снимаем 5 баллов
+        movie_list.is_public = False
+        PointsManager.deduct_points(request.user, PointsManager.POINTS_FOR_PUBLIC_LIST, 'Отмена публикации списка',
+                                    target=movie_list)
+    else:
+        # Если список не публичный, начисляем 5 баллов
+        movie_list.is_public = True
+        PointsManager.add_points(request.user, PointsManager.POINTS_FOR_PUBLIC_LIST, 'Публикация списка',
+                                 target=movie_list)
+        movie_url = request.build_absolute_uri(movie_list.get_absolute_url())
+        create_action(request.user, 'опубликовал список', target=movie_list, movie_url=movie_url)
+    movie_list.save()
+    return redirect('dashboard')  # Перенаправляем обратно на дашборд
 @login_required
 def movie_list_detail(request, list_id):
     movie_list = get_object_or_404(MovieList, id=list_id)
@@ -118,7 +139,7 @@ def view_movie_list(request, list_id):
 @login_required
 def users_movie_lists(request):
     # Получаем все списки фильмов, созданные всеми пользователями, и аннотируем количество лайков
-    movie_lists = MovieList.objects.prefetch_related('movies', 'user').annotate(likes_count=Count('users_like')).order_by('-likes_count')
+    movie_lists = MovieList.objects.filter(is_public=True).prefetch_related('movies', 'user').annotate(likes_count=Count('users_like')).order_by('-likes_count')
 
     # Получаем список ID фильмов, просмотренных текущим пользователем
     watched_movies = Watched.objects.filter(user=request.user).values_list('movie_id', flat=True)

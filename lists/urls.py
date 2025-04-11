@@ -11,4 +11,5 @@ urlpatterns = [
     path('add/<int:list_id>/', views.add_movies_to_list, name='add_movies_to_list'),
     path('view/<int:list_id>/', views.view_movie_list, name='view_movie_list'),
     path('users_lists/', views.users_movie_lists, name='users_movie_lists'),
+    path('update_movie_list/<int:list_id>/', views.update_movie_list, name='update_movie_list'),
 ]

@@ -14,6 +14,7 @@ from .models import Contact, PointsHistory
 from actions.utils import create_action
 from actions.models import Action
 from movies.models import Movie, Watched, WishList
+from lists.models import MovieList
 from telegram_bot.notifications import send_new_profile_notification
 from decouple import config
 
@@ -116,6 +117,16 @@ def dashboard(request):
     # Определяем активную вкладку
     active_tab = request.GET.get('tab', 'activity')  # По умолчанию активна вкладка "Активность"
 
+    # Получаем списки пользователя
+    movie_lists = MovieList.objects.filter(user=request.user)
+    if request.method == 'POST':
+        movie_list_id = request.POST.get('movie_list_id')
+        movie_list = get_object_or_404(MovieList, id=movie_list_id, user=request.user)
+        movie_list.is_public = not movie_list.is_public  # Переключаем значение
+        movie_list.save()
+        return redirect('dashboard')  # Перенаправляем обратно на дашборд
+
+
     return render(
         request,
         'account/dashboard.html',
@@ -133,6 +144,7 @@ def dashboard(request):
             'user_position': user_position,
             'filter_option': filter_option,  # Передаем выбранный фильтр
             'active_tab': active_tab,  # Передаем активную вкладку
+            'movie_lists': movie_lists,  # Передаем списки пользователя
         }
     )
 

@@ -6,7 +6,7 @@ from .models import Action
 
 
 def create_action(user, verb, target=None, movie_url=None):
-    from telegram_bot.notifications import send_movie_action_notification
+    from telegram_bot.notifications import send_movie_action_notification, send_list_action_notification
     # Проверяем, не было ли каких-либо аналогичных действий, совершенных за последнюю минуту
     now = timezone.now()
     last_minute = now - datetime.timedelta(seconds=60)
@@ -24,6 +24,8 @@ def create_action(user, verb, target=None, movie_url=None):
         # Определяем, какие действия требуют уведомления
         if verb == "добавил":
             send_movie_action_notification(target, movie_url, user, verb, notify_all=True)
+        elif verb == "опубликовал список":
+            send_list_action_notification(target, movie_url, user, verb, notify_all=True)
         elif verb in [
             "недавно посмотрел",
             "понравился",

@@ -21,6 +21,7 @@
 <div class="tabs">
     <button class="tablink" data-tab="aboutme" onclick="openTab(event, 'AboutMe')">Обо мне</button>
     <button class="tablink" data-tab="activity" onclick="openTab(event, 'Activity')">Активность</button>
+    <button class="tablink" data-tab="lists" onclick="openTab(event, 'Lists')">Списки</button> <!-- Новая вкладка -->
     <button class="tablink" data-tab="comments" onclick="openTab(event, 'Comments')">Комментарии</button>
     <button class="tablink" data-tab="points" onclick="openTab(event, 'PointsHistory')">История начислений</button>
 </div>
@@ -171,7 +172,28 @@
     </div>
 </div>
 
-
+<!-- Содержимое вкладки "Списки" -->
+<div id="Lists" class="tabcontent {% if active_tab == 'lists' %}active{% endif %}">
+    <h3>Ваши списки фильмов</h3>
+    <ul>
+        {% for movie_list in movie_lists %}
+            <li>
+                <strong>
+                    <a href="{% url 'lists:movie_list_detail' movie_list.id %}">{{ movie_list.title }}</a>
+                </strong>
+                <form method="post" action="{% url 'lists:update_movie_list' movie_list.id %}">
+                    {% csrf_token %}
+                    <label>
+                        <input type="checkbox" name="is_public" {% if movie_list.is_public %}checked{% endif %} onchange="this.form.submit()">
+                        Публичный
+                    </label>
+                </form>
+            </li>
+        {% empty %}
+            <li>У вас нет списков фильмов.</li>
+        {% endfor %}
+    </ul>
+</div>
 
 <div id="Comments" class="tabcontent {% if active_tab == 'comments' %}active {% endif %}">
     <h3>Комментарии</h3>

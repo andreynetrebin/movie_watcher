@@ -189,7 +189,7 @@ def movie_actions(request):
     action_type = request.GET.get('action_type', None)
 
     # Формируем фильтр для действий
-    action_filter = Q(target_ct__model='movie') | Q(verb__in=['подписался', 'отписался'])
+    action_filter = Q(target_ct__model='movie') | Q(verb__in=['подписался', 'отписался', 'опубликовал список'])
 
     # Если action_type задан и не пустой, добавляем фильтр
     if action_type and action_type != "Все действия":
