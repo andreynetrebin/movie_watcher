@@ -22,9 +22,9 @@
 
 <!-- Вкладки -->
 <div class="tabs">
-    <button class="tablink active" onclick="openTab(event, 'AboutMe')">О пользователе</button>
-    <button class="tablink" onclick="openTab(event, 'Activity')">Активность</button>
-    <button class="tablink" onclick="openTab(event, 'Comments')">Комментарии</button>
+    <button class="tablink {% if active_tab == 'aboutme' %}active{% endif %}" data-tab="aboutme" onclick="openTab(event, 'AboutMe')">О пользователе</button>
+    <button class="tablink {% if active_tab == 'activity' %}active{% endif %}" data-tab="activity" onclick="openTab(event, 'Activity')">Активность</button>
+    <button class="tablink {% if active_tab == 'comments' %}active{% endif %}" data-tab="comments" onclick="openTab(event, 'Comments')">Комментарии</button>
 </div>
 
 <!-- Содержимое вкладок -->
@@ -78,7 +78,6 @@
         </div>
 
         <div class="about-me-recently-action">
-            <h ```html
             <h4 style="text-decoration: underline;">Недавние действия</h4>
             {% for action in actions %}
                 {% if forloop.counter <= 3 %}  <!-- Ограничиваем вывод до 3 действий -->
@@ -104,7 +103,6 @@
     <h3>Активность</h3>
     <div class="actions">
         {% for action in actions %}
-            {% with user=action.user %}
             <div class="action">
                 <div class="action-header">
                     <div class="user-info">
@@ -138,14 +136,27 @@
                     </div>
                 {% endif %}
             </div>
-            {% endwith %}
         {% empty %}
             <p>Нет активности для отображения.</p>
         {% endfor %}
     </div>
+    <!-- Пагинация для активности -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if actions.has_previous %}
+                <a href="?tab=Activity&actions_page=1">&laquo; Первая</a>
+                <a href="?tab=Activity&actions_page={{ actions.previous_page_number }}">Предыдущая</a>
+            {% endif %}
+            <span class="current">
+                Страница {{ actions.number }} из {{ actions.paginator.num_pages }}.
+            </span>
+            {% if actions.has_next %}
+                <a href="?tab=Activity&actions_page={{ actions.next_page_number }}">Следующая</a>
+                <a href="?tab=Activity&actions_page={{ actions.paginator.num_pages }}">Последняя &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
 </div>
-
-
 
 <div id="Comments" class="tabcontent" style="display: none;">  <!-- Скрыть по умолчанию -->
     <h3>Комментарии</h3>
@@ -168,8 +179,23 @@
             </li>
         {% endfor %}
     </ul>
+    <!-- Пагинация для комментариев -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if comments.has_previous %}
+                <a href="?tab=Comments&comments_page=1">&laquo; Первая</a>
+                <a href="?tab=Comments&comments_page={{ comments.previous_page_number }}">Предыдущая</a>
+            {% endif %}
+            <span class="current">
+                Страница {{ comments.number }} из {{ comments.paginator.num_pages }}.
+            </span>
+            {% if comments.has_next %}
+                <a href="?tab=Comments&comments_page={{ comments.next_page_number }}">Следующая</a>
+                <a href="?tab=Comments&comments_page={{ comments.paginator.num_pages }}">Последняя &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
 </div>
-
 <script>
 function openTab(evt, tabName) {
     var i, tabcontent, tablinks;
@@ -183,7 +209,24 @@ function openTab(evt, tabName) {
     }
     document.getElementById(tabName).style.display = "block";  // Показать выбранную вкладку
     evt.currentTarget.classList.add("active");  // Добавить класс "active" к текущей вкладке
+
+    // Обновить URL с параметром tab
+    const url = new URL(window.location);
+    url.searchParams.set('tab', tabName.toLowerCase()); // Убедитесь, что имя вкладки в нижнем регистре
+    window.history.pushState({}, '', url); // Обновить URL без перезагрузки страницы
 }
+
+// Открыть вкладку в зависимости от параметра tab в URL
+document.addEventListener("DOMContentLoaded", function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tab = urlParams.get('tab') || 'aboutme'; // По умолчанию 'aboutme'
+    const tabLink = document.querySelector(`.tablink[data-tab="${tab}"]`);
+    if (tabLink) {
+        tabLink.click(); // Кликнуть на вкладку, чтобы открыть её
+    } else {
+        document.getElementsByClassName("tablink")[0].click(); // Открыть первую вкладку по умолчанию
+    }
+});
 
 // Открыть вкладку "О пользователе" по умолчанию
 document.addEventListener("DOMContentLoaded", function() {
@@ -270,7 +313,7 @@ function toggleFollowersList() {
 
 .follower-item {
     display: flex; /* Используем Flexbox для расположения аватара и имени */
-    align-items: center; /* Выравниваем по центру по вертикали */
+    align-items: center; /* Вырав align-items: center; /* Выравниваем по центру по вертикали */
     margin-bottom: 10px; /* Отступ между подписчиками */
 }
 
@@ -286,7 +329,6 @@ function toggleFollowersList() {
     height: auto; /* Автоматическая высота для сохранения пропорций */
     margin-right: 10px; /* Отступ справа от постера */
 }
-
 
 .action-item {
     margin-bottom: 10px;
@@ -307,7 +349,6 @@ function toggleFollowersList() {
     font-weight: bold;
 }
 
-
 .compatibility-bar {
     background-color: #e0e0e0; /* Цвет фона для полосы совместимости */
     border-radius: 5px; /* Закругленные углы */
@@ -321,9 +362,6 @@ function toggleFollowersList() {
     height: 100%; /* Высота заполнения равна высоте полосы */
     border-radius: 5px; /* Закругленные углы */
 }
-
-
-
 
 /* Медиа-запросы для адаптации под мобильные устройства */
 @media (max-width: 1300px) {
@@ -342,7 +380,7 @@ function toggleFollowersList() {
     .about-me-content {
         flex-direction: column; /* Изменяем расположение блоков на вертикальное */
     }
- .about-me-stats, .about-me-compatibility, .about-me-recently-action {
+    .about-me-stats, .about-me-compatibility, .about-me-recently-action {
         width: 100%; /* Устанавливаем ширину блоков */
         margin-right: 0; /* Убираем отступ справа у блоков */
         margin-bottom: 20px; /* Добавляем отступ снизу для блоков */
