@@ -211,7 +211,8 @@ def movie_actions(request):
     top_users = Profile.objects.select_related('user').order_by('-points')[:3]
 
     # Топ 3 списков фильмов по количеству лайков
-    top_lists = MovieList.objects.annotate(likes_count=Count('users_like')).order_by('-likes_count')[:3]
+
+    top_lists = MovieList.objects.filter(is_public=True).annotate(likes_count=Count('users_like')).order_by('-likes_count')[:3]
 
     # 5 последних добавленных фильмов
     latest_movies = Movie.objects.order_by('-created')[:5]  # Предполагается, что есть поле created

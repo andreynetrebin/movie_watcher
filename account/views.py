@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
+from django.contrib import messages  # Импортируем для работы с сообщениями
 from django.core.paginator import Paginator
 from django.contrib.auth.models import User
 from django.http import HttpResponse, JsonResponse
@@ -52,7 +52,6 @@ def user_login(request):
     else:
         form = LoginForm()
     return render(request, 'account/login.html', {'form': form})
-
 
 @login_required
 def dashboard(request):
@@ -119,14 +118,8 @@ def dashboard(request):
 
     # Получаем списки пользователя
     movie_lists = MovieList.objects.filter(user=request.user)
-    if request.method == 'POST':
-        movie_list_id = request.POST.get('movie_list_id')
-        movie_list = get_object_or_404(MovieList, id=movie_list_id, user=request.user)
-        movie_list.is_public = not movie_list.is_public  # Переключаем значение
-        movie_list.save()
-        return redirect('dashboard')  # Перенаправляем обратно на дашборд
 
-
+    # Передаем сообщения в контекст
     return render(
         request,
         'account/dashboard.html',
@@ -145,9 +138,9 @@ def dashboard(request):
             'filter_option': filter_option,  # Передаем выбранный фильтр
             'active_tab': active_tab,  # Передаем активную вкладку
             'movie_lists': movie_lists,  # Передаем списки пользователя
+            'messages': messages.get_messages(request),  # Передаем сообщения
         }
     )
-
 @login_required
 def user_movie_list(request, username):
     user = get_object_or_404(User, username=username, is_active=True)
@@ -277,9 +270,12 @@ def user_list(request):
         'users': users
     })
 
+
+
 @login_required
 def user_detail(request, username):
     user = get_object_or_404(User, username=username, is_active=True)
+
     # Получаем количество просмотренных фильмов
     watched_count = Watched.objects.filter(user=user).count()
     # Получаем количество понравившихся фильмов
@@ -289,11 +285,23 @@ def user_detail(request, username):
     # Получаем количество фильмов в вишлисте
     wishlist_count = WishList.objects.filter(user=user).count()
     # Получаем количество добавленных фильмов (если у вас есть такая связь)
-    added_count = Movie.objects.filter(user=user).count()  # Предполагается, что у вас есть связь с добавленными фильмами
-    # Получаем недавние действия пользователя (например, лайки, дизлайки и т.д.)
-    actions = user.actions.all()[:10]  # Предполагается, что у вас есть связь с действиями
+    added_count = Movie.objects.filter(
+        user=user).count()  # Предполагается, что у вас есть связь с добавленными фильмами
+
+    # Получаем недавние действия пользователя
+    actions = user.actions.all().order_by('-created')  # Предполагается, что у вас есть связь с действиями
+    # Пагинация для действий
+    actions_paginator = Paginator(actions, 10)  # 10 действий на страницу
+    actions_page_number = request.GET.get('actions_page')
+    actions_page = actions_paginator.get_page(actions_page_number)
+
     # Получаем комментарии пользователя
-    comments = user.comments.all()  # Предполагается, что у вас есть связь с комментариями
+    comments = user.comments.all().order_by('-created_on')  # Предполагается, что у вас есть связь с комментариями
+    # Пагинация для комментариев
+    comments_paginator = Paginator(comments, 10)  # 10 комментариев на страницу
+    comments_page_number = request.GET.get('comments_page')
+    comments_page = comments_paginator.get_page(comments_page_number)
+
     # Вычисляем совместимость
     current_user_liked_movies = request.user.movies_like.values_list('id', flat=True)
     user_liked_movies = user.movies_like.values_list('id', flat=True)
@@ -301,7 +309,8 @@ def user_detail(request, username):
     common_movies_count = user.movies_like.filter(id__in=current_user_liked_movies).count()
     # Вычисляем процент совместимости
     compatibility_score = (common_movies_count / max(liked_count, 1)) * 100  # Избегаем деления на ноль
-    print(f"Compatibility Score: {compatibility_score}")
+    # Определяем активную вкладку
+    active_tab = request.GET.get('tab', 'aboutme')  # По умолчанию активна вкладка "О пользователе"
 
     return render(request, 'account/user/detail.html', {
         'section': 'people',
@@ -311,12 +320,12 @@ def user_detail(request, username):
         'disliked_count': disliked_count,
         'wishlist_count': wishlist_count,  # Добавлено количество фильмов в вишлисте
         'added_count': added_count,  # Добавлено количество добавленных фильмов
-        'actions': actions,
-        'comments': comments,  # Передаем комментарии в шаблон
+        'actions': actions_page,  # Передаем пагинированные действия в шаблон
+        'comments': comments_page,  # Передаем пагинированные комментарии в шаблон
         'common_movies_count': common_movies_count,  # Добавлено количество общих фильмов
         'compatibility_score': round(compatibility_score, 2),  # Округляем до 2 знаков после запятой
+        'active_tab': active_tab,  # Передаем активную вкладку
     })
-
 
 
 

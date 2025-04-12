@@ -1,6 +1,8 @@
 # lists/views.py
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render, get_object_or_404
+from django.contrib import messages
+from django.urls import reverse
 from .models import MovieList
 from movies.models import Movie, Watched, WishList
 from django.core.paginator import Paginator
@@ -16,29 +18,34 @@ def create_movie_list(request):
     if request.method == 'POST':
         title = request.POST.get('title')
         movie_list = MovieList.objects.create(title=title, user=request.user)
-        # PointsManager.add_points(request.user, PointsManager.POINTS_FOR_CREATING_LIST, 'Создание списка', target=movie_list)
         return redirect('lists:add_movies_to_list', list_id=movie_list.id)
     return render(request, 'lists/create_movie_list.html')
 
-# POINTS_FOR_PUBLIC_LIST
+
 @login_required
+
 def update_movie_list(request, list_id):
     movie_list = get_object_or_404(MovieList, id=list_id, user=request.user)
-
     if movie_list.is_public:
         # Если список уже публичный, снимаем 5 баллов
         movie_list.is_public = False
         PointsManager.deduct_points(request.user, PointsManager.POINTS_FOR_PUBLIC_LIST, 'Отмена публикации списка',
                                     target=movie_list)
+        messages.success(request, f' Список "{movie_list.title}" снят с публикации.')  # Сообщение об успешной отмене публикации
     else:
-        # Если список не публичный, начисляем 5 баллов
-        movie_list.is_public = True
-        PointsManager.add_points(request.user, PointsManager.POINTS_FOR_PUBLIC_LIST, 'Публикация списка',
-                                 target=movie_list)
-        movie_url = request.build_absolute_uri(movie_list.get_absolute_url())
-        create_action(request.user, 'опубликовал список', target=movie_list, movie_url=movie_url)
+        # Проверка на количество фильмов в списке
+        if movie_list.movies.count() < 3:
+            messages.error(request, 'Для публикации списка минимум 3 фильма.')  # Сообщение об ошибке
+        else:
+            # Если список не публичный, начисляем 5 баллов
+            movie_list.is_public = True
+            PointsManager.add_points(request.user, PointsManager.POINTS_FOR_PUBLIC_LIST, 'Публикация списка',
+                                     target=movie_list)
+            movie_url = request.build_absolute_uri(movie_list.get_absolute_url())
+            create_action(request.user, 'опубликовал список', target=movie_list, movie_url=movie_url)
+            messages.success(request, f'Список "{movie_list.title}" опубликован.')  # Сообщение об успешной публикации
     movie_list.save()
-    return redirect('dashboard')  # Перенаправляем обратно на дашборд
+    return redirect(f"{reverse('dashboard')}?tab=lists")
 @login_required
 def movie_list_detail(request, list_id):
     movie_list = get_object_or_404(MovieList, id=list_id)

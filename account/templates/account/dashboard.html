@@ -5,7 +5,6 @@
 {% block title %}Дашборд{% endblock %}
 {% block content %}
 <h1>Дашборд</h1>
-
 <!-- Аватар пользователя -->
 <div class="user-avatar">
     {% if user.profile.photo %}
@@ -175,24 +174,50 @@
 <!-- Содержимое вкладки "Списки" -->
 <div id="Lists" class="tabcontent {% if active_tab == 'lists' %}active{% endif %}">
     <h3>Ваши списки фильмов</h3>
-    <ul>
-        {% for movie_list in movie_lists %}
-            <li>
-                <strong>
-                    <a href="{% url 'lists:movie_list_detail' movie_list.id %}">{{ movie_list.title }}</a>
-                </strong>
-                <form method="post" action="{% url 'lists:update_movie_list' movie_list.id %}">
-                    {% csrf_token %}
-                    <label>
-                        <input type="checkbox" name="is_public" {% if movie_list.is_public %}checked{% endif %} onchange="this.form.submit()">
-                        Публичный
-                    </label>
-                </form>
-            </li>
-        {% empty %}
-            <li>У вас нет списков фильмов.</li>
-        {% endfor %}
-    </ul>
+    <table>
+        <thead>
+            <tr>
+                <th>Название списка</th>
+                <th>Количество фильмов</th>
+                <th>Дата создания</th>
+                <th>Баллы</th>
+                <th>Количество лайков</th>
+                <th>Видимость</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for movie_list in movie_lists %}
+                <tr>
+                    <td>
+                        <strong>
+                            <a href="{% url 'lists:movie_list_detail' movie_list.id %}">{{ movie_list.title }}</a>
+                        </strong>
+                    </td>
+                    <td>{{ movie_list.movies.count }}</td>  <!-- Количество фильмов в списке -->
+                    <td>{{ movie_list.created|date:"Y-m-d" }}</td>  <!-- Дата создания -->
+                    <td>{{ movie_list.points }}</td>  <!-- Баллы -->
+                    <td>{{ movie_list.users_like.count }}</td>  <!-- Количество лайков -->
+                    <td>
+                        <form method="post" action="{% url 'lists:update_movie_list' movie_list.id %}">
+                            {% csrf_token %}
+                            <label>
+                                <input type="radio" name="is_public" value="1" {% if movie_list.is_public %}checked{% endif %} onchange="this.form.submit()">
+                                Публичный
+                            </label>
+                            <label>
+                                <input type="radio" name="is_public" value="0" {% if not movie_list.is_public %}checked{% endif %} onchange="this.form.submit()">
+                                Приватный
+                            </label>
+                        </form>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6">У вас нет списков фильмов.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 
 <div id="Comments" class="tabcontent {% if active_tab == 'comments' %}active {% endif %}">
@@ -484,7 +509,7 @@ function filterActivity() {
 }
 
 
-h3, h4, p, span, .movie-title, li {
+h3, h4, p, span, .movie-title, li, th, td {
     color: black; /* Устанавливаем цвет текста для заголовков и параграфов */
 }
 
@@ -501,6 +526,31 @@ h3, h4, p, span, .movie-title, li {
 .pagination .current {
     font-weight: bold; /* Выделяем текущую страницу */
     color: black; /* Устанавливаем цвет текста для текущей страницы */
+}
+
+table {
+    width: 100%; /* Занимает всю ширину контейнера */
+    border-collapse: collapse; /* Убирает двойные границы между ячейками */
+    margin-top: 20px; /* Отступ сверху для таблицы */
+}
+
+th, td {
+    border: 1px solid #ccc; /* Рамка для ячеек */
+    padding: 10px; /* Отступ внутри ячеек */
+    text-align: left; /* Выравнивание текста по левому краю */
+}
+
+th {
+    background-color: #f2f2f2; /* Цвет фона для заголовков */
+    font-weight: bold; /* Жирный шрифт для заголовков */
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9; /* Цвет фона для четных строк */
+}
+
+tr:hover {
+    background-color: #f1f1f1; /* Цвет фона при наведении на строку */
 }
 
 /* Медиа-запросы для адаптации под мобильные устройства */
