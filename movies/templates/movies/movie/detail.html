@@ -73,6 +73,7 @@
     {% endfor %}
 </ul>
 
+
 {% if user.is_authenticated %}
     <h3>Оставить комментарий</h3>
     <form method="post" class="comment-form">
@@ -81,11 +82,37 @@
             <label for="id_body">Ваш комментарий:</label>
             {{ form.body }}  <!-- Используем form.body для отображения поля -->
         </div>
-        <button type="submit" class="btn btn-primary">Отправить</button>
+        <div class="form-group">
+            <button type="submit" class="btn btn-custom">Отправить</button>
+        </div>
     </form>
 {% else %}
     <p>Вы должны <a href="{% url 'login' %}">войти</a>, чтобы оставить комментарий.</p>
 {% endif %}
+
+<style>
+
+.btn-custom {
+    background-color: #28a745; /* Зеленый цвет */
+    border: 2px solid #28a745; /* Цвет границы */
+    color: white; /* Цвет текста */
+    padding: 10px 20px; /* Отступы */
+    font-size: 16px; /* Размер шрифта */
+    border-radius: 5px; /* Закругленные углы */
+    transition: background-color 0.3s, border-color 0.3s, transform 0.2s; /* Плавный переход */
+    cursor: pointer; /* Указатель при наведении */
+}
+
+.btn-custom:hover {
+    background-color: #218838; /* Темно-зеленый цвет при наведении */
+    border-color: #1e7e34; /* Темно-зеленый цвет границы при наведении */
+    transform: scale(1.05); /* Увеличение кнопки при наведении */
+}
+
+.btn-custom:active {
+    transform: scale(0.95); /* Уменьшение кнопки при нажатии */
+}
+</style>
 
 
 {% endblock %}

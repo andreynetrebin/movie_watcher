@@ -3,6 +3,7 @@ from django.db import models
 from django.urls import reverse
 from pytils.translit import slugify
 import logging
+from telegram_bot.notifications import send_movie_similar_notification
 
 logger = logging.getLogger(__name__)
 
@@ -110,6 +111,13 @@ class Movie(models.Model):
             self.total_likes += 1
             logger.info(f"User  {user.id} added a like to movie {self.id}. Total likes: {self.total_likes}")
 
+            # Подбор похожих фильмов
+            similar_movies = self.get_similar_movies()
+
+            # Отправка уведомления с рекомендациями
+            if similar_movies:
+                send_movie_similar_notification(self, user, similar_movies)
+
         self.save()  # Сохраняем изменения
 
     def add_dislike(self, user):
@@ -160,6 +168,51 @@ class Movie(models.Model):
         else:
             logger.info(f"User  {user.id} tried to remove dislike from movie {self.id}, but no dislike was found.")
 
+    from django.db.models import Count
+
+    def get_similar_movies(self):
+        # Получаем все фильмы, которые не являются текущим
+        similar_movies = Movie.objects.exclude(id=self.id)
+
+        matches = {}
+
+        current_genre_ids = list(self.genres.values_list('id', flat=True))
+        current_genres_count = len(current_genre_ids)
+
+        for similar in similar_movies:
+            match_count = 0
+
+            # Проверяем совпадения по режиссеру
+            if similar.directors.filter(id__in=self.directors.values_list('id', flat=True)).exists():
+                match_count += 1
+
+            # Проверяем совпадения по сценаристу
+            if similar.writers.filter(id__in=self.writers.values_list('id', flat=True)).exists():
+                match_count += 1
+
+            # Проверяем совпадения по жанрам
+            similar_genre_ids = list(similar.genres.values_list('id', flat=True))
+            similar_genres_count = len(similar_genre_ids)
+
+            # Проверяем, что все жанры текущего фильма есть в жанрах похожего фильма
+            if set(current_genre_ids).issubset(set(similar_genre_ids)):
+                # Проверяем, что доля жанров текущего фильма составляет не менее 75% от жанров похожего фильма
+                if current_genres_count <= 3:
+                    if current_genres_count / similar_genres_count == 1:
+                        match_count += 1
+                elif current_genres_count > 3:
+                    if current_genres_count / similar_genres_count >= 0.75:
+                        match_count += 1
+            # Если есть совпадения, добавляем в словарь
+            if match_count > 0:
+                matches[similar] = match_count
+
+        # Сортируем фильмы по количеству совпадений (от большего к меньшему)
+        sorted_movies = sorted(matches.items(), key=lambda x: x[1], reverse=True)
+        print(sorted_movies)
+
+        # Возвращаем не более 5 наиболее похожих фильмов
+        return [movie for movie, count in sorted_movies[:5]]
 
     class Meta:
         indexes = [
