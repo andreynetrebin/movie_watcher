@@ -22,17 +22,17 @@ def create_action(user, verb, target=None, movie_url=None):
         action.save()
 
         # Определяем, какие действия требуют уведомления
-        if verb == "добавил":
-            send_movie_action_notification(target, movie_url, user, verb, notify_all=True)
-        elif verb == "опубликовал список":
+        # if verb == "добавил":
+        #     send_movie_action_notification(target, movie_url, user, verb, notify_all=True)
+        if verb == "опубликовал список":
             send_list_action_notification(target, movie_url, user, verb, notify_all=True)
         elif verb in [
             "недавно посмотрел",
             "понравился",
             "не понравился",
             "прокомментировал",
-            'добавил в "Буду смотреть"',
-            "добавил в список"
+            # 'добавил в "Буду смотреть"',
+            # "добавил в список"
         ]:
             send_movie_action_notification(target, movie_url, user, verb)
 

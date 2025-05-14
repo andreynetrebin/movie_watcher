@@ -2,7 +2,9 @@ from django.conf import settings
 from django.db import models
 from django.urls import reverse
 from pytils.translit import slugify
+import requests
 import logging
+from decouple import config
 from telegram_bot.notifications import send_movie_similar_notification
 
 logger = logging.getLogger(__name__)
@@ -113,10 +115,9 @@ class Movie(models.Model):
 
             # Подбор похожих фильмов
             similar_movies = self.get_similar_movies()
-
             # Отправка уведомления с рекомендациями
             if similar_movies:
-                send_movie_similar_notification(self, user, similar_movies)
+                send_movie_similar_notification(self, user, similar_movies['internal_similars'], similar_movies['api_similars'])
 
         self.save()  # Сохраняем изменения
 
@@ -203,16 +204,41 @@ class Movie(models.Model):
                 elif current_genres_count > 3:
                     if current_genres_count / similar_genres_count >= 0.75:
                         match_count += 1
+
             # Если есть совпадения, добавляем в словарь
             if match_count > 0:
                 matches[similar] = match_count
 
         # Сортируем фильмы по количеству совпадений (от большего к меньшему)
         sorted_movies = sorted(matches.items(), key=lambda x: x[1], reverse=True)
-        print(sorted_movies)
 
-        # Возвращаем не более 5 наиболее похожих фильмов
-        return [movie for movie, count in sorted_movies[:5]]
+        # Получаем похожие фильмы из API Кинопоиска
+        kinopoisk_similars_url = f"https://kinopoiskapiunofficial.tech/api/v2.2/films/{self.kinopoisk_id}/similars"
+        try:
+            similars_movie_response = requests.get(kinopoisk_similars_url, headers={
+                'X-API-KEY': config('X-API-KEY'),
+                "Content-Type": "application/json",
+            })
+            similars_movie_data = similars_movie_response.json()
+        except Exception as e:
+            logger.error(f"occur error by getting similar movies - {e}")
+            similars_movie_data = {'total': 0, 'items': []}
+
+        # Формируем списки
+        internal_similars = [movie for movie, count in sorted_movies[:5]]
+        api_similars = []
+
+        # Проверяем наличие фильмов из API в внутренней базе
+        internal_ids = {movie.kinopoisk_id for movie in internal_similars}
+        for item in similars_movie_data['items']:
+            if item['filmId'] not in internal_ids:
+                api_similars.append(item)
+
+        # Возвращаем два списка
+        return {
+            'internal_similars': internal_similars,
+            'api_similars': api_similars[:5]  # Возвращаем только первые 5 из API
+        }
 
     class Meta:
         indexes = [

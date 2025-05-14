@@ -32,6 +32,11 @@ bot = telebot.TeleBot(config('TELEGRAM_BOT_TOKEN'))
 
 def send_monthly_summary():
     # Часовой пояс Москвы
+    now = timezone.now()
+    if now.day != 1:
+        print("Сегодня не 1-е число. Уведомление не будет отправлено.")
+        return
+
     moscow_tz = ZoneInfo('Europe/Moscow')
     # Получаем текущую дату и время с учетом временной зоны (UTC или активной зоны)
     now = timezone.now()
