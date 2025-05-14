@@ -25,21 +25,33 @@ def send_version_notification(version_number, release_date, changes):
         bot.send_message(chat_id, message, parse_mode='Markdown')
 
 
-def send_movie_similar_notification(movie, user, similar_movies):
+def send_movie_similar_notification(movie, user, internal_similars, api_similars):
     message = f"Вы поставили лайк фильму <a href='{movie.kinopoisk_url}'><b>{movie.title}</b></a>. Вот несколько похожих фильмов:\n"
-    for similar_movie in similar_movies:
-        message += f"- <a href='{site_url}{similar_movie.get_absolute_url()}'>{similar_movie.title} ({similar_movie.year})</a>\n"
+
+    # Добавляем внутренние похожие фильмы
+    if internal_similars:
+        message += "Из нашей базы:\n"
+        for similar_movie in internal_similars:
+            message += f"- <a href='{site_url}{similar_movie.get_absolute_url()}'>{similar_movie.title} ({similar_movie.year})</a>\n"
+
+    # Добавляем похожие фильмы из API
+    if api_similars:
+        message += "Из Кинопоиска:\n"
+        for similar_movie in api_similars:
+            message += f"- <a href='https://kinopoisk.ru/film/{similar_movie['filmId']}'>{similar_movie['nameRu']}</a>\n"
+
     message += "__________"
+
     # Получаем Telegram ID пользователя
     profile = Profile.objects.get(user=user)
     chat_id = profile.telegram_user_id
-
     if chat_id:
         try:
             bot.send_message(chat_id, message, parse_mode='HTML')
             logger.info(f"Recommendation message sent to {user.username} ({chat_id})")
         except Exception as e:
             logger.error(f"Error sending message to {chat_id}: {e}")
+
 
 def send_list_action_notification(movie, movie_url, action_user, action, notify_all=False):
     if action in ["опубликовал список"]:
@@ -76,7 +88,15 @@ def send_list_action_notification(movie, movie_url, action_user, action, notify_
                 logger.warning(f"No Telegram ID for subscriber: {subscriber.username}")
 
 def send_movie_action_notification(movie, movie_url, action_user, action, notify_all=False):
-    if action in ["добавил", "понравился", "не понравился", "прокомментировал", "добавил в список", "недавно посмотрел", 'добавил в "Буду смотреть"']:
+    if action in [
+        "добавил",
+        "понравился",
+        "не понравился",
+        "прокомментировал",
+        "добавил в список",
+        "недавно посмотрел",
+        'добавил в "Буду смотреть"'
+    ]:
         if notify_all:
             subscribers = User.objects.exclude(id=action_user.id).filter(profile__telegram_connected=True)
         else:
