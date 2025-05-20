@@ -99,6 +99,9 @@
             <li {% if section == "people" %}class="selected"{% endif %}>
                 <a href="{% url "user_list" %}">Сообщество</a>
             </li>
+            <li {% if section == "moviepremieres" %}class="selected"{% endif %}>
+                <a href="{% url "moviepremieres:movie_list" %}">Кинопремьеры</a>
+            </li>
             {% else %}
             <li><a href="{% url "login" %}">Войти</a></li>
             <li><a href="{% url "register" %}">Регистрация</a></li>
