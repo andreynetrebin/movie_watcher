@@ -1,0 +1,20 @@
+<!-- moviepremieres/templates/moviepremieres/movie_list.html -->
+{% extends "base.html" %}
+{% block content %}
+    <h1>Список кинопремьер</h1>
+    <ul>
+        {% for movie in movies %}
+            <li>
+                <a href="{% url 'moviepremieres:movie_detail' movie.slug %}">
+                    {% if movie.poster %}
+                    <img src="{{ movie.poster.url }}" alt="{{ movie.title }}" style="width: 100px; height: auto;">
+                    {% endif %}
+                    <h2>{{ movie.title }}</h2>
+                    <p>Год: {{ movie.year }}</p>
+                </a>
+            </li>
+        {% empty %}
+            <li>Нет доступных фильмов.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

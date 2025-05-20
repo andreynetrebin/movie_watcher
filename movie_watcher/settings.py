@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'telegram_bot',
     'versioning',
     'lists',
+    'moviepremieres',
 
 ]
 

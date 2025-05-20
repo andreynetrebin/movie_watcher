@@ -1,0 +1,48 @@
+<!-- moviepremieres/templates/moviepremieres/movie_detail.html -->
+{% extends "base.html" %}
+{% block content %}
+    <h1>{{ movie.title }}</h1>
+    <img src="{{ movie.poster.url }}" alt="{{ movie.title }}" style="width: 300px; height: auto;">
+    <p><strong>Год:</strong> {{ movie.year }}</p>
+    <p><strong>Продолжительность:</strong> {{ movie.duration }} минут</p>
+    <p><strong>Дата премьеры:</strong> {{ movie.premiere_date }}</p>
+    <p><strong>Описание:</strong> {{ movie.description }}</p>
+
+    <h2>Жанры</h2>
+    <ul>
+        {% for genre in movie.genres.all %}
+            <li>{{ genre.name }}</li>
+        {% empty %}
+            <li>Нет жанров.</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Страны</h2>
+    <ul>
+        {% for country in movie.countries.all %}
+            <li>{{ country.name }}</li>
+        {% empty %}
+            <li>Нет стран.</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Режиссеры</h2>
+    <ul>
+        {% for director in movie.directors.all %}
+            <li>{{ director.name }}</li>
+        {% empty %}
+            <li>Нет режиссеров.</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Сценаристы</h2>
+    <ul>
+        {% for writer in movie.writers.all %}
+            <li>{{ writer.name }}</li>
+        {% empty %}
+            <li>Нет сценаристов.</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'moviepremieres:movie_list' %}">Назад к списку фильмов</a>
+{% endblock %}
