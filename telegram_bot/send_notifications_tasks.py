@@ -9,6 +9,7 @@ from decouple import config
 import requests
 from django.core.files.base import ContentFile
 
+
 import sys
 try:
     from zoneinfo import ZoneInfo  # Python 3.9+
@@ -37,6 +38,77 @@ from moviepremieres.models import Movie, Genre, Country, Director, Writer
 # Инициализация бота
 
 bot = telebot.TeleBot(config('TELEGRAM_BOT_TOKEN'))
+
+
+def find_similar_movies():
+    # Получаем понравившиеся фильмы пользователя
+    profiles = Profile.objects.filter(telegram_connected=True)
+    for profile in profiles:
+        chat_id = profile.telegram_user_id
+        user = profile.user
+        # Получаем понравившиеся фильмы пользователя
+        liked_movies = Action.objects.filter(verb='понравился', user=user).select_related('target_ct')
+
+        # Сбор уникальных наборов жанров и создателей (режиссеры и сценаристы в одном set)
+        genre_sets = set()
+        creators = set()  # Объединяем режиссеров и сценаристов в один set
+
+        for action in liked_movies:
+            movie = action.target
+            # Создаем frozenset для уникального набора жанров
+            genre_set = frozenset(movie.genres.values_list('name', flat=True))
+            genre_sets.add(genre_set)
+            creators.update(movie.directors.values_list('name', flat=True))
+            creators.update(movie.writers.values_list('name', flat=True))
+
+        # Получаем кинопремьеры
+        premieres = Movie.objects.all().prefetch_related('genres', 'directors', 'writers')
+
+        # Поиск похожих фильмов
+        similar_movies = []
+        for movie in premieres:
+            # Создаем frozenset для жанров текущего фильма
+            current_genre_set = frozenset(movie.genres.values_list('name', flat=True))
+            current_genres_count = len(current_genre_set)
+
+            match_count = 0
+
+            # Проверяем совпадения по режиссерам и сценаристам
+            directors = set(movie.directors.values_list('name', flat=True))
+            writers = set(movie.writers.values_list('name', flat=True))
+
+            if directors.intersection(creators) or writers.intersection(creators):
+                print(f"Совпадения по режиссерам и сценаристам - {movie.title}")
+                match_count += 1
+
+            # Проверяем совпадения по жанрам
+
+            for genre_set in genre_sets:
+                # Проверяем, что все жанры текущего фильма есть в жанрах понравившихся фильмов
+                if current_genres_count > 0 and current_genre_set.issubset(genre_set):
+                    if current_genres_count <= 3:
+                        # Полное совпадение
+                        if current_genres_count == len(genre_set):
+                            print(f"Полное совпадение по жанрам - {movie.title}")
+                            match_count += 1
+                    elif current_genres_count > 3:
+                        # Проверка на 75% совпадение
+                        if current_genres_count / len(genre_set) >= 0.75:
+                            print(f"На 75% совпадение по жанрам - {movie.title}")
+                            match_count += 1
+
+            # Если есть совпадения, добавляем в список
+            if match_count > 0:
+                similar_movies.append(movie)
+        # Отправка похожих фильмов в Telegram
+        if similar_movies:
+            message = "На основе ваших лайков, подборка фильмов среди кинопремьер:\n"
+            message += "\n".join(
+                    [f"- <a href='{movie.kinopoisk_url}'>{movie.title}</a>" for movie in
+                     similar_movies]) + "\n"
+            bot.send_message(chat_id, message, parse_mode='HTML')
+
+    return
 
 
 
@@ -155,6 +227,7 @@ def save_movie(movie_data):
             movie.poster.save(image_name, ContentFile(poster_image.content), save=False)
 
         movie.save()  # Сохраняем объект в БД
+        logger.info(f"Сохранен фильм - {movie_data['nameRu']}")
 
     except Exception as e:
         logger.error(f"Error while saving movie {movie_data['nameRu']} - {e}")
@@ -276,11 +349,13 @@ def send_monthly_summary():
 
 if __name__ == "__main__":
     now = timezone.now()
-    if now.day == 1:
-        send_monthly_summary()
-        get_premieres()
-        if now.weekday() == 4:  # 4 соответствует пятнице
-            send_friday_movies()
-    else:
-        if now.weekday() == 4:  # 4 соответствует пятнице
-            send_friday_movies()
+    # get_premieres()
+    find_similar_movies()
+    # if now.day == 1:
+    #     send_monthly_summary()
+    #     get_premieres()
+    #     if now.weekday() == 4:  # 4 соответствует пятнице
+    #         send_friday_movies()
+    # else:
+    #     if now.weekday() == 4:  # 4 соответствует пятнице
+    #         send_friday_movies()
