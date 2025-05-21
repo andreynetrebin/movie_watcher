@@ -1,20 +1,149 @@
-<!-- moviepremieres/templates/moviepremieres/movie_list.html -->
 {% extends "base.html" %}
+{% load thumbnail %}
+{% load static %}
+<!-- moviepremieres/templates/moviepremieres/movie_list.html -->
+
 {% block content %}
-    <h1>Список кинопремьер</h1>
-    <ul>
-        {% for movie in movies %}
-            <li>
-                <a href="{% url 'moviepremieres:movie_detail' movie.slug %}">
-                    {% if movie.poster %}
-                    <img src="{{ movie.poster.url }}" alt="{{ movie.title }}" style="width: 100px; height: auto;">
-                    {% endif %}
-                    <h2>{{ movie.title }}</h2>
-                    <p>Год: {{ movie.year }}</p>
-                </a>
-            </li>
-        {% empty %}
-            <li>Нет доступных фильмов.</li>
-        {% endfor %}
-    </ul>
+    <div class="container">
+        <div class="movie-list">
+            <h1>Список кинопремьер</h1>
+            {% for movie in movies %}
+                <div class="movie-item">
+                    <div class="movie-poster">
+                        <a href="{% url 'moviepremieres:movie_detail' movie.slug %}">
+                            {% if movie.poster %}
+                                <img src="{% thumbnail movie.poster "150x225" crop="100%" %}" alt="{{ movie.title }} постер" class="movie-poster-img">
+                            {% else %}
+                                <div class="no-poster">Нет постера</div>
+                            {% endif %}
+                        </a>
+                    </div>
+                    <div class="movie-details">
+                        <h2 class="movie-title"><a href="{{ movie.kinopoisk_url }}" target="_blank" rel="noopener noreferrer">{{ movie.title }} ({{ movie.year }})</a></h2>
+                        <p class="movie-info"><strong>Страны:</strong> {{ movie.countries.all|join:", " }}</p>
+                        <p class="movie-info"><strong>Жанры:</strong> {{ movie.genres.all|join:", " }}</p>
+                        <p class="movie-info"><strong>Режиссеры:</strong> {{ movie.directors.all|join:", " }}</p>
+                        <p class="movie-info"><strong>Сценаристы:</strong> {{ movie.writers.all|join:", " }}</p>
+                    </div>
+                    <div class="movie-release-date">
+                        <p class="release-day">{{ movie.premiere_date|date:"j" }}</p> <!-- Число -->
+                        <p class="release-month">{{ movie.premiere_date|date:"F" }}</p> <!-- Месяц -->
+                    </div>
+                </div>
+            {% empty %}
+                <p>Нет доступных фильмов.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex; /* Используем flex для размещения сайдбаров и списка фильмов */
+            justify-content: center; /* Центрирование содержимого */
+            padding: 20px;
+        }
+
+        .movie-list {
+            display: flex;
+            flex-direction: column; /* Вертикальное расположение карточек */
+            align-items: center; /* Центрирование карточек */
+            padding: 20px;
+            flex: 1; /* Занимает оставшееся пространство */
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 2.5em;
+            color: #2c3e50;
+        }
+
+        .movie-item {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin: 15px 0; /* Отступы между карточками */
+            padding: 10px;
+            width: 100%; /* Ширина карточки 100% от родительского контейнера */
+            max-width: 800px; /* Увеличенная максимальная ширина карточки */
+            display: flex; /* Используем flex для размещения постера и деталей */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            justify-content: space-between; /* Разделение элементов по краям */
+        }
+
+        .movie-poster {
+            margin-right: 15px; /* Отступ между постером и деталями */
+        }
+
+        .no-poster {
+            width: 150px; /* Ширина блока для отсутствующего постера */
+            height: 225px; /* Высота блока для отсутствующего постера */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #777; /* Цвет текста для отсутствующего постера */
+            font-size: 1em; /* Размер шрифта */
+            background-color: #eaeaea; /* Цвет фона для блока */
+            border-radius: 5px;
+        }
+
+        .movie-details {
+            display: flex;
+            flex-direction: column; /* Вертикальное расположение деталей фильма */
+            justify-content: center; /* Центрирование по вертикали */
+            flex: 1; /* Занимает оставшееся пространство */
+        }
+
+        .movie-title {
+            font-size: 1.5em;
+            margin: 0; /* Убрали отступы */
+        }
+
+        .movie-title a {
+            text-decoration: none; /* Убираем подчеркивание */
+            color: #2c3e50; /* Цвет текста */
+        }
+
+        .movie-title a:hover {
+            text-decoration: underline; /* Подчеркивание при наведении */
+        }
+
+        .movie-info {
+            font-size: 0.9em;
+            color: #555;
+            margin: 5px 0;
+        }
+
+        .movie-release-date {
+            display: flex;
+            flex-direction: column; /* Вертикальное расположение даты */
+            align-items: center; /* Центрирование по горизонтали */
+            justify-content: center; /* Центрирование по вертикали */
+            border: 1px solid #ddd; /* Граница */
+            border-radius: 5px; /* Закругление углов */
+            padding: 10px; /* Отступы внутри блока */
+            background-color: #f9f9f9; /* Цвет фона для блока с датой */
+            width: 80px; /* Ширина блока с датой */
+            text-align: center; /* Центрирование текста */
+        }
+
+        .release-day {
+            font-size: 1.5em; /* Размер шрифта для числа */
+            margin: 0; /* Убрали отступы */
+        }
+
+        .release-month {
+            font-size: 1em; /* Размер шрифта для месяца */
+            margin: 0; /* Убрали отступы */
+            color: #555; /* Цвет текста для месяца */
+        }
+    </style>
 {% endblock %}

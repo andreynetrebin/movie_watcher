@@ -583,6 +583,11 @@ img.user-detail {
 }
 
 .movie-item {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin: 15px 0; /* Отступы между карточками */
+
     display: flex; /* Используем Flexbox для горизонтального расположения */
     align-items: center; /* Выравнивание по центру по вертикали */
     min-height: 100px; /* Установите минимальную высоту для элементов списка */

@@ -1,8 +1,18 @@
 <!-- moviepremieres/templates/moviepremieres/movie_detail.html -->
 {% extends "base.html" %}
+{% load thumbnail %}
 {% block content %}
     <h1>{{ movie.title }}</h1>
-    <img src="{{ movie.poster.url }}" alt="{{ movie.title }}" style="width: 300px; height: auto;">
+
+    <div class="movie-poster">
+        <a href="{% url 'moviepremieres:movie_detail' movie.slug %}">
+            {% if movie.poster %}
+                <img src="{% thumbnail movie.poster "150x225" crop="100%" %}" alt="{{ movie.title }} постер" class="movie-poster-img">
+
+            {% endif %}
+        </a>
+    </div>
+
     <p><strong>Год:</strong> {{ movie.year }}</p>
     <p><strong>Продолжительность:</strong> {{ movie.duration }} минут</p>
     <p><strong>Дата премьеры:</strong> {{ movie.premiere_date }}</p>
