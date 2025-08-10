@@ -7,6 +7,18 @@
 
 {% block content %}
 <h1>{{ user.get_full_name }}</h1>
+<!-- Кнопка подписки/отписки -->
+<div class="follow-button">
+    {% if request.user != user %}
+        {% if request.user in user.followers.all %}
+            <button class="toggle-follow-btn" data-action="unfollow" data-id="{{ user.id }}">Отписаться</button>
+        {% else %}
+            <button class="toggle-follow-btn" data-action="follow" data-id="{{ user.id }}">Подписаться</button>
+        {% endif %}
+    {% endif %}
+</div>
+
+
 
 <!-- Аватар пользователя -->
 <div class="user-avatar">
@@ -240,7 +252,45 @@ function toggleFollowersList() {
     } else {
         list.style.display = "none";
     }
-}
+};
+document.addEventListener("DOMContentLoaded", function() {
+    const followButtons = document.querySelectorAll('.toggle-follow-btn');
+
+    followButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const action = this.getAttribute('data-action');
+            const userId = this.getAttribute('data-id');
+
+            fetch("{% url 'user_follow' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'  // Добавляем CSRF-токен
+                },
+                body: JSON.stringify({ id: userId, action: action })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    // Изменяем текст кнопки в зависимости от действия
+                    if (action === 'follow') {
+                        this.textContent = 'Отписаться';
+                        this.setAttribute('data-action', 'unfollow');
+                    } else {
+                        this.textContent = 'Подписаться';
+                        this.setAttribute('data-action', 'follow');
+                    }
+                } else {
+                    alert(data.message);  // Показываем сообщение об ошибке
+                }
+            })
+            .catch(error => console.error('Ошибка:', error));
+        });
+    });
+});
+
+
+
 </script>
 
 <style>
@@ -362,6 +412,33 @@ function toggleFollowersList() {
     height: 100%; /* Высота заполнения равна высоте полосы */
     border-radius: 5px; /* Закругленные углы */
 }
+.follow-button {
+    margin-top: 20px; /* Отступ сверху для кнопки */
+}
+
+.toggle-follow-btn {
+    background-color: #007bff; /* Цвет фона кнопки "Подписаться" */
+    color: white; /* Цвет текста кнопки */
+    border: none; /* Убираем рамку */
+    padding: 10px 15px; /* Отступы внутри кнопки */
+    border-radius: 5px; /* Закругление углов кнопки */
+    cursor: pointer; /* Указатель при наведении */
+    transition: background-color 0.3s; /* Плавный переход цвета фона */
+    font-size: 16px; /* Размер шрифта */
+}
+
+.toggle-follow-btn:hover {
+    background-color: #0056b3; /* Цвет фона при наведении для кнопки "Подписаться" */
+}
+
+/* Новый стиль для кнопки "Отписаться" */
+.toggle-unfollow-btn {
+    background-color: #dc3545; /* Красный цвет фона для кнопки "Отписаться" */
+}
+
+.toggle-unfollow-btn:hover {
+    background-color: #c82333; /* Темно-красный цвет при наведении */
+}
 
 /* Медиа-запросы для адаптации под мобильные устройства */
 @media (max-width: 1300px) {
@@ -387,5 +464,12 @@ function toggleFollowersList() {
         border-radius: 10px; /* Закругляем углы для мобильных устройств */
     }
 }
+
+.follow-button {
+    margin-top: 20px; /* Отступ сверху для кнопки */
+}
+
+
+
 </style>
 {% endblock %}
