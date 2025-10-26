@@ -1,0 +1,1577 @@
+@import url(//fonts.googleapis.com/css?family=Muli);
+
+
+.follow-button {
+    margin: 20px 0; /* Отступ сверху и снизу */
+    text-align: left; /* Выровнять содержимое по левому краю */
+}
+
+.follow-button button {
+    padding: 10px 20px; /* Отступы внутри кнопки */
+    font-size: 16px; /* Размер шрифта */
+    border: none; /* Убираем рамку */
+    border-radius: 5px; /* Закругленные углы */
+    cursor: pointer; /* Указатель при наведении */
+    transition: background-color 0.3s, color 0.3s; /* Плавный переход для фона и цвета */
+}
+
+.follow-button .follow-btn {
+    background-color: #12c064; /* Цвет фона для кнопки подписки */
+    color: white; /* Цвет текста */
+}
+
+.follow-button .unfollow-btn {
+    background-color: #ff4d4d; /* Цвет фона для кнопки отписки */
+    color: white; /* Цвет текста */
+}
+
+.follow-button button:hover {
+    opacity: 0.9; /* Эффект затемнения при наведении */
+}
+
+.follow-button button:focus {
+    outline: none; /* Убираем обводку при фокусе */
+}
+
+
+.container {
+    flex-direction: column; /* Вертикальное расположение для мобильных */
+}
+
+.main-content {
+    padding: 10px; /* Уменьшаем отступы для мобильных */
+}
+
+
+body {
+    margin:0;
+    padding:0;
+    font-family:helvetica, sans-serif;
+}
+
+p {
+    line-height: 1.8;
+}
+
+a {
+    color:#12c064;
+    text-decoration:none;
+}
+
+a:hover {
+    color:#00a74f;
+}
+
+h1, h2, h3, h4, h5 , h6 { font-family: 'Muli', sans-serif; font-weight:normal; }
+
+h1 {
+    border-bottom:1px solid #bbb;
+    padding:0 0 10px 0;
+    margin:10px 0 20px 0;
+}
+
+h2 {
+    margin:30px 0 20px;
+}
+
+ol {
+    line-height:1.5;
+}
+#header {
+    padding: 20px; /* Отступы вокруг заголовка */
+    background: #12c064; /* Цвет фона заголовка */
+    color: #fff; /* Цвет текста */
+    display: flex; /* Используем flexbox для расположения элементов */
+    flex-direction: column; /* Вертикальное расположение элементов */
+}
+
+.header-content {
+    display: flex; /* Используем flexbox для расположения содержимого заголовка */
+    align-items: center; /* Центрируем элементы по вертикали */
+    width: 100%; /* Занимаем всю ширину */
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Отступ между лого и версией */
+}
+
+.logo a {
+    font-family: 'Muli', sans-serif;
+    font-size: 24px; /* Увеличенный размер */
+    color: #f3f7cc;
+    text-decoration: none;
+}
+
+.version-number a {
+    font-size: 14px; /* Размер для версии */
+    color: white;
+}
+
+.version-number {
+    border-left: 1px solid #ccc; /* Вертикальная черта */
+    padding-left: 10px; /* Отступ слева от номера версии */
+    margin-left: 10px; /* Отступ слева от версии */
+    color: white; /* Цвет текста номера версии */
+}
+
+.user-container {
+    display: flex; /* Используем flexbox для расположения пользователя и поиска */
+    align-items: center; /* Центрируем элементы по вертикали */
+    margin-left: auto; /* Сдвигаем пользователя и поиск вправо */
+}
+
+
+
+
+.user-controls {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    order: 2; /* Гарантирует, что текст и меню будут после аватара */
+}
+
+.username {
+    margin-right: 5px; /* Отступ справа от имени пользователя */
+}
+
+.dropdown {
+    position: relative; /* Для позиционирования выпадающего меню */
+}
+
+.search-container {
+    display: flex; /* Используем flexbox для расположения поля поиска и кнопки */
+    align-items: center; /* Центрируем элементы по вертикали */
+}
+
+/* 1. Восстановление фона для menu-container */
+.menu-container {
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 4px; /* Опционально: скругление углов */
+}
+
+/* 2. Видимость элементов меню */
+.menu {
+    display: flex !important; /* Принудительное отображение */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 20px; /* Расстояние между пунктами */
+}
+
+.menu > li {
+    position: relative;
+}
+
+/* 3. Стилизация выпадающего меню */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #4d7f2a; /* Цвет фона подменю */
+    min-width: 200px;
+    padding: 10px;
+    border-radius: 4px;
+    top: 100%; /* Позиционирование под родительским пунктом */
+    left: 0;
+    z-index: 1000;
+}
+
+.menu li:hover .dropdown-content {
+    display: block; /* Показываем подменю при наведении */
+}
+
+/* 4. Стилизация ссылок */
+.menu a {
+    color: white !important;
+    text-decoration: none;
+    padding: 8px 12px;
+    display: block;
+    transition: background-color 0.3s;
+}
+
+.menu a:hover {
+    background-color: #3d6520; /* Темный оттенок при наведении */
+}
+.dropdown {
+    position: relative; /* Для позиционирования выпадающего меню */
+}
+
+.user-controls {
+    position: relative; /* Убедитесь, что родительский элемент имеет относительное позиционирование */
+}
+
+.dropdown-content {
+    display: none; /* Скрываем выпадающий список по умолчанию */
+    position: absolute; /* Позиционируем выпадающий список относительно родителя */
+    background-color: white; /* Цвет фона выпадающего списка */
+    min-width: 160px; /* Минимальная ширина выпадающего списка */
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); /* Тень для выпадающего списка */
+    z-index: 1; /* Устанавливаем z-index, чтобы выпадающий список был поверх других элементов */
+}
+
+.username:hover + .dropdown .dropdown-content {
+    display: block; /* Показываем выпадающий список при наведении на имя пользователя */
+}
+
+.dropdown-content {
+    display: none; /* Скрываем меню по умолчанию */
+    position: absolute; /* Позиционирование относительно родителя */
+    background-color: #556B2F; /* Темно-оливковый цвет фона */
+    color: white; /* Цвет текста */
+    min-width: 160px; /* Минимальная ширина */
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); /* Тень */
+    z-index: 1; /* Устанавливаем на передний план */
+}
+/* Общие стили для элементов выпадающего меню */
+.dropdown-content a,
+.dropdown-content button {
+    font-family: 'Muli', sans-serif; /* Используем тот же шрифт */
+    font-size: 14px; /* Размер шрифта */
+    color: white !important; /* Цвет текста */
+    text-decoration: none; /* Убираем подчеркивание */
+    padding: 12px 16px; /* Отступы как у ссылки */
+    display: block; /* Блочное отображение */
+    width: 100%; /* Ширина на всю доступную область */
+    text-align: left; /* Выравнивание текста слева */
+    background: none; /* Убираем фон кнопки */
+    border: none; /* Убираем границу кнопки */
+    cursor: pointer; /* Курсор-указатель */
+}
+
+/* Стиль при наведении */
+.dropdown-content a:hover,
+.dropdown-content button:hover {
+    background-color: #4d7f2a !important; /* Подсветка как у ссылки */
+}
+
+.dropdown:hover .dropdown-content {
+    display: block; /* Показываем меню при наведении на родительский элемент */
+}
+
+.dropdown-content a {
+    color: white; /* Цвет текста по умолчанию для ссылок в выпадающем меню */
+    padding: 12px 16px; /* Отступы */
+    text-decoration: none; /* Убираем подчеркивание */
+    display: block; /* Отображение в блоке */
+}
+
+.dropdown-content a:hover {
+    background-color: #4d7f2a; /* Цвет фона при наведении на ссылку */
+}
+
+/* Подсветка логотипа */
+.logo:hover,
+.logo:hover a {
+    background-color: #4d7f2a; /* Темно-оливковый при наведении */
+    color: white; /* Цвет текста */
+    transition: background-color 0.3s ease; /* Плавный переход */
+}
+
+/* Подсветка номера версии */
+.version-number:hover,
+.version-number:hover a {
+    background-color: #4d7f2a; /* Темно-оливковый при наведении */
+    color: white; /* Цвет текста */
+    transition: background-color 0.3s ease; /* Плавный переход */
+}
+#header a {
+    color: #f3f7cc; /* Цвет ссылок в заголовке */
+}
+
+#header a:hover {
+    color: #fff; /* Цвет ссылок при наведении */
+}
+
+#header .version-number a {
+    color: white; /* Устанавливаем цвет ссылки версии */
+    text-decoration: none; /* Убираем подчеркивание */
+}
+
+#header .version-number a:hover {
+    text-decoration: underline; /* Добавляем подчеркивание при наведении */
+}
+
+#movie-search {
+    padding: 5px; /* Отступы внутри поля поиска */
+    border: 1px solid #ccc; /* Рамка для поля поиска */
+    border-radius: 4px; /* Закругленные углы */
+    margin-right: 5px; /* Отступ справа от поля поиска */
+}
+
+.search-button {
+    background-color: #12c064; /* Цвет кнопки поиска */
+    color: white; /* Цвет текста кнопки */
+    border: none; /* Убираем рамку */
+    padding: 5px 10px; /* Отступы для кнопки */
+    cursor: pointer; /* Указатель при наведении */
+    border-radius: 4px; /* Закругленные углы */
+}
+
+
+#header a {
+    color:#f3f7cc;
+}
+#header a:hover {
+    color:#fff;
+}
+
+#header .user {
+    float:right;
+    padding-top:4px;
+}
+
+#header .user form {
+    display:inline;
+    float:right;
+}
+
+#header .user button {
+    background:none;
+    color:#f3f7cc;
+    border:none;
+    cursor:pointer;
+    float:left;
+    display:inline;
+}
+
+#content {
+    padding:30px 100px;
+}
+
+/* forms */
+form {
+    overflow:auto;
+}
+
+form p {
+    width:100%;
+    overflow:auto;
+}
+
+label {
+    float:left;
+    clear:both;
+    color:#333;
+    margin-bottom:4px;
+}
+input, textarea {
+    clear:both;
+    float:left;
+    margin:0 0 10px;
+    background:#efefef;
+    border:0;
+    padding:6px 10px;
+    font-size:14px;
+}
+input[type=submit], a.button {
+    font-weight:bold;
+    background:#12c064;
+    color:#fff;
+    padding:10px 20px;
+    font-size:14px;
+    text-transform:uppercase;
+}
+.errorlist {
+    color:#cc0033;
+    float:left;
+    clear:both;
+    padding-left:10px;
+}
+.helptext {
+    margin:0 0 20px 0;
+    color:#aaa;
+    clear:both;
+    float:left;
+    font-size:13px;
+}
+/* messages */
+ul.messages {
+    margin:10px 100px;
+    padding:0;
+    list-style-type:
+    none;
+}
+ul.messages li.success,
+ul.messages li.warning,
+ul.messages li.error,
+ul.messages li.info {
+    margin:0;
+    padding:14px 20px;
+    list-style:none;
+    color:#fff;
+}
+
+ul.messages li.success { background:#81ce81; }
+ul.messages li.success a { color:#0ac33e; }
+
+ul.messages li.error { background:#a30029; color:#e9828e; }
+ul.messages li.error a { color:#e9828e; }
+
+ul.messages li.info { background:#faffae; color:#696b4e; }
+ul.messages li.info a { color:#1586de; }
+
+ul.messages li.warning { background:#de9404; }
+ul.messages li.warning a { color:#f49000; }
+
+ul.messages li a.close {
+    margin:0;
+    float:right;
+    opacity:1;
+    border:0;
+    box-shadow:none;
+    text-shadow:none;
+}
+
+.login-form {
+    float:left;
+}
+
+/* social-auth */
+.social {
+    float:right;
+}
+.social li {
+    list-style:none;
+    padding:10px 20px;
+    margin:0 0 10px 0;
+}
+.social li a {
+    width:100%;
+    height:100%;
+    display:block;
+    color:#fff;
+}
+.social li.google { background:#de1710; }
+.social li.yandex {
+    background: #FFD300; /* Темно-желтый цвет */
+    color: #000000 !important; /* Черный текст с высоким приоритетом */
+}
+
+.social li a.yandex {
+    color: #000000 !important; /* Убедитесь, что ссылки также имеют черный цвет */
+}
+
+/* images */
+
+.image-preview, .image-detail {
+    max-width:300px;
+    float:left;
+    margin:0 20px 20px 0;
+}
+.image-detail { margin-top:20px; }
+.image-info div {
+    padding:20px 0;
+    overflow:auto;
+}
+.count {
+    color:#aaa;
+    border:3px solid #bbb;
+    border-radius:26px;
+    padding:10px 20px;
+    margin:20px 10px 0;
+}
+a.like, a.follow { float:right; margin-top:-8px; }
+
+
+#image-list { overflow:hidden; }
+#image-list .image {
+    float:left;
+    width:220px;
+    height:300px;
+    margin:0 10px 10px 10px;
+    border-top:8px solid #12c064;
+    background:#eee;
+}
+#image-list img { width:220px; height:220px; }
+#image-list .info { padding:10px; }
+#image-list .info a { color:#333; }
+.image-likes div {
+    float:left;
+    width:auto;
+    padding:10px;
+    text-align:center;
+}
+.image-likes img {
+    width:120px;
+    height:120px;
+    border-radius:50%;
+}
+
+/* users */
+#people-list img {
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    margin-bottom:20px;
+}
+#people-list .user {
+    width:180px;
+    float:left;
+    overflow:auto;
+    padding:10px;
+}
+#people-list .info { text-align:center; }
+img.user-detail {
+    border-radius:50%;
+    float:left;
+}
+.profile-info {
+    float:left;
+    overflow:auto;
+    margin-right:20px;
+}
+.image-container { margin-top:40px; }
+
+/* actions */
+.action {
+    clear:both;
+    overflow:auto;
+}
+.action .images {
+    float:left;
+    margin:0 10px 10px 0;
+}
+.action .date {
+    font-style:italic;
+    color:#ccc;
+}
+
+.movie-poster {
+    margin-right: 5px; /* Отступ между постером и информацией о фильме */
+    width: 40px; /* Фиксированная ширина */
+    height: 60px; /* Фиксированная высота */
+    overflow: hidden; /* Скрываем переполнение, если изображение больше */
+    display: flex; /* Используем flexbox для центрирования изображения */
+    justify-content: center; /* Центрируем изображение по горизонтали */
+    align-items: center; /* Центрируем изображение по вертикали */
+
+}
+
+.movie-poster-img {
+    width: 100%; /* Ширина изображения 100% от родительского контейнера */
+    height: auto; /* Автоматическая высота для сохранения пропорций */
+    object-fit: cover; /* Обеспечивает обрезку изображения, чтобы оно заполнило контейнер */
+}
+
+
+.movie-info {
+ margin: 10px; /* Убедитесь, что отступы равны 0 */
+}
+
+.movie-actions {
+    display: flex; /* Используем Flexbox для кнопок */
+    gap: 10px; /* Отступ между кнопками */
+}
+
+.movie-container {
+    flex-grow: 1; /* Конт ейнер с фильмами занимает оставшееся пространство */
+    max-width: 1200px; /* Максимальная ширина для десктопов */
+    margin: 0 auto; /* Центрируем контейнер */
+    padding: 5px; /* Внутренние отступы */
+
+
+}
+
+.movie-list {
+    display: flex; /* Используем flexbox для выравнивания элементов */
+    flex-wrap: wrap; /* Позволяем переносить фильмы на новую строку */
+    justify-content: space-between; /* Распределяем элементы по доступному пространству */
+    margin: 0; /* Убираем отступы вокруг списка фильмов */
+    padding: 0; /* Убираем внутренние отступы */
+}
+
+.movie-item {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin: 15px 0; /* Отступы между карточками */
+
+    display: flex; /* Используем Flexbox для горизонтального расположения */
+    align-items: center; /* Выравнивание по центру по вертикали */
+    min-height: 100px; /* Установите минимальную высоту для элементов списка */
+    padding: 0; /* Убираем отступы для лучшего отображения */
+    border-radius: 5px; /* Закругленные углы для лучшего внешнего вида */
+    flex: 1 1 calc(25% - 10px); /* Элементы занимают 25% ширины с учетом отступов */
+    box-sizing: border-box; /* Учитываем отступы в ширине */
+    margin-bottom: 10px; /* Уменьшаем отступ между элементами */
+    margin-right: 0; /* Уменьшаем отступ справа между элементами */
+}
+
+/* Убираем отступ справа для последнего элемента в строке */
+.movie-item:nth-child(4n) {
+    margin-right: 0; /* Убираем отступ справа для каждого четвертого элемента */
+}
+
+
+
+.top-movie-item {
+    display: flex; /* Используем flexbox для выравнивания */
+    align-items: center; /* Выравниваем по центру по вертикали */
+    margin-bottom: 1px; /* Уменьшаем отступ между элементами списка */
+}
+
+.movie-info {
+    flex-grow: 1; /* Позволяем этому блоку занимать оставшееся пространство */
+}
+
+.top-movie-item a {
+    display: block; /* Переносим название фильма на новую строку */
+    font-weight: bold; /* Жирный шрифт для названия фильма */
+}
+
+.likes-count {
+    font-size: 0.9em; /* Уменьшаем размер шрифта для количества лайков */
+    color: #666; /* Цвет текста для количества лайков */
+}
+
+.filter-button {
+    margin: 20px 0; /* Отступ сверху и снизу */
+}
+
+.filter-button .btn {
+    background-color: #007bff; /* Цвет фона */
+    color: white; /* Цвет текста */
+    padding: 10px 20px; /* Отступы внутри кнопки */
+    border: none; /* Убираем границу */
+    border-radius: 5px; /* Закругленные углы */
+    text-decoration: none; /* Убираем подчеркивание */
+    display: inline-block; /* Чтобы кнопка вела себя как блок */
+    transition: background-color 0.3s; /* Плавный переход цвета фона */
+}
+
+.filter-button .btn:hover {
+    background-color: #0056b3; /* Цвет фона при наведении */
+}
+
+.divider {
+    border: none; /* Убираем стандартные стили для hr */
+    border-top: 1px solid #ddd; /* Добавляем верхнюю границу */
+    margin: 1px 0; /* Отступы сверху и снизу */
+}
+
+.sidebar {
+    float: right;
+    width: 25%;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.sidebar h2 {
+    margin-top: 0;
+}
+
+.pagination {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.pagination a {
+    margin: 0 5px;
+    text-decoration: none;
+    color: #007bff;
+}
+
+.pagination .current {
+    font-weight: bold;
+}
+
+.tabs {
+    display: flex;
+    flex-wrap: wrap; /* Позволяем вкладкам переноситься на новую строку */
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.tabs a {
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.tabs a.active {
+    background-color: #f3f7cc;
+    color: black;
+}
+
+.tabs a:hover {
+    background-color: #f0f0f0;
+}
+
+.loading {
+    display: none;
+    text-align: center;
+    font-size: 18px;
+    color: #007bff;
+}
+
+.movie-detail {
+    display: flex; /* Используем flexbox для расположения элементов в строку */
+    margin: 20px; /* Отступы вокруг блока */
+}
+
+
+.poster-img {
+    width: 100%; /* Ширина изображения 100% от родительского контейнера */
+    height: auto; /* Автоматическая высота для сохранения пропорций */
+}
+
+
+.info-block {
+    display: flex; /* Используем flexbox для расположения информации и показателей */
+    justify-content: space-between; /* Распределяем пространство между колонками */
+}
+
+.details {
+    flex: 2; /* Ширина блока с деталями */
+}
+
+.metrics {
+    flex: 1; /* Ширина блока с показателями */
+    padding-left: 20px; /* Отступ слева для отделения от деталей */
+    border-left: 1px solid #ccc; /* Линия для отделения */
+}
+
+.watched {
+    background-color: #d3ffd3; /* Светло-зеленый фон для просмотренных фильмов */
+    font-weight: bold; /* Жирный шрифт для выделения */
+}
+
+.movie-actions button {
+    background: none; /* Убираем фон */
+    border: none; /* Убираем рамку */
+    cursor: pointer; /* Указатель при наведении */
+    font-size: 24px; /* Размер иконок */
+    color: #333; /* Цвет иконок */
+    margin-right: 10px; /* Отступ между кнопками */
+}
+
+.movie-actions button:hover {
+    color: #007bff; /* Цвет при наведении */
+}
+
+/* Общие стили для кнопок */
+button {
+    background: none; /* Убираем фон */
+    border: none; /* Убираем рамку */
+    cursor: pointer; /* Указатель при наведении */
+}
+
+/* Стили для иконок */
+button i {
+    font-size: 24px; /* Размер иконок */
+    color: #007bff; /* Цвет иконок по умолчанию */
+    transition: color 0.3s ease; /* Плавный переход цвета */
+}
+
+/* Прозрачные иконки */
+.transparent {
+    opacity: 0.5; /* Прозрачные иконки */
+}
+
+/* Активные иконки */
+.active {
+    color: #007bff; /* Цвет активной иконки */
+}
+
+/* Стили для состояния лайка */
+button.like i.active {
+    color: #28a745; /* Цвет для активного лайка */
+}
+
+/* Стили для состояния дизлайка */
+button.dislike i.active {
+    color: #dc3545; /* Цвет для активного дизлайка */
+}
+
+/* Стили для состояния вишлиста */
+button.wishlist i.transparent {
+    opacity: 0.5; /* Прозрачная иконка вишлиста */
+}
+
+
+#header ul.menu {
+    list-style: none; /* Убираем маркеры списка */
+    float: left; /* Выравнивание влево */
+    margin: 0; /* Убираем отступы */
+    padding: 0; /* Убираем внутренние отступы */
+}
+
+#header ul.menu li {
+    float: left; /* Элементы списка располагаются в ряд */
+    padding: 4px 10px; /* Отступы вокруг элементов */
+    position: relative; /* Устанавливаем относительное позиционирование для родителя */
+}
+
+.movie-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #333; /* Цвет иконок */
+    position: relative; /* Для позиционирования */
+    display: flex; /* Используем flexbox для выравнивания */
+    align-items: center; /* Выравнивание по центру */
+}
+
+.movie-actions button i {
+    font-size: 24px; /* Размер иконок */
+    margin-right: 5px; /* Отступ между иконкой и текстом */
+}
+
+.movie-actions button .action-label {
+    font-size: 14px; /* Размер шрифта для подписи */
+    color: #333; /* Цвет текста */
+}
+
+.movie-actions button i.fa-circle {
+    color: #ccc; /* Цвет кружка */
+}
+
+.movie-actions button i.fa-check {
+    position: absolute; /* Позиционирование галочки */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Центрирование галочки */
+    color: green; /* Цвет галочки */
+    font-size: 16px; /* Размер галочки */
+    display: none; /* Скрываем галочку по умолчанию */
+}
+
+.movie-actions button i.fa-check {
+    display: inline; /* Показываем галочку, когда она активна */
+}
+
+.action {
+    display: flex; /* Используем Flexbox для расположения элементов */
+    flex-direction: column; /* Вертикальное расположение для элементов */
+    margin-bottom: 20px; /* Отступ между действиями */
+    padding-bottom: 10px; /* Отступ снизу для визуального отделения */
+    border-bottom: 1px solid #ddd !important; /* Принудительное применение стиля */
+}
+
+.action-header {
+    display: flex; /* Используем Flexbox для выравнивания аватара и информации */
+    align-items: center; /* Выравнивание по центру по вертикали */
+}
+
+.user-info {
+    display: flex; /* Используем Flexbox для расположения информации */
+    flex-direction: column; /* Вертикальное направление для дочерних элементов */
+    margin-left: 10px; /* Отступ слева от аватара */
+    flex-wrap: nowrap; /* Запрещаем перенос элементов */
+    gap: 10px; /* Расстояние между аватаром и текстом */
+}
+
+
+.date {
+    margin-top: 5px; /* Отступ ⬤
+}
+
+.user-avatar {
+    margin-right: 15px; /* Отступ между аватаром и информацией */
+}
+
+.user-avatar img {
+    border-radius: 50%; /* Круглая форма для аватара */
+}
+
+.user-avatar-header {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    object-fit: cover;
+    order: 1; /* Гарантирует, что аватар будет первым элементом */
+}
+
+
+
+.user-action {
+    display: flex; /* Используем Flexbox для выравнивания в одну строку */
+    align-items: center; /* Выравнивание по центру по вертикали */
+}
+
+.user-action a,
+.user-action .action-verb,
+.user-action .movie-title {
+    margin-right: 5px; /* Отступ между элементами */
+}
+
+.date {
+    margin-top: 5px; /* Отступ сверху для даты */
+    font-size: 12px; /* Размер шрифта для даты */
+    color: #999; /* Цвет для даты */
+}
+
+.action-poster {
+    margin-top: 10px; /* Отступ сверху для постера */
+    text-align: center; /* Центрируем постер */
+}
+
+.action-poster img {
+    max-width: 100%; /* Ограничиваем ширину постера */
+    height: auto; /* Автоматическая высота для сохранения пропорций */
+}
+}
+
+.container {
+    display: flex; /* Используем Flexbox для расположения основного контента и сайдбара */
+}
+
+.main-content {
+    flex: 3; /* Основной контент занимает 3/4 ширины */
+    padding: 20px; /* Отступы вокруг основного контента */
+}
+
+.content-wrapper {
+    display: flex; /* Используем Flexbox для расположения действий и сайдбара */
+}
+
+.actions {
+    flex: 3; /* Действия пользователей занимают 3/4 ширины */
+    margin-right: 20px; /* Отступ между действиями и сайдбаром */
+}
+
+.sidebar {
+    flex: 1; /* Сайдбар занимает 1/4 ширины */
+    padding: 20px; /* Отступы вокруг сайдбара */
+    background-color: #f9f9f9; /* Цвет фона для сайдбара */
+    border-left: 1px solid #ddd; /* Разделительная линия между контентом и сайдбаром */
+}
+
+.sidebar h2 {
+    margin-top: 0; /* Убираем верхний отступ для заголовка */
+}
+
+.sidebar ul {
+    list-style-type: none; /* Убираем маркеры списка */
+    padding: 0; /* Убираем внутренние отступы */
+}
+
+.sidebar ul li {
+    margin-bottom: 5px; /* Отступ между элементами списка */
+}
+
+.pagination {
+    text-align: center; /* Центрируем текст пагинации */
+    margin-top: 20px; /* Отступ сверху для пагинации */
+}
+
+.pagination a {
+    margin: 0 5px; /* Отступы между ссылками */
+    text-decoration: none; /* Убираем подчеркивание */
+    color: #007bff; /* Цвет ссылок */
+}
+
+.pagination .current {
+    font-weight: bold; /* Выделяем текущую страницу */
+}
+
+.kinopoisk-link {
+    display: inline-block; /* Чтобы элемент занимал только необходимое пространство */
+}
+
+.icon {
+    width: 20px; /* Установите ширину иконки */
+    height: 20px; /* Установите высоту иконки */
+    vertical-align: middle; /* Выравнивание по центру */
+}
+
+.sidebar {
+    float: left; /* Размещаем сайдбар слева */
+    width: 15%; /* Ширина сайдбара */
+    padding: 5px; /* Отступы вокруг сайдбара */
+    background-color: #f9f9f9; /* Цвет фона для сайдбара */
+    border: 1px solid #ccc; /* Рамка для сайдбара */
+    border-radius: 5px; /* Закругленные углы */
+}
+
+
+
+#header .version-number {
+    color: white; /* Устанавливаем цвет */
+    font-size: 0.6em; /* Устанавливаем мелкий шрифт */
+    margin-left: 5px; /* Добавляем небольшой отступ слева для отделения от логотипа */
+}
+
+#header .version-number a {
+    color: white; /* Устанавливаем цвет ссылки */
+    text-decoration: none; /* Убираем подчеркивание */
+}
+
+#header .version-number a:hover {
+    text-decoration: underline; /* Добавляем подчеркивание при наведении */
+}
+
+.content-wrapper {
+    display: flex; /* Используем Flexbox для расположения сайдбара и фильтра */
+}
+
+.sidebar {
+    width: 200px; /* Установите ширину сайдбара */
+    margin-right: 20px; /* Отступ между сайдбаром и фильтром */
+}
+
+.filter {
+    flex-grow: 1; /* Фильтр занимает оставшееся пространство */
+}
+
+
+
+/* Стили для кнопок фильтров */
+.filter-btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    margin: 10px 0;
+    display: block;
+    width: 100%;
+}
+
+.title-filter {
+    background-color: #4d7f2a; /* Темно-оливковый */
+    color: white;
+}
+
+.genre-filter {
+    background-color: #556B2F; /* Немного светлее */
+    color: white;
+}
+
+.filter-btn:hover {
+    filter: brightness(110%);
+    transform: translateY(-1px);
+}
+
+/* Стили для группы фильтров */
+.filter-group {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+}
+
+.genre-checkboxes {
+    margin-top: 10px;
+    display: grid;
+    gap: 8px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.checkbox-label input {
+    margin: 0;
+}
+
+.content-wrapper {
+    display: flex; /* Используем Flexbox для расположения сайдбара и контейнера с фильмами */
+    flex-wrap: wrap; /* Позволяем переносить элементы на новую строку */
+}
+
+.info-block {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+}
+
+.info-left, .info-right {
+    width: 48%;
+}
+
+.info-left h2, .info-right h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.info-left ul, .info-right ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.info-left li, .info-right li {
+    margin-bottom: 5px;
+}
+
+.activity-table {
+    width: 100%; /* Ширина таблицы */
+    border-collapse: collapse; /* Убираем двойные границы */
+    margin-top: 10px; /* Отступ сверху */
+}
+
+.activity-table th, .activity-table td {
+    border: 1px solid #ddd; /* Граница ячеек */
+    padding: 8px; /* Отступы внутри ячеек */
+    text-align: left; /* Выравнивание текста по левому краю */
+}
+
+.activity-table th {
+    background-color: #f2f2f2; /* Цвет фона для заголовков */
+    font-weight: bold; /* Жирный шрифт для заголовков */
+}
+
+.activity-table tr:nth-child(even) {
+    background-color: #f9f9f9; /* Цвет фона для четных строк */
+}
+
+.activity-table tr:hover {
+    background-color: #f1f1f1; /* Цвет фона при наведении */
+}
+
+.changelog-container {
+    max-width: 800px; /* Максимальная ширина контейнера */
+    margin: 0 auto; /* Центрирование контейнера */
+    padding: 20px; /* Отступы внутри контейнера */
+    background-color: #f9f9f9; /* Цвет фона */
+    border: 1px solid #ddd; /* Граница вокруг контейнера */
+    border-radius: 8px; /* Закругленные углы */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Тень для контейнера */
+}
+
+.changelog-list {
+    list-style-type: none; /* Убираем маркеры списка */
+    padding: 0; /* Убираем отступы */
+}
+
+.changelog-item {
+    margin-bottom: 20px; /* Отступ между элементами списка */
+    padding: 15px; /* Отступы внутри элемента списка */
+    background-color: #fff; /* Цвет фона элемента списка */
+    border: 1px solid #e0e0e0; /* Граница вокруг элемента списка */
+    border-radius: 5px; /* Закругленные углы */
+}
+
+.version-header {
+    display: flex; /* Используем flexbox для выравнивания */
+    justify-content: space-between; /* Распределяем пространство между элементами */
+    align-items: center; /* Выравниваем по центру по вертикали */
+}
+
+.version-number {
+    font-size: 1.2em; /* Увеличиваем размер шрифта для номера версии */
+    color: #333; /* Цвет текста */
+}
+
+.release-date {
+    font-size: 0.9em; /* Уменьшаем размер шрифта для даты */
+    color: #777; /* Цвет текста для даты */
+}
+
+.changes {
+    margin-top: 10px; /* Отступ сверху для изменений */
+    white-space: pre-wrap; /* Сохраняем пробелы и переносы строк */
+    background-color: #f0f0f0; /* Цвет фона для блока изменений */
+    padding: 10px; /* Отступы внутри блока изменений */
+    border-radius: 4px; /* Закругленные углы для блока изменений */
+    overflow-x: auto; /* Добавляем прокрутку по горизонтали, если текст длинный */
+}
+
+.search-results {
+    position: absolute; /* Позволяет позиционировать результаты поиска */
+    background-color: white; /* Фон для контейнера результатов */
+    border: 1px solid #ccc; /* Граница для контейнера результатов */
+    z-index: 1000; /* Убедитесь, что результаты отображаются поверх других элементов */
+    width: 40%; /* Ширина контейнера результатов (можно изменить по желанию) */
+    right: 10px; /* Устанавливаем отступ справа, чтобы не выступал за границу */
+    left: 50%; /* Устанавливаем левую границу на 50% от ширины экрана */
+    margin-top: 55px; /* Отступ сверху для отделения от элемента поиска */
+}
+
+.result-item {
+    padding: 10px; /* Отступы для элементов результатов */
+    cursor: pointer; /* Указатель при наведении */
+}
+
+.result-item strong {
+    color: black; /* Цвет текста названия фильма */
+    text-decoration: none; /* Убираем подчеркивание */
+}
+
+.result-item .movie-year {
+    color: gray; /* Цвет для года фильма (можно изменить по желанию) */
+}
+
+/* Добавьте эффект при наведении на элемент результата */
+.result-item:hover {
+    background-color: #f0f0f0; /* Цвет фона при наведении */
+}
+
+.movie-year {
+    color: #666; /* Цвет для года */
+    font-size: 0.9em; /* Уменьшенный размер шрифта для года */
+}
+
+
+.comment-form {
+    max-width: 600px;
+    margin: auto;
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.comment-list {
+    list-style-type: none;
+    padding: 0;
+ }
+
+.comment-item {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    background-color: #ffffff;
+}
+
+.comment-item strong {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.comment-item p {
+    margin: 0;
+    color: #555;
+}
+
+
+.combined-sidebar {
+    margin-top: 20px; /* Отступ сверху для объединенного сайдбара */
+    padding: 5px;
+    border-radius: 5px; /* Закругленные углы */
+}
+
+.top-movies-sidebar,
+.top-users-sidebar,
+.top-lists-sidebar {
+    background-color: #f9f9f9; /* Цвет фона для боковых панелей */
+    border: 1px solid #ddd; /* Цвет и стиль границы */
+    border-radius: 10px; /* Закругление углов */
+    padding: 5px; /* Отступ внутри блока */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Легкая тень для глубины */
+    margin-bottom: 10px; /* Отступ снизу для создания пространства между элементами */
+}
+
+.top-movies-sidebar h3,
+.top-users-sidebar h3,
+.top-lists-sidebar h3 {
+    margin-top: 0; /* Убираем верхний отступ у заголовков */
+}
+
+.top-movies-list, .top-users-list, .top-users-lists {
+    list-style-type: none; /* Убираем маркеры списка */
+    padding: 0; /* Убираем отступы */
+    margin: 0; /* Убираем отступы */
+}
+
+.top-user-item, .top-list-item {
+    display: flex; /* Используем flexbox для выравнивания */
+    align-items: center; /* Выравнивание по центру */
+    margin-bottom: 10px; /* Отступ между элементами списка */
+}
+
+.user-avatar {
+    margin-right: 10px; /* Отступ между аватаром и информацией о пользователе */
+}
+
+.movie-poster {
+    margin-right: 10px; /* Отступ между постером и информацией о фильме */
+}
+
+.likes-count {
+    font-size: 0.9em; /* Уменьшаем размер шрифта для количества лайков */
+    color: #666; /* Цвет для текста количества лайков */
+}
+.list-title {
+    color: blue; /* Устанавливаем синий цвет для имени списка */
+    text-decoration: none; /* Убираем подчеркивание */
+}
+
+.list-title:hover {
+    text-decoration: underline; /* Добавляем подчеркивание при наведении */
+}
+
+.latest-movies-slider {
+    margin: 20px 0;
+    text-align: center; /* Центрируем заголовок */
+}
+
+.slider {
+    display: flex; /* Используем Flexbox для горизонтального расположения */
+    overflow-x: auto; /* Позволяет прокручивать слайдер */
+    scroll-snap-type: x mandatory; /* Для плавного скроллинга */
+    padding: 10px 0; /* Отступы сверху и снизу */
+    gap: 15px; /* Промежуток между элементами */
+    -webkit-overflow-scrolling: touch; /* Для плавного скроллинга на мобильных устройствах */
+}
+
+.slider-item {
+    flex: 0 0 auto; /* Не позволяет элементам сжиматься */
+    width: 200px; /* Ширина каждого элемента */
+    scroll-snap-align: start; /* Привязывает элементы к началу при прокрутке */
+    position: relative; /* Для позиционирования заголовка */
+    transition: transform 0.3s; /* Плавный эффект при наведении */
+}
+
+.slider-item:hover {
+    transform: scale(1.05); /* Увеличение элемента при наведении */
+}
+
+.slider-img {
+    width: 100%; /* Ширина изображения */
+    height: auto; /* Высота изображения */
+    border-radius: 10px; /* Закругленные углы */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень для изображения */
+}
+
+.slider-title {
+    margin-top: 5px; /* Отступ сверху */
+    font-weight: bold; /* Жирный шрифт для заголовка */
+    color: #333; /* Цвет текста заголовка */
+    font-size: 1.1em; /* Размер шрифта заголовка */
+}
+
+
+
+.action-filter-container {
+    margin: 20px 0; /* Отступы сверху и снизу */
+    display: flex; /* Используем Flexbox для выравнивания */
+    align-items: center; /* Центрируем элементы по вертикали */
+}
+
+.action-filter-label {
+    margin-right: 10px; /* Отступ справа от метки */
+    font-weight: bold; /* Жирный шрифт для метки */
+    color: #333; /* Цвет текста метки */
+}
+
+.action-filter-select {
+    padding: 10px; /* Внутренние отступы */
+    border: 1px solid #ccc; /* Цвет рамки */
+    border-radius: 5px; /* Закругленные углы */
+    font-size: 1em; /* Размер шрифта */
+    transition: border-color 0.3s; /* Плавный переход цвета рамки */
+    outline: none; /* Убираем обводку при фокусе */
+}
+
+.action-filter-select:focus {
+    border-color: #007bff; /* Цвет рамки при фокусе */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Тень при фокусе */
+}
+
+/* Стили для мобильных устройств */
+@media (max-width: 768px) {
+    .movie-item {
+        flex: 1 1 calc(50% - 20px); /* Два фильма в ряд на мобильных */
+    }
+}
+
+@media (max-width: 480px) {
+    .movie-item {
+        flex: 1 1 100%; /* Один фильм в ряд на очень маленьких экранах */
+    }
+}
+
+@media (max-width: 768px) {
+    .comment-form {
+        padding: 10px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-control {
+        width: 100%;
+        font-size: 14px;
+    }
+
+    .sidebar {
+        width: 100%; /* Сайдбар занимает всю ширину */
+        margin: 0; /* Убираем отступы */
+        padding: 5px; /* Уменьшаем отступы */
+        border: none; /* Убираем рамку */
+        margin-top: 20px; /* Отступ сверху */
+    }
+
+    .movie-container {
+        margin-left: 0; /* Убираем отступ слева */
+        padding: 5px; /* Уменьшаем отступы */
+    }
+
+    .content-wrapper {
+        flex-direction: column; /* Вертикальное расположение для мобильных */
+    }
+
+    .movie-list {
+        flex-direction: column; /* Изменяем направление на колонку для мобильных */
+        align-items: center; /* Центрируем элементы */
+    }
+
+    #header {
+        padding: 20px; /* Уменьшаем отступы */
+        font-size: 12px; /* Уменьшаем размер шрифта */
+    }
+
+    #header .logo {
+        font-size: 18px; /* Уменьшаем размер логотипа */
+    }
+
+    #header .menu {
+        flex-direction: column; /* Меню будет вертикальным */
+        display: none; /* Скрыть меню по умолчанию */
+    }
+
+    #header .menu.active {
+        display: flex; /* Показать меню, когда оно активно */
+    }
+
+    .menu-toggle {
+        display: block; /* Показать кнопку для открытия меню */
+        background-color: #12c064; /* Цвет кнопки */
+        color: white; /* Цвет текста кнопки */
+        border: none; /* Убираем рамку */
+        padding: 10px; /* Отступы для кнопки */
+        cursor: pointer; /* Указатель при наведении */
+    }
+
+    .menu li {
+        margin: 10px 0; /* Увеличиваем отступы между элементами */
+    }
+
+    .movie-item {
+        flex: 1 1 100%; /* Элементы занимают 100% ширины на мобильных */
+        margin-bottom: 5px; /* Уменьшаем отступ между элементами */
+        margin-right: 0; /* Убираем отступ справа на мобильных */
+    }
+
+    .movie-poster {
+        margin-right: 0; /* Убираем отступ справа */
+        margin-bottom: 5px; /* Отступ снизу для постера */
+    }
+
+    .movie-poster-img {
+        width: 80%; /* Уменьшаем ширину постера */
+        margin: 0; /* Убедитесь, что отступы равны 0 */
+        margin-right: 0; /* Отступ справа от постера */
+    }
+
+    .movie-info {
+        text-align: center; /* Центрируем текст информации о фильме */
+        margin: 0; /* Убедитесь, что отступы равны 0 */
+    }
+
+    .tabs {
+        flex-direction: column; /* Изменяем направление на колонку для мобильных */
+        align-items: stretch; /* Вкладки занимают всю ширину */
+    }
+
+    .tabs a {
+        margin: 5px 0; /* Убираем боковые отступы и оставляем только вертикальные */
+    }
+
+
+    .top-movies-sidebar {
+        width: 25%; /* Ширина 100% на мобильных устройствах */
+        padding: 1px; /* Уменьшаем отступы */
+    }
+
+    .top-movie-item {
+        flex-direction: column; /* Располагаем элементы в колонку */
+        align-items: flex-start; /* Выравниваем по левому краю */
+    }
+
+}
+
+@media (max-width: 1300px) {
+    .movie-poster {
+        margin-right: 0; /* Убираем отступ справа */
+        margin-bottom: 5px; /* Отступ снизу для постера */
+    }
+
+    .movie-poster-img {
+        width: 80%; /* Уменьшаем ширину постера */
+        margin: 0; /* Убедитесь, что отступы равны 0 */
+        margin-right: 0; /* Отступ справа от постера */
+    }
+
+     .content-wrapper {
+        display: flex; /* Используем Flexbox для расположения блоков */
+    }
+
+    .actions {
+        margin-bottom: 20px; /* Отступ снизу для блока действий */
+    }
+
+    .combined-sidebar {
+        width: 30%; /* Ширина 100% на мобильных устройствах */
+        margin-top: 0; /* Убираем отступ сверху для объединенного сайдбара на мобильных устройствах */
+    }
+    .metrics {
+        font-size: 10px; /* Уменьшаем размер шрифта в блоке metrics */
+    }
+
+    .metrics h2 {
+        font-size: 14px; /* Уменьшаем размер заголовка в блоке metrics */
+    }
+
+    .metrics p {
+        font-size: 10px; /* Уменьшаем размер текста в параграфах блока metrics */
+    }
+
+   .pagination {
+        font-size: 12px; /* Уменьшаем размер шрифта */
+    }
+
+    .step-links a {
+        padding: 3px 6px; /* Уменьшаем отступы внутри ссылок */
+        font-size: 10px; /* Уменьшаем размер шрифта для ссылок */
+    }
+
+    .current {
+        font-size: 10px; /* Уменьшаем размер шрифта для текущей страницы */
+    }
+
+    .slider {
+        padding: 5px 0; /* Уменьшаем отступы для меньших экранов */
+    }
+
+    .slider-item {
+        width: 150px; /* Уменьшаем ширину элементов для меньших экранов */
+    }
+    .btn-primary {
+        display: block; /* Убедитесь, что кнопка отображается как блочный элемент */
+        width: 100%; /* Задайте ширину 100% для лучшего отображения на мобильных устройствах */
+    }
+
+}

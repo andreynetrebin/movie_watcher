@@ -1,0 +1,232 @@
+/* 
+ * main.css v1.0 - Плавный переход на новую структуру
+ * Эта версия обеспечивает обратную совместимость
+ */
+
+/* 1. Сначала подключаем переменные - они не сломают существующие стили */
+:root {
+    /* Основные цвета из вашего base.css */
+    --primary-color: #12c064;
+    --primary-hover: #00a74f;
+    --secondary-color: #4d7f2a;
+    --accent-color: #f3f7cc;
+    --text-color: #333;
+    --text-light: #666;
+    --bg-light: #f9f9f9;
+    --border-color: #ddd;
+    --error-color: #cc0033;
+    
+    /* Размеры */
+    --spacing-xs: 5px;
+    --spacing-sm: 10px;
+    --spacing-md: 20px;
+    --spacing-lg: 30px;
+    --border-radius: 5px;
+    
+    /* Шрифты */
+    --font-main: 'Muli', helvetica, sans-serif;
+    --font-size-sm: 14px;
+    --font-size-md: 16px;
+    --font-size-lg: 18px;
+    --font-size-xl: 24px;
+}
+
+/* 2. Базовый сброс, который не конфликтует с вашими стилями */
+.migration-reset {
+    box-sizing: border-box;
+}
+
+.migration-reset * {
+    box-sizing: inherit;
+}
+
+/* 3. Утилитарные классы - они не повлияют на существующие стили */
+.migration-hidden {
+    display: none !important;
+}
+
+.migration-flex {
+    display: flex;
+}
+
+.migration-items-center {
+    align-items: center;
+}
+
+.migration-justify-between {
+    justify-content: space-between;
+}
+
+/* 4. Новые компоненты с префиксом migration- для безопасности */
+.migration-btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: var(--font-size-md);
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.migration-btn--primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.migration-btn--primary:hover {
+    background-color: var(--primary-hover);
+    opacity: 0.9;
+}
+
+/* 5. Плавное добавление новых стилей для существующих элементов */
+/* Эти стили будут добавляться поверх существующих */
+
+/* Для header - очень аккуратно */
+#header {
+    /* Пока оставляем как есть, только добавляем переменные если нужно */
+    --header-bg: #12c064;
+    --header-text: #fff;
+}
+
+/* 6. Тестовые элементы для проверки работы CSS */
+.migration-test {
+    display: none; /* По умолчанию скрыты */
+    padding: 10px;
+    margin: 5px;
+    border-radius: 4px;
+}
+
+.migration-test--variables {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.migration-test--success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+/* 7. Медиа-запросы - можно безопасно добавлять */
+@media (max-width: 768px) {
+    .migration-mobile-hidden {
+        display: none;
+    }
+    
+    .migration-mobile-flex {
+        display: flex;
+    }
+}
+
+/* 8. Временные хелперы для отладки */
+.migration-debug {
+    outline: 1px solid red !important;
+}
+
+.migration-debug-2 {
+    outline: 1px solid blue !important;
+}
+
+/* 9. Постепенная миграция самых безопасных элементов */
+
+/* Кнопки - начинаем с добавления новых классов к существующим элементам */
+.follow-button button,
+.search-button,
+.filter-button .btn {
+    /* Пока оставляем старые стили, но добавляем возможность переопределения */
+}
+
+/* Формы - безопасные улучшения */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(18, 192, 100, 0.1);
+}
+
+/* 10. Новые компоненты, которые не конфликтуют со старыми */
+
+/* Карточки - используем новые классы */
+.migration-card {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.migration-card__header {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+.migration-card__title {
+    font-size: var(--font-size-lg);
+    color: var(--text-color);
+    margin: 0;
+}
+
+/* 11. Улучшения для существующих элементов без изменения поведения */
+
+/* Плавные переходы для интерактивных элементов */
+a, button, .menu li {
+    transition: all 0.2s ease-in-out;
+}
+
+/* Улучшение читаемости */
+p, li, td, th {
+    line-height: 1.5;
+}
+
+/* 12. Безопасные улучшения для таблиц */
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    border: 1px solid var(--border-color);
+    padding: 8px 12px;
+    text-align: left;
+}
+
+th {
+    background-color: var(--bg-light);
+    font-weight: bold;
+}
+
+/* 13. Индикатор загрузки новых стилей */
+#migration-status {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: var(--primary-color);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 12px;
+    z-index: 10000;
+    display: none; /* Скрыт по умолчанию */
+}
+
+/* 14. Адаптивность - безопасные улучшения */
+@media (max-width: 1300px) {
+    .migration-responsive-text {
+        font-size: 14px;
+    }
+}
+
+/* 15. Сообщение для разработчиков */
+/* Это сообщение будет видно только при прямом заходе на main.css */
+/* main.css v1.0 - Migration Phase 1: Variables and Utilities */
+/* Current status: SAFE - No breaking changes */
+/* Next phase: Component migration */

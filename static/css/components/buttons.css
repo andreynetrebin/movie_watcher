@@ -1,0 +1,50 @@
+.btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: var(--font-size-md);
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    opacity: 0.9;
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+/* Стили для кнопок в header */
+.search-button {
+    composes: btn;
+    composes: btn-primary;
+    padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+/* Кнопки фильтров */
+.filter-btn {
+    composes: btn;
+    width: 100%;
+    text-align: left;
+    margin: var(--spacing-sm) 0;
+}
+
+.title-filter {
+    background-color: var(--secondary-color);
+    color: white;
+}

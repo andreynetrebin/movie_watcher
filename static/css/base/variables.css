@@ -1,0 +1,27 @@
+:root {
+    /* Цвета */
+    --primary-color: #12c064;
+    --primary-hover: #00a74f;
+    --secondary-color: #4d7f2a;
+    --accent-color: #f3f7cc;
+    --text-color: #333;
+    --text-light: #666;
+    --bg-light: #f9f9f9;
+    --border-color: #ddd;
+    --error-color: #cc0033;
+
+    /* Размеры */
+    --header-height: 70px;
+    --border-radius: 5px;
+    --spacing-xs: 5px;
+    --spacing-sm: 10px;
+    --spacing-md: 20px;
+    --spacing-lg: 30px;
+
+    /* Шрифты */
+    --font-main: 'Muli', helvetica, sans-serif;
+    --font-size-sm: 14px;
+    --font-size-md: 16px;
+    --font-size-lg: 18px;
+    --font-size-xl: 24px;
+}
