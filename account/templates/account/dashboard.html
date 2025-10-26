@@ -4,6 +4,9 @@
 {% load static %}
 {% block title %}Дашборд{% endblock %}
 {% block content %}
+{% block extra_css %}
+<link href="{% static 'css/pages/dashboard.css' %}" rel="stylesheet">
+{% endblock %}
 <h1>Дашборд</h1>
 <!-- Аватар пользователя -->
 <div class="user-avatar">
