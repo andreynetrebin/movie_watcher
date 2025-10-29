@@ -1,0 +1,87 @@
+/*
+ * layouts/dashboard.css
+ * Специфичные стили для дашборда
+ */
+
+.refactor-dashboard {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: var(--space-6);
+    min-height: calc(100vh - 80px);
+}
+
+.refactor-dashboard__sidebar {
+    background: var(--color-gray-50);
+    border-radius: var(--border-radius-lg);
+    padding: var(--space-5);
+    height: fit-content;
+    position: sticky;
+    top: var(--space-6);
+}
+
+.refactor-dashboard__main {
+    min-width: 0; /* Для правильной работы flex/grid внутри */
+}
+
+.refactor-dashboard__section {
+    background: white;
+    border-radius: var(--border-radius-lg);
+    padding: var(--space-6);
+    margin-bottom: var(--space-6);
+    box-shadow: var(--shadow-sm);
+}
+
+.refactor-dashboard__section-header {
+    display: flex;
+    align-items: center;
+    justify-content: between;
+    margin-bottom: var(--space-5);
+    padding-bottom: var(--space-4);
+    border-bottom: var(--border-width) solid var(--border-color);
+}
+
+.refactor-dashboard__title {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    margin: 0;
+    color: var(--color-gray-900);
+}
+
+/* Табы */
+.refactor-tabs {
+    display: flex;
+    gap: var(--space-1);
+    border-bottom: var(--border-width) solid var(--border-color);
+    margin-bottom: var(--space-5);
+}
+
+.refactor-tab {
+    padding: var(--space-3) var(--space-5);
+    background: none;
+    border: none;
+    color: var(--color-gray-600);
+    text-decoration: none;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    transition: all var(--transition-normal);
+    font: inherit;
+    cursor: pointer;
+}
+
+.refactor-tab:hover {
+    background: var(--color-gray-50);
+    color: var(--color-gray-800);
+}
+
+.refactor-tab--active {
+    background: var(--color-primary-500);
+    color: white;
+    font-weight: 500;
+}
+
+.refactor-tab-content {
+    display: none;
+}
+
+.refactor-tab-content--active {
+    display: block;
+}

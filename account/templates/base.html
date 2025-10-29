@@ -5,10 +5,12 @@
 <html>
 <head>
   <title>{% block title %}{% endblock %}</title>
-  <link href="{% static 'css/base.css' %}" rel="stylesheet">
-<link href="{% static 'css/main.css' %}" rel="stylesheet" id="new-styles">
-    <!-- Хелпер для миграции -->
-    <script src="{% static 'javascript/migration-helper.js' %}"></script>
+    <!-- LEGACY СТИЛИ - основа -->
+    <link href="{% static 'css/legacy/base.css' %}" rel="stylesheet">
+
+    <!-- НОВАЯ АРХИТЕКТУРА - улучшения -->
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://yastatic.net/s3/passport-sdk/autofill/v1/sdk-suggest-with-polyfills-latest.js"></script>
 <script src="{% static 'javascript/search_movie.js' %}"></script>

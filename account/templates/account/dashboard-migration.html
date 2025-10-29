@@ -1,0 +1,476 @@
+<!-- account/dashboard-migration.html -->
+{% extends "base.html" %}
+{% load thumbnail %}
+{% load static %}
+
+{% block title %}Дашборд (Migration){% endblock %}
+
+{% block content %}
+<div class="refactor-container refactor-p-6">
+
+    <!-- Header с новыми стилями -->
+    <div class="refactor-card refactor-mb-6">
+        <div class="refactor-dashboard__section-header">
+            <h1 class="refactor-dashboard__title">Дашборд</h1>
+            <div class="refactor-badge refactor-badge--success">New Design</div>
+        </div>
+
+        <!-- Аватар пользователя -->
+        <div class="refactor-flex refactor-items-center refactor-gap-4 refactor-mb-6">
+            <div class="refactor-header__user">
+                {% if user.profile.photo %}
+                    {% thumbnail user.profile.photo "80x80" crop="100%" as im %}
+                    <img src="{{ im.url }}" class="refactor-header__avatar" alt="{{ user.get_full_name }}">
+                {% else %}
+                    <img src="{% static 'images/default_user_avatar.jpg' %}" class="refactor-header__avatar" alt="Default Avatar">
+                {% endif %}
+                <div>
+                    <div class="refactor-header__username">{{ request.user.first_name|default:request.user.username }}</div>
+                    <div class="refactor-text-sm refactor-text-muted">Участник с {{ user.date_joined|date:"d.m.Y" }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Табы -->
+        <div class="refactor-tabs">
+            <button class="refactor-tab refactor-tab--active" data-tab="aboutme">Обо мне</button>
+            <button class="refactor-tab" data-tab="activity">Активность</button>
+            <button class="refactor-tab" data-tab="lists">Списки</button>
+            <button class="refactor-tab" data-tab="comments">Комментарии</button>
+            <button class="refactor-tab" data-tab="points">История начислений</button>
+        </div>
+    </div>
+
+    <!-- Контент табов -->
+    <div class="refactor-card">
+        <!-- Обо мне -->
+        <div class="refactor-tab-content refactor-tab-content--active" id="aboutme">
+            <div class="refactor-grid refactor-grid-cols-3 refactor-gap-6">
+                <!-- Статистика -->
+                <div class="refactor-card">
+                    <div class="refactor-card__header">
+                        <h3 class="refactor-card__title">📊 Статистика</h3>
+                    </div>
+                    <div class="refactor-card__body">
+                        <div class="refactor-stats">
+                            <div class="refactor-stat refactor-mb-3">
+                                <div class="refactor-stat__value">{{ watched_count }}</div>
+                                <div class="refactor-stat__label">Просмотрено</div>
+                            </div>
+                            <div class="refactor-stat refactor-mb-3">
+                                <div class="refactor-stat__value">{{ liked_count }}</div>
+                                <div class="refactor-stat__label">Понравилось</div>
+                            </div>
+                            <div class="refactor-stat refactor-mb-3">
+                                <div class="refactor-stat__value">{{ user_position }}</div>
+                                <div class="refactor-stat__label">Позиция в рейтинге</div>
+                            </div>
+                            <div class="refactor-stat">
+                                <div class="refactor-stat__value">{{ user.followers.count }}</div>
+                                <div class="refactor-stat__label">Подписчиков</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Настройки -->
+                <div class="refactor-card">
+                    <div class="refactor-card__header">
+                        <h3 class="refactor-card__title">⚙️ Настройки</h3>
+                    </div>
+                    <div class="refactor-card__body">
+                        <div class="refactor-flex refactor-flex-col refactor-gap-3">
+                            <a href="{% url "edit" %}" class="refactor-btn refactor-btn--secondary">
+                                <i class="fas fa-edit refactor-btn__icon"></i>
+                                Редактировать профиль
+                            </a>
+                            <a href="{% url "password_change" %}" class="refactor-btn refactor-btn--secondary">
+                                <i class="fas fa-key refactor-btn__icon"></i>
+                                Сменить пароль
+                            </a>
+
+                            <div class="refactor-form-group refactor-mt-4">
+                                <label class="refactor-form-label">Telegram</label>
+                                {% if user.profile.telegram_connected %}
+                                    <div class="refactor-badge refactor-badge--success">Привязан</div>
+                                {% else %}
+                                    <a href="{{ bot_url }}" class="refactor-btn refactor-btn--primary refactor-btn--sm">
+                                        Привязать Telegram
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Недавние действия -->
+                <div class="refactor-card">
+                    <div class="refactor-card__header">
+                        <h3 class="refactor-card__title">🕐 Недавние действия</h3>
+                    </div>
+                    <div class="refactor-card__body">
+                        <div class="refactor-activity">
+                            {% for action in actions %}
+                                {% if forloop.counter <= 3 %}
+                                <div class="refactor-activity-item refactor-mb-3">
+                                    <div class="refactor-activity__content">
+                                        {% if action.verb == "подписался" %}
+                                            подписался на <strong>{{ action.target.get_full_name }}</strong>
+                                        {% elif action.verb == "отписался" %}
+                                            отписался от <strong>{{ action.target.get_full_name }}</strong>
+                                        {% else %}
+                                            {{ action.verb }}: <strong>{{ action.target.title }}</strong>
+                                        {% endif %}
+                                    </div>
+                                    <div class="refactor-activity__time refactor-text-sm refactor-text-muted">
+                                        {{ action.created|date:"DATETIME_FORMAT" }}
+                                    </div>
+                                </div>
+                                {% endif %}
+                            {% empty %}
+                                <div class="refactor-text-muted">Нет недавних действий</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Активность -->
+        <div class="refactor-tab-content" id="activity">
+            <div class="refactor-card">
+                <div class="refactor-card__header">
+                    <h3 class="refactor-card__title">Активность</h3>
+                    <select class="refactor-form-input refactor-form-input--sm" style="width: auto;" onchange="filterActivity(this.value)">
+                        <option value="all" {% if filter_option == 'all' %}selected{% endif %}>Все время</option>
+                        <option value="day" {% if filter_option == 'day' %}selected{% endif %}>За сутки</option>
+                        <option value="week" {% if filter_option == 'week' %}selected{% endif %}>За неделю</option>
+                        <option value="month" {% if filter_option == 'month' %}selected{% endif %}>За месяц</option>
+                        <option value="year" {% if filter_option == 'year' %}selected{% endif %}>За год</option>
+                    </select>
+                </div>
+                <div class="refactor-card__body">
+                    {% if actions %}
+                    <div class="refactor-activity-feed">
+                        {% for action in actions %}
+                        <div class="refactor-activity-item">
+                            <div class="refactor-activity-item__header">
+                                <div class="refactor-activity-item__content">
+                                    {% if action.verb == "подписался" %}
+                                        подписался на <a href="{{ action.target.get_absolute_url }}" class="refactor-text-primary">{{ action.target.get_full_name }}</a>
+                                    {% elif action.verb == "отписался" %}
+                                        отписался от <a href="{{ action.target.get_absolute_url }}" class="refactor-text-primary">{{ action.target.get_full_name }}</a>
+                                    {% else %}
+                                        {{ action.verb }}: <a href="{{ action.target.get_absolute_url }}" class="refactor-text-primary">{{ action.target.title }}</a>
+                                    {% endif %}
+                                </div>
+                                <div class="refactor-activity-item__time refactor-text-sm refactor-text-muted">
+                                    {{ action.created|date:"DATETIME_FORMAT" }}
+                                </div>
+                            </div>
+                            {% if action.target.poster %}
+                            <div class="refactor-activity-item__preview refactor-mt-2">
+                                {% thumbnail action.target.poster "50x75" crop="100%" as im %}
+                                <img src="{{ im.url }}" alt="{{ action.target.title }}" class="refactor-activity-item__image">
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Пагинация -->
+                    {% if actions.has_other_pages %}
+                    <div class="refactor-pagination refactor-mt-6">
+                        <div class="refactor-flex refactor-gap-2 refactor-items-center refactor-justify-center">
+                            {% if actions.has_previous %}
+                            <a href="?page=1&filter={{ filter_option }}&tab=activity" class="refactor-btn refactor-btn--secondary refactor-btn--sm">
+                                &laquo;
+                            </a>
+                            <a href="?page={{ actions.previous_page_number }}&filter={{ filter_option }}&tab=activity" class="refactor-btn refactor-btn--secondary refactor-btn--sm">
+                                Назад
+                            </a>
+                            {% endif %}
+
+                            <span class="refactor-text-sm refactor-text-muted">
+                                Страница {{ actions.number }} из {{ actions.paginator.num_pages }}
+                            </span>
+
+                            {% if actions.has_next %}
+                            <a href="?page={{ actions.next_page_number }}&filter={{ filter_option }}&tab=activity" class="refactor-btn refactor-btn--secondary refactor-btn--sm">
+                                Вперед
+                            </a>
+                            <a href="?page={{ actions.paginator.num_pages }}&filter={{ filter_option }}&tab=activity" class="refactor-btn refactor-btn--secondary refactor-btn--sm">
+                                &raquo;
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% else %}
+                    <div class="refactor-empty-state">
+                        <div class="refactor-empty-state__icon">📊</div>
+                        <div class="refactor-empty-state__text">Нет активности для отображения</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Списки -->
+        <div class="refactor-tab-content" id="lists">
+            <div class="refactor-card">
+                <div class="refactor-card__header">
+                    <h3 class="refactor-card__title">Мои списки фильмов</h3>
+                    <a href="{% url "lists:create_movie_list" %}" class="refactor-btn refactor-btn--primary refactor-btn--sm">
+                        <i class="fas fa-plus refactor-btn__icon"></i>
+                        Создать список
+                    </a>
+                </div>
+                <div class="refactor-card__body">
+                    {% if movie_lists %}
+                    <div class="refactor-table">
+                        <table style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>Название</th>
+                                    <th>Фильмы</th>
+                                    <th>Дата</th>
+                                    <th>Лайки</th>
+                                    <th>Видимость</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for movie_list in movie_lists %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'lists:movie_list_detail' movie_list.id %}" class="refactor-text-primary refactor-font-medium">
+                                            {{ movie_list.title }}
+                                        </a>
+                                    </td>
+                                    <td>{{ movie_list.movies.count }}</td>
+                                    <td>{{ movie_list.created|date:"Y-m-d" }}</td>
+                                    <td>{{ movie_list.users_like.count }}</td>
+                                    <td>
+                                        {% if movie_list.is_public %}
+                                            <span class="refactor-badge refactor-badge--success">Публичный</span>
+                                        {% else %}
+                                            <span class="refactor-badge refactor-badge--secondary">Приватный</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="refactor-empty-state">
+                        <div class="refactor-empty-state__icon">📝</div>
+                        <div class="refactor-empty-state__text">У вас нет списков фильмов</div>
+                        <a href="{% url "lists:create_movie_list" %}" class="refactor-btn refactor-btn--primary refactor-mt-4">
+                            Создать первый список
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Комментарии -->
+        <div class="refactor-tab-content" id="comments">
+            <div class="refactor-card">
+                <div class="refactor-card__header">
+                    <h3 class="refactor-card__title">Комментарии</h3>
+                    <select class="refactor-form-input refactor-form-input--sm" style="width: auto;" onchange="filterComments(this.value)">
+                        <option value="all" {% if filter_option == 'all' %}selected{% endif %}>Все время</option>
+                        <option value="day" {% if filter_option == 'day' %}selected{% endif %}>За сутки</option>
+                        <option value="week" {% if filter_option == 'week' %}selected{% endif %}>За неделю</option>
+                        <option value="month" {% if filter_option == 'month' %}selected{% endif %}>За месяц</option>
+                        <option value="year" {% if filter_option == 'year' %}selected{% endif %}>За год</option>
+                    </select>
+                </div>
+                <div class="refactor-card__body">
+                    {% if comments %}
+                    <div class="refactor-comments">
+                        {% for comment in comments %}
+                        <div class="refactor-comment refactor-mb-4">
+                            <div class="refactor-comment__header refactor-flex refactor-items-center refactor-gap-3 refactor-mb-2">
+                                <a href="{{ comment.movie.get_absolute_url }}" class="refactor-flex refactor-items-center refactor-gap-2">
+                                    {% if comment.movie.poster %}
+                                        {% thumbnail comment.movie.poster "30x45" crop="100%" as im %}
+                                        <img src="{{ im.url }}" alt="{{ comment.movie.title }}" class="refactor-comment__movie-poster">
+                                    {% else %}
+                                        <img src="{% static 'images/default_movie_poster.jpg' %}" alt="Default Poster" class="refactor-comment__movie-poster">
+                                    {% endif %}
+                                    <span class="refactor-font-medium">{{ comment.movie.title }}</span>
+                                </a>
+                                <span class="refactor-text-sm refactor-text-muted">{{ comment.created_on|date:"d.m.Y H:i" }}</span>
+                            </div>
+                            <div class="refactor-comment__content">
+                                {{ comment.body }}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Пагинация -->
+                    {% if comments.has_other_pages %}
+                    <div class="refactor-pagination refactor-mt-6">
+                        <div class="refactor-flex refactor-gap-2 refactor-items-center refactor-justify-center">
+                            {% if comments.has_previous %}
+                            <a href="?comments_page=1&filter={{ filter_option }}&tab=comments" class="refactor-btn refactor-btn--secondary refactor-btn--sm">
+                                &laquo;
+                            </a>
+                            <a href="?comments_page={{ comments.previous_page_number }}&filter={{ filter_option }}&tab=comments" class="refactor-btn refactor-btn--secondary refactor-btn--sm">
+                                Назад
+                            </a>
+                            {% endif %}
+
+                            <span class="refactor-text-sm refactor-text-muted">
+                                Страница {{ comments.number }} из {{ comments.paginator.num_pages }}
+                            </span>
+
+                            {% if comments.has_next %}
+                            <a href="?comments_page={{ comments.next_page_number }}&filter={{ filter_option }}&tab=comments" class="refactor-btn refactor-btn--secondary refactor-btn--sm">
+                                Вперед
+                            </a>
+                            <a href="?comments_page={{ comments.paginator.num_pages }}&filter={{ filter_option }}&tab=comments" class="refactor-btn refactor-btn--secondary refactor-btn--sm">
+                                &raquo;
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% else %}
+                    <div class="refactor-empty-state">
+                        <div class="refactor-empty-state__icon">💬</div>
+                        <div class="refactor-empty-state__text">Нет комментариев для отображения</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- История начислений -->
+        <div class="refactor-tab-content" id="points">
+            <div class="refactor-card">
+                <div class="refactor-card__header">
+                    <h3 class="refactor-card__title">История начислений</h3>
+                    <select class="refactor-form-input refactor-form-input--sm" style="width: auto;" onchange="filterPoints(this.value)">
+                        <option value="all" {% if filter_option == 'all' %}selected{% endif %}>Все время</option>
+                        <option value="day" {% if filter_option == 'day' %}selected{% endif %}>За сутки</option>
+                        <option value="week" {% if filter_option == 'week' %}selected{% endif %}>За неделю</option>
+                        <option value="month" {% if filter_option == 'month' %}selected{% endif %}>За месяц</option>
+                        <option value="year" {% if filter_option == 'year' %}selected{% endif %}>За год</option>
+                    </select>
+                </div>
+                <div class="refactor-card__body">
+                    {% if points_history %}
+                    <div class="refactor-list">
+                        {% for entry in points_history %}
+                        <div class="refactor-list-item refactor-flex refactor-justify-between refactor-items-center">
+                            <div>
+                                <div class="refactor-font-medium">{{ entry.action }}</div>
+                                {% if entry.target %}
+                                <div class="refactor-text-sm refactor-text-muted">{{ entry.target.title }}</div>
+                                {% endif %}
+                                <div class="refactor-text-xs refactor-text-muted">{{ entry.created_at|date:"d.m.Y H:i" }}</div>
+                            </div>
+                            <div class="refactor-points {% if entry.points > 0 %}refactor-points--positive{% else %}refactor-points--negative{% endif %}">
+                                {% if entry.points > 0 %}+{% endif %}{{ entry.points }}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Пагинация -->
+                    {% if points_history.has_other_pages %}
+                    <div class="refactor-pagination refactor-mt-6">
+                        <div class="refactor-flex refactor-gap-2 refactor-items-center refactor-justify-center">
+                            {% if points_history.has_previous %}
+                            <a href="?points_page=1&filter={{ filter_option }}&tab=points" class="refactor-btn refactor-btn--secondary refactor-btn--sm">
+                                &laquo;
+                            </a>
+                            <a href="?points_page={{ points_history.previous_page_number }}&filter={{ filter_option }}&tab=points" class="refactor-btn refactor-btn--secondary refactor-btn--sm">
+                                Назад
+                            </a>
+                            {% endif %}
+
+                            <span class="refactor-text-sm refactor-text-muted">
+                                Страница {{ points_history.number }} из {{ points_history.paginator.num_pages }}
+                            </span>
+
+                            {% if points_history.has_next %}
+                            <a href="?points_page={{ points_history.next_page_number }}&filter={{ filter_option }}&tab=points" class="refactor-btn refactor-btn--secondary refactor-btn--sm">
+                                Вперед
+                            </a>
+                            <a href="?points_page={{ points_history.paginator.num_pages }}&filter={{ filter_option }}&tab=points" class="refactor-btn refactor-btn--secondary refactor-btn--sm">
+                                &raquo;
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% else %}
+                    <div class="refactor-empty-state">
+                        <div class="refactor-empty-state__icon">💎</div>
+                        <div class="refactor-empty-state__text">Нет истории начислений</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+// Функции фильтрации
+function filterActivity(filterValue) {
+    window.location.href = `?page=1&filter=${filterValue}&tab=activity`;
+}
+
+function filterComments(filterValue) {
+    window.location.href = `?comments_page=1&filter=${filterValue}&tab=comments`;
+}
+
+function filterPoints(filterValue) {
+    window.location.href = `?points_page=1&filter=${filterValue}&tab=points`;
+}
+
+// Управление табами
+document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.refactor-tab');
+    const contents = document.querySelectorAll('.refactor-tab-content');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            const tabName = this.getAttribute('data-tab');
+
+            // Убираем активные классы
+            tabs.forEach(t => t.classList.remove('refactor-tab--active'));
+            contents.forEach(c => c.classList.remove('refactor-tab-content--active'));
+
+            // Добавляем активные классы
+            this.classList.add('refactor-tab--active');
+            document.getElementById(tabName).classList.add('refactor-tab-content--active');
+
+            // Обновляем URL
+            const url = new URL(window.location);
+            url.searchParams.set('tab', tabName);
+            window.history.pushState({}, '', url);
+        });
+    });
+
+    // Инициализация активной вкладки из URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const activeTab = urlParams.get('tab') || 'aboutme';
+    const tabElement = document.querySelector(`.refactor-tab[data-tab="${activeTab}"]`);
+    if (tabElement) {
+        tabElement.click();
+    }
+});
+</script>
+{% endblock %}

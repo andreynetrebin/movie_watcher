@@ -1,0 +1,43 @@
+/*
+ * components/cards.css
+ * Универсальные карточки
+ */
+
+.refactor-card {
+    background: white;
+    border: var(--border-width) solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-normal);
+}
+
+.refactor-card--hover:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.refactor-card__header {
+    padding: var(--space-5) var(--space-5) 0;
+    border-bottom: var(--border-width) solid var(--border-color);
+}
+
+.refactor-card__body {
+    padding: var(--space-5);
+}
+
+.refactor-card__footer {
+    padding: 0 var(--space-5) var(--space-5);
+    border-top: var(--border-width) solid var(--border-color);
+}
+
+.refactor-card__title {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    margin: 0 0 var(--space-2);
+    color: var(--color-gray-900);
+}
+
+.refactor-card__description {
+    color: var(--color-gray-700);
+    margin: 0;
+}

@@ -1,50 +1,78 @@
-.btn {
-    padding: var(--spacing-sm) var(--spacing-md);
-    border: none;
+/*
+ * components/buttons.css
+ * Модульные, переиспользуемые кнопки
+ */
+
+/* Базовый класс кнопки */
+.refactor-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-5);
+    font-size: var(--font-size-base);
+    font-weight: 500;
+    line-height: var(--line-height-tight);
+    border: var(--border-width) solid transparent;
     border-radius: var(--border-radius);
     cursor: pointer;
-    font-size: var(--font-size-md);
-    transition: all 0.3s ease;
-    display: inline-block;
+    text-decoration: none;
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
 }
 
-.btn-primary {
-    background-color: var(--primary-color);
+/* Варианты */
+.refactor-btn--primary {
+    background-color: var(--color-primary-500);
     color: white;
+    border-color: var(--color-primary-500);
 }
 
-.btn-primary:hover {
-    background-color: var(--primary-hover);
-    opacity: 0.9;
+.refactor-btn--primary:hover {
+    background-color: var(--color-primary-600);
+    border-color: var(--color-primary-600);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
 }
 
-.btn-secondary {
-    background-color: var(--secondary-color);
+.refactor-btn--secondary {
+    background-color: white;
+    color: var(--color-gray-700);
+    border-color: var(--border-color);
+}
+
+.refactor-btn--secondary:hover {
+    background-color: var(--color-gray-50);
+    border-color: var(--color-gray-300);
+}
+
+.refactor-btn--danger {
+    background-color: var(--color-error);
     color: white;
+    border-color: var(--color-error);
 }
 
-.btn-outline {
-    background: transparent;
-    border: 2px solid var(--primary-color);
-    color: var(--primary-color);
+/* Размеры */
+.refactor-btn--sm {
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--font-size-sm);
 }
 
-/* Стили для кнопок в header */
-.search-button {
-    composes: btn;
-    composes: btn-primary;
-    padding: var(--spacing-xs) var(--spacing-sm);
+.refactor-btn--lg {
+    padding: var(--space-4) var(--space-6);
+    font-size: var(--font-size-lg);
 }
 
-/* Кнопки фильтров */
-.filter-btn {
-    composes: btn;
-    width: 100%;
-    text-align: left;
-    margin: var(--spacing-sm) 0;
+/* Состояния */
+.refactor-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
 }
 
-.title-filter {
-    background-color: var(--secondary-color);
-    color: white;
+/* Иконки в кнопках */
+.refactor-btn__icon {
+    width: 1.25em;
+    height: 1.25em;
 }

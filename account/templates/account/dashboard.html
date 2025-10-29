@@ -4,9 +4,7 @@
 {% load static %}
 {% block title %}Дашборд{% endblock %}
 {% block content %}
-{% block extra_css %}
-<link href="{% static 'css/pages/dashboard.css' %}" rel="stylesheet">
-{% endblock %}
+
 <h1>Дашборд</h1>
 <!-- Аватар пользователя -->
 <div class="user-avatar">
@@ -27,7 +25,21 @@
     <button class="tablink" data-tab="comments" onclick="openTab(event, 'Comments')">Комментарии</button>
     <button class="tablink" data-tab="points" onclick="openTab(event, 'PointsHistory')">История начислений</button>
 </div>
+<script>
+function enableNewStyles() {
+    document.getElementById('new-styles').disabled = false;
+    document.getElementById('main-styles').disabled = true;
+    document.getElementById('migration-status').innerHTML =
+        'Статус: <span style="color: green; font-weight: bold;">Новые стили</span>';
+}
 
+function disableNewStyles() {
+    document.getElementById('new-styles').disabled = true;
+    document.getElementById('main-styles').disabled = false;
+    document.getElementById('migration-status').innerHTML =
+        'Статус: <span style="color: red; font-weight: bold;">Старые стили</span>';
+}
+</script>
 
 <!-- Содержимое вкладок -->
 <div id="AboutMe" class="tabcontent">

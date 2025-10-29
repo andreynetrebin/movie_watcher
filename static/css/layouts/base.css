@@ -1,0 +1,22 @@
+/*
+ * layouts/base.css
+ * Стили для базового layout
+ */
+
+.refactor-layout {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.refactor-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-5);
+}
+
+.refactor-main {
+    flex: 1;
+    padding: var(--space-6) 0;
+}

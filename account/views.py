@@ -122,7 +122,8 @@ def dashboard(request):
     # Передаем сообщения в контекст
     return render(
         request,
-        'account/dashboard.html',
+        # 'account/dashboard.html',
+        'account/dashboard-migration.html',
         {
             'section': 'dashboard',
             'actions': actions_page,

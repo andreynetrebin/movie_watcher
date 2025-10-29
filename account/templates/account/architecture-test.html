@@ -1,0 +1,143 @@
+<!-- architecture-test.html -->
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="refactor-container refactor-p-6">
+
+    <div class="refactor-card refactor-mb-6">
+        <div class="refactor-card__header">
+            <h1 class="refactor-h1">🏗️ Новая CSS Архитектура</h1>
+            <p class="refactor-text refactor-text-muted">
+                Модульные компоненты и дизайн-система
+            </p>
+        </div>
+    </div>
+
+    <!-- Навигация -->
+    <div class="refactor-card refactor-mb-6">
+        <div class="refactor-card__header">
+            <h2 class="refactor-h2">🧭 Навигация</h2>
+        </div>
+        <div class="refactor-card__body">
+            <ul class="refactor-nav">
+                <li class="refactor-nav__item">
+                    <a href="#" class="refactor-nav__link refactor-nav__link--active">
+                        <i class="fas fa-home refactor-nav__icon"></i>
+                        Главная
+                    </a>
+                </li>
+                <li class="refactor-nav__item">
+                    <a href="#" class="refactor-nav__link">
+                        <i class="fas fa-film refactor-nav__icon"></i>
+                        Фильмы
+                    </a>
+                </li>
+                <li class="refactor-nav__item refactor-dropdown">
+                    <a href="#" class="refactor-nav__link">
+                        <i class="fas fa-list refactor-nav__icon"></i>
+                        Списки
+                        <i class="fas fa-chevron-down refactor-nav__icon"></i>
+                    </a>
+                    <div class="refactor-dropdown__menu">
+                        <a href="#" class="refactor-dropdown__item">Мои списки</a>
+                        <a href="#" class="refactor-dropdown__item">Создать список</a>
+                        <a href="#" class="refactor-dropdown__item">Популярные</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Формы -->
+    <div class="refactor-card refactor-mb-6">
+        <div class="refactor-card__header">
+            <h2 class="refactor-h2">📝 Формы</h2>
+        </div>
+        <div class="refactor-card__body">
+            <div class="refactor-form-group">
+                <label class="refactor-form-label">Поиск фильма</label>
+                <input type="text" class="refactor-form-input" placeholder="Введите название...">
+                <div class="refactor-form-help">Начните вводить название фильма</div>
+            </div>
+
+            <div class="refactor-form-row">
+                <div class="refactor-form-group">
+                    <label class="refactor-form-label">Жанр</label>
+                    <select class="refactor-form-input">
+                        <option>Все жанры</option>
+                        <option>Драма</option>
+                        <option>Комедия</option>
+                        <option>Боевик</option>
+                    </select>
+                </div>
+                <div class="refactor-form-group">
+                    <label class="refactor-form-label">Год</label>
+                    <input type="number" class="refactor-form-input" placeholder="2024">
+                </div>
+            </div>
+
+            <div class="refactor-form-group">
+                <label class="refactor-form-check">
+                    <input type="checkbox" class="refactor-form-check-input">
+                    <span class="refactor-form-check-label">Только просмотренные</span>
+                </label>
+                <label class="refactor-form-check">
+                    <input type="checkbox" class="refactor-form-check-input">
+                    <span class="refactor-form-check-label">Включить сериалы</span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Дашборд Layout -->
+    <div class="refactor-card">
+        <div class="refactor-card__header">
+            <h2 class="refactor-h2">📊 Макет Дашборда</h2>
+        </div>
+        <div class="refactor-card__body">
+            <div class="refactor-dashboard">
+                <aside class="refactor-dashboard__sidebar">
+                    <h3 class="refactor-h3 refactor-mb-4">Боковая панель</h3>
+                    <ul class="refactor-nav refactor-nav--vertical">
+                        <li><a href="#" class="refactor-nav__link refactor-nav__link--active">Профиль</a></li>
+                        <li><a href="#" class="refactor-nav__link">Активность</a></li>
+                        <li><a href="#" class="refactor-nav__link">Списки</a></li>
+                        <li><a href="#" class="refactor-nav__link">Настройки</a></li>
+                    </ul>
+                </aside>
+
+                <main class="refactor-dashboard__main">
+                    <div class="refactor-tabs">
+                        <button class="refactor-tab refactor-tab--active">Статистика</button>
+                        <button class="refactor-tab">Активность</button>
+                        <button class="refactor-tab">Достижения</button>
+                    </div>
+
+                    <div class="refactor-grid refactor-grid-cols-3 refactor-gap-4">
+                        <div class="refactor-card refactor-text-center">
+                            <div class="refactor-card__body">
+                                <div class="refactor-text-lg refactor-font-semibold">156</div>
+                                <div class="refactor-text-muted">Просмотрено</div>
+                            </div>
+                        </div>
+                        <div class="refactor-card refactor-text-center">
+                            <div class="refactor-card__body">
+                                <div class="refactor-text-lg refactor-font-semibold">42</div>
+                                <div class="refactor-text-muted">В избранном</div>
+                            </div>
+                        </div>
+                        <div class="refactor-card refactor-text-center">
+                            <div class="refactor-card__body">
+                                <div class="refactor-text-lg refactor-font-semibold">15</div>
+                                <div class="refactor-text-muted">Списков</div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

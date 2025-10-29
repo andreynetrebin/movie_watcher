@@ -1,0 +1,40 @@
+/*
+ * foundation/typography.css
+ * Типографика и текстовые стили
+ */
+
+.refactor-text {
+    font-family: var(--font-family-base);
+    line-height: var(--line-height-normal);
+    color: var(--color-gray-900);
+}
+
+.refactor-heading {
+    font-family: var(--font-family-heading);
+    font-weight: 600;
+    line-height: var(--line-height-tight);
+    color: var(--color-gray-900);
+}
+
+.refactor-h1 {
+    font-size: var(--font-size-2xl);
+    margin: 0 0 var(--space-4);
+}
+
+.refactor-h2 {
+    font-size: var(--font-size-xl);
+    margin: 0 0 var(--space-4);
+}
+
+.refactor-h3 {
+    font-size: var(--font-size-lg);
+    margin: 0 0 var(--space-3);
+}
+
+.refactor-p {
+    margin: 0 0 var(--space-4);
+}
+
+.refactor-p:last-child {
+    margin-bottom: 0;
+}
