@@ -1,0 +1,98 @@
+/*
+ * utils/migration.css
+ * Утилиты для плавной миграции
+ */
+
+/* Плавное применение новых стилей к существующим элементам */
+.migration-btn-group {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+/* Совместимость старых и новых классов */
+.follow-button {
+    composes: refactor-btn-group;
+    margin: var(--space-5) 0;
+}
+
+.follow-button button {
+    composes: refactor-btn;
+}
+
+.follow-button .follow-btn {
+    composes: refactor-btn--primary;
+}
+
+.follow-button .unfollow-btn {
+    composes: refactor-btn--danger;
+}
+
+/* Поисковая форма */
+.search-container {
+    composes: refactor-flex refactor-items-center refactor-gap-2;
+}
+
+#movie-search {
+    composes: refactor-form-input;
+    margin-right: 0 !important;
+}
+
+.search-button {
+    composes: refactor-btn refactor-btn--primary refactor-btn--sm;
+}
+
+/* Карточки фильмов */
+.movie-item {
+    composes: refactor-card refactor-card--hover;
+    flex: 1 1 calc(25% - 10px);
+    margin-bottom: var(--space-4);
+    display: flex;
+    align-items: center;
+    min-height: 100px;
+    padding: var(--space-4);
+}
+
+.movie-poster {
+    margin-right: var(--space-4);
+    width: 40px;
+    height: 60px;
+    flex-shrink: 0;
+}
+
+.movie-info {
+    flex: 1;
+    min-width: 0; /* Для правильного обрезания текста */
+}
+
+/* Табы */
+.tabs {
+    composes: refactor-tabs;
+    margin-bottom: var(--space-6);
+}
+
+.tabs a {
+    composes: refactor-tab;
+    text-decoration: none;
+}
+
+.tabs a.active {
+    composes: refactor-tab--active;
+}
+
+/* Пагинация */
+.pagination {
+    composes: refactor-flex refactor-justify-between refactor-items-center;
+    margin: var(--space-6) 0;
+}
+
+.pagination a {
+    composes: refactor-btn refactor-btn--secondary refactor-btn--sm;
+    margin: 0 var(--space-1);
+}
+
+.pagination .current {
+    composes: refactor-btn refactor-btn--primary refactor-btn--sm;
+    margin: 0 var(--space-1);
+}

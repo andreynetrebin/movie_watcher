@@ -1,0 +1,19 @@
+/*
+ * foundation/reset.css
+ * Совместимый reset, не конфликтует с legacy
+ */
+
+.refactor-reset {
+    box-sizing: border-box;
+}
+
+.refactor-reset * {
+    box-sizing: inherit;
+}
+
+.refactor-reset input,
+.refactor-reset button,
+.refactor-reset textarea,
+.refactor-reset select {
+    font: inherit;
+}

@@ -1,0 +1,121 @@
+/* components/lists.css - новые компоненты для списков и активности */
+.refactor-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.refactor-list-item {
+    padding: var(--space-4);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background: white;
+    transition: all var(--transition-normal);
+}
+
+.refactor-list-item:hover {
+    border-color: var(--color-primary-300);
+    box-shadow: var(--shadow-sm);
+}
+
+.refactor-points {
+    font-weight: 600;
+    font-size: var(--font-size-lg);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--border-radius);
+}
+
+.refactor-points--positive {
+    color: var(--color-success);
+    background: rgba(18, 192, 100, 0.1);
+}
+
+.refactor-points--negative {
+    color: var(--color-error);
+    background: rgba(244, 67, 54, 0.1);
+}
+
+.refactor-activity-feed {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.refactor-activity-item {
+    padding: var(--space-4);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background: white;
+}
+
+.refactor-activity-item__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-4);
+}
+
+.refactor-activity-item__content {
+    flex: 1;
+}
+
+.refactor-activity-item__time {
+    flex-shrink: 0;
+}
+
+.refactor-activity-item__preview {
+    display: flex;
+    justify-content: center;
+}
+
+.refactor-activity-item__image {
+    border-radius: var(--border-radius-sm);
+    box-shadow: var(--shadow-sm);
+}
+
+.refactor-comments {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.refactor-comment {
+    padding: var(--space-4);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background: white;
+}
+
+.refactor-comment__movie-poster {
+    width: 30px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: var(--border-radius-sm);
+}
+
+.refactor-comment__content {
+    line-height: var(--line-height-relaxed);
+    color: var(--color-gray-700);
+}
+
+.refactor-empty-state {
+    text-align: center;
+    padding: var(--space-8) var(--space-6);
+    color: var(--color-gray-500);
+}
+
+.refactor-empty-state__icon {
+    font-size: 3rem;
+    margin-bottom: var(--space-4);
+}
+
+.refactor-empty-state__text {
+    font-size: var(--font-size-lg);
+}
+
+.refactor-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-2);
+}

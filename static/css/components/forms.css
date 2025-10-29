@@ -1,0 +1,83 @@
+/*
+ * components/forms.css
+ * Универсальные компоненты форм
+ */
+
+.refactor-form-group {
+    margin-bottom: var(--space-5);
+}
+
+.refactor-form-label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: var(--space-2);
+    color: var(--color-gray-700);
+}
+
+.refactor-form-input {
+    width: 100%;
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--font-size-base);
+    border: var(--border-width) solid var(--border-color);
+    border-radius: var(--border-radius);
+    background-color: white;
+    transition: all var(--transition-normal);
+    line-height: var(--line-height-normal);
+}
+
+.refactor-form-input:focus {
+    outline: none;
+    border-color: var(--color-primary-500);
+    box-shadow: 0 0 0 3px rgba(18, 192, 100, 0.1);
+}
+
+.refactor-form-input--error {
+    border-color: var(--color-error);
+}
+
+.refactor-form-input--error:focus {
+    border-color: var(--color-error);
+    box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.1);
+}
+
+.refactor-form-help {
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-500);
+    margin-top: var(--space-2);
+}
+
+.refactor-form-error {
+    font-size: var(--font-size-sm);
+    color: var(--color-error);
+    margin-top: var(--space-2);
+}
+
+/* Группы полей */
+.refactor-form-row {
+    display: flex;
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
+}
+
+.refactor-form-row .refactor-form-group {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+/* Чекбоксы и радиокнопки */
+.refactor-form-check {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+}
+
+.refactor-form-check-input {
+    width: 1.25em;
+    height: 1.25em;
+}
+
+.refactor-form-check-label {
+    margin-bottom: 0;
+    font-weight: normal;
+}

@@ -1,103 +1,76 @@
-#header {
-    padding: var(--spacing-md);
-    background: var(--primary-color);
+/*
+ * components/header.css
+ * Компонент header с новой архитектурой
+ */
+
+.refactor-header {
+    background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-700));
     color: white;
-    display: flex;
-    flex-direction: column;
+    box-shadow: var(--shadow);
+    position: relative;
+    z-index: var(--z-sticky);
 }
 
-.header-content {
-    display: flex;
-    align-items: center;
-    width: 100%;
-}
-
-.logo-container {
+.refactor-header__container {
     display: flex;
     align-items: center;
-    gap: var(--spacing-sm);
+    justify-content: space-between;
+    padding: var(--space-4) var(--space-5);
+    gap: var(--space-6);
 }
 
-.logo a {
-    font-family: var(--font-main);
-    font-size: var(--font-size-xl);
-    color: var(--accent-color);
-}
-
-.user-container {
+.refactor-header__brand {
     display: flex;
     align-items: center;
+    gap: var(--space-4);
+    text-decoration: none;
+    color: inherit;
+}
+
+.refactor-header__logo {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    margin: 0;
+}
+
+.refactor-header__version {
+    font-size: var(--font-size-sm);
+    opacity: 0.8;
+}
+
+.refactor-header__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
     margin-left: auto;
 }
 
-#header a {
-    color: #f3f7cc; /* Цвет ссылок в заголовке */
+.refactor-header__search {
+    display: flex;
+    gap: var(--space-2);
 }
 
-#header a:hover {
-    color: #fff; /* Цвет ссылок при наведении */
+.refactor-header__search-input {
+    padding: var(--space-2) var(--space-3);
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: var(--font-size-sm);
+    min-width: 200px;
 }
 
-#header .version-number a {
-    color: white; /* Устанавливаем цвет ссылки версии */
-    text-decoration: none; /* Убираем подчеркивание */
+.refactor-header__user {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
 }
 
-#header .version-number a:hover {
-    text-decoration: underline; /* Добавляем подчеркивание при наведении */
+.refactor-header__avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
-
-#header a {
-    color:#f3f7cc;
-}
-#header a:hover {
-    color:#fff;
-}
-
-#header .user {
-    float:right;
-    padding-top:4px;
-}
-
-#header .user form {
-    display:inline;
-    float:right;
-}
-
-#header .user button {
-    background:none;
-    color:#f3f7cc;
-    border:none;
-    cursor:pointer;
-    float:left;
-    display:inline;
-}
-
-#header ul.menu {
-    list-style: none; /* Убираем маркеры списка */
-    float: left; /* Выравнивание влево */
-    margin: 0; /* Убираем отступы */
-    padding: 0; /* Убираем внутренние отступы */
-}
-
-#header ul.menu li {
-    float: left; /* Элементы списка располагаются в ряд */
-    padding: 4px 10px; /* Отступы вокруг элементов */
-    position: relative; /* Устанавливаем относительное позиционирование для родителя */
-}
-
-#header .version-number {
-    color: white; /* Устанавливаем цвет */
-    font-size: 0.6em; /* Устанавливаем мелкий шрифт */
-    margin-left: 5px; /* Добавляем небольшой отступ слева для отделения от логотипа */
-}
-
-#header .version-number a {
-    color: white; /* Устанавливаем цвет ссылки */
-    text-decoration: none; /* Убираем подчеркивание */
-}
-
-#header .version-number a:hover {
-    text-decoration: underline; /* Добавляем подчеркивание при наведении */
+.refactor-header__username {
+    font-weight: 500;
 }
