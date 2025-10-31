@@ -16,6 +16,7 @@ from account.points_manager import PointsManager
 
 logger = logging.getLogger(__name__)
 
+
 def search_movies(request):
     if 'query' in request.GET:
         query = request.GET['query']
@@ -23,6 +24,8 @@ def search_movies(request):
         results = [{'id': movie.id, 'title': movie.title, 'slug': movie.slug, 'year': movie.year} for movie in movies]
         return JsonResponse(results, safe=False)
     return JsonResponse([], safe=False)
+
+
 @login_required
 def director_list(request):
     user = request.user
@@ -30,9 +33,11 @@ def director_list(request):
     # Получаем всех режиссеров с количеством фильмов, исключая тех, у кого 0 фильмов
     directors = Director.objects.annotate(
         num_movies=Count('movies_director', distinct=True),  # Количество уникальных фильмов у каждого режиссера
-        num_watched=Count('movies_director__watched', filter=Q(movies_director__watched__user=user)),  # Количество просмотренных фильмов
+        num_watched=Count('movies_director__watched', filter=Q(movies_director__watched__user=user)),
+        # Количество просмотренных фильмов
         watched_percentage=ExpressionWrapper(
-            Count('movies_director__watched', filter=Q(movies_director__watched__user=user)) * 100.0 / Count('movies_director', distinct=True),
+            Count('movies_director__watched', filter=Q(movies_director__watched__user=user)) * 100.0 / Count(
+                'movies_director', distinct=True),
             output_field=FloatField()
         )
     ).filter(num_movies__gt=0).order_by('-num_movies')
@@ -44,6 +49,7 @@ def director_list(request):
 
     return render(request, 'movies/directors/director_list.html', {'directors': directors_page})
 
+
 @login_required
 def writer_list(request):
     user = request.user
@@ -51,9 +57,11 @@ def writer_list(request):
     # Получаем всех сценаристов с количеством фильмов, исключая тех, у кого 0 фильмов
     writers = Writer.objects.annotate(
         num_movies=Count('movies_writer', distinct=True),  # Количество уникальных фильмов у каждого сценариста
-        num_watched=Count('movies_writer__watched', filter=Q(movies_writer__watched__user=user)),  # Количество просмотренных фильмов
+        num_watched=Count('movies_writer__watched', filter=Q(movies_writer__watched__user=user)),
+        # Количество просмотренных фильмов
         watched_percentage=ExpressionWrapper(
-            Count('movies_writer__watched', filter=Q(movies_writer__watched__user=user)) * 100.0 / Count('movies_writer', distinct=True),
+            Count('movies_writer__watched', filter=Q(movies_writer__watched__user=user)) * 100.0 / Count(
+                'movies_writer', distinct=True),
             output_field=FloatField()
         )
     ).filter(num_movies__gt=0).order_by('-num_movies')
@@ -64,7 +72,6 @@ def writer_list(request):
     writers_page = paginator.get_page(page_number)
 
     return render(request, 'movies/writers/writer_list.html', {'writers': writers_page})
-
 
 
 @login_required
@@ -118,8 +125,9 @@ def movie_bulk_create(request):
                             new_movie = movie_form.save(commit=False)  # Сохраняем объект, но не в БД
                             new_movie.user = request.user  # Устанавливаем пользователя
                             new_movie.save()  # Сохраняем изменения
-                            PointsManager.add_points(request.user, PointsManager.POINTS_FOR_ADDING_MOVIE, 'Добавил фильм',
-                                     target=new_movie)
+                            PointsManager.add_points(request.user, PointsManager.POINTS_FOR_ADDING_MOVIE,
+                                                     'Добавил фильм',
+                                                     target=new_movie)
                             # Добавление связей
                             for genre in cd["genres"]:
                                 genre_row = Genre.objects.get(name=genre)
@@ -152,6 +160,7 @@ def movie_bulk_create(request):
 
     return render(request, 'movies/movie/bulk_create.html', {'form': form})
 
+
 @login_required
 def director_detail(request, pk):
     director = get_object_or_404(Director, pk=pk)
@@ -167,6 +176,7 @@ def director_detail(request, pk):
         'wishlist_movies': wishlist_movies,
     })
 
+
 @login_required
 def writer_detail(request, pk):
     writer = get_object_or_404(Writer, pk=pk)
@@ -181,7 +191,6 @@ def writer_detail(request, pk):
         'watched_movies': watched_movies,
         'wishlist_movies': wishlist_movies,
     })
-
 
 
 def movie_actions(request):
@@ -212,7 +221,8 @@ def movie_actions(request):
 
     # Топ 3 списков фильмов по количеству лайков
 
-    top_lists = MovieList.objects.filter(is_public=True).annotate(likes_count=Count('users_like')).order_by('-likes_count')[:3]
+    top_lists = MovieList.objects.filter(is_public=True).annotate(likes_count=Count('users_like')).order_by(
+        '-likes_count')[:3]
 
     # 5 последних добавленных фильмов
     latest_movies = Movie.objects.order_by('-created')[:5]  # Предполагается, что есть поле created
@@ -247,6 +257,12 @@ def mark_watched(request):
 
         # Начисляем 1 балл за просмотр
         PointsManager.add_points(request.user, PointsManager.POINTS_FOR_WATCHING, 'Просмотр фильма', target=movie)
+        # Проверяем, есть ли фильм в вишлисте, и удаляем его, если есть
+        try:
+            wishlist_item = WishList.objects.get(user=request.user, movie=movie)
+            wishlist_item.delete()  # Удаляем фильм из вишлиста
+        except WishList.DoesNotExist:
+            pass  # Фильм не в вишлисте, ничего не делаем
 
         return JsonResponse({'status': 'added'})
     else:
@@ -281,14 +297,27 @@ def mark_recently_watched(request):
 
             movie_url = request.build_absolute_uri(movie.get_absolute_url())
             create_action(request.user, 'недавно посмотрел', target=movie, movie_url=movie_url)
+            # Проверяем, есть ли фильм в вишлисте, и удаляем его, если есть
+            try:
+                wishlist_item = WishList.objects.get(user=request.user, movie=movie)
+                wishlist_item.delete()  # Удаляем фильм из вишлиста
+            except WishList.DoesNotExist:
+                pass  # Фильм не в вишлисте, ничего не делаем
             return JsonResponse({'status': 'added'})
         else:
             # Если фильм уже был просмотрен, просто помечаем его как "недавно просмотренный"
             movie_url = request.build_absolute_uri(movie.get_absolute_url())
             create_action(request.user, 'недавно посмотрел', target=movie, movie_url=movie_url)
+            # Проверяем, есть ли фильм в вишлисте, и удаляем его, если есть
+            try:
+                wishlist_item = WishList.objects.get(user=request.user, movie=movie)
+                wishlist_item.delete()  # Удаляем фильм из вишлиста
+            except WishList.DoesNotExist:
+                pass  # Фильм не в вишлисте, ничего не делаем
             return JsonResponse({'status': 'already_marked'})
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
+
 
 @login_required
 @require_POST
@@ -307,6 +336,7 @@ def add_to_wishlist(request):
             return JsonResponse({'status': 'removed'})
     return JsonResponse({'status': 'error'}, status=400)
 
+
 @login_required
 @require_POST
 def mark_like(request):
@@ -324,6 +354,7 @@ def mark_like(request):
 
     return JsonResponse({'status': action_status['status'], 'total_likes': movie.total_likes})
 
+
 @login_required
 @require_POST
 def mark_dislike(request):
@@ -340,6 +371,7 @@ def mark_dislike(request):
     create_action(request.user, action_status['action'], target=movie, movie_url=movie_url)
 
     return JsonResponse({'status': action_status['status'], 'total_dislikes': movie.total_dislikes})
+
 
 @login_required
 def movie_create(request):
@@ -427,7 +459,8 @@ def movie_detail(request, slug):
             comment.movie = movie
             comment.author = request.user
             comment.save()
-            PointsManager.add_points(request.user, PointsManager.POINTS_FOR_COMMENT, 'Прокомментировал фильм', target=movie)
+            PointsManager.add_points(request.user, PointsManager.POINTS_FOR_COMMENT, 'Прокомментировал фильм',
+                                     target=movie)
             movie_url = request.build_absolute_uri(movie.get_absolute_url())
             create_action(request.user, 'прокомментировал', target=movie, movie_url=movie_url)
 
@@ -443,7 +476,6 @@ def movie_detail(request, slug):
         'comments': comments,
         'form': form
     })
-
 
 
 @login_required
