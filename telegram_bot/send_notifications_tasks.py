@@ -9,8 +9,8 @@ from decouple import config
 import requests
 from django.core.files.base import ContentFile
 
-
 import sys
+
 try:
     from zoneinfo import ZoneInfo  # Python 3.9+
 except ImportError:
@@ -35,81 +35,110 @@ django.setup()
 from account.models import Profile
 from actions.models import Action
 from moviepremieres.models import Movie, Genre, Country, Director, Writer
+
 # Инициализация бота
 
 bot = telebot.TeleBot(config('TELEGRAM_BOT_TOKEN'))
 
 
-def find_similar_movies():
+def find_similar_movies(mode=None):
+    if mode == 'day':
+        moscow_tz = ZoneInfo('Europe/Moscow')
+        # Получаем текущую дату и время
+        now = timezone.now().astimezone(moscow_tz)
+        # Вычисляем дату 7 дней назад
+        one_days_ago = now - timedelta(days=1)
+
     # Получаем понравившиеся фильмы пользователя
     profiles = Profile.objects.filter(telegram_connected=True)
     for profile in profiles:
         chat_id = profile.telegram_user_id
         user = profile.user
         # Получаем понравившиеся фильмы пользователя
-        liked_movies = Action.objects.filter(verb='понравился', user=user).select_related('target_ct')
-
+        if mode == 'day':
+            liked_movies = Action.objects.filter(verb='понравился', user=user,
+                                                 created__gte=one_days_ago).select_related('target_ct')
+        else:
+            liked_movies = Action.objects.filter(verb='понравился', user=user).select_related('target_ct')
         # Сбор уникальных наборов жанров и создателей (режиссеры и сценаристы в одном set)
-        genre_sets = set()
-        creators = set()  # Объединяем режиссеров и сценаристов в один set
+        liked_genre_sets = set()
+        liked_creators = set()  # Объединяем режиссеров и сценаристов в один set
 
         for action in liked_movies:
             movie = action.target
-            # Создаем frozenset для уникального набора жанров
-            genre_set = frozenset(movie.genres.values_list('name', flat=True))
-            genre_sets.add(genre_set)
-            creators.update(movie.directors.values_list('name', flat=True))
-            creators.update(movie.writers.values_list('name', flat=True))
+            try:
+                genre_set = frozenset(movie.genres.values_list('name', flat=True))
+                liked_genre_sets.add(genre_set)
+
+                liked_creators.update(movie.directors.values_list('name', flat=True))
+                liked_creators.update(movie.writers.values_list('name', flat=True))
+            except Exception as e:
+                logger.error(f"Ошибка на фильму - {e}")
 
         # Получаем кинопремьеры
         premieres = Movie.objects.all().prefetch_related('genres', 'directors', 'writers')
 
-        # Поиск похожих фильмов
-        similar_movies = []
+        similar_movies = {}
+        creator_matches = {}  # Для хранения совпадений по создателям
         for movie in premieres:
-            # Создаем frozenset для жанров текущего фильма
             current_genre_set = frozenset(movie.genres.values_list('name', flat=True))
-            current_genres_count = len(current_genre_set)
-
-            match_count = 0
-
-            # Проверяем совпадения по режиссерам и сценаристам
+            if not current_genre_set:
+                continue
             directors = set(movie.directors.values_list('name', flat=True))
             writers = set(movie.writers.values_list('name', flat=True))
 
-            if directors.intersection(creators) or writers.intersection(creators):
-                print(f"Совпадения по режиссерам и сценаристам - {movie.title}")
-                match_count += 1
+            match_creators = (directors.intersection(liked_creators)) | (writers.intersection(liked_creators))
+            matched_genres = set()
 
-            # Проверяем совпадения по жанрам
+            # Проверяем жанры: ищем пересечение с каждым набором понравившихся жанров
+            for liked_genre_set in liked_genre_sets:
+                if current_genre_set.issubset(liked_genre_set):
+                    if len(current_genre_set) <= 3 and len(current_genre_set) == len(liked_genre_set):
+                        matched_genres = current_genre_set
+                        break
+                    elif len(current_genre_set) > 3:
+                        ratio = len(current_genre_set) / len(liked_genre_set)
+                        if ratio >= 0.75:
+                            matched_genres = current_genre_set
+                            break
 
-            for genre_set in genre_sets:
-                # Проверяем, что все жанры текущего фильма есть в жанрах понравившихся фильмов
-                if current_genres_count > 0 and current_genre_set.issubset(genre_set):
-                    if current_genres_count <= 3:
-                        # Полное совпадение
-                        if current_genres_count == len(genre_set):
-                            print(f"Полное совпадение по жанрам - {movie.title}")
-                            match_count += 1
-                    elif current_genres_count > 3:
-                        # Проверка на 75% совпадение
-                        if current_genres_count / len(genre_set) >= 0.75:
-                            print(f"На 75% совпадение по жанрам - {movie.title}")
-                            match_count += 1
+            if match_creators or matched_genres:
+                genre_key = ", ".join(sorted(matched_genres)) if matched_genres else "другие совпадения"
+                if genre_key not in similar_movies:
+                    similar_movies[genre_key] = []
+                similar_movies[genre_key].append(movie)
 
-            # Если есть совпадения, добавляем в список
-            if match_count > 0:
-                similar_movies.append(movie)
-        # Отправка похожих фильмов в Telegram
-        if similar_movies:
-            message = "На основе ваших лайков, подборка фильмов среди кинопремьер:\n"
-            message += "\n".join(
-                    [f"- <a href='{movie.kinopoisk_url}'>{movie.title}</a>" for movie in
-                     similar_movies]) + "\n"
+                if match_creators:
+                    # Сохраняем совпавших создателей для каждого фильма
+                    creator_names = directors.intersection(liked_creators).union(writers.intersection(liked_creators))
+                    for creator in creator_names:
+                        if creator not in creator_matches:
+                            creator_matches[creator] = []
+                        creator_matches[creator].append(movie)
+
+        # Формирование сообщения
+        if similar_movies or creator_matches:
+            message = "Представляем подборку фильмов среди кинопремьер на основе Ваших лайков.\n\n"
+
+            if creator_matches:
+                message += "<b>По Cоздателям:</b>\n\n"
+                for creator, movies in creator_matches.items():
+                    message += f"совпадение по: <b>{creator}</b>\n"
+                    for movie in movies:
+                        country = movie.countries.first().name if movie.countries.exists() else "-"
+                        message += f"- <a href='{movie.kinopoisk_url}'>{movie.title} ({country})</a>\n"
+                    message += "\n"  # Добавляем пустую строку для разделения групп
+
+            if similar_movies:
+                message += "<b>По Жанрам:</b>\n\n"
+                for genre_key, movies in similar_movies.items():
+                    message += f"<b>{genre_key}</b>:\n"
+                    for movie in movies:
+                        country = movie.countries.first().name if movie.countries.exists() else "-"
+                        message += f"- <a href='{movie.kinopoisk_url}'>{movie.title} ({country})</a>\n"
+
             bot.send_message(chat_id, message, parse_mode='HTML')
-
     return
-
 
 
 def get_premieres():
@@ -153,7 +182,7 @@ def get_premieres():
         ]
 
         for movie_data in filtered_premieres_movie_data:
-                save_movie(movie_data)
+            save_movie(movie_data)
 
     except Exception as e:
         logger.error(f"Error while getting premieres movies - {e}")
@@ -252,21 +281,19 @@ def send_friday_movies():
             created__gte=seven_days_ago
         )
 
-        watched_movies_ids = Action.objects.filter(
-            verb='недавно посмотрел',
-            user=profile.user
-        ).values_list('target_id', flat=True)
-
-        to_watch_movies = added_movies_to_watchlist.exclude(target_id__in=watched_movies_ids)
-
         # Формируем сообщение
-        message = "📋Фильмы, добавленные в 'Буду смотреть' за последние 7 дней и непросмотренные:\n\n"
-
-        if to_watch_movies.exists():
-            message += "\n".join([f"- <a href='{site_url}{action.target.get_absolute_url()}'>{action.target.title}</a>" for action in to_watch_movies]) + "\n"
+        if added_movies_to_watchlist.exists():
+            message = "📋Фильмы, добавленные в 'Буду смотреть' за последние 7 дней:\n\n"
+            message += "\n".join(
+                [f"- <a href='{site_url}{action.target.get_absolute_url()}'>{action.target.title}</a>" for action in
+                 added_movies_to_watchlist]) + "\n"
             message += "\n😎 желаем найти время и посмотреть фильмы🍿!"
+        else:
+            message = "😳Очень жаль, что Вы не добавили ни одного фильма в 'Буду смотреть'."
         # Отправка сообщения в Telegram
-            bot.send_message(chat_id, message, parse_mode='HTML')
+        bot.send_message(chat_id, message, parse_mode='HTML')
+    return
+
 
 def send_monthly_summary():
     # Часовой пояс Москвы
@@ -289,7 +316,7 @@ def send_monthly_summary():
     end_of_previous_month = end_of_previous_month_naive.replace(tzinfo=moscow_tz)
     # Получаем действия пользователей за предыдущий месяц
     actions = Action.objects.filter(created__gte=start_of_previous_month,
-                                     created__lt=end_of_previous_month)
+                                    created__lt=end_of_previous_month)
 
     profiles = Profile.objects.filter(telegram_connected=True)
     site_url = config('SITE_URL')
@@ -320,7 +347,9 @@ def send_monthly_summary():
         watched_count = watched_movies.count()
         if watched_count > 0:
             message += f"🍿Посмотрели {watched_count} фильмов:\n"
-            message += "\n".join([f"- <a href='{site_url}{action.target.get_absolute_url()}'>{action.target.title}</a>" for action in watched_movies]) + "\n"
+            message += "\n".join(
+                [f"- <a href='{site_url}{action.target.get_absolute_url()}'>{action.target.title}</a>" for action in
+                 watched_movies]) + "\n"
         else:
             message += "😳Не посмотрели ни одного фильма.\n"
         message += "\n"
@@ -330,7 +359,9 @@ def send_monthly_summary():
         unseen_to_watch_movies = to_watch_movies.count()
         if to_watch_count > 0:
             message += f"📋Добавили в 'Буду смотреть' {to_watch_count} фильмов.\nИз них остались не просмотренными - {unseen_to_watch_movies} фильмов:\n"
-            message += "\n".join([f"- <a href='{site_url}{action.target.get_absolute_url()}'>{action.target.title}</a>" for action in to_watch_movies]) + "\n"
+            message += "\n".join(
+                [f"- <a href='{site_url}{action.target.get_absolute_url()}'>{action.target.title}</a>" for action in
+                 to_watch_movies]) + "\n"
         else:
             message += f"😳Ничего не добавили в 'Буду смотреть'.\n"
         message += "\n"
@@ -339,23 +370,28 @@ def send_monthly_summary():
         published_count = published_lists.count()
         if published_count > 0:
             message += f"🎞Опубликовали {published_count} списков фильмов:\n"
-            message += "\n".join([f"- <a href='{site_url}{action.target.get_absolute_url()}'>{action.target.title}</a>" for action in published_lists]) + "\n"
+            message += "\n".join(
+                [f"- <a href='{site_url}{action.target.get_absolute_url()}'>{action.target.title}</a>" for action in
+                 published_lists]) + "\n"
         else:
             message += "Не опубликовали ни одного списка фильмов.\n"
         message += "\n"
 
         # Отправка сообщения в Telegram
         bot.send_message(chat_id, message, parse_mode='HTML')
+        return
+
 
 if __name__ == "__main__":
     now = timezone.now()
     # get_premieres()
-    find_similar_movies()
-    # if now.day == 1:
-    #     send_monthly_summary()
-    #     get_premieres()
-    #     if now.weekday() == 4:  # 4 соответствует пятнице
-    #         send_friday_movies()
-    # else:
-    #     if now.weekday() == 4:  # 4 соответствует пятнице
-    #         send_friday_movies()
+    if now.day == 1:
+        send_monthly_summary()
+        get_premieres()
+        find_similar_movies()
+        if now.weekday() == 4:  # 4 соответствует пятнице
+            send_friday_movies()
+    else:
+        find_similar_movies(mode='day')
+        if now.weekday() == 4:  # 4 соответствует пятнице
+            send_friday_movies()
