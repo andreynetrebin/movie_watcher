@@ -1367,3 +1367,91 @@
         flex-direction: row;
     }
 }
+
+/* Исправления для контейнера и табов */
+.refactor-container {
+    max-width: 100%;
+    overflow-x: hidden; /* Предотвращаем горизонтальную прокрутку */
+    box-sizing: border-box;
+}
+
+.refactor-tabs {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto; /* Разрешаем прокрутку только для табов */
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.5rem;
+    margin-bottom: -0.5rem;
+}
+
+.refactor-tabs::-webkit-scrollbar {
+    height: 4px;
+}
+
+.refactor-tabs::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 2px;
+}
+
+.refactor-tabs::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 2px;
+}
+
+.refactor-tabs::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+.refactor-tab {
+    flex: 0 0 auto; /* Табы не растягиваются */
+    white-space: nowrap;
+    min-width: fit-content;
+}
+
+/* Специфические исправления для планшетов в портретной ориентации */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+    .refactor-container {
+        padding: 1.5rem 1rem !important; /* Уменьшаем боковые отступы */
+    }
+
+    .refactor-tabs {
+        gap: 0.25rem;
+    }
+
+    .refactor-tab {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.8rem;
+        min-width: 100px;
+    }
+
+    /* Укорачиваем текст в табах для планшетов */
+    .refactor-tab[data-tab="points"] .refactor-tab__text {
+        display: none;
+    }
+
+    .refactor-tab[data-tab="points"] .refactor-tab__icon {
+        margin-right: 0;
+    }
+
+    .refactor-tab[data-tab="points"]::after {
+        content: "💎";
+    }
+
+    .refactor-tab[data-tab="points"] .refactor-tab__icon {
+        display: none;
+    }
+}
+
+/* Для очень узких экранов */
+@media (max-width: 380px) {
+    .refactor-tab {
+        padding: 0.75rem 0.4rem;
+        font-size: 0.75rem;
+        min-width: 80px;
+    }
+
+    .refactor-tab__icon {
+        font-size: 0.9rem;
+    }
+}
