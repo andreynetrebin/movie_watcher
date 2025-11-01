@@ -1,0 +1,390 @@
+{% extends "base.html" %}
+{% load static %}
+{% load thumbnail %}
+{% block title %}Лента{% endblock %}
+{% block content %}
+<div class="refactor-container refactor-p-6">
+
+    <!-- Информационный блок для неавторизованных пользователей -->
+    {% if not user.is_authenticated %}
+    <div class="refactor-card refactor-mb-6">
+        <div class="refactor-card__header">
+            <h2 class="refactor-card__title">Добро пожаловать в <strong>КиноСмотрители</strong></h2>
+        </div>
+        <div class="refactor-card__body">
+            <div class="refactor-grid refactor-grid-cols-1 lg:refactor-grid-cols-2 refactor-gap-6">
+                <!-- Левая колонка -->
+                <div class="refactor-space-y-4">
+                    <h3 class="refactor-text-lg refactor-font-semibold refactor-text-gray-900">С нашим сервисом вы можете:</h3>
+                    <ul class="refactor-space-y-2 refactor-text-gray-700">
+                        <li class="refactor-flex refactor-items-start refactor-gap-2">
+                            <span class="refactor-text-primary">•</span>
+                            <span>Вести личный список просмотренных и понравившихся фильмов</span>
+                        </li>
+                        <li class="refactor-flex refactor-items-start refactor-gap-2">
+                            <span class="refactor-text-primary">•</span>
+                            <span>Следить за активностью друзей и сообщества</span>
+                        </li>
+                        <li class="refactor-flex refactor-items-start refactor-gap-2">
+                            <span class="refactor-text-primary">•</span>
+                            <span>Создавать собственные тематические списки фильмов</span>
+                        </li>
+                        <li class="refactor-flex refactor-items-start refactor-gap-2">
+                            <span class="refactor-text-primary">•</span>
+                            <span>Зарабатывать баллы и участвовать в рейтинге</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Правая колонка - таблица баллов -->
+                <div class="refactor-space-y-4">
+                    <h3 class="refactor-text-lg refactor-font-semibold refactor-text-gray-900">Зарабатывайте баллы:</h3>
+                    <div class="refactor-table-container">
+                        <table class="refactor-table">
+                            <thead>
+                                <tr>
+                                    <th>Активность</th>
+                                    <th class="refactor-text-center">Баллы</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="refactor-table-row">
+                                    <td>Отметка о просмотре фильма</td>
+                                    <td class="refactor-text-center refactor-font-semibold refactor-text-primary">1</td>
+                                </tr>
+                                <tr class="refactor-table-row">
+                                    <td>Добавление комментария</td>
+                                    <td class="refactor-text-center refactor-font-semibold refactor-text-primary">2</td>
+                                </tr>
+                                <tr class="refactor-table-row">
+                                    <td>Добавление фильма в базу</td>
+                                    <td class="refactor-text-center refactor-font-semibold refactor-text-primary">3</td>
+                                </tr>
+                                <tr class="refactor-table-row">
+                                    <td>Публикация списка фильмов</td>
+                                    <td class="refactor-text-center refactor-font-semibold refactor-text-primary">5</td>
+                                </tr>
+                                <tr class="refactor-table-row">
+                                    <td>Лайк на ваш список</td>
+                                    <td class="refactor-text-center refactor-font-semibold refactor-text-primary">3</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Основной контент для авторизованных пользователей -->
+    {% if user.is_authenticated %}
+    <div class="refactor-grid refactor-grid-cols-1 xl:refactor-grid-cols-4 refactor-gap-6">
+
+        <!-- Основная лента (3 колонки) -->
+        <div class="xl:refactor-col-span-3 refactor-space-y-6">
+
+            <!-- Слайдер последних фильмов -->
+            <div class="refactor-card">
+                <div class="refactor-card__header">
+                    <h3 class="refactor-card__title">🎬 Недавно добавленные фильмы</h3>
+                </div>
+                <div class="refactor-card__body">
+                    <div class="refactor-flex refactor-gap-4 refactor-overflow-x-auto refactor-pb-4">
+                        {% for movie in latest_movies %}
+                        <div class="refactor-flex-shrink-0 refactor-w-20 refactor-text-center">
+                            <a href="{{ movie.get_absolute_url }}" class="refactor-block refactor-group">
+                                <div class="refactor-relative refactor-mb-2">
+                                    {% if movie.poster %}
+                                        {% thumbnail movie.poster "80x120" crop="100%" as im %}
+                                        <img src="{{ im.url }}" alt="{{ movie.title }}"
+                                             class="refactor-w-20 refactor-h-30 refactor-object-cover refactor-rounded refactor-shadow-md group-hover:refactor-shadow-lg refactor-transition-shadow">
+                                    {% else %}
+                                        <img src="{% static 'images/default_movie_poster.jpg' %}" alt="{{ movie.title }}"
+                                             class="refactor-w-20 refactor-h-30 refactor-object-cover refactor-rounded refactor-shadow-md">
+                                    {% endif %}
+                                </div>
+                                <div class="refactor-text-xs refactor-text-gray-700 group-hover:refactor-text-primary refactor-font-medium refactor-line-clamp-2">
+                                    {{ movie.title }}
+                                </div>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Фильтр и лента действий -->
+            <div class="refactor-card">
+                <div class="refactor-card__header">
+                    <h3 class="refactor-card__title">📊 Лента активности</h3>
+                    <!-- Форма фильтрации -->
+                    <form method="get" class="refactor-flex refactor-items-center refactor-gap-3">
+                        <select name="action_type" id="action_type"
+                                onchange="this.form.submit()"
+                                class="refactor-form-input refactor-form-input--sm">
+                            <option value="">Все действия</option>
+                            <option value="добавил" {% if action_type == "добавил" %}selected{% endif %}>Добавления</option>
+                            <option value="недавно посмотрел" {% if action_type == "недавно посмотрел" %}selected{% endif %}>Просмотры</option>
+                            <option value='добавил в "Буду смотреть"' {% if action_type == 'добавил в "Буду смотреть"' %}selected{% endif %}>Буду смотреть</option>
+                            <option value="понравился" {% if action_type == "понравился" %}selected{% endif %}>Лайки</option>
+                            <option value="не понравился" {% if action_type == "не понравился" %}selected{% endif %}>Дизлайки</option>
+                            <option value="прокомментировал" {% if action_type == "прокомментировал" %}selected{% endif %}>Комментарии</option>
+                            <option value="подписался" {% if action_type == "подписался" %}selected{% endif %}>Подписки</option>
+                        </select>
+                    </form>
+                </div>
+
+                <div class="refactor-card__body">
+                    <!-- Список действий -->
+                    <div class="refactor-space-y-4">
+                        {% for action in actions %}
+                        <div class="refactor-recent-action refactor-p-4 refactor-rounded-lg refactor-border refactor-border-gray-200 refactor-bg-white refactor-transition-all refactor-duration-200 refactor-hover:shadow-md">
+                            <div class="refactor-flex refactor-gap-4">
+                                <!-- Аватар пользователя -->
+                                <div class="refactor-flex-shrink-0">
+                                    <a href="{{ action.user.get_absolute_url }}" class="refactor-block">
+                                        {% if action.user.profile.photo %}
+                                            {% thumbnail action.user.profile.photo "60x60" crop="100%" as im %}
+                                            <img src="{{ im.url }}" alt="{{ action.user.get_full_name }}"
+                                                 class="refactor-w-12 refactor-h-12 refactor-rounded-full refactor-object-cover refactor-border refactor-border-gray-200">
+                                        {% else %}
+                                            <img src="{% static 'images/default_user_avatar.jpg' %}" alt="{{ action.user.get_full_name }}"
+                                                 class="refactor-w-12 refactor-h-12 refactor-rounded-full refactor-object-cover refactor-border refactor-border-gray-200">
+                                        {% endif %}
+                                    </a>
+                                </div>
+
+                                <!-- Контент действия -->
+                                <div class="refactor-flex-1 refactor-min-w-0">
+                                    <div class="refactor-flex refactor-items-start refactor-justify-between refactor-mb-2">
+                                        <div class="refactor-flex refactor-items-center refactor-gap-2">
+                                            <a href="{{ action.user.get_absolute_url }}"
+                                               class="refactor-font-semibold refactor-text-gray-900 refactor-hover:refactor-text-primary">
+                                                {{ action.user.get_full_name }}
+                                            </a>
+                                            <span class="refactor-text-sm refactor-text-gray-500">•</span>
+                                            <span class="refactor-text-sm refactor-text-gray-500">
+                                                {{ action.created|date:"d.m.Y в H:i" }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="refactor-text-gray-700">
+                                        {% if action.verb == "подписался" %}
+                                            <span class="refactor-text-gray-600">подписался на</span>
+                                            <a href="{{ action.target.get_absolute_url }}" class="refactor-font-medium refactor-text-primary refactor-hover:underline">
+                                                {{ action.target.get_full_name }}
+                                            </a>
+                                        {% elif action.verb == "отписался" %}
+                                            <span class="refactor-text-gray-600">отписался от</span>
+                                            <a href="{{ action.target.get_absolute_url }}" class="refactor-font-medium refactor-text-primary refactor-hover:underline">
+                                                {{ action.target.get_full_name }}
+                                            </a>
+                                        {% else %}
+                                            <span class="refactor-text-gray-600">{{ action.verb }}</span>
+                                            {% if action.target %}
+                                                <a href="{{ action.target.get_absolute_url }}" class="refactor-font-medium refactor-text-primary refactor-hover:underline">
+                                                    {{ action.target.title }}
+                                                </a>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <!-- Постер фильма (если есть) -->
+                                {% if action.target and action.verb not in "подписался, отписался" and action.target.poster %}
+                                <div class="refactor-flex-shrink-0">
+                                    <a href="{{ action.target.get_absolute_url }}" class="refactor-block">
+                                        {% thumbnail action.target.poster "50x75" crop="100%" as im %}
+                                        <img src="{{ im.url }}" alt="{{ action.target.title }}"
+                                             class="refactor-w-12 refactor-h-18 refactor-object-cover refactor-rounded refactor-shadow-sm">
+                                    </a>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="refactor-empty-state refactor-py-8">
+                            <div class="refactor-empty-state__icon refactor-text-4xl refactor-mb-3">📊</div>
+                            <div class="refactor-empty-state__text refactor-text-gray-500">Нет действий для отображения</div>
+                            <p class="refactor-text-sm refactor-text-gray-400 refactor-mt-1">Активность сообщества появится здесь</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Пагинация -->
+                    {% if actions.has_other_pages %}
+                    <div class="refactor-pagination refactor-mt-6">
+                        <div class="refactor-flex refactor-gap-2 refactor-items-center refactor-justify-center">
+                            {% if actions.has_previous %}
+                            <a href="?page=1{% if action_type %}&action_type={{ action_type }}{% endif %}"
+                               class="refactor-btn refactor-btn--secondary refactor-btn--sm">
+                                &laquo;
+                            </a>
+                            <a href="?page={{ actions.previous_page_number }}{% if action_type %}&action_type={{ action_type }}{% endif %}"
+                               class="refactor-btn refactor-btn--secondary refactor-btn--sm">
+                                Назад
+                            </a>
+                            {% endif %}
+
+                            <span class="refactor-text-sm refactor-text-gray-600">
+                                Страница {{ actions.number }} из {{ actions.paginator.num_pages }}
+                            </span>
+
+                            {% if actions.has_next %}
+                            <a href="?page={{ actions.next_page_number }}{% if action_type %}&action_type={{ action_type }}{% endif %}"
+                               class="refactor-btn refactor-btn--secondary refactor-btn--sm">
+                                Вперед
+                            </a>
+                            <a href="?page={{ actions.paginator.num_pages }}{% if action_type %}&action_type={{ action_type }}{% endif %}"
+                               class="refactor-btn refactor-btn--secondary refactor-btn--sm">
+                                &raquo;
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Единый сайдбар справа (1 колонка) -->
+        <div class="refactor-space-y-6">
+
+            <!-- Топ фильмов -->
+            <div class="refactor-card">
+                <div class="refactor-card__header">
+                    <h3 class="refactor-card__title">🏆 Топ 5 фильмов</h3>
+                </div>
+                <div class="refactor-card__body">
+                    <div class="refactor-space-y-3">
+                        {% for movie in top_movies %}
+                        <div class="refactor-flex refactor-items-center refactor-gap-3 refactor-p-2 refactor-rounded refactor-hover:refactor-bg-gray-50 refactor-transition-colors">
+                            <div class="refactor-flex-shrink-0 refactor-w-8 refactor-h-12">
+                                {% if movie.poster %}
+                                    {% thumbnail movie.poster "32x48" crop="100%" as im %}
+                                    <img src="{{ im.url }}" alt="{{ movie.title }}"
+                                         class="refactor-w-full refactor-h-full refactor-object-cover refactor-rounded">
+                                {% else %}
+                                    <img src="{% static 'images/default_movie_poster.jpg' %}" alt="{{ movie.title }}"
+                                         class="refactor-w-full refactor-h-full refactor-object-cover refactor-rounded">
+                                {% endif %}
+                            </div>
+                            <div class="refactor-flex-1 refactor-min-w-0">
+                                <a href="{{ movie.get_absolute_url }}"
+                                   class="refactor-text-sm refactor-font-medium refactor-text-gray-900 refactor-hover:refactor-text-primary refactor-line-clamp-1">
+                                    {{ movie.title }}
+                                </a>
+                                <div class="refactor-flex refactor-items-center refactor-gap-1 refactor-mt-1">
+                                    <span class="refactor-text-xs refactor-text-red-500">❤️</span>
+                                    <span class="refactor-text-xs refactor-text-gray-500">{{ movie.total_likes }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="refactor-mt-4 refactor-pt-4 refactor-border-t refactor-border-gray-200">
+                        <a href="{% url 'movies:list' %}?sort=likes&order=desc"
+                           class="refactor-btn refactor-btn--link refactor-btn--sm refactor-w-full refactor-justify-center">
+                            Весь рейтинг фильмов →
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Топ пользователей -->
+            <div class="refactor-card">
+                <div class="refactor-card__header">
+                    <h3 class="refactor-card__title">👑 Топ 3 пользователя</h3>
+                </div>
+                <div class="refactor-card__body">
+                    <div class="refactor-space-y-3">
+                        {% for profile in top_users %}
+                        <div class="refactor-flex refactor-items-center refactor-gap-3 refactor-p-2 refactor-rounded refactor-hover:refactor-bg-gray-50 refactor-transition-colors">
+                            <div class="refactor-flex-shrink-0">
+                                {% if profile.user.profile.photo %}
+                                    {% thumbnail profile.user.profile.photo "40x40" crop="100%" as im %}
+                                    <img src="{{ im.url }}" alt="{{ profile.user.get_full_name }}"
+                                         class="refactor-w-10 refactor-h-10 refactor-rounded-full refactor-object-cover">
+                                {% else %}
+                                    <img src="{% static 'images/default_user_avatar.jpg' %}" alt="{{ profile.user.get_full_name }}"
+                                         class="refactor-w-10 refactor-h-10 refactor-rounded-full refactor-object-cover">
+                                {% endif %}
+                            </div>
+                            <div class="refactor-flex-1 refactor-min-w-0">
+                                <a href="{{ profile.user.get_absolute_url }}"
+                                   class="refactor-text-sm refactor-font-medium refactor-text-gray-900 refactor-hover:refactor-text-primary refactor-line-clamp-1">
+                                    {{ profile.user.get_full_name }}
+                                </a>
+                                <div class="refactor-text-xs refactor-text-gray-500 refactor-mt-1">
+                                    {{ profile.points }} баллов
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="refactor-mt-4 refactor-pt-4 refactor-border-t refactor-border-gray-200">
+                        <a href="{% url 'user_ranking' %}"
+                           class="refactor-btn refactor-btn--link refactor-btn--sm refactor-w-full refactor-justify-center">
+                            Весь рейтинг пользователей →
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Топ списков -->
+            <div class="refactor-card">
+                <div class="refactor-card__header">
+                    <h3 class="refactor-card__title">📚 Топ 3 списков</h3>
+                </div>
+                <div class="refactor-card__body">
+                    <div class="refactor-space-y-3">
+                        {% for movie_list in top_lists %}
+                        <div class="refactor-p-2 refactor-rounded refactor-hover:refactor-bg-gray-50 refactor-transition-colors">
+                            <div class="refactor-flex refactor-items-center refactor-gap-3 refactor-mb-2">
+                                <div class="refactor-flex-shrink-0">
+                                    {% if movie_list.user.profile.photo %}
+                                        {% thumbnail movie_list.user.profile.photo "32x32" crop="100%" as im %}
+                                        <img src="{{ im.url }}" alt="{{ movie_list.user.get_full_name }}"
+                                             class="refactor-w-8 refactor-h-8 refactor-rounded-full refactor-object-cover">
+                                    {% else %}
+                                        <img src="{% static 'images/default_user_avatar.jpg' %}" alt="{{ movie_list.user.get_full_name }}"
+                                             class="refactor-w-8 refactor-h-8 refactor-rounded-full refactor-object-cover">
+                                    {% endif %}
+                                </div>
+                                <div class="refactor-flex-1 refactor-min-w-0">
+                                    <a href="{{ movie_list.user.get_absolute_url }}"
+                                       class="refactor-text-xs refactor-text-gray-600 refactor-hover:refactor-text-primary refactor-line-clamp-1">
+                                        {{ movie_list.user.get_full_name }}
+                                    </a>
+                                </div>
+                            </div>
+                            <a href="{% url 'lists:movie_list_detail' movie_list.id %}"
+                               class="refactor-text-sm refactor-font-medium refactor-text-gray-900 refactor-hover:refactor-text-primary refactor-line-clamp-2">
+                                {{ movie_list.title }}
+                            </a>
+                            <div class="refactor-flex refactor-items-center refactor-gap-1 refactor-mt-1">
+                                <span class="refactor-text-xs refactor-text-red-500">❤️</span>
+                                <span class="refactor-text-xs refactor-text-gray-500">{{ movie_list.likes_count }}</span>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="refactor-text-sm refactor-text-gray-500 refactor-text-center refactor-py-2">
+                            Нет списков
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="refactor-mt-4 refactor-pt-4 refactor-border-t refactor-border-gray-200">
+                        <a href="{% url 'lists:users_movie_lists' %}"
+                           class="refactor-btn refactor-btn--link refactor-btn--sm refactor-w-full refactor-justify-center">
+                            Весь рейтинг списков →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

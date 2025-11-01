@@ -225,11 +225,12 @@ def movie_actions(request):
         '-likes_count')[:3]
 
     # 5 последних добавленных фильмов
-    latest_movies = Movie.objects.order_by('-created')[:5]  # Предполагается, что есть поле created
+    latest_movies = Movie.objects.order_by('-created')[:15]  # Предполагается, что есть поле created
 
     return render(
         request,
-        'movies/movie/movie_actions.html',
+        # 'movies/movie/movie_actions.html',
+        'movies/movie/movie_actions-migration.html',
         {
             'section': 'movie_actions',
             'actions': page_obj,
