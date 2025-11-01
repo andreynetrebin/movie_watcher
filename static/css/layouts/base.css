@@ -20,3 +20,215 @@
     flex: 1;
     padding: var(--space-6) 0;
 }
+
+/* Стили для ленты активности */
+.refactor-feed-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+}
+
+@media (min-width: 1280px) {
+    .refactor-feed-layout {
+        grid-template-columns: 3fr 1fr;
+    }
+}
+
+/* Стили для карточек в ленте */
+.refactor-feed-card {
+    background: var(--color-white);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+
+.refactor-feed-card__header {
+    padding: var(--space-5) var(--space-6);
+    border-bottom: var(--border-width) solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.refactor-feed-card__body {
+    padding: var(--space-6);
+}
+
+/* Адаптивная сетка для ленты */
+.refactor-feed-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+}
+
+@media (min-width: 768px) {
+    .refactor-feed-grid {
+        grid-template-columns: 2fr 1fr;
+        gap: var(--space-8);
+    }
+}
+
+@media (min-width: 1280px) {
+    .refactor-feed-grid {
+        grid-template-columns: 3fr 1fr;
+    }
+}
+
+/* Основной контент ленты */
+.refactor-feed-main {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+}
+
+/* Сайдбар ленты */
+.refactor-feed-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+}
+
+/* На мобильных сайдбар идет после основного контента */
+@media (max-width: 767px) {
+    .refactor-feed-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .refactor-feed-sidebar {
+        order: 2;
+    }
+
+    .refactor-feed-main {
+        order: 1;
+    }
+}
+
+/* Унифицированные стили для аватаров */
+.refactor-avatar {
+    border-radius: var(--border-radius-full);
+    object-fit: cover;
+    border: 2px solid var(--color-gray-200);
+    background: var(--color-gray-100);
+}
+
+.refactor-avatar--sm {
+    width: 2rem;
+    height: 2rem;
+}
+
+.refactor-avatar--md {
+    width: 3rem;
+    height: 3rem;
+}
+
+.refactor-avatar--lg {
+    width: 5rem;
+    height: 5rem;
+}
+
+.refactor-avatar--xl {
+    width: 6rem;
+    height: 6rem;
+}
+
+/* Стили для дефолтных аватаров */
+.refactor-avatar--default {
+    background: linear-gradient(135deg, var(--color-primary-100) 0%, var(--color-primary-200) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary-600);
+    font-weight: 600;
+}
+
+.refactor-avatar--default.refactor-avatar--sm {
+    font-size: var(--font-size-xs);
+}
+
+.refactor-avatar--default.refactor-avatar--md {
+    font-size: var(--font-size-sm);
+}
+
+.refactor-avatar--default.refactor-avatar--lg {
+    font-size: var(--font-size-lg);
+}
+
+.refactor-avatar--default.refactor-avatar--xl {
+    font-size: var(--font-size-xl);
+}
+
+/* Стили для постеров фильмов */
+.refactor-poster {
+    border-radius: var(--border-radius);
+    object-fit: cover;
+    background: var(--color-gray-100);
+    box-shadow: var(--shadow-sm);
+}
+
+.refactor-poster--sm {
+    width: 2rem;
+    height: 3rem;
+}
+
+.refactor-poster--md {
+    width: 3rem;
+    height: 4.5rem;
+}
+
+.refactor-poster--lg {
+    width: 5rem;
+    height: 7.5rem;
+}
+
+.refactor-poster--xl {
+    width: 8rem;
+    height: 12rem;
+}
+
+/* Адаптивность для слайдера */
+.refactor-movies-slider {
+    display: flex;
+    gap: var(--space-4);
+    overflow-x: auto;
+    padding: var(--space-2) 0;
+    scrollbar-width: thin;
+}
+
+.refactor-movies-slider::-webkit-scrollbar {
+    height: 4px;
+}
+
+.refactor-movies-slider::-webkit-scrollbar-track {
+    background: var(--color-gray-100);
+    border-radius: 2px;
+}
+
+.refactor-movies-slider::-webkit-scrollbar-thumb {
+    background: var(--color-gray-300);
+    border-radius: 2px;
+}
+
+.refactor-movie-slide {
+    flex-shrink: 0;
+    width: 5rem;
+    text-align: center;
+}
+
+/* Адаптивность для карточек в сайдбаре */
+@media (max-width: 767px) {
+    .refactor-feed-sidebar {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: var(--space-4);
+    }
+
+    .refactor-card {
+        margin-bottom: 0;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1279px) {
+    .refactor-feed-sidebar {
+        min-width: 280px;
+    }
+}
