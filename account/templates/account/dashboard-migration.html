@@ -32,15 +32,29 @@
             </div>
         </div>
 
-        <!-- Табы -->
-        <div class="refactor-tabs">
-            <button class="refactor-tab refactor-tab--active" data-tab="aboutme">Обо мне</button>
-            <button class="refactor-tab" data-tab="activity">Активность</button>
-            <button class="refactor-tab" data-tab="lists">Списки</button>
-            <button class="refactor-tab" data-tab="comments">Комментарии</button>
-            <button class="refactor-tab" data-tab="points">История начислений</button>
-        </div>
-    </div>
+<!-- Обновите блок табов для планшетов -->
+<div class="refactor-tabs refactor-tabs--responsive">
+    <button class="refactor-tab refactor-tab--active" data-tab="aboutme">
+        <span class="refactor-tab__icon">👤</span>
+        <span class="refactor-tab__text">Обо мне</span>
+    </button>
+    <button class="refactor-tab" data-tab="activity">
+        <span class="refactor-tab__icon">📊</span>
+        <span class="refactor-tab__text">Активность</span>
+    </button>
+    <button class="refactor-tab" data-tab="lists">
+        <span class="refactor-tab__icon">📝</span>
+        <span class="refactor-tab__text">Списки</span>
+    </button>
+    <button class="refactor-tab" data-tab="comments">
+        <span class="refactor-tab__icon">💬</span>
+        <span class="refactor-tab__text">Комментарии</span>
+    </button>
+    <button class="refactor-tab" data-tab="points">
+        <span class="refactor-tab__icon">💎</span>
+        <span class="refactor-tab__text">Начисления</span>
+    </button>
+</div>
 
 <!-- Контент табов -->
 <div class="refactor-card">
