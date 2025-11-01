@@ -77,12 +77,13 @@
     </div>
     {% endif %}
 
+    <div class="refactor-container refactor-p-4 md:refactor-p-6">
     <!-- Основной контент для авторизованных пользователей -->
     {% if user.is_authenticated %}
-    <div class="refactor-feed-grid">
+    <div class="refactor-feed-layout">
 
-        <!-- Основная лента -->
-        <div class="refactor-feed-main">
+        <!-- Основная лента - УЗКАЯ -->
+        <div class="refactor-feed-main refactor-feed-content">
 
             <!-- Слайдер последних фильмов -->
             <div class="refactor-card">
@@ -96,7 +97,7 @@
                             <a href="{{ movie.get_absolute_url }}" class="refactor-block refactor-group">
                                 <div class="refactor-relative refactor-mb-2">
                                     {% if movie.poster %}
-                                        {% thumbnail movie.poster "80x120" crop="100%" as im %}
+                                        {% thumbnail movie.poster "64x96" crop="100%" as im %}
                                         <img src="{{ im.url }}" alt="{{ movie.title }}"
                                              class="refactor-poster refactor-poster--lg refactor-shadow-md group-hover:refactor-shadow-lg refactor-transition-shadow">
                                     {% else %}
@@ -140,13 +141,13 @@
                     <!-- Список действий -->
                     <div class="refactor-space-y-4">
                         {% for action in actions %}
-                        <div class="refactor-recent-action refactor-p-4 refactor-rounded-lg refactor-border refactor-border-gray-200 refactor-bg-white refactor-transition-all refactor-duration-200 refactor-hover:shadow-md">
-                            <div class="refactor-flex refactor-gap-4">
+                        <div class="refactor-recent-action refactor-p-3 refactor-rounded-lg refactor-border refactor-border-gray-200 refactor-bg-white refactor-transition-all refactor-duration-200 refactor-hover:shadow-md">
+                            <div class="refactor-flex refactor-gap-3">
                                 <!-- Аватар пользователя -->
                                 <div class="refactor-flex-shrink-0">
                                     <a href="{{ action.user.get_absolute_url }}" class="refactor-block">
                                         {% if action.user.profile.photo %}
-                                            {% thumbnail action.user.profile.photo "60x60" crop="100%" as im %}
+                                            {% thumbnail action.user.profile.photo "50x50" crop="100%" as im %}
                                             <img src="{{ im.url }}" alt="{{ action.user.get_full_name }}"
                                                  class="refactor-avatar refactor-avatar--md refactor-border refactor-border-gray-200">
                                         {% else %}
@@ -157,22 +158,22 @@
                                     </a>
                                 </div>
 
-                                <!-- Контент действия -->
-                                <div class="refactor-flex-1 refactor-min-w-0">
+                                <!-- Контент действия - УЗКИЙ -->
+                                <div class="refactor-action-content refactor-min-w-0">
                                     <div class="refactor-flex refactor-items-start refactor-justify-between refactor-mb-2">
                                         <div class="refactor-flex refactor-items-center refactor-gap-2 refactor-flex-wrap">
                                             <a href="{{ action.user.get_absolute_url }}"
-                                               class="refactor-font-semibold refactor-text-gray-900 refactor-hover:refactor-text-primary">
+                                               class="refactor-text-sm refactor-font-semibold refactor-text-gray-900 refactor-hover:refactor-text-primary refactor-line-clamp-1">
                                                 {{ action.user.get_full_name }}
                                             </a>
-                                            <span class="refactor-text-sm refactor-text-gray-500">•</span>
-                                            <span class="refactor-text-sm refactor-text-gray-500">
+                                            <span class="refactor-text-xs refactor-text-gray-500">•</span>
+                                            <span class="refactor-text-xs refactor-text-gray-500">
                                                 {{ action.created|date:"d.m.Y в H:i" }}
                                             </span>
                                         </div>
                                     </div>
 
-                                    <div class="refactor-text-gray-700">
+                                    <div class="refactor-text-sm refactor-text-gray-700 refactor-line-clamp-2">
                                         {% if action.verb == "подписался" %}
                                             <span class="refactor-text-gray-600">подписался на</span>
                                             <a href="{{ action.target.get_absolute_url }}" class="refactor-font-medium refactor-text-primary refactor-hover:underline">
@@ -198,7 +199,7 @@
                                 {% if action.target and action.verb not in "подписался, отписался" and action.target.poster %}
                                 <div class="refactor-flex-shrink-0">
                                     <a href="{{ action.target.get_absolute_url }}" class="refactor-block">
-                                        {% thumbnail action.target.poster "50x75" crop="100%" as im %}
+                                        {% thumbnail action.target.poster "40x60" crop="100%" as im %}
                                         <img src="{{ im.url }}" alt="{{ action.target.title }}"
                                              class="refactor-poster refactor-poster--md refactor-shadow-sm">
                                     </a>
@@ -256,7 +257,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Единый сайдбар справа -->
         <div class="refactor-feed-sidebar">
 

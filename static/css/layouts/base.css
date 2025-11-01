@@ -232,3 +232,177 @@
         min-width: 280px;
     }
 }
+
+/* Стили для ленты активности - УЗКАЯ основная колонка */
+.refactor-feed-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+}
+
+@media (min-width: 768px) {
+    .refactor-feed-layout {
+        grid-template-columns: 1fr 320px; /* Узкая основная колонка + фиксированный сайдбар */
+        gap: var(--space-6);
+    }
+}
+
+@media (min-width: 1024px) {
+    .refactor-feed-layout {
+        grid-template-columns: 1fr 350px; /* Чуть шире сайдбар на десктопе */
+        gap: var(--space-8);
+    }
+}
+
+/* Основной контент ленты - УЗКИЙ */
+.refactor-feed-main {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    max-width: 100%;
+}
+
+/* Узкий текст в основном контенте */
+.refactor-feed-content .refactor-text-gray-700 {
+    max-width: 100%;
+    line-height: 1.5;
+}
+
+/* Сайдбар ленты - ФИКСИРОВАННОЙ ШИРИНЫ */
+.refactor-feed-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .refactor-feed-sidebar {
+        width: 320px; /* Фиксированная ширина сайдбара */
+        flex-shrink: 0;
+    }
+}
+
+@media (min-width: 1024px) {
+    .refactor-feed-sidebar {
+        width: 350px; /* Чуть шире на десктопе */
+    }
+}
+
+/* Карточки в сайдбаре компактные */
+.refactor-feed-sidebar .refactor-card {
+    margin-bottom: 0;
+}
+
+.refactor-feed-sidebar .refactor-card__body {
+    padding: var(--space-4);
+}
+
+/* Компактные элементы в сайдбаре */
+.refactor-feed-sidebar .refactor-flex {
+    gap: var(--space-2);
+}
+
+.refactor-feed-sidebar .refactor-text-sm {
+    font-size: var(--font-size-xs);
+}
+
+.refactor-feed-sidebar .refactor-p-2 {
+    padding: var(--space-2);
+}
+
+/* Узкий контент для основного блока действий */
+.refactor-action-content {
+    max-width: 100%;
+    flex: 1;
+    min-width: 0; /* Для правильного обрезания текста */
+}
+
+/* Компактные отступы в основном контенте */
+.refactor-feed-main .refactor-recent-action {
+    padding: var(--space-3) var(--space-4);
+}
+
+.refactor-feed-main .refactor-gap-4 {
+    gap: var(--space-3);
+}
+
+/* Уменьшаем аватары в ленте для экономии места */
+.refactor-feed-main .refactor-avatar--md {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+.refactor-feed-main .refactor-avatar--default.refactor-avatar--md {
+    font-size: var(--font-size-xs);
+}
+
+/* Уменьшаем постеры в ленте */
+.refactor-feed-main .refactor-poster--md {
+    width: 2.5rem;
+    height: 3.75rem;
+}
+
+/* Компактные текстовые стили */
+.refactor-feed-main .refactor-text-sm {
+    font-size: var(--font-size-xs);
+    line-height: 1.4;
+}
+
+.refactor-feed-main .refactor-text-xs {
+    font-size: 0.7rem;
+}
+
+/* Узкий слайдер фильмов */
+.refactor-movies-slider {
+    display: flex;
+    gap: var(--space-3);
+    overflow-x: auto;
+    padding: var(--space-2) 0;
+}
+
+.refactor-movie-slide {
+    flex-shrink: 0;
+    width: 4.5rem; /* Уже чем было */
+    text-align: center;
+}
+
+.refactor-movie-slide .refactor-poster--lg {
+    width: 4rem;
+    height: 6rem;
+}
+
+/* На мобильных сайдбар идет после основного контента */
+@media (max-width: 767px) {
+    .refactor-feed-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .refactor-feed-sidebar {
+        order: 2;
+    }
+
+    .refactor-feed-main {
+        order: 1;
+    }
+}
+
+/* Адаптивность для очень маленьких экранов */
+@media (max-width: 480px) {
+    .refactor-container {
+        padding: 0 var(--space-3);
+    }
+
+    .refactor-feed-main .refactor-recent-action {
+        padding: var(--space-2);
+    }
+
+    .refactor-feed-main .refactor-gap-4 {
+        gap: var(--space-2);
+    }
+
+    .refactor-feed-main .refactor-avatar--md {
+        width: 2rem;
+        height: 2rem;
+    }
+}
