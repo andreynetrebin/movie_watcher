@@ -263,14 +263,14 @@
                                     <div class="refactor-recent-action__icon refactor-flex refactor-shrink-0 refactor-items-center refactor-justify-center refactor-w-10 refactor-h-10 refactor-rounded-full refactor-text-white refactor-text-sm refactor-font-semibold
                                         {% if action.verb == 'liked' or 'понравился' in action.verb %}refactor-bg-red-500
                                         {% elif action.verb == 'disliked' or 'непонравился' in action.verb %}refactor-bg-orange-500
-                                        {% elif action.verb == 'added_to_watchlist' or 'добавил' in action.verb %}refactor-bg-blue-500
+                                        {% elif action.verb == 'added_to_watchlist' or 'добавил в "Буду смотреть"' in action.verb %}refactor-bg-blue-500
                                         {% elif action.verb == 'подписался' %}refactor-bg-green-500
                                         {% elif action.verb == 'отписался' %}refactor-bg-gray-500
                                         {% elif 'комментарий' in action.verb %}refactor-bg-purple-500
                                         {% else %}refactor-bg-indigo-500{% endif %}">
                                         {% if action.verb == 'liked' or 'понравился' in action.verb %}❤️
                                         {% elif action.verb == 'disliked' or 'непонравился' in action.verb %}👎
-                                        {% elif action.verb == 'added_to_watchlist' or 'добавил' in action.verb %}➕
+                                        {% elif action.verb == 'added_to_watchlist' or 'добавил в "Буду смотреть"' in action.verb %}➕
                                         {% elif action.verb == 'подписался' %}👤
                                         {% elif action.verb == 'отписался' %}🚫
                                         {% elif 'комментарий' in action.verb %}💬
@@ -290,7 +290,7 @@
                                                 <a href="{{ action.target.get_absolute_url }}" class="refactor-text-primary refactor-font-medium refactor-hover:underline refactor-truncate refactor-block">
                                                     {{ action.target.title }}
                                                 </a>
-                                            {% elif action.verb == "added_to_watchlist" or "добавил" in action.verb %}
+                                            {% elif action.verb == "added_to_watchlist" or 'добавил в "Буду смотреть"' in action.verb %}
                                                 <span class="refactor-text-gray-600">Добавил в "Буду смотреть"</span>
                                                 <a href="{{ action.target.get_absolute_url }}" class="refactor-text-primary refactor-font-medium refactor-hover:underline refactor-truncate refactor-block">
                                                     {{ action.target.title }}
@@ -398,7 +398,7 @@
                                     <div class="refactor-activity-icon refactor-flex refactor-items-center refactor-justify-center refactor-w-8 refactor-h-8 refactor-rounded-full refactor-bg-blue-50 refactor-text-blue-600 refactor-flex-shrink-0 refactor-mt-1">
                                         {% if action.verb == "liked" or "понравился" in action.verb %}❤️
                                         {% elif action.verb == "disliked" or "непонравился" in action.verb %}👎
-                                        {% elif action.verb == "added_to_watchlist" or "добавил" in action.verb %}📝
+                                        {% elif action.verb == "added_to_watchlist" or 'добавил в "Буду смотреть"' in action.verb %}📝
                                         {% elif action.verb == "подписался" %}👤
                                         {% elif action.verb == "отписался" %}🚫
                                         {% elif "комментарий" in action.verb %}💬
@@ -418,7 +418,7 @@
                                                 <a href="{{ action.target.get_absolute_url }}" class="refactor-text-primary refactor-font-medium refactor-hover:underline">
                                                     {{ action.target.title }}
                                                 </a>
-                                            {% elif action.verb == "added_to_watchlist" or "добавил" in action.verb %}
+                                            {% elif action.verb == "added_to_watchlist" or 'добавил в "Буду смотреть"' in action.verb %}
                                                 Добавил в "Буду смотреть":
                                                 <a href="{{ action.target.get_absolute_url }}" class="refactor-text-primary refactor-font-medium refactor-hover:underline">
                                                     {{ action.target.title }}
