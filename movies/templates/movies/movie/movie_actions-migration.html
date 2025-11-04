@@ -75,87 +75,79 @@
                     <!-- Список действий -->
                     <div class="refactor-space-y-4">
                         {% for action in actions %}
-                        <div class="refactor-recent-action refactor-p-4 refactor-rounded-lg refactor-border refactor-border-gray-200 refactor-bg-white refactor-transition-all refactor-duration-200 refactor-hover:shadow-md">
-                            <div class="refactor-flex refactor-gap-4">
-                                <!-- Аватар пользователя -->
-                                <div class="refactor-flex-shrink-0">
-                                    <a href="{{ action.user.get_absolute_url }}" class="refactor-block">
-                                        {% if action.user.profile.photo %}
-                                            {% thumbnail action.user.profile.photo "50x50" crop="100%" as im %}
-                                            <img src="{{ im.url }}" alt="{{ action.user.get_full_name }}"
-                                                 class="refactor-avatar refactor-avatar--md refactor-border refactor-border-gray-200">
-                                        {% else %}
-                                            <div class="refactor-avatar refactor-avatar--md refactor-avatar--default">
-                                                {{ action.user.get_full_name|default:action.user.username|first|upper }}
-                                            </div>
-                                        {% endif %}
-                                    </a>
-                                </div>
-
-                                <!-- Контент действия -->
-                                <div class="refactor-action-content refactor-min-w-0">
-                                    <div class="refactor-flex refactor-items-start refactor-justify-between refactor-mb-2">
-                                        <div class="refactor-flex refactor-items-center refactor-gap-2 refactor-flex-wrap">
-                                            <a href="{{ action.user.get_absolute_url }}"
-                                               class="refactor-text-sm refactor-font-semibold refactor-text-gray-900 refactor-hover:refactor-text-primary refactor-line-clamp-1">
-                                                {{ action.user.get_full_name }}
-                                            </a>
-                                            <span class="refactor-text-xs refactor-text-gray-500">•</span>
-                                            <span class="refactor-text-xs refactor-text-gray-500">
-                                                {{ action.created|date:"d.m.Y в H:i" }}
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <div class="refactor-text-sm refactor-text-gray-700 refactor-line-clamp-2">
-                                        {% if action.verb == "подписался" %}
-                                            <span class="refactor-text-gray-600">подписался на</span>
-                                            <a href="{{ action.target.get_absolute_url }}" class="refactor-font-medium refactor-text-primary refactor-hover:underline">
-                                                {{ action.target.get_full_name }}
-                                            </a>
-                                        {% elif action.verb == "отписался" %}
-                                            <span class="refactor-text-gray-600">отписался от</span>
-                                            <a href="{{ action.target.get_absolute_url }}" class="refactor-font-medium refactor-text-primary refactor-hover:underline">
-                                                {{ action.target.get_full_name }}
-                                            </a>
-                                        {% else %}
-                                            <span class="refactor-text-gray-600">{{ action.verb }}</span>
-                                            {% if action.target %}
-                                                <a href="{{ action.target.get_absolute_url }}" class="refactor-font-medium refactor-text-primary refactor-hover:underline">
-                                                    {{ action.target.title }}
-                                                </a>
-                                            {% endif %}
-                                        {% endif %}
-                                    </div>
-                                </div>
-
-                                <!-- Постер фильма (если есть) -->
-                                {% if action.target and action.verb not in "подписался, отписался" and action.target.poster %}
-                                <div class="refactor-flex-shrink-0">
-                                    <a href="{{ action.target.get_absolute_url }}" class="refactor-block">
-                                        {% thumbnail action.target.poster "40x60" crop="100%" as im %}
-                                        <img src="{{ im.url }}" alt="{{ action.target.title }}"
-                                             class="refactor-poster refactor-poster--md refactor-shadow-sm">
-                                    </a>
-                                </div>
-                                {% elif action.target and action.verb not in "подписался, отписался" %}
-                                <div class="refactor-flex-shrink-0">
-                                    <div class="refactor-poster refactor-poster--md refactor-poster--default refactor-shadow-sm refactor-flex refactor-items-center refactor-justify-center">
-                                        🎬
-                                    </div>
-                                </div>
-                                {% endif %}
-                            </div>
-                        </div>
-                        {% empty %}
-                        <div class="refactor-empty-state refactor-py-8">
-                            <div class="refactor-empty-state__icon refactor-text-4xl refactor-mb-3">📊</div>
-                            <div class="refactor-empty-state__text refactor-text-gray-500">Нет действий для отображения</div>
-                            <p class="refactor-text-sm refactor-text-gray-400 refactor-mt-1">Активность сообщества появится здесь</p>
-                        </div>
-                        {% endfor %}
+<!-- В блоке с действиями заменяем старую структуру на новую -->
+<div class="refactor-recent-action refactor-p-4 refactor-rounded-lg refactor-border refactor-border-gray-200 refactor-bg-white refactor-transition-all refactor-duration-200 refactor-hover:shadow-md">
+    <div class="refactor-flex refactor-gap-4">
+        <!-- Аватар пользователя (оставляем как есть) -->
+        <div class="refactor-flex-shrink-0">
+            <a href="{{ action.user.get_absolute_url }}" class="refactor-block">
+                {% if action.user.profile.photo %}
+                    {% thumbnail action.user.profile.photo "50x50" crop="100%" as im %}
+                    <img src="{{ im.url }}" alt="{{ action.user.get_full_name }}"
+                         class="refactor-avatar refactor-avatar--md refactor-border refactor-border-gray-200">
+                {% else %}
+                    <div class="refactor-avatar refactor-avatar--md refactor-avatar--default">
+                        {{ action.user.get_full_name|default:action.user.username|first|upper }}
                     </div>
+                {% endif %}
+            </a>
+        </div>
 
+        <!-- Обновленный контент действия - ГОРИЗОНТАЛЬНЫЙ -->
+        <div class="refactor-action-content refactor-min-w-0">
+            <!-- Верхняя строка: имя пользователя и время -->
+            <div class="refactor-action-header">
+                <a href="{{ action.user.get_absolute_url }}"
+                   class="refactor-font-semibold refactor-text-gray-900 refactor-hover:refactor-text-primary">
+                    {{ action.user.get_full_name }}
+                </a>
+                <span class="refactor-text-xs refactor-text-gray-500">•</span>
+                <span class="refactor-action-time">
+                    {{ action.created|date:"d.m.Y в H:i" }}
+                </span>
+            </div>
+
+            <!-- Нижняя строка: действие и цель -->
+            <div class="refactor-action-body">
+                {% if action.verb == "подписался" %}
+                    <span class="refactor-action-verb">подписался на</span>
+                    <a href="{{ action.target.get_absolute_url }}" class="refactor-action-target refactor-font-medium refactor-text-primary refactor-hover:underline">
+                        {{ action.target.get_full_name }}
+                    </a>
+                {% elif action.verb == "отписался" %}
+                    <span class="refactor-action-verb">отписался от</span>
+                    <a href="{{ action.target.get_absolute_url }}" class="refactor-action-target refactor-font-medium refactor-text-primary refactor-hover:underline">
+                        {{ action.target.get_full_name }}
+                    </a>
+                {% else %}
+                    <span class="refactor-action-verb">{{ action.verb }}</span>
+                    {% if action.target %}
+                        <a href="{{ action.target.get_absolute_url }}" class="refactor-action-target refactor-font-medium refactor-text-primary refactor-hover:underline">
+                            {{ action.target.title }}
+                        </a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Постер фильма (если есть) -->
+        {% if action.target and action.verb not in "подписался, отписался" and action.target.poster %}
+        <div class="refactor-flex-shrink-0">
+            <a href="{{ action.target.get_absolute_url }}" class="refactor-block">
+                {% thumbnail action.target.poster "40x60" crop="100%" as im %}
+                <img src="{{ im.url }}" alt="{{ action.target.title }}"
+                     class="refactor-poster refactor-poster--md refactor-shadow-sm">
+            </a>
+        </div>
+        {% elif action.target and action.verb not in "подписался, отписался" %}
+        <div class="refactor-flex-shrink-0">
+            <div class="refactor-poster refactor-poster--md refactor-poster--default refactor-shadow-sm refactor-flex refactor-items-center refactor-justify-center">
+                🎬
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
                     <!-- Пагинация -->
                     {% if actions.has_other_pages %}
                     <div class="refactor-pagination refactor-mt-6">
