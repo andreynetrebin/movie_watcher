@@ -601,3 +601,87 @@
         font-size: 0.7rem;
     }
 }
+
+/* Горизонтальное расположение элементов действия */
+.refactor-action-content {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.refactor-action-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-wrap: nowrap; /* Запрещаем переносы */
+    margin-bottom: 0; /* Убираем отступ снизу */
+}
+
+.refactor-action-header a {
+    white-space: nowrap; /* Запрещаем перенос текста */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px; /* Ограничиваем ширину имени пользователя */
+}
+
+.refactor-action-body {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-wrap: nowrap; /* Запрещаем переносы */
+}
+
+.refactor-action-verb {
+    color: var(--color-gray-600);
+    white-space: nowrap;
+    flex-shrink: 0; /* Не сжимается */
+}
+
+.refactor-action-target {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+    min-width: 0;
+}
+
+.refactor-action-time {
+    font-size: var(--font-size-xs);
+    color: var(--color-gray-500);
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-left: auto; /* Прижимаем время к правому краю */
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 767px) {
+    .refactor-action-header {
+        gap: var(--space-1);
+    }
+
+    .refactor-action-header a {
+        max-width: 120px; /* Уже на мобильных */
+    }
+
+    .refactor-action-body {
+        gap: var(--space-1);
+    }
+
+    .refactor-action-verb,
+    .refactor-action-target {
+        font-size: var(--font-size-xs);
+    }
+}
+
+/* Для очень маленьких экранов */
+@media (max-width: 480px) {
+    .refactor-action-header a {
+        max-width: 100px;
+    }
+
+    .refactor-action-time {
+        font-size: 0.7rem;
+    }
+}
