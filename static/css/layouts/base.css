@@ -406,3 +406,198 @@
         height: 2rem;
     }
 }
+
+/* Стили для ленты активности - FLEXBOX как в легаси */
+.refactor-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+}
+
+@media (min-width: 768px) {
+    .refactor-content-wrapper {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+}
+
+/* Основной контент ленты */
+.refactor-actions {
+    flex: 1;
+    min-width: 0; /* Для правильного обрезания текста */
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+}
+
+/* Сайдбар ленты - как в легаси .combined-sidebar */
+.refactor-combined-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    width: 100%;
+    margin-top: var(--space-5);
+}
+
+@media (min-width: 768px) {
+    .refactor-combined-sidebar {
+        width: 30%;
+        flex-shrink: 0;
+        margin-top: 0;
+        margin-left: var(--space-6);
+    }
+}
+
+@media (min-width: 1024px) {
+    .refactor-combined-sidebar {
+        width: 25%;
+    }
+}
+
+/* Карточки в сайдбаре - стили как в легаси */
+.refactor-top-sidebar {
+    background-color: var(--color-gray-50);
+    border: 1px solid var(--color-gray-300);
+    border-radius: var(--border-radius-lg);
+    padding: var(--space-4);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--space-4);
+}
+
+.refactor-top-sidebar:last-child {
+    margin-bottom: 0;
+}
+
+.refactor-top-sidebar h3 {
+    margin-top: 0;
+    margin-bottom: var(--space-3);
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--color-gray-900);
+}
+
+/* Списки в сайдбаре */
+.refactor-top-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.refactor-top-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--space-3);
+    padding: var(--space-2);
+    border-radius: var(--border-radius);
+    transition: background-color var(--transition-normal);
+}
+
+.refactor-top-item:hover {
+    background-color: var(--color-gray-100);
+}
+
+.refactor-top-item:last-child {
+    margin-bottom: 0;
+}
+
+/* Элементы списков */
+.refactor-top-item .refactor-avatar--sm {
+    width: 2rem;
+    height: 2rem;
+    margin-right: var(--space-3);
+    flex-shrink: 0;
+}
+
+.refactor-top-item .refactor-poster--sm {
+    width: 1.5rem;
+    height: 2.25rem;
+    margin-right: var(--space-3);
+    flex-shrink: 0;
+}
+
+.refactor-top-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.refactor-top-info a {
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--color-gray-900);
+    text-decoration: none;
+}
+
+.refactor-top-info a:hover {
+    color: var(--color-primary-500);
+}
+
+.refactor-top-meta {
+    font-size: var(--font-size-xs);
+    color: var(--color-gray-600);
+    margin-top: 2px;
+}
+
+/* Ссылки "Посмотреть весь рейтинг" */
+.refactor-sidebar-link {
+    display: block;
+    text-align: center;
+    padding: var(--space-3) 0;
+    margin-top: var(--space-3);
+    border-top: 1px solid var(--color-gray-200);
+    font-size: var(--font-size-sm);
+    color: var(--color-primary-500);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.refactor-sidebar-link:hover {
+    color: var(--color-primary-600);
+    text-decoration: underline;
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 767px) {
+    .refactor-combined-sidebar {
+        margin-top: var(--space-4);
+    }
+
+    .refactor-top-sidebar {
+        padding: var(--space-3);
+    }
+
+    .refactor-top-item {
+        margin-bottom: var(--space-2);
+        padding: var(--space-1) var(--space-2);
+    }
+}
+
+/* Адаптивность для очень маленьких экранов */
+@media (max-width: 480px) {
+    .refactor-container {
+        padding: 0 var(--space-3);
+    }
+
+    .refactor-top-sidebar {
+        padding: var(--space-2);
+    }
+
+    .refactor-top-item .refactor-avatar--sm {
+        width: 1.5rem;
+        height: 1.5rem;
+        margin-right: var(--space-2);
+    }
+
+    .refactor-top-item .refactor-poster--sm {
+        width: 1.25rem;
+        height: 1.875rem;
+        margin-right: var(--space-2);
+    }
+
+    .refactor-top-info a {
+        font-size: var(--font-size-xs);
+    }
+
+    .refactor-top-meta {
+        font-size: 0.7rem;
+    }
+}
