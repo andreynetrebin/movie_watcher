@@ -31,7 +31,7 @@
                             <a href="{{ movie.get_absolute_url }}" class="refactor-block refactor-group">
                                 <div class="refactor-relative refactor-mb-2">
                                     {% if movie.poster %}
-                                        {% thumbnail movie.poster "64x96" crop="100%" as im %}
+                                        {% thumbnail movie.poster "80x120" crop="100%" as im %}
                                         <img src="{{ im.url }}" alt="{{ movie.title }}"
                                              class="refactor-poster refactor-poster--lg refactor-shadow-md group-hover:refactor-shadow-lg refactor-transition-shadow">
                                     {% else %}
@@ -82,7 +82,7 @@
                                 <div class="refactor-flex-shrink-0">
                                     <a href="{{ action.user.get_absolute_url }}" class="refactor-block">
                                         {% if action.user.profile.photo %}
-                                            {% thumbnail action.user.profile.photo "50x50" crop="100%" as im %}
+                                            {% thumbnail action.user.profile.photo "80x80" crop="100%" as im %}
                                             <img src="{{ im.url }}" alt="{{ action.user.get_full_name }}"
                                                  class="refactor-avatar refactor-avatar--md refactor-border refactor-border-gray-200">
                                         {% else %}
@@ -134,7 +134,7 @@
                                 {% if action.target and action.verb not in "подписался, отписался" and action.target.poster %}
                                 <div class="refactor-flex-shrink-0">
                                     <a href="{{ action.target.get_absolute_url }}" class="refactor-block">
-                                        {% thumbnail action.target.poster "40x60" crop="100%" as im %}
+                                        {% thumbnail action.target.poster "50x75" crop="100%" as im %}
                                         <img src="{{ im.url }}" alt="{{ action.target.title }}"
                                              class="refactor-poster refactor-poster--md refactor-shadow-sm">
                                     </a>
@@ -204,7 +204,7 @@
                     <li class="refactor-top-item">
                         <div class="refactor-flex-shrink-0">
                             {% if movie.poster %}
-                                {% thumbnail movie.poster "24x36" crop="100%" as im %}
+                                {% thumbnail movie.poster "20x30" crop="100%" as im %}
                                 <img src="{{ im.url }}" alt="{{ movie.title }}"
                                      class="refactor-poster refactor-poster--sm">
                             {% else %}
@@ -237,7 +237,7 @@
                     <li class="refactor-top-item">
                         <div class="refactor-flex-shrink-0">
                             {% if profile.user.profile.photo %}
-                                {% thumbnail profile.user.profile.photo "32x32" crop="100%" as im %}
+                                {% thumbnail profile.user.profile.photo "40x40" crop="100%" as im %}
                                 <img src="{{ im.url }}" alt="{{ profile.user.get_full_name }}"
                                      class="refactor-avatar refactor-avatar--sm">
                             {% else %}

@@ -159,7 +159,7 @@
                                             {% for follower in user.followers.all %}
                                             <li class="refactor-follower-item refactor-flex refactor-items-center refactor-gap-3 refactor-p-2 refactor-hover:bg-gray-50 refactor-rounded">
                                                 {% if follower.profile.photo %}
-                                                    {% thumbnail follower.profile.photo "32x32" crop="100%" as im %}
+                                                    {% thumbnail follower.profile.photo "20x20" crop="100%" as im %}
                                                     <img src="{{ im.url }}" alt="{{ follower.get_full_name }}" class="refactor-avatar refactor-avatar--sm refactor-rounded-full">
                                                 {% else %}
                                                     <img src="{% static 'images/default_user_avatar.jpg' %}" alt="Default Avatar" class="refactor-avatar refactor-avatar--sm refactor-rounded-full">
@@ -340,7 +340,7 @@
                                     <!-- Постер фильма (если есть) -->
                                     {% if action.target.poster %}
                                     <div class="refactor-recent-action__preview refactor-shrink-0 refactor-ml-2">
-                                        {% thumbnail action.target.poster "45x67" crop="100%" as im %}
+                                        {% thumbnail action.target.poster "50x75" crop="100%" as im %}
                                         <img src="{{ im.url }}" alt="{{ action.target.title }}"
                                              class="refactor-recent-action__image refactor-w-11 refactor-h-16 refactor-object-cover refactor-rounded refactor-shadow-sm refactor-transition-transform refactor-duration-200 refactor-hover:scale-105">
                                     </div>
@@ -613,7 +613,7 @@
                         <!-- Заголовок фильма -->
                         <div class="refactor-comments-movie__header refactor-flex refactor-items-center refactor-gap-3 refactor-p-3 refactor-bg-gray-50 refactor-rounded-lg refactor-mb-3">
                             {% if movie_group.grouper.poster %}
-                                {% thumbnail movie_group.grouper.poster "40x60" crop="100%" as im %}
+                                {% thumbnail movie_group.grouper.poster "50x75" crop="100%" as im %}
                                 <img src="{{ im.url }}" alt="{{ movie_group.grouper.title }}" class="refactor-comments-movie__poster refactor-rounded refactor-w-10 refactor-h-15">
                             {% else %}
                                 <img src="{% static 'images/default_movie_poster.jpg' %}" alt="Default Poster" class="refactor-comments-movie__poster refactor-rounded refactor-w-10 refactor-h-15">
