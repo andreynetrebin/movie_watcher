@@ -143,22 +143,33 @@ def view_movie_list(request, list_id):
 
     return render(request, 'lists/view_movie_list.html', {'movie_list': movie_list})
 
+
 @login_required
 def users_movie_lists(request):
     # Получаем все списки фильмов, созданные всеми пользователями, и аннотируем количество лайков
-    movie_lists = MovieList.objects.filter(is_public=True).prefetch_related('movies', 'user').annotate(likes_count=Count('users_like')).order_by('-likes_count')
+    movie_lists = MovieList.objects.filter(is_public=True).prefetch_related('movies', 'user').annotate(
+        likes_count=Count('users_like')).order_by('-likes_count')
 
     # Получаем список ID фильмов, просмотренных текущим пользователем
     watched_movies = Watched.objects.filter(user=request.user).values_list('movie_id', flat=True)
 
     # Подсчитываем количество просмотренных фильмов для каждого списка
+    completed_count = 0  # Добавляем счетчик завершенных списков
+
     for movie_list in movie_lists:
         movie_list.watched_count = sum(1 for movie in movie_list.movies.all() if movie.id in watched_movies)
         movie_list.total_count = movie_list.movies.count()
-        movie_list.watched_percentage = (movie_list.watched_count / movie_list.total_count * 100) if movie_list.total_count > 0 else 0
+        movie_list.watched_percentage = (
+                    movie_list.watched_count / movie_list.total_count * 100) if movie_list.total_count > 0 else 0
+
+        # Считаем завершенные списки (100% просмотренных)
+        if movie_list.watched_percentage == 100:
+            completed_count += 1
 
     return render(request,
-                  # 'lists/users_movie_lists.html',
                   'lists/users_movie_lists-migration.html',
-                  {'movie_lists': movie_lists,}
-    )
+                  {
+                      'movie_lists': movie_lists,
+                      'completed_count': completed_count,  # Передаем в контекст
+                  }
+                  )
