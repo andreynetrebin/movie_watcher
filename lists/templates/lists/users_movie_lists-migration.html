@@ -1,0 +1,216 @@
+<!-- lists/users_movie_lists.html -->
+{% extends "base.html" %}
+{% load thumbnail %}
+{% load static %}
+{% block title %}Пользовательские списки{% endblock %}
+{% block content %}
+<div class="refactor-container refactor-p-6">
+
+    <!-- Заголовок страницы -->
+    <div class="refactor-card refactor-mb-6">
+        <div class="refactor-dashboard__section-header">
+            <h1 class="refactor-dashboard__title">Пользовательские списки фильмов</h1>
+        </div>
+    </div>
+
+    <!-- Дополнительная информация - ПЕРЕМЕЩЕНА ВВЕРХ -->
+    <div class="refactor-grid refactor-grid-cols-1 md:refactor-grid-cols-2 refactor-gap-6 refactor-mb-6">
+        <!-- Статистика -->
+        <div class="refactor-card">
+            <div class="refactor-card__header">
+                <h3 class="refactor-card__title">📊 Статистика списков</h3>
+            </div>
+            <div class="refactor-card__body">
+                <div class="refactor-grid refactor-grid-cols-2 refactor-gap-4">
+                    <div class="refactor-stat-item refactor-text-center">
+                        <div class="refactor-stat-item__value refactor-text-2xl refactor-font-bold refactor-text-primary">
+                            {{ movie_lists|length }}
+                        </div>
+                        <div class="refactor-stat-item__label refactor-text-sm refactor-text-gray-600">
+                            Всего списков
+                        </div>
+                    </div>
+                    <div class="refactor-stat-item refactor-text-center">
+                        <div class="refactor-stat-item__value refactor-text-2xl refactor-font-bold refactor-text-green-600">
+                            {{ completed_count|default:0 }}
+                        </div>
+                        <div class="refactor-stat-item__label refactor-text-sm refactor-text-gray-600">
+                            Завершено
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Быстрые действия -->
+        <div class="refactor-card">
+            <div class="refactor-card__header">
+                <h3 class="refactor-card__title">⚡ Быстрые действия</h3>
+            </div>
+            <div class="refactor-card__body">
+                <div class="refactor-space-y-3">
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'lists:create_movie_list' %}" class="refactor-btn refactor-btn--primary refactor-w-full refactor-justify-center">
+                        <i class="fas fa-plus refactor-btn__icon"></i>
+                        Создать новый список
+                    </a>
+                    <!-- Заменил my_movie_lists на dashboard или другую существующую ссылку -->
+                    <a href="{% url 'dashboard' %}" class="refactor-btn refactor-btn--secondary refactor-w-full refactor-justify-center">
+                        <i class="fas fa-tachometer-alt refactor-btn__icon"></i>
+                        В дашборд
+                    </a>
+                    {% else %}
+                    <a href="{% url 'login' %}" class="refactor-btn refactor-btn--primary refactor-w-full refactor-justify-center">
+                        <i class="fas fa-sign-in-alt refactor-btn__icon"></i>
+                        Войти для создания списков
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if movie_lists %}
+    <!-- Таблица списков -->
+    <div class="refactor-card">
+        <div class="refactor-card__header">
+            <h3 class="refactor-card__title">📚 Все списки сообщества</h3>
+            <div class="refactor-text-sm refactor-text-muted">
+                {{ movie_lists|length }} список{{ movie_lists|length|pluralize:"ов" }}
+            </div>
+        </div>
+
+        <div class="refactor-card__body">
+            <div class="refactor-table-container">
+                <table class="refactor-table">
+                    <thead>
+                        <tr>
+                            <th>Пользователь</th>
+                            <th>Название списка</th>
+                            <th class="refactor-text-center">Фильмы</th>
+                            <th class="refactor-text-center">Просмотрено</th>
+                            <th class="refactor-text-center">Прогресс</th>
+                            <th class="refactor-text-center">Лайки</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for movie_list in movie_lists %}
+                        <tr class="refactor-table-row {% if movie_list.watched_percentage == 100 %}refactor-bg-green-50{% endif %}">
+                            <!-- Пользователь -->
+                            <td>
+                                <div class="refactor-flex refactor-items-center refactor-gap-3">
+                                    <div class="refactor-flex-shrink-0">
+                                        {% if movie_list.user.profile.photo %}
+                                            {% thumbnail movie_list.user.profile.photo "40x40" crop="100%" as im %}
+                                            <img src="{{ im.url }}" alt="{{ movie_list.user.username }}"
+                                                 class="refactor-avatar refactor-avatar--md">
+                                        {% else %}
+                                            <div class="refactor-avatar refactor-avatar--md refactor-avatar--default">
+                                                {{ movie_list.user.get_full_name|default:movie_list.user.username|first|upper }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="refactor-flex-1 refactor-min-w-0">
+                                        <a href="{{ movie_list.user.get_absolute_url }}"
+                                           class="refactor-text-sm refactor-font-medium refactor-text-gray-900 refactor-hover:refactor-text-primary refactor-line-clamp-1">
+                                            {{ movie_list.user.get_full_name }}
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <!-- Название списка -->
+                            <td>
+                                <a href="{% url 'lists:movie_list_detail' movie_list.id %}"
+                                   class="refactor-text-sm refactor-font-semibold refactor-text-primary refactor-hover:underline refactor-line-clamp-2">
+                                    {{ movie_list.title }}
+                                </a>
+                                {% if movie_list.watched_percentage == 100 %}
+                                <span class="refactor-badge refactor-badge--success refactor-ml-2" title="Полностью просмотрен">
+                                    ✅
+                                </span>
+                                {% endif %}
+                            </td>
+
+                            <!-- Количество фильмов -->
+                            <td class="refactor-text-center">
+                                <span class="refactor-badge refactor-badge--secondary">
+                                    {{ movie_list.total_count }}
+                                </span>
+                            </td>
+
+                            <!-- Просмотренные фильмы -->
+                            <td class="refactor-text-center">
+                                <span class="refactor-text-sm refactor-font-medium refactor-text-gray-700">
+                                    {{ movie_list.watched_count }}
+                                </span>
+                            </td>
+
+                            <!-- Процент просмотренных -->
+                            <td class="refactor-text-center">
+                                <div class="refactor-flex refactor-items-center refactor-justify-center refactor-gap-2">
+                                    <!-- Прогресс-бар -->
+                                    <div class="refactor-w-16 refactor-bg-gray-200 refactor-rounded-full refactor-h-2">
+                                        <div class="refactor-bg-green-500 refactor-h-2 refactor-rounded-full"
+                                             style="width: {{ movie_list.watched_percentage }}%">
+                                        </div>
+                                    </div>
+                                    <span class="refactor-text-xs refactor-font-medium {% if movie_list.watched_percentage == 100 %}refactor-text-green-600{% else %}refactor-text-gray-600{% endif %}">
+                                        {{ movie_list.watched_percentage|floatformat:0 }}%
+                                    </span>
+                                </div>
+                            </td>
+
+                            <!-- Лайки -->
+                            <td class="refactor-text-center">
+                                <div class="refactor-flex refactor-items-center refactor-justify-center refactor-gap-1">
+                                    <span class="refactor-text-red-500">❤️</span>
+                                    <span class="refactor-text-sm refactor-font-medium refactor-text-gray-700">
+                                        {{ movie_list.likes_count }}
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Статистика внизу таблицы -->
+            <div class="refactor-flex refactor-justify-between refactor-items-center refactor-mt-6 refactor-pt-6 refactor-border-t refactor-border-gray-200">
+                <div class="refactor-text-sm refactor-text-gray-600">
+                    Найдено {{ movie_lists|length }} список{{ movie_lists|length|pluralize:"ов" }}
+                </div>
+
+                <div class="refactor-text-sm refactor-text-gray-600">
+                    Сортировка: по популярности
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% else %}
+    <!-- Состояние при отсутствии списков -->
+    <div class="refactor-card">
+        <div class="refactor-card__body">
+            <div class="refactor-empty-state refactor-py-12">
+                <div class="refactor-empty-state__icon refactor-text-4xl refactor-mb-4">📚</div>
+                <div class="refactor-empty-state__text refactor-text-xl refactor-font-semibold refactor-text-gray-700 refactor-mb-2">
+                    Списки фильмов не найдены
+                </div>
+                <p class="refactor-text-sm refactor-text-gray-500 refactor-mb-6">
+                    Пользователи еще не создали публичные списки фильмов.
+                </p>
+                {% if user.is_authenticated %}
+                <a href="{% url 'lists:create_movie_list' %}" class="refactor-btn refactor-btn--primary">
+                    <i class="fas fa-plus refactor-btn__icon"></i>
+                    Создать первый список
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

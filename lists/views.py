@@ -157,6 +157,8 @@ def users_movie_lists(request):
         movie_list.total_count = movie_list.movies.count()
         movie_list.watched_percentage = (movie_list.watched_count / movie_list.total_count * 100) if movie_list.total_count > 0 else 0
 
-    return render(request, 'lists/users_movie_lists.html', {
-        'movie_lists': movie_lists,
-    })
+    return render(request,
+                  # 'lists/users_movie_lists.html',
+                  'lists/users_movie_lists-migration.html',
+                  {'movie_lists': movie_lists,}
+    )
