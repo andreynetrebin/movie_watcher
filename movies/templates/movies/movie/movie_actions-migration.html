@@ -5,50 +5,114 @@
 {% block content %}
 <div class="refactor-container refactor-p-4 md:refactor-p-6">
 
-    <!-- Информационный блок для неавторизованных пользователей -->
+    <!-- Блок для неавторизованных пользователей -->
     {% if not user.is_authenticated %}
     <div class="refactor-card refactor-mb-6">
-        <!-- ... существующий код информационного блока ... -->
+        <div class="refactor-card__header">
+            <h2 class="refactor-card__title">Добро пожаловать в <strong>КиноСмотрители</strong></h2>
+        </div>
+        <div class="refactor-card__body">
+            <div class="refactor-grid refactor-grid-cols-1 lg:refactor-grid-cols-2 refactor-gap-6">
+                <!-- Левая колонка -->
+                <div class="refactor-space-y-4">
+                    <h3 class="refactor-text-lg refactor-font-semibold refactor-text-gray-900">С нашим сервисом вы можете:</h3>
+                    <ul class="refactor-space-y-2 refactor-text-gray-700">
+                        <li class="refactor-flex refactor-items-start refactor-gap-2">
+                            <span class="refactor-text-primary">•</span>
+                            <span>Вести личный список просмотренных и понравившихся фильмов</span>
+                        </li>
+                        <li class="refactor-flex refactor-items-start refactor-gap-2">
+                            <span class="refactor-text-primary">•</span>
+                            <span>Следить за активностью друзей и сообщества</span>
+                        </li>
+                        <li class="refactor-flex refactor-items-start refactor-gap-2">
+                            <span class="refactor-text-primary">•</span>
+                            <span>Создавать собственные тематические списки фильмов</span>
+                        </li>
+                        <li class="refactor-flex refactor-items-start refactor-gap-2">
+                            <span class="refactor-text-primary">•</span>
+                            <span>Зарабатывать баллы и участвовать в рейтинге</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Правая колонка - таблица баллов -->
+                <div class="refactor-space-y-4">
+                    <h3 class="refactor-text-lg refactor-font-semibold refactor-text-gray-900">Зарабатывайте баллы:</h3>
+                    <div class="refactor-table-container">
+                        <table class="refactor-table">
+                            <thead>
+                                <tr>
+                                    <th>Активность</th>
+                                    <th class="refactor-text-center">Баллы</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="refactor-table-row">
+                                    <td>Отметка о просмотре фильма</td>
+                                    <td class="refactor-text-center refactor-font-semibold refactor-text-primary">1</td>
+                                </tr>
+                                <tr class="refactor-table-row">
+                                    <td>Добавление комментария</td>
+                                    <td class="refactor-text-center refactor-font-semibold refactor-text-primary">2</td>
+                                </tr>
+                                <tr class="refactor-table-row">
+                                    <td>Добавление фильма в базу</td>
+                                    <td class="refactor-text-center refactor-font-semibold refactor-text-primary">3</td>
+                                </tr>
+                                <tr class="refactor-table-row">
+                                    <td>Публикация списка фильмов</td>
+                                    <td class="refactor-text-center refactor-font-semibold refactor-text-primary">5</td>
+                                </tr>
+                                <tr class="refactor-table-row">
+                                    <td>Лайк на ваш список</td>
+                                    <td class="refactor-text-center refactor-font-semibold refactor-text-primary">3</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <!-- Слайдер последних фильмов для авторизованных пользователей -->
+    <div class="refactor-card refactor-mb-6">
+        <div class="refactor-card__header">
+            <h3 class="refactor-card__title">🎬 Недавно добавленные фильмы</h3>
+        </div>
+        <div class="refactor-card__body">
+            <div class="refactor-movies-slider">
+                {% for movie in latest_movies %}
+                <div class="refactor-movie-slide">
+                    <a href="{{ movie.get_absolute_url }}" class="refactor-block refactor-group">
+                        <div class="refactor-relative refactor-mb-2">
+                            {% if movie.poster %}
+                                {% thumbnail movie.poster "80x120" crop="100%" as im %}
+                                <img src="{{ im.url }}" alt="{{ movie.title }}"
+                                     class="refactor-poster refactor-poster--lg refactor-shadow-md group-hover:refactor-shadow-lg refactor-transition-shadow">
+                            {% else %}
+                                <div class="refactor-poster refactor-poster--lg refactor-poster--default refactor-shadow-md group-hover:refactor-shadow-lg refactor-transition-shadow refactor-flex refactor-items-center refactor-justify-center">
+                                    🎬
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="refactor-text-xs refactor-text-gray-700 group-hover:refactor-text-primary refactor-font-medium refactor-line-clamp-2">
+                            {{ movie.title }}
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
     {% endif %}
 
-    <!-- Основной контент для авторизованных пользователей -->
-    {% if user.is_authenticated %}
+    <!-- ОСНОВНОЙ КОНТЕНТ ДЛЯ ВСЕХ ПОЛЬЗОВАТЕЛЕЙ -->
     <div class="refactor-content-wrapper">
 
         <!-- Основная лента действий -->
         <div class="refactor-actions">
-
-            <!-- Слайдер последних фильмов -->
-            <div class="refactor-card">
-                <div class="refactor-card__header">
-                    <h3 class="refactor-card__title">🎬 Недавно добавленные фильмы</h3>
-                </div>
-                <div class="refactor-card__body">
-                    <div class="refactor-movies-slider">
-                        {% for movie in latest_movies %}
-                        <div class="refactor-movie-slide">
-                            <a href="{{ movie.get_absolute_url }}" class="refactor-block refactor-group">
-                                <div class="refactor-relative refactor-mb-2">
-                                    {% if movie.poster %}
-                                        {% thumbnail movie.poster "80x120" crop="100%" as im %}
-                                        <img src="{{ im.url }}" alt="{{ movie.title }}"
-                                             class="refactor-poster refactor-poster--lg refactor-shadow-md group-hover:refactor-shadow-lg refactor-transition-shadow">
-                                    {% else %}
-                                        <div class="refactor-poster refactor-poster--lg refactor-poster--default refactor-shadow-md group-hover:refactor-shadow-lg refactor-transition-shadow refactor-flex refactor-items-center refactor-justify-center">
-                                            🎬
-                                        </div>
-                                    {% endif %}
-                                </div>
-                                <div class="refactor-text-xs refactor-text-gray-700 group-hover:refactor-text-primary refactor-font-medium refactor-line-clamp-2">
-                                    {{ movie.title }}
-                                </div>
-                            </a>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
 
             <!-- Фильтр и лента действий -->
             <div class="refactor-card">
@@ -300,6 +364,6 @@
             </div>
         </div>
     </div>
-    {% endif %}
+
 </div>
 {% endblock %}
