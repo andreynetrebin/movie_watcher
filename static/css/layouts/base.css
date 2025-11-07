@@ -485,3 +485,31 @@
  - Устаревшие стили .refactor-feed-grid (заменены на .refactor-content-wrapper)
  - Устаревшие стили .refactor-feed-card (используются стандартные .refactor-card)
 */
+
+/* Стили для страницы деталей фильма */
+.refactor-comment-item {
+    transition: all var(--transition-normal);
+}
+
+.refactor-comment-item:hover {
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-1px);
+}
+
+/* Позиционирование для иконки Кинопоиска */
+.refactor-absolute {
+    position: absolute;
+}
+
+.refactor-top-4 {
+    top: 1rem;
+}
+
+.refactor-right-4 {
+    right: 1rem;
+}
+
+/* Высота по содержимому */
+.refactor-h-fit {
+    height: fit-content;
+}
