@@ -266,7 +266,11 @@ def edit(request):
 def user_list(request):
     # Получаем всех активных пользователей, кроме текущего
     users = User.objects.filter(is_active=True).exclude(is_superuser=True)
-    return render(request, 'account/user/list.html', {
+    return render(
+        request,
+        # 'account/user/list.html',
+                  'account/user/list-migration.html',
+        {
         'section': 'people',
         'users': users
     })
