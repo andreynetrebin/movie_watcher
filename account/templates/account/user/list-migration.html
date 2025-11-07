@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% load static %}
+
+{% block title %}Сообщество{% endblock %}
+
+{% block content %}
+<div class="refactor-container refactor-p-6">
+
+    <!-- Заголовок страницы -->
+    <div class="refactor-card refactor-mb-6">
+        <div class="refactor-dashboard__section-header">
+            <h1 class="refactor-dashboard__title">👥 Сообщество</h1>
+            <div class="refactor-text-sm refactor-text-muted">
+                {{ users|length }} пользователь{{ users|length|pluralize:"ь,я,ей" }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Список пользователей -->
+    <div class="refactor-card">
+        <div class="refactor-card__header">
+            <h3 class="refactor-card__title">🎯 Все участники</h3>
+            <div class="refactor-text-sm refactor-text-gray-600">
+                Активные пользователи
+            </div>
+        </div>
+
+        <div class="refactor-card__body">
+            {% if users %}
+            <div class="refactor-grid refactor-grid-cols-1 sm:refactor-grid-cols-2 lg:refactor-grid-cols-3 xl:refactor-grid-cols-4 refactor-gap-6">
+                {% for user in users %}
+                <div class="refactor-user-card refactor-p-4 refactor-border refactor-border-gray-200 refactor-rounded-lg refactor-bg-white refactor-text-center refactor-transition-all refactor-duration-200 hover:refactor-shadow-md hover:refactor-border-primary-200">
+
+                    <!-- Аватар пользователя -->
+                    <div class="refactor-flex refactor-justify-center refactor-mb-3">
+                        <a href="{{ user.get_absolute_url }}" class="refactor-block refactor-group">
+                            <div class="refactor-relative">
+                                {% if user.profile.photo %}
+                                    {% thumbnail user.profile.photo "100x100" crop="100%" as im %}
+                                    <img src="{{ im.url }}" alt="{{ user.get_full_name }}"
+                                         class="refactor-avatar refactor-avatar--xl refactor-border-4 refactor-border-white refactor-shadow-md group-hover:refactor-shadow-lg refactor-transition-shadow">
+                                {% else %}
+                                    <div class="refactor-avatar refactor-avatar--xl refactor-avatar--default refactor-border-4 refactor-border-white refactor-shadow-md group-hover:refactor-shadow-lg refactor-transition-shadow">
+                                        {{ user.get_full_name|default:user.username|first|upper }}
+                                    </div>
+                                {% endif %}
+
+                                <!-- Индикатор активности -->
+                                {% if user.is_online %}
+                                <div class="refactor-absolute refactor-bottom-2 refactor-right-2 refactor-w-3 refactor-h-3 refactor-bg-green-500 refactor-rounded-full refactor-border-2 refactor-border-white"></div>
+                                {% endif %}
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Информация о пользователе -->
+                    <div class="refactor-space-y-2">
+                        <a href="{{ user.get_absolute_url }}"
+                           class="refactor-block refactor-text-lg refactor-font-semibold refactor-text-gray-900 refactor-hover:refactor-text-primary refactor-transition-colors refactor-line-clamp-1">
+                            {{ user.get_full_name|default:user.username }}
+                        </a>
+
+                        <!-- Статистика пользователя -->
+                        <div class="refactor-flex refactor-justify-center refactor-items-center refactor-gap-4 refactor-text-xs refactor-text-gray-500">
+                            <!-- Дата присоединения -->
+                            <div class="refactor-flex refactor-items-center refactor-gap-1">
+                                <span>📅</span>
+                                <span>{{ user.date_joined|date:"m.Y" }}</span>
+                            </div>
+
+                            <!-- Последняя активность -->
+                            {% if user.last_login %}
+                            <div class="refactor-flex refactor-items-center refactor-gap-1">
+                                <span>🕒</span>
+                                <span>{{ user.last_login|date:"m.Y" }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Email (только для админов или при необходимости) -->
+                        {% if user.is_superuser or user.is_staff %}
+                        <div class="refactor-text-xs refactor-text-gray-400 refactor-line-clamp-1">
+                            {{ user.email }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Кнопка действия -->
+                    <div class="refactor-mt-4">
+                        <a href="{{ user.get_absolute_url }}"
+                           class="refactor-btn refactor-btn--primary refactor-btn--sm refactor-w-full">
+                            Посмотреть профиль
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            {% else %}
+            <!-- Состояние при отсутствии пользователей -->
+            <div class="refactor-empty-state refactor-py-12">
+                <div class="refactor-empty-state__icon refactor-text-4xl refactor-mb-4">👥</div>
+                <div class="refactor-empty-state__text refactor-text-xl refactor-font-semibold refactor-text-gray-700 refactor-mb-2">
+                    Пользователи не найдены
+                </div>
+                <p class="refactor-text-sm refactor-text-gray-500 refactor-mb-6">
+                    В сообществе пока нет других активных пользователей
+                </p>
+                <a href="{% url 'dashboard' %}" class="refactor-btn refactor-btn--primary">
+                    Вернуться в дашборд
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Дополнительная информация -->
+    <div class="refactor-grid refactor-grid-cols-1 md:refactor-grid-cols-2 refactor-gap-6 refactor-mt-6">
+
+        <!-- Информация о сообществе -->
+        <div class="refactor-card">
+            <div class="refactor-card__header">
+                <h3 class="refactor-card__title">ℹ️ О сообществе</h3>
+            </div>
+            <div class="refactor-card__body">
+                <div class="refactor-space-y-3 refactor-text-sm refactor-text-gray-700">
+                    <p>Это страница сообщества <strong>КиноСмотрители</strong>, где вы можете:</p>
+                    <ul class="refactor-space-y-2 refactor-list-disc refactor-list-inside">
+                        <li>Найти друзей и единомышленников</li>
+                        <li>Посмотреть профили других участников</li>
+                        <li>Узнать о их кинопредпочтениях</li>
+                        <li>Найти интересные списки фильмов</li>
+                    </ul>
+                    <p class="refactor-text-xs refactor-text-gray-500 refactor-mt-4">
+                        💡 <strong>Совет:</strong> Нажмите на аватар пользователя, чтобы посмотреть его профиль и списки фильмов.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Быстрые действия -->
+        <div class="refactor-card">
+            <div class="refactor-card__header">
+                <h3 class="refactor-card__title">⚡ Быстрые действия</h3>
+            </div>
+            <div class="refactor-card__body">
+                <div class="refactor-space-y-3">
+                    <a href="{% url 'user_ranking' %}" class="refactor-btn refactor-btn--secondary refactor-w-full refactor-justify-center">
+                        👑 Рейтинг пользователей
+                    </a>
+                    <a href="{% url 'dashboard' %}" class="refactor-btn refactor-btn--secondary refactor-w-full refactor-justify-center">
+                        📊 Мой дашборд
+                    </a>
+                    {% if user.is_authenticated %}
+                    <a href="{{ user.get_absolute_url }}" class="refactor-btn refactor-btn--primary refactor-w-full refactor-justify-center">
+                        👤 Мой профиль
+                    </a>
+                    {% else %}
+                    <a href="{% url 'login' %}" class="refactor-btn refactor-btn--primary refactor-w-full refactor-justify-center">
+                        🔑 Войти в систему
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

@@ -513,3 +513,74 @@
 .refactor-h-fit {
     height: fit-content;
 }
+
+/* Стили для страницы сообщества */
+.refactor-user-card {
+    transition: all var(--transition-normal);
+}
+
+.refactor-user-card:hover {
+    transform: translateY(-2px);
+}
+
+.refactor-border-4 {
+    border-width: 4px;
+}
+
+/* Сетка для карточек пользователей */
+.refactor-grid-cols-1 { grid-template-columns: repeat(1, 1fr); }
+.refactor-grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+.refactor-grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+.refactor-grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+/* Адаптивность для мобильных */
+@media (max-width: 640px) {
+    .sm\:refactor-grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 480px) {
+    .refactor-grid-cols-1 { grid-template-columns: 1fr; }
+    .sm\:refactor-grid-cols-2 { grid-template-columns: 1fr; }
+}
+
+
+/* Стили для страницы сообщества */
+.refactor-user-card {
+    transition: all var(--transition-normal);
+}
+
+.refactor-user-card:hover {
+    transform: translateY(-2px);
+}
+
+.refactor-border-4 {
+    border-width: 4px;
+}
+
+/* Список с точками */
+.refactor-list-disc {
+    list-style-type: disc;
+}
+
+.refactor-list-inside {
+    list-style-position: inside;
+}
+
+/* Сетка для карточек пользователей */
+@media (min-width: 640px) {
+    .sm\:refactor-grid-cols-2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .lg\:refactor-grid-cols-3 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1280px) {
+    .xl\:refactor-grid-cols-4 {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
