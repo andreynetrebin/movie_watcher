@@ -1,0 +1,276 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% load static %}
+{% block title %}{{ movie.title }}{% endblock %}
+{% block content %}
+<div class="refactor-container refactor-p-6">
+
+    <!-- Основная информация о фильме -->
+    <div class="refactor-card refactor-mb-6">
+        <div class="refactor-card__header">
+            <h1 class="refactor-card__title">{{ movie.title }} ({{ movie.year }})</h1>
+            <a href="{% url 'movies:list' %}?kinopoisk_id={{ movie.kinopoisk_id }}" class="refactor-btn refactor-btn--primary">
+                📝 Проставить отметки
+            </a>
+        </div>
+
+        <div class="refactor-card__body">
+            <div class="refactor-grid refactor-grid-cols-1 lg:refactor-grid-cols-3 refactor-gap-8">
+
+                <!-- Постер фильма -->
+                <div class="refactor-flex refactor-justify-center lg:refactor-justify-start">
+                    <div class="refactor-relative">
+                        {% if movie.poster %}
+                            {% thumbnail movie.poster "300x450" crop="100%" as im %}
+                            <img src="{{ im.url }}" alt="{{ movie.title }}"
+                                 class="refactor-poster refactor-poster--xl refactor-shadow-lg refactor-rounded-lg">
+                        {% else %}
+                            <div class="refactor-poster refactor-poster--xl refactor-poster--default refactor-shadow-lg refactor-rounded-lg refactor-flex refactor-items-center refactor-justify-center">
+                                🎬
+                            </div>
+                        {% endif %}
+                        <!-- Ссылка на Кинопоиск -->
+                        <a href="{{ movie.kinopoisk_url }}" target="_blank"
+                           class="refactor-absolute refactor-top-4 refactor-right-4 refactor-bg-blue-600 refactor-text-white refactor-p-2 refactor-rounded-full refactor-shadow-lg hover:refactor-bg-blue-700 refactor-transition-colors"
+                           title="Открыть на Кинопоиске">
+                            📊
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Основная информация -->
+                <div class="lg:refactor-col-span-2">
+                    <div class="refactor-grid refactor-grid-cols-1 md:refactor-grid-cols-2 refactor-gap-6">
+
+                        <!-- Детали фильма -->
+                        <div class="refactor-space-y-4">
+                            <h3 class="refactor-text-lg refactor-font-semibold refactor-text-gray-900">📋 Информация о фильме</h3>
+
+                            {% if movie.duration %}
+                            <div class="refactor-flex refactor-items-center refactor-gap-3">
+                                <span class="refactor-text-gray-500">⏱️</span>
+                                <span class="refactor-text-sm refactor-text-gray-700">{{ movie.duration }} минут</span>
+                            </div>
+                            {% endif %}
+
+                            <!-- Жанры -->
+                            {% if movie.genres.all %}
+                            <div>
+                                <h4 class="refactor-text-sm refactor-font-medium refactor-text-gray-900 refactor-mb-2">🎭 Жанры</h4>
+                                <div class="refactor-flex refactor-flex-wrap refactor-gap-2">
+                                    {% for genre in movie.genres.all %}
+                                    <span class="refactor-badge refactor-badge--secondary">{{ genre.name }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <!-- Режиссеры -->
+                            {% if movie.directors.all %}
+                            <div>
+                                <h4 class="refactor-text-sm refactor-font-medium refactor-text-gray-900 refactor-mb-2">🎬 Режиссеры</h4>
+                                <div class="refactor-space-y-1">
+                                    {% for director in movie.directors.all %}
+                                    <div class="refactor-flex refactor-items-center refactor-gap-2">
+                                        <a href="{% url 'movies:director_detail' director.id %}"
+                                           class="refactor-text-sm refactor-text-primary refactor-hover:underline">
+                                            {{ director.name }}
+                                        </a>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <!-- Сценаристы -->
+                            {% if movie.writers.all %}
+                            <div>
+                                <h4 class="refactor-text-sm refactor-font-medium refactor-text-gray-900 refactor-mb-2">✍️ Сценаристы</h4>
+                                <div class="refactor-space-y-1">
+                                    {% for writer in movie.writers.all %}
+                                    <div class="refactor-flex refactor-items-center refactor-gap-2">
+                                        <a href="{% url 'movies:writer_detail' writer.id %}"
+                                           class="refactor-text-sm refactor-text-primary refactor-hover:underline">
+                                            {{ writer.name }}
+                                        </a>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Статистика -->
+                        <div class="refactor-space-y-4">
+                            <h3 class="refactor-text-lg refactor-font-semibold refactor-text-gray-900">📊 Статистика</h3>
+
+                            <div class="refactor-grid refactor-grid-cols-2 refactor-gap-4">
+                                <!-- Просмотры -->
+                                <div class="refactor-stat-item refactor-text-center refactor-p-4 refactor-bg-gray-50 refactor-rounded-lg">
+                                    <div class="refactor-stat-item__value refactor-text-2xl refactor-font-bold refactor-text-blue-600">
+                                        {{ movie.total_views }}
+                                    </div>
+                                    <div class="refactor-stat-item__label refactor-text-sm refactor-text-gray-600">
+                                        👁️ Просмотры
+                                    </div>
+                                </div>
+
+                                <!-- Лайки -->
+                                <div class="refactor-stat-item refactor-text-center refactor-p-4 refactor-bg-gray-50 refactor-rounded-lg">
+                                    <div class="refactor-stat-item__value refactor-text-2xl refactor-font-bold refactor-text-green-600">
+                                        {{ movie.total_likes }}
+                                    </div>
+                                    <div class="refactor-stat-item__label refactor-text-sm refactor-text-gray-600">
+                                        ❤️ Лайки
+                                    </div>
+                                </div>
+
+                                <!-- Дизлайки -->
+                                <div class="refactor-stat-item refactor-text-center refactor-p-4 refactor-bg-gray-50 refactor-rounded-lg">
+                                    <div class="refactor-stat-item__value refactor-text-2xl refactor-font-bold refactor-text-red-600">
+                                        {{ movie.total_dislikes }}
+                                    </div>
+                                    <div class="refactor-stat-item__label refactor-text-sm refactor-text-gray-600">
+                                        👎 Дизлайки
+                                    </div>
+                                </div>
+
+                                <!-- Соотношения -->
+                                <div class="refactor-stat-item refactor-text-center refactor-p-4 refactor-bg-gray-50 refactor-rounded-lg">
+                                    <div class="refactor-stat-item__value refactor-text-lg refactor-font-bold refactor-text-purple-600">
+                                        {{ like_ratio|floatformat:2 }}
+                                    </div>
+                                    <div class="refactor-stat-item__label refactor-text-xs refactor-text-gray-600">
+                                        Лайки/Просмотры
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Дополнительные соотношения -->
+                            <div class="refactor-grid refactor-grid-cols-2 refactor-gap-4 refactor-mt-4">
+                                <div class="refactor-text-center refactor-p-3 refactor-bg-gray-50 refactor-rounded-lg">
+                                    <div class="refactor-text-sm refactor-font-semibold refactor-text-gray-700">
+                                        {{ dislike_ratio|floatformat:2 }}
+                                    </div>
+                                    <div class="refactor-text-xs refactor-text-gray-500">
+                                        Лайки/Дизлайки
+                                    </div>
+                                </div>
+                                <div class="refactor-text-center refactor-p-3 refactor-bg-gray-50 refactor-rounded-lg">
+                                    <div class="refactor-text-sm refactor-font-semibold refactor-text-gray-700">
+                                        {{ movie.kinopoisk_id }}
+                                    </div>
+                                    <div class="refactor-text-xs refactor-text-gray-500">
+                                        ID Кинопоиск
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Комментарии -->
+    <div class="refactor-grid refactor-grid-cols-1 lg:refactor-grid-cols-3 refactor-gap-6">
+
+        <!-- Список комментариев -->
+        <div class="lg:refactor-col-span-2">
+            <div class="refactor-card">
+                <div class="refactor-card__header">
+                    <h3 class="refactor-card__title">💬 Комментарии ({{ comments|length }})</h3>
+                </div>
+
+                <div class="refactor-card__body">
+                    {% if comments %}
+                    <div class="refactor-space-y-4">
+                        {% for comment in comments %}
+                        <div class="refactor-comment-item refactor-p-4 refactor-border refactor-border-gray-200 refactor-rounded-lg refactor-bg-white">
+                            <div class="refactor-flex refactor-items-start refactor-gap-3">
+                                <!-- Аватар автора -->
+                                <div class="refactor-flex-shrink-0">
+                                    {% if comment.author.profile.photo %}
+                                        {% thumbnail comment.author.profile.photo "40x40" crop="100%" as im %}
+                                        <img src="{{ im.url }}" alt="{{ comment.author.get_full_name }}"
+                                             class="refactor-avatar refactor-avatar--md">
+                                    {% else %}
+                                        <div class="refactor-avatar refactor-avatar--md refactor-avatar--default">
+                                            {{ comment.author.get_full_name|default:comment.author.username|first|upper }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Контент комментария -->
+                                <div class="refactor-flex-1 refactor-min-w-0">
+                                    <div class="refactor-flex refactor-items-center refactor-gap-2 refactor-mb-2">
+                                        <span class="refactor-text-sm refactor-font-semibold refactor-text-gray-900">
+                                            {{ comment.author.get_full_name }}
+                                        </span>
+                                        <span class="refactor-text-xs refactor-text-gray-500">•</span>
+                                        <span class="refactor-text-xs refactor-text-gray-500">
+                                            {{ comment.created_on|date:"d.m.Y в H:i" }}
+                                        </span>
+                                    </div>
+                                    <div class="refactor-text-sm refactor-text-gray-700 refactor-leading-relaxed">
+                                        {{ comment.body|linebreaksbr }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="refactor-empty-state refactor-py-8">
+                        <div class="refactor-empty-state__icon refactor-text-4xl refactor-mb-3">💬</div>
+                        <div class="refactor-empty-state__text refactor-text-gray-500">Пока нет комментариев</div>
+                        <p class="refactor-text-sm refactor-text-gray-400 refactor-mt-1">Будьте первым, кто оставит комментарий</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Форма комментария -->
+        <div class="refactor-card refactor-h-fit">
+            <div class="refactor-card__header">
+                <h3 class="refactor-card__title">📝 Оставить комментарий</h3>
+            </div>
+
+            <div class="refactor-card__body">
+                {% if user.is_authenticated %}
+                <form method="post" class="refactor-space-y-4">
+                    {% csrf_token %}
+                    <div class="refactor-form-group">
+                        <label for="id_body" class="refactor-form-label">Ваш комментарий:</label>
+                        <textarea name="body" id="id_body" rows="4"
+                                  class="refactor-form-input refactor-w-full"
+                                  placeholder="Поделитесь вашим мнением о фильме..."
+                                  required></textarea>
+                    </div>
+                    <button type="submit" class="refactor-btn refactor-btn--primary refactor-w-full">
+                        📤 Отправить комментарий
+                    </button>
+                </form>
+                {% else %}
+                <div class="refactor-text-center refactor-py-4">
+                    <div class="refactor-text-lg refactor-text-gray-500 refactor-mb-2">🔒</div>
+                    <p class="refactor-text-sm refactor-text-gray-600 refactor-mb-4">
+                        Чтобы оставить комментарий, необходимо
+                        <a href="{% url 'login' %}?next={{ request.path }}"
+                           class="refactor-text-primary refactor-font-medium refactor-hover:underline">
+                            войти в систему
+                        </a>
+                    </p>
+                    <a href="{% url 'login' %}?next={{ request.path }}"
+                       class="refactor-btn refactor-btn--primary refactor-w-full">
+                        Войти
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

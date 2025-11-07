@@ -469,7 +469,11 @@ def movie_detail(request, slug):
     else:
         form = CommentForm()  # Инициализация формы, если это не POST-запрос
 
-    return render(request, 'movies/movie/detail.html', {
+    return render(
+        request,
+        # 'movies/movie/detail.html'
+        'movies/movie/detail-migration.html',
+        {
         'section': 'movies',
         'movie': movie,
         'like_ratio': like_ratio,
