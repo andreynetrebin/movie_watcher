@@ -317,7 +317,11 @@ def user_detail(request, username):
     # Определяем активную вкладку
     active_tab = request.GET.get('tab', 'aboutme')  # По умолчанию активна вкладка "О пользователе"
 
-    return render(request, 'account/user/detail.html', {
+    return render(
+        request,
+        # 'account/user/detail.html',
+        'account/user/detail-migration.html',
+        {
         'section': 'people',
         'user': user,
         'watched_count': watched_count,
