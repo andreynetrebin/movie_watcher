@@ -1,0 +1,505 @@
+<!-- account/detail.html -->
+{% extends "base.html" %}
+{% load static %}
+{% load thumbnail %}
+
+{% block title %}{{ user.get_full_name }}{% endblock %}
+
+{% block content %}
+<div class="refactor-container refactor-p-6">
+
+    <!-- Заголовок профиля -->
+    <div class="refactor-card refactor-mb-6">
+        <div class="refactor-dashboard__section-header">
+            <div class="refactor-flex refactor-items-center refactor-gap-4">
+                <!-- Аватар пользователя -->
+                <div class="refactor-flex-shrink-0">
+                    {% if user.profile.photo %}
+                        {% thumbnail user.profile.photo "100x100" crop="100%" as im %}
+                        <img src="{{ im.url }}" alt="{{ user.get_full_name }}"
+                             class="refactor-avatar refactor-avatar--xl refactor-border-4 refactor-border-white refactor-shadow-lg">
+                    {% else %}
+                        <div class="refactor-avatar refactor-avatar--xl refactor-avatar--default refactor-border-4 refactor-border-white refactor-shadow-lg">
+                            {{ user.get_full_name|default:user.username|first|upper }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Информация пользователя -->
+                <div class="refactor-flex-1">
+                    <h1 class="refactor-dashboard__title refactor-mb-2">{{ user.get_full_name }}</h1>
+                    <div class="refactor-flex refactor-items-center refactor-gap-4 refactor-text-sm refactor-text-gray-600">
+                        <span>📅 Участник с {{ user.date_joined|date:"d.m.Y" }}</span>
+                        {% if user.last_login %}
+                        <span>🕒 Был(а) онлайн {{ user.last_login|date:"d.m.Y" }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Кнопка подписки -->
+                {% if request.user != user and request.user.is_authenticated %}
+                <div class="refactor-flex-shrink-0">
+                    {% if request.user in user.followers.all %}
+                        <button class="refactor-btn refactor-btn--danger toggle-follow-btn"
+                                data-action="unfollow" data-id="{{ user.id }}">
+                            ❌ Отписаться
+                        </button>
+                    {% else %}
+                        <button class="refactor-btn refactor-btn--primary toggle-follow-btn"
+                                data-action="follow" data-id="{{ user.id }}">
+                            ✅ Подписаться
+                        </button>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Вкладки -->
+    <div class="refactor-tabs refactor-mb-6">
+        <button class="refactor-tab {% if active_tab == 'aboutme' %}refactor-tab--active{% endif %}"
+                data-tab="aboutme">
+            <span class="refactor-tab__icon">👤</span>
+            <span class="refactor-tab__text">О пользователе</span>
+        </button>
+        <button class="refactor-tab {% if active_tab == 'activity' %}refactor-tab--active{% endif %}"
+                data-tab="activity">
+            <span class="refactor-tab__icon">📊</span>
+            <span class="refactor-tab__text">Активность</span>
+        </button>
+        <button class="refactor-tab {% if active_tab == 'comments' %}refactor-tab--active{% endif %}"
+                data-tab="comments">
+            <span class="refactor-tab__icon">💬</span>
+            <span class="refactor-tab__text">Комментарии</span>
+        </button>
+    </div>
+
+    <!-- Контент вкладок -->
+    <div class="refactor-tab-content refactor-tab-content--active" id="aboutme">
+        <div class="refactor-grid refactor-grid-cols-1 lg:refactor-grid-cols-3 refactor-gap-6">
+
+            <!-- Статистика -->
+            <div class="refactor-card">
+                <div class="refactor-card__header">
+                    <h3 class="refactor-card__title">📈 Статистика</h3>
+                </div>
+                <div class="refactor-card__body">
+                    <div class="refactor-space-y-4">
+                        <!-- Подписчики -->
+                        <div class="refactor-flex refactor-justify-between refactor-items-center">
+                            <span class="refactor-text-sm refactor-text-gray-600">Подписчики</span>
+                            <div class="refactor-flex refactor-items-center refactor-gap-2">
+                                <span class="refactor-text-lg refactor-font-semibold">{{ user.followers.count }}</span>
+                                <button class="refactor-btn refactor-btn--link refactor-btn--sm"
+                                        onclick="toggleFollowersList()">
+                                    Показать
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Список подписчиков -->
+                        <div class="refactor-followers-list refactor-hidden" id="followersList">
+                            <div class="refactor-space-y-2 refactor-mt-3 refactor-pt-3 refactor-border-t">
+                                {% for follower in user.followers.all %}
+                                <div class="refactor-flex refactor-items-center refactor-gap-3 refactor-p-2 refactor-rounded refactor-hover:refactor-bg-gray-50">
+                                    {% if follower.profile.photo %}
+                                        {% thumbnail follower.profile.photo "32x32" crop="100%" as im %}
+                                        <img src="{{ im.url }}" alt="{{ follower.get_full_name }}"
+                                             class="refactor-avatar refactor-avatar--sm">
+                                    {% else %}
+                                        <div class="refactor-avatar refactor-avatar--sm refactor-avatar--default">
+                                            {{ follower.get_full_name|default:follower.username|first|upper }}
+                                        </div>
+                                    {% endif %}
+                                    <a href="{{ follower.get_absolute_url }}"
+                                       class="refactor-text-sm refactor-text-primary refactor-hover:underline refactor-line-clamp-1">
+                                        {{ follower.get_full_name }}
+                                    </a>
+                                </div>
+                                {% empty %}
+                                <div class="refactor-text-sm refactor-text-gray-500 refactor-text-center refactor-py-2">
+                                    Нет подписчиков
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Фильмы -->
+                        <div class="refactor-grid refactor-grid-cols-2 refactor-gap-4 refactor-mt-4">
+                            <a href="{% url 'user_movie_list' user.username %}?filter=watched"
+                               class="refactor-stat-card refactor-stat-card--primary">
+                                <div class="refactor-stat-card__icon">👁️</div>
+                                <div class="refactor-stat-card__content">
+                                    <div class="refactor-stat-card__value">{{ watched_count }}</div>
+                                    <div class="refactor-stat-card__label">Просмотренные</div>
+                                </div>
+                            </a>
+
+                            <a href="{% url 'user_movie_list' user.username %}?filter=liked"
+                               class="refactor-stat-card refactor-stat-card--success">
+                                <div class="refactor-stat-card__icon">❤️</div>
+                                <div class="refactor-stat-card__content">
+                                    <div class="refactor-stat-card__value">{{ liked_count }}</div>
+                                    <div class="refactor-stat-card__label">Понравившиеся</div>
+                                </div>
+                            </a>
+
+                            <a href="{% url 'user_movie_list' user.username %}?filter=disliked"
+                               class="refactor-stat-card refactor-stat-card--danger">
+                                <div class="refactor-stat-card__icon">👎</div>
+                                <div class="refactor-stat-card__content">
+                                    <div class="refactor-stat-card__value">{{ disliked_count }}</div>
+                                    <div class="refactor-stat-card__label">Непонравившиеся</div>
+                                </div>
+                            </a>
+
+                            <a href="{% url 'user_movie_list' user.username %}?filter=wishlist"
+                               class="refactor-stat-card refactor-stat-card--info">
+                                <div class="refactor-stat-card__icon">📝</div>
+                                <div class="refactor-stat-card__content">
+                                    <div class="refactor-stat-card__value">{{ wishlist_count }}</div>
+                                    <div class="refactor-stat-card__label">Буду смотреть</div>
+                                </div>
+                            </a>
+                        </div>
+
+                        <!-- Дополнительная информация -->
+                        <div class="refactor-flex refactor-justify-between refactor-items-center refactor-mt-4 refactor-pt-4 refactor-border-t">
+                            <span class="refactor-text-sm refactor-text-gray-600">Добавленные фильмы</span>
+                            <a href="{% url 'user_movie_list' user.username %}?filter=added"
+                               class="refactor-text-sm refactor-font-semibold refactor-text-primary">
+                                {{ added_count }}
+                            </a>
+                        </div>
+
+                        <div class="refactor-flex refactor-justify-between refactor-items-center">
+                            <span class="refactor-text-sm refactor-text-gray-600">Telegram</span>
+                            <span class="refactor-text-sm {% if user.profile.telegram_connected %}refactor-text-green-600{% else %}refactor-text-gray-500{% endif %}">
+                                {% if user.profile.telegram_connected %}✅ Привязан{% else %}❌ Не привязан{% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Совместимость -->
+            <div class="refactor-card">
+                <div class="refactor-card__header">
+                    <h3 class="refactor-card__title">🤝 Совместимость</h3>
+                </div>
+                <div class="refactor-card__body">
+                    <div class="refactor-space-y-4 refactor-text-center">
+                        <div class="refactor-text-3xl refactor-font-bold refactor-text-primary">
+                            {{ compatibility_score }}%
+                        </div>
+                        <div class="refactor-text-sm refactor-text-gray-600">
+                            Общие понравившиеся фильмы: {{ common_movies_count }}
+                        </div>
+
+                        <!-- Прогресс-бар совместимости -->
+                        <div class="refactor-w-full refactor-bg-gray-200 refactor-rounded-full refactor-h-3">
+                            <div class="refactor-bg-green-500 refactor-h-3 refactor-rounded-full"
+                                 style="width: {{ compatibility_score }}%">
+                            </div>
+                        </div>
+
+                        <p class="refactor-text-xs refactor-text-gray-500">
+                            На основе общих кинопредпочтений
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Недавние действия -->
+            <div class="refactor-card">
+                <div class="refactor-card__header">
+                    <h3 class="refactor-card__title">🕐 Недавние действия</h3>
+                    <a href="?tab=activity" class="refactor-btn refactor-btn--link refactor-btn--sm">
+                        Все →
+                    </a>
+                </div>
+                <div class="refactor-card__body">
+                    <div class="refactor-space-y-3">
+                        {% for action in actions %}
+                            {% if forloop.counter <= 3 %}
+                            <div class="refactor-recent-action refactor-p-3 refactor-rounded refactor-border refactor-border-gray-200">
+                                <div class="refactor-text-sm refactor-text-gray-700 refactor-line-clamp-2">
+                                    {% if action.verb == "подписался" %}
+                                        подписался на
+                                        <a href="{{ action.target.get_absolute_url }}" class="refactor-font-medium refactor-text-primary refactor-hover:underline">
+                                            {{ action.target.get_full_name }}
+                                        </a>
+                                    {% elif action.verb == "отписался" %}
+                                        отписался от
+                                        <a href="{{ action.target.get_absolute_url }}" class="refactor-font-medium refactor-text-primary refactor-hover:underline">
+                                            {{ action.target.get_full_name }}
+                                        </a>
+                                    {% else %}
+                                        {{ action.verb }}:
+                                        <a href="{{ action.target.get_absolute_url }}" class="refactor-font-medium refactor-text-primary refactor-hover:underline">
+                                            {{ action.target.title }}
+                                        </a>
+                                    {% endif %}
+                                </div>
+                                <div class="refactor-text-xs refactor-text-gray-500 refactor-mt-1">
+                                    {{ action.created|date:"d.m.Y в H:i" }}
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% empty %}
+                            <div class="refactor-text-sm refactor-text-gray-500 refactor-text-center refactor-py-4">
+                                Нет недавних действий
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Вкладка Активность -->
+    <div class="refactor-tab-content" id="activity">
+        <div class="refactor-card">
+            <div class="refactor-card__header">
+                <h3 class="refactor-card__title">📊 Вся активность</h3>
+            </div>
+            <div class="refactor-card__body">
+                <div class="refactor-space-y-4">
+                    {% for action in actions %}
+                    <div class="refactor-recent-action refactor-p-4 refactor-rounded-lg refactor-border refactor-border-gray-200 refactor-bg-white">
+                        <div class="refactor-flex refactor-gap-4">
+                            <div class="refactor-flex-1 refactor-min-w-0">
+                                <div class="refactor-text-sm refactor-text-gray-700">
+                                    {% if action.verb == "подписался" %}
+                                        подписался на
+                                        <a href="{{ action.target.get_absolute_url }}" class="refactor-font-medium refactor-text-primary refactor-hover:underline">
+                                            {{ action.target.get_full_name }}
+                                        </a>
+                                    {% elif action.verb == "отписался" %}
+                                        отписался от
+                                        <a href="{{ action.target.get_absolute_url }}" class="refactor-font-medium refactor-text-primary refactor-hover:underline">
+                                            {{ action.target.get_full_name }}
+                                        </a>
+                                    {% else %}
+                                        {{ action.verb }}:
+                                        <a href="{{ action.target.get_absolute_url }}" class="refactor-font-medium refactor-text-primary refactor-hover:underline">
+                                            {{ action.target.title }}
+                                        </a>
+                                    {% endif %}
+                                </div>
+                                <div class="refactor-text-xs refactor-text-gray-500 refactor-mt-1">
+                                    {{ action.created|date:"d.m.Y в H:i" }}
+                                </div>
+                            </div>
+                            {% if action.target and action.target.poster %}
+                            <div class="refactor-flex-shrink-0">
+                                <a href="{{ action.target.get_absolute_url }}" class="refactor-block">
+                                    {% thumbnail action.target.poster "50x75" crop="100%" as im %}
+                                    <img src="{{ im.url }}" alt="{{ action.target.title }}"
+                                         class="refactor-poster refactor-poster--md refactor-shadow-sm">
+                                </a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="refactor-empty-state refactor-py-8">
+                        <div class="refactor-empty-state__icon refactor-text-4xl refactor-mb-3">📊</div>
+                        <div class="refactor-empty-state__text refactor-text-gray-500">Нет активности</div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Пагинация -->
+                {% if actions.has_other_pages %}
+                <div class="refactor-pagination refactor-mt-6">
+                    <div class="refactor-flex refactor-gap-2 refactor-items-center refactor-justify-center refactor-flex-wrap">
+                        {% if actions.has_previous %}
+                        <a href="?tab=activity&actions_page=1" class="refactor-btn refactor-btn--secondary refactor-btn--sm">
+                            &laquo;
+                        </a>
+                        <a href="?tab=activity&actions_page={{ actions.previous_page_number }}" class="refactor-btn refactor-btn--secondary refactor-btn--sm">
+                            Назад
+                        </a>
+                        {% endif %}
+
+                        <span class="refactor-text-sm refactor-text-gray-600">
+                            Страница {{ actions.number }} из {{ actions.paginator.num_pages }}
+                        </span>
+
+                        {% if actions.has_next %}
+                        <a href="?tab=activity&actions_page={{ actions.next_page_number }}" class="refactor-btn refactor-btn--secondary refactor-btn--sm">
+                            Вперед
+                        </a>
+                        <a href="?tab=activity&actions_page={{ actions.paginator.num_pages }}" class="refactor-btn refactor-btn--secondary refactor-btn--sm">
+                            &raquo;
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Вкладка Комментарии -->
+    <div class="refactor-tab-content" id="comments">
+        <div class="refactor-card">
+            <div class="refactor-card__header">
+                <h3 class="refactor-card__title">💬 Комментарии</h3>
+            </div>
+            <div class="refactor-card__body">
+                <div class="refactor-space-y-4">
+                    {% for comment in comments %}
+                    <div class="refactor-comment-item refactor-p-4 refactor-border refactor-border-gray-200 refactor-rounded-lg">
+                        <div class="refactor-flex refactor-gap-4">
+                            <!-- Постер фильма -->
+                            <div class="refactor-flex-shrink-0">
+                                <a href="{{ comment.movie.get_absolute_url }}" class="refactor-block">
+                                    {% if comment.movie.poster %}
+                                        {% thumbnail comment.movie.poster "60x90" crop="100%" as im %}
+                                        <img src="{{ im.url }}" alt="{{ comment.movie.title }}"
+                                             class="refactor-poster refactor-poster--md refactor-shadow-sm">
+                                    {% else %}
+                                        <div class="refactor-poster refactor-poster--md refactor-poster--default refactor-shadow-sm refactor-flex refactor-items-center refactor-justify-center">
+                                            🎬
+                                        </div>
+                                    {% endif %}
+                                </a>
+                            </div>
+
+                            <!-- Контент комментария -->
+                            <div class="refactor-flex-1 refactor-min-w-0">
+                                <a href="{{ comment.movie.get_absolute_url }}"
+                                   class="refactor-text-sm refactor-font-semibold refactor-text-gray-900 refactor-hover:refactor-text-primary refactor-line-clamp-1">
+                                    {{ comment.movie.title }}
+                                </a>
+                                <div class="refactor-text-sm refactor-text-gray-700 refactor-mt-2 refactor-leading-relaxed">
+                                    {{ comment.body|linebreaksbr }}
+                                </div>
+                                <div class="refactor-text-xs refactor-text-gray-500 refactor-mt-2">
+                                    {{ comment.created_on|date:"d.m.Y в H:i" }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="refactor-empty-state refactor-py-8">
+                        <div class="refactor-empty-state__icon refactor-text-4xl refactor-mb-3">💬</div>
+                        <div class="refactor-empty-state__text refactor-text-gray-500">Нет комментариев</div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Пагинация -->
+                {% if comments.has_other_pages %}
+                <div class="refactor-pagination refactor-mt-6">
+                    <div class="refactor-flex refactor-gap-2 refactor-items-center refactor-justify-center refactor-flex-wrap">
+                        {% if comments.has_previous %}
+                        <a href="?tab=comments&comments_page=1" class="refactor-btn refactor-btn--secondary refactor-btn--sm">
+                            &laquo;
+                        </a>
+                        <a href="?tab=comments&comments_page={{ comments.previous_page_number }}" class="refactor-btn refactor-btn--secondary refactor-btn--sm">
+                            Назад
+                        </a>
+                        {% endif %}
+
+                        <span class="refactor-text-sm refactor-text-gray-600">
+                            Страница {{ comments.number }} из {{ comments.paginator.num_pages }}
+                        </span>
+
+                        {% if comments.has_next %}
+                        <a href="?tab=comments&comments_page={{ comments.next_page_number }}" class="refactor-btn refactor-btn--secondary refactor-btn--sm">
+                            Вперед
+                        </a>
+                        <a href="?tab=comments&comments_page={{ comments.paginator.num_pages }}" class="refactor-btn refactor-btn--secondary refactor-btn--sm">
+                            &raquo;
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Управление вкладками
+    const tabs = document.querySelectorAll('.refactor-tab');
+    const contents = document.querySelectorAll('.refactor-tab-content');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            const tabName = this.getAttribute('data-tab');
+
+            // Убираем активные классы
+            tabs.forEach(t => t.classList.remove('refactor-tab--active'));
+            contents.forEach(c => c.classList.remove('refactor-tab-content--active'));
+
+            // Добавляем активные классы
+            this.classList.add('refactor-tab--active');
+            document.getElementById(tabName).classList.add('refactor-tab-content--active');
+
+            // Обновляем URL
+            const url = new URL(window.location);
+            url.searchParams.set('tab', tabName);
+            window.history.pushState({}, '', url);
+        });
+    });
+
+    // Инициализация активной вкладки из URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const activeTab = urlParams.get('tab') || 'aboutme';
+    const tabElement = document.querySelector(`.refactor-tab[data-tab="${activeTab}"]`);
+    if (tabElement) {
+        tabElement.click();
+    }
+
+    // Управление подпиской
+    const followButtons = document.querySelectorAll('.toggle-follow-btn');
+    followButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const action = this.getAttribute('data-action');
+            const userId = this.getAttribute('data-id');
+
+            fetch("{% url 'user_follow' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ id: userId, action: action })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    if (action === 'follow') {
+                        this.textContent = '❌ Отписаться';
+                        this.setAttribute('data-action', 'unfollow');
+                        this.classList.remove('refactor-btn--primary');
+                        this.classList.add('refactor-btn--danger');
+                    } else {
+                        this.textContent = '✅ Подписаться';
+                        this.setAttribute('data-action', 'follow');
+                        this.classList.remove('refactor-btn--danger');
+                        this.classList.add('refactor-btn--primary');
+                    }
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error('Ошибка:', error));
+        });
+    });
+});
+
+function toggleFollowersList() {
+    const list = document.getElementById('followersList');
+    list.classList.toggle('refactor-hidden');
+}
+</script>
+{% endblock %}
