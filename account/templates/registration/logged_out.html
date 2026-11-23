@@ -1,10 +1,13 @@
 {% extends "base.html" %}
-{% block title %}Выход из системы{% endblock %}
+{% block title %}Выход из системы — Movie Watcher{% endblock %}
 {% block content %}
-<h1>Выход из системы</h1>
-<p>
-
-Вы успешно вышли из системы.
-Вы можете <a href="{% url "login" %}">войти снова</a>.
-</p>
+<section class="cinema-auth-page">
+  <div class="cinema-auth-card cinema-auth-card--success">
+    <div class="cinema-auth-success-icon" aria-hidden="true">✓</div>
+    <p class="cinema-auth-eyebrow">Сеанс завершён</p>
+    <h1>Вы вышли из аккаунта</h1>
+    <p class="cinema-auth-lead">Спасибо, что были с Movie Watcher. Ваша коллекция будет ждать возвращения.</p>
+    <a class="cinema-auth-submit cinema-auth-submit--link" href="{% url 'login' %}">Войти снова <span aria-hidden="true">→</span></a>
+  </div>
+</section>
 {% endblock %}
