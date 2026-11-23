@@ -370,3 +370,42 @@ tr:hover td { background:rgba(255,255,255,.025); }
 @media(max-width:850px){.cinema-account-dashboard .refactor-dashboard-grid{grid-template-columns:1fr}.cinema-account-dashboard .refactor-dashboard-column{grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))}}
 @media(max-width:600px){.cinema-account-dashboard .refactor-tabs,.cinema-public-profile .refactor-tabs{margin-inline:-.15rem}.cinema-account-dashboard .refactor-tab,.cinema-public-profile .refactor-tab{min-height:40px;padding:.55rem .7rem;font-size:.8rem}.cinema-account-dashboard .refactor-header__avatar{width:56px;height:56px}.cinema-account-dashboard .refactor-card__body,.cinema-public-profile .refactor-card__body{padding:.85rem}.cinema-account-dashboard .refactor-stat-card{padding:.75rem;gap:.55rem}.cinema-account-dashboard .refactor-stat-card__value{font-size:1.3rem}.cinema-public-profile .refactor-avatar--xl{width:72px;height:72px}.cinema-edit-form__actions>*{flex:1}}
 @media(prefers-reduced-motion:reduce){.cinema-account-dashboard .refactor-tab-content--active,.cinema-account-dashboard .refactor-tab,.cinema-public-profile .refactor-tab{animation:none;transition:none}}
+
+
+/* Authentication and password flows — stage 5 */
+.cinema-auth-page{display:grid;justify-items:center;gap:1.1rem;width:100%;max-width:760px;margin:clamp(1rem,4vw,3.5rem) auto;padding:0 clamp(.25rem,2vw,1rem)}
+.cinema-auth-card{width:100%;max-width:510px;padding:clamp(1.25rem,4vw,2.35rem);border:1px solid var(--cinema-border);border-radius:18px;background:radial-gradient(ellipse at 95% 0%,rgba(53,211,154,.09),transparent 42%),var(--cinema-surface);box-shadow:0 22px 70px rgba(0,0,0,.22)}
+.cinema-auth-card--wide{max-width:620px}.cinema-auth-card--success{text-align:center}
+.cinema-auth-brand{display:flex;align-items:center;gap:.65rem;margin-bottom:1.8rem;color:var(--cinema-muted);font-size:.72rem;font-weight:800;letter-spacing:.16em}
+.cinema-auth-brand__mark{display:grid;width:34px;height:34px;place-items:center;border-radius:10px;background:var(--cinema-accent);color:#062117;font-size:.85rem;letter-spacing:-.04em}
+.cinema-auth-eyebrow{margin:0 0 .45rem;color:var(--cinema-accent);font-size:.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.cinema-auth-card h1{margin:0;color:var(--cinema-text);font-size:clamp(1.65rem,4vw,2.15rem);font-weight:820;letter-spacing:-.04em;line-height:1.15}
+.cinema-auth-lead{margin:.75rem 0 1.5rem;color:var(--cinema-muted);font-size:.92rem;line-height:1.65}
+.cinema-auth-form{display:grid;gap:1rem}
+.cinema-auth-field{display:grid;gap:.42rem;min-width:0}
+.cinema-auth-field label{color:var(--cinema-text);font-size:.84rem;font-weight:700}
+.cinema-auth-field input:not([type=checkbox]):not([type=radio]),.cinema-auth-field select,.cinema-auth-field textarea{box-sizing:border-box;width:100%;min-width:0;min-height:45px;padding:.7rem .8rem;border:1px solid var(--cinema-border);border-radius:9px;background:#0d131a;color:var(--cinema-text);font:inherit;transition:border-color .18s,box-shadow .18s}
+.cinema-auth-field input:focus,.cinema-auth-field select:focus,.cinema-auth-field textarea:focus{outline:0;border-color:var(--cinema-accent);box-shadow:0 0 0 3px rgba(53,211,154,.13)}
+.cinema-auth-field input[type=checkbox],.cinema-auth-field input[type=radio]{accent-color:var(--cinema-accent)}
+.cinema-auth-field small,.cinema-auth-field .helptext{color:var(--cinema-muted);font-size:.76rem;line-height:1.5}
+.cinema-auth-field ul,.cinema-auth-form ul.errorlist{margin:0;padding-left:1.15rem;color:#ff9aa5;font-size:.78rem}
+.cinema-auth-form .errorlist{list-style:disc}
+.cinema-auth-form>ul.errorlist{padding:.7rem .9rem;border:1px solid rgba(255,120,135,.3);border-radius:9px;background:rgba(125,35,48,.16)}
+.cinema-auth-submit{display:flex;align-items:center;justify-content:space-between;gap:1rem;width:100%;min-height:48px;margin-top:.35rem;padding:.75rem 1rem;border:1px solid var(--cinema-accent);border-radius:10px;background:var(--cinema-accent);color:#062117;font:inherit;font-weight:800;text-align:left;text-decoration:none;cursor:pointer;transition:background .18s,transform .18s}
+.cinema-auth-submit:hover{background:#63e6b2;color:#062117;transform:translateY(-1px)}
+.cinema-auth-submit--link{box-sizing:border-box}
+.cinema-auth-links{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.65rem 1rem;margin-top:1.15rem;color:var(--cinema-muted);font-size:.82rem}
+.cinema-auth-links a,.cinema-auth-card a:not(.cinema-auth-submit){color:var(--cinema-accent);font-weight:650;text-decoration:none}
+.cinema-auth-links a:hover,.cinema-auth-card a:not(.cinema-auth-submit):hover{text-decoration:underline}
+.cinema-auth-divider{display:flex;align-items:center;gap:.8rem;margin:1.35rem 0 .85rem;color:var(--cinema-muted);font-size:.75rem}
+.cinema-auth-divider:before,.cinema-auth-divider:after{content:"";height:1px;flex:1;background:var(--cinema-border)}
+.cinema-auth-social{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem}
+.cinema-auth-social__link{display:flex;align-items:center;justify-content:center;gap:.55rem;min-height:44px;border:1px solid var(--cinema-border);border-radius:9px;background:var(--cinema-surface-raised);color:var(--cinema-text)!important;font-size:.84rem;font-weight:700;text-decoration:none}
+.cinema-auth-social__link:hover{border-color:var(--cinema-accent);background:var(--cinema-surface-hover)}
+.cinema-auth-social__link img{width:19px;height:19px;object-fit:contain}
+.cinema-auth-alert{margin:0 0 1rem;padding:.8rem .9rem;border:1px solid rgba(255,120,135,.35);border-radius:9px;background:rgba(125,35,48,.16);color:#ffb5bd;font-size:.84rem;line-height:1.5}
+.cinema-auth-hint{margin:1rem 0;color:var(--cinema-muted);font-size:.8rem;line-height:1.55}
+.cinema-auth-success-icon{display:grid;width:54px;height:54px;margin:0 auto 1.2rem;place-items:center;border:1px solid rgba(53,211,154,.3);border-radius:50%;background:rgba(53,211,154,.12);color:var(--cinema-accent);font-size:1.55rem;font-weight:800}
+.cinema-auth-footnote{max-width:440px;margin:0;color:var(--cinema-muted);font-size:.76rem;text-align:center}
+@media(max-width:520px){.cinema-auth-page{margin:1rem auto}.cinema-auth-card{padding:1.2rem;border-radius:14px}.cinema-auth-social{grid-template-columns:1fr}.cinema-auth-links{flex-direction:column}.cinema-auth-brand{margin-bottom:1.3rem}}
+@media(prefers-reduced-motion:reduce){.cinema-auth-submit,.cinema-auth-field input{transition:none}}
