@@ -307,3 +307,66 @@ tr:hover td { background:rgba(255,255,255,.025); }
 .cinema-person-movies .movie-actions{gap:.35rem}
 .cinema-person-movies .kinopoisk-link img{display:block}
 @media(max-width:680px){.cinema-person-hero{align-items:stretch;flex-direction:column}.cinema-person-hero .cinema-button{width:100%}.cinema-ranking-table{min-width:610px}}
+
+
+/* Account dashboard, public profile and profile settings — stage 4 */
+.cinema-account-dashboard,.cinema-public-profile{padding:clamp(.25rem,1.5vw,1.25rem)!important}
+.cinema-account-dashboard>.refactor-card:first-child,.cinema-public-profile>.refactor-card:first-child{padding:clamp(1rem,2.6vw,1.8rem);overflow:hidden;background:radial-gradient(ellipse at 90% 0%,rgba(53,211,154,.10),transparent 45%),var(--cinema-surface)!important}
+.cinema-account-dashboard .refactor-dashboard__section-header{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1.15rem}
+.cinema-account-dashboard .refactor-dashboard__title,.cinema-public-profile .refactor-dashboard__title{margin:0;color:var(--cinema-text);font-size:clamp(1.65rem,3vw,2.35rem);font-weight:800;letter-spacing:-.035em}
+.cinema-account-intro{margin:.45rem 0 0;color:var(--cinema-muted);font-size:.92rem}
+.cinema-account-dashboard .refactor-header__user{display:flex;align-items:center;gap:1rem}
+.cinema-account-dashboard .refactor-header__avatar{width:68px;height:68px;border:3px solid rgba(53,211,154,.45);border-radius:50%;object-fit:cover}
+.cinema-account-dashboard .refactor-header__username{color:var(--cinema-text);font-size:1.08rem;font-weight:750}
+.cinema-account-dashboard .refactor-tabs,.cinema-public-profile .refactor-tabs{display:flex;gap:.45rem;overflow-x:auto;padding:.4rem;border:1px solid var(--cinema-border);border-radius:13px;background:#0d131a;scrollbar-width:thin}
+.cinema-account-dashboard .refactor-tab,.cinema-public-profile .refactor-tab{display:inline-flex;flex:0 0 auto;align-items:center;justify-content:center;gap:.5rem;min-height:42px;padding:.65rem .9rem;border:1px solid transparent;border-radius:9px;background:transparent;color:var(--cinema-muted);font:inherit;font-size:.86rem;font-weight:650;white-space:nowrap;cursor:pointer;transition:background .18s,color .18s,border-color .18s}
+.cinema-account-dashboard .refactor-tab:hover,.cinema-public-profile .refactor-tab:hover{background:var(--cinema-surface-hover);color:var(--cinema-text)}
+.cinema-account-dashboard .refactor-tab--active,.cinema-public-profile .refactor-tab--active{border-color:rgba(53,211,154,.22);background:rgba(53,211,154,.12);color:var(--cinema-accent)}
+.cinema-account-dashboard .refactor-tab__icon,.cinema-public-profile .refactor-tab__icon{font-size:1rem}
+.cinema-account-dashboard .refactor-tab-content,.cinema-public-profile .refactor-tab-content{display:none}
+.cinema-account-dashboard .refactor-tab-content--active,.cinema-public-profile .refactor-tab-content--active{display:block;animation:cinema-tab-in .2s ease both}
+@keyframes cinema-tab-in{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.cinema-account-dashboard .refactor-dashboard-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(260px,.8fr);gap:1rem;align-items:start}
+.cinema-account-dashboard .refactor-dashboard-column{display:grid;gap:1rem;min-width:0}
+.cinema-account-dashboard .refactor-dashboard-column>.refactor-card,.cinema-account-dashboard .refactor-card,.cinema-public-profile .refactor-card{min-width:0;border:1px solid var(--cinema-border)!important;border-radius:var(--cinema-radius);background:var(--cinema-surface)!important;box-shadow:none}
+.cinema-account-dashboard .refactor-card__header,.cinema-public-profile .refactor-card__header{padding:1rem 1.15rem;border-bottom:1px solid var(--cinema-border)}
+.cinema-account-dashboard .refactor-card__body,.cinema-public-profile .refactor-card__body{padding:1.1rem}
+.cinema-account-dashboard .refactor-card__title,.cinema-public-profile .refactor-card__title{color:var(--cinema-text)!important;font-size:1rem;font-weight:750}
+.cinema-account-dashboard .refactor-stat-card{display:flex;align-items:center;gap:.8rem;min-width:0;padding:1rem;border:1px solid var(--cinema-border);border-radius:12px;background:var(--cinema-surface-raised)!important}
+.cinema-account-dashboard .refactor-stat-card__icon{display:grid;flex:0 0 38px;width:38px;height:38px;place-items:center;border-radius:10px;background:rgba(53,211,154,.1);font-size:1.15rem}
+.cinema-account-dashboard .refactor-stat-card__value{color:var(--cinema-text);font-size:1.55rem;font-weight:800;line-height:1.1}
+.cinema-account-dashboard .refactor-stat-link{color:inherit;text-decoration:none}
+.cinema-account-dashboard .refactor-stat-link:hover{color:var(--cinema-accent)}
+.cinema-account-dashboard .refactor-stat-card__label{margin-top:.25rem;color:var(--cinema-muted);font-size:.78rem}
+.cinema-account-dashboard .refactor-stat-item{gap:.8rem;padding:.8rem!important;border:1px solid var(--cinema-border);border-radius:10px;background:var(--cinema-surface-raised)!important}
+.cinema-account-dashboard .refactor-stat-item__label,.cinema-account-dashboard .refactor-stat-item__value{color:var(--cinema-text)!important}
+.cinema-account-dashboard .refactor-btn,.cinema-public-profile .refactor-btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;min-height:36px;padding:.5rem .75rem;border:1px solid var(--cinema-border);border-radius:8px;background:var(--cinema-surface-raised);color:var(--cinema-text);font-size:.8rem;font-weight:650;text-decoration:none;cursor:pointer}
+.cinema-account-dashboard .refactor-btn--primary,.cinema-public-profile .refactor-btn--primary{border-color:var(--cinema-accent);background:var(--cinema-accent);color:#062117}
+.cinema-account-dashboard .refactor-btn--danger,.cinema-public-profile .refactor-btn--danger{border-color:#8d3944;background:#3b2027;color:#ffb5bd}
+.cinema-account-dashboard .refactor-btn:hover,.cinema-public-profile .refactor-btn:hover{border-color:var(--cinema-accent);color:var(--cinema-accent)}
+.cinema-account-dashboard .refactor-btn--primary:hover,.cinema-public-profile .refactor-btn--primary:hover{background:#63e6b2;color:#062117}
+.cinema-account-dashboard .refactor-recent-action,.cinema-public-profile .refactor-recent-action{border-color:var(--cinema-border)!important;background:var(--cinema-surface-raised)!important}
+.cinema-account-dashboard .refactor-empty-state,.cinema-public-profile .refactor-empty-state{padding:2rem 1rem;border:1px dashed var(--cinema-border);border-radius:12px;background:var(--cinema-surface-raised)}
+.cinema-account-dashboard .refactor-pagination,.cinema-public-profile .refactor-pagination{display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem}
+.cinema-account-dashboard .refactor-pagination a,.cinema-public-profile .refactor-pagination a{padding:.5rem .75rem;border:1px solid var(--cinema-border);border-radius:8px;background:var(--cinema-surface-raised);color:var(--cinema-text)}
+.cinema-account-dashboard .refactor-comment-item,.cinema-public-profile .refactor-comment-item{border-color:var(--cinema-border)!important;background:var(--cinema-surface-raised)!important}
+.cinema-public-profile>.refactor-card:first-child .refactor-dashboard__section-header{padding:clamp(.25rem,1vw,.75rem)}
+.cinema-public-profile .refactor-avatar--xl{width:92px;height:92px;object-fit:cover;border-color:var(--cinema-border)!important}
+.cinema-public-profile .refactor-dashboard__section-header>div{min-width:0}
+.cinema-public-profile .refactor-dashboard__section-header .refactor-flex{flex-wrap:wrap}
+.cinema-public-profile .refactor-grid{align-items:start}
+.cinema-edit-page{max-width:900px;margin-inline:auto}
+.cinema-edit-card{padding:clamp(1rem,3vw,1.75rem);border:1px solid var(--cinema-border);border-radius:var(--cinema-radius);background:var(--cinema-surface)}
+.cinema-edit-form__section+ .cinema-edit-form__section{margin-top:1.75rem;padding-top:1.5rem;border-top:1px solid var(--cinema-border)}
+.cinema-edit-form__section h2{margin:0 0 1rem;color:var(--cinema-text);font-size:1.05rem}
+.cinema-edit-form p{display:grid;gap:.45rem;margin:0 0 1rem;color:var(--cinema-muted)}
+.cinema-edit-form label{color:var(--cinema-text);font-size:.88rem;font-weight:650}
+.cinema-edit-form input:not([type=checkbox]):not([type=radio]),.cinema-edit-form select,.cinema-edit-form textarea{width:100%;max-width:100%;min-height:42px;padding:.65rem .75rem;border:1px solid var(--cinema-border);border-radius:9px;background:#0d131a;color:var(--cinema-text);font:inherit}
+.cinema-edit-form input[type=file]{padding:.5rem;background:var(--cinema-surface-raised)}
+.cinema-edit-form input:focus,.cinema-edit-form select:focus,.cinema-edit-form textarea:focus{outline:2px solid rgba(53,211,154,.35);border-color:var(--cinema-accent)}
+.cinema-edit-form .helptext,.cinema-edit-form ul.errorlist{color:var(--cinema-muted);font-size:.8rem}
+.cinema-edit-form ul.errorlist{margin:0;padding-left:1.2rem;color:#ff9aa5}
+.cinema-edit-form__actions{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:.65rem;margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid var(--cinema-border)}
+@media(max-width:850px){.cinema-account-dashboard .refactor-dashboard-grid{grid-template-columns:1fr}.cinema-account-dashboard .refactor-dashboard-column{grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))}}
+@media(max-width:600px){.cinema-account-dashboard .refactor-tabs,.cinema-public-profile .refactor-tabs{margin-inline:-.15rem}.cinema-account-dashboard .refactor-tab,.cinema-public-profile .refactor-tab{min-height:40px;padding:.55rem .7rem;font-size:.8rem}.cinema-account-dashboard .refactor-header__avatar{width:56px;height:56px}.cinema-account-dashboard .refactor-card__body,.cinema-public-profile .refactor-card__body{padding:.85rem}.cinema-account-dashboard .refactor-stat-card{padding:.75rem;gap:.55rem}.cinema-account-dashboard .refactor-stat-card__value{font-size:1.3rem}.cinema-public-profile .refactor-avatar--xl{width:72px;height:72px}.cinema-edit-form__actions>*{flex:1}}
+@media(prefers-reduced-motion:reduce){.cinema-account-dashboard .refactor-tab-content--active,.cinema-account-dashboard .refactor-tab,.cinema-public-profile .refactor-tab{animation:none;transition:none}}
