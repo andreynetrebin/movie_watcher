@@ -1,12 +1,26 @@
 {% extends "base.html" %}
-{% block title %}Регистрация{% endblock %}
+{% block title %}Регистрация — Movie Watcher{% endblock %}
 {% block content %}
-<h1>Регистрация</h1>
-<p>Используйте форму ниже, чтобы зарегистрироваться:</p>
-<form method="post">
-    {{ user_form.as_p }}
-{% csrf_token %}
-<p><input type="submit" value="Зарегистрироваться"></p>
-</form>
+<section class="cinema-auth-page">
+  <div class="cinema-auth-card cinema-auth-card--wide">
+    <div class="cinema-auth-brand"><span class="cinema-auth-brand__mark">MW</span><span>MOVIE WATCHER</span></div>
+    <p class="cinema-auth-eyebrow">Ваше путешествие начинается здесь</p>
+    <h1>Создать аккаунт</h1>
+    <p class="cinema-auth-lead">Собирайте любимые фильмы, отмечайте просмотренное и находите единомышленников.</p>
+    <form method="post" class="cinema-auth-form">
+      {% csrf_token %}
+      {{ user_form.non_field_errors }}
+      {% for field in user_form %}
+        <div class="cinema-auth-field">
+          {{ field.label_tag }}
+          {{ field }}
+          {{ field.errors }}
+          {% if field.help_text %}<small>{{ field.help_text|safe }}</small>{% endif %}
+        </div>
+      {% endfor %}
+      <button class="cinema-auth-submit" type="submit">Зарегистрироваться <span aria-hidden="true">→</span></button>
+    </form>
+    <div class="cinema-auth-links"><span>Уже есть аккаунт? <a href="{% url 'login' %}">Войти</a></span></div>
+  </div>
+</section>
 {% endblock %}
-
