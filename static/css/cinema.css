@@ -276,3 +276,34 @@ tr:hover td { background:rgba(255,255,255,.025); }
 .cinema-empty{display:grid;justify-items:center;gap:.55rem;padding:3.5rem 1.25rem;border:1px dashed var(--cinema-border);border-radius:var(--cinema-radius);background:var(--cinema-surface);text-align:center}.cinema-empty__icon{color:var(--cinema-accent);font-size:2.5rem}.cinema-empty h2{margin:.2rem 0}.cinema-empty p{max-width:520px;margin:0 0 .7rem;color:var(--cinema-muted)}.cinema-button{display:inline-flex;align-items:center;justify-content:center;padding:.7rem 1rem;border:1px solid var(--cinema-accent);border-radius:9px;background:var(--cinema-accent);color:#062117;font-weight:750;cursor:pointer}.cinema-button:hover{background:#63e6b2;color:#062117}.cinema-button--secondary{border-color:var(--cinema-border);background:var(--cinema-surface-raised);color:var(--cinema-text)}.cinema-button--secondary:hover{border-color:var(--cinema-accent);background:var(--cinema-surface-hover);color:var(--cinema-accent)}
 .cinema-breadcrumb{display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 1.2rem;color:var(--cinema-muted);font-size:.82rem}.cinema-breadcrumb span:last-child{overflow-wrap:anywhere}.cinema-list-detail-header{display:flex;justify-content:space-between;gap:2rem;padding:clamp(1rem,3vw,1.7rem);border:1px solid var(--cinema-border);border-radius:16px;background:var(--cinema-surface)}.cinema-list-detail-header h1{margin:.25rem 0 .65rem}.cinema-list-detail-header__main{min-width:0}.cinema-list-detail-header__actions{display:flex;flex-wrap:wrap;align-content:flex-start;gap:.6rem}.cinema-list-detail-header__actions form{margin:0}.cinema-list-detail-stats{display:flex;flex-wrap:wrap;gap:1rem;margin-top:1rem;color:var(--cinema-muted);font-size:.84rem}.cinema-list-detail-stats strong{color:var(--cinema-text)}.cinema-view-toolbar{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin:2rem 0 1rem}.cinema-view-toolbar h2{margin:0}.cinema-view-toolbar p{margin:.25rem 0 0;color:var(--cinema-muted);font-size:.82rem}.cinema-view-toggle{display:flex;gap:.35rem;padding:.3rem;border:1px solid var(--cinema-border);border-radius:10px;background:var(--cinema-surface)}.cinema-view-toggle button{padding:.5rem .75rem;border:0;border-radius:7px;background:transparent;color:var(--cinema-muted);font-size:.82rem}.cinema-view-toggle button.active{background:var(--cinema-surface-hover);color:var(--cinema-accent)}.cinema-movie-grid-view .movie-list>ul{grid-template-columns:repeat(auto-fill,minmax(min(100%,430px),1fr))}.cinema-table-scroll{width:100%;overflow-x:auto;border:1px solid var(--cinema-border);border-radius:12px;background:var(--cinema-surface)}.cinema-table-scroll[hidden]{display:none!important}.cinema-data-table{min-width:760px;margin:0}.cinema-data-table th{background:var(--cinema-surface-raised)}.cinema-data-table td{color:var(--cinema-text)}.cinema-data-table .cinema-table-row--watched td{background:rgba(53,211,154,.07)}.cinema-table-poster{display:block;width:42px;height:63px;border-radius:5px;object-fit:cover}.cinema-table-poster-placeholder{display:grid;place-items:center;width:42px;height:63px;border-radius:5px;background:var(--cinema-surface-raised)}.cinema-back-link{margin-top:1.5rem}
 @media(max-width:680px){.cinema-page__header{align-items:stretch;flex-direction:column}.cinema-page__counter{display:flex;align-items:center;justify-content:center;gap:.5rem;min-width:0}.cinema-page__counter strong{font-size:1.25rem}.cinema-summary-grid{gap:.65rem}.cinema-summary-card{padding:.85rem}.cinema-summary-card strong{font-size:1.4rem}.cinema-section-heading{align-items:flex-start;flex-direction:column;gap:.2rem}.cinema-list-detail-header{flex-direction:column;gap:1rem}.cinema-list-detail-header__actions{width:100%}.cinema-list-detail-header__actions form,.cinema-list-detail-header__actions .cinema-button{width:100%}.cinema-view-toolbar{align-items:stretch;flex-direction:column}.cinema-view-toggle{width:100%}.cinema-view-toggle button{flex:1}}
+
+/* Directors and writers — stage 3 */
+.cinema-ranking-wrap{width:100%;overflow-x:auto;border:1px solid var(--cinema-border);border-radius:var(--cinema-radius);background:var(--cinema-surface)}
+.cinema-ranking-table{width:100%;min-width:650px;border-collapse:collapse}
+.cinema-ranking-table th{padding:.9rem 1rem;background:var(--cinema-surface-raised);color:var(--cinema-muted);font-size:.74rem;letter-spacing:.07em;text-transform:uppercase}
+.cinema-ranking-table td{padding:.85rem 1rem;border-bottom:1px solid var(--cinema-border);vertical-align:middle}
+.cinema-ranking-table tbody tr:last-child td{border-bottom:0}
+.cinema-ranking-table tbody tr:hover td{background:var(--cinema-surface-hover)}
+.cinema-ranking-table__position{width:70px;color:var(--cinema-muted);font-variant-numeric:tabular-nums}
+.cinema-ranking-table__name{font-weight:700;color:var(--cinema-text)}
+.cinema-ranking-table__name:hover{color:var(--cinema-accent)}
+.cinema-ranking-table__badge{display:inline-block;margin-left:.55rem;padding:.18rem .45rem;border-radius:20px;background:#15382b;color:var(--cinema-accent);font-size:.67rem;font-weight:700;white-space:nowrap}
+.cinema-ranking-table__row--complete td{background:rgba(53,211,154,.045)}
+.cinema-ranking-progress{min-width:125px}
+.cinema-ranking-progress__meta{margin-bottom:.3rem;text-align:right;font-size:.78rem}
+.cinema-ranking-progress__meta strong{color:var(--cinema-text)}
+.cinema-ranking-progress__track{height:7px;overflow:hidden;border-radius:10px;background:var(--cinema-surface-hover)}
+.cinema-ranking-progress__track span{display:block;height:100%;border-radius:inherit;background:var(--cinema-accent)}
+.cinema-pagination{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:.5rem;margin:1.5rem 0;color:var(--cinema-muted);font-size:.84rem}
+.cinema-pagination a{padding:.5rem .75rem;border:1px solid var(--cinema-border);border-radius:8px;background:var(--cinema-surface);color:var(--cinema-text)}
+.cinema-pagination a:hover{border-color:var(--cinema-accent);color:var(--cinema-accent)}
+.cinema-person-hero{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;margin-bottom:1.5rem;padding:clamp(1rem,3vw,1.6rem);border:1px solid var(--cinema-border);border-radius:16px;background:var(--cinema-surface)}
+.cinema-person-hero h1{margin:.25rem 0 .6rem}
+.cinema-person-hero .cinema-page__lead{margin:0}
+.cinema-person-hero .cinema-button{flex:0 0 auto}
+.cinema-person-movies>h2{margin:1.5rem 0 1rem}
+.cinema-person-movies .movie-list>ul{grid-template-columns:repeat(auto-fill,minmax(min(100%,420px),1fr))}
+.cinema-person-movies .movie-item{height:100%}
+.cinema-person-movies .movie-actions{gap:.35rem}
+.cinema-person-movies .kinopoisk-link img{display:block}
+@media(max-width:680px){.cinema-person-hero{align-items:stretch;flex-direction:column}.cinema-person-hero .cinema-button{width:100%}.cinema-ranking-table{min-width:610px}}
