@@ -1,56 +1,41 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Войти{% endblock %}
+{% block title %}Войти — Movie Watcher{% endblock %}
 {% block content %}
-<h1>Войти</h1>
-{% if form.errors %}
-<p>
-Неверный логин или пароль.
-Попробуйте снова.
-</p>
-{% else %}
-    <p>
-      Пожалуйста, используйте форму ниже для входа в систему.<br>
-      Если, вы впервые, то <a href="{% url "register" %}">зарегистрируйтесь</a>.
-      Или воспользуйтесь сервисами социальной аутентификации
-      <img src="{% static 'images/Yandex_icon.svg.png' %}" alt="Яндекс" class="icon">Yandex
-      или <img src="{% static 'images/Google_icon.png' %}" alt="Google" class="icon">Google
-    </p>
-<br>
-{% endif %}
-<div class="login-form">
-<form action="{% url 'login' %}" method="post">
-    {% csrf_token %}
-    <div>
+<section class="cinema-auth-page">
+  <div class="cinema-auth-card">
+    <div class="cinema-auth-brand"><span class="cinema-auth-brand__mark">MW</span><span>MOVIE WATCHER</span></div>
+    <p class="cinema-auth-eyebrow">С возвращением</p>
+    <h1>Войти в аккаунт</h1>
+    <p class="cinema-auth-lead">Продолжайте вести свою коллекцию и делиться впечатлениями о кино.</p>
+    {% if form.errors %}
+      <div class="cinema-auth-alert" role="alert">Не удалось войти. Проверьте имя пользователя и пароль.</div>
+    {% endif %}
+    {% if next and user.is_authenticated %}
+      <div class="cinema-auth-alert" role="alert">У вашей учётной записи нет доступа к этой странице.</div>
+    {% endif %}
+    <form action="{% url 'login' %}" method="post" class="cinema-auth-form">
+      {% csrf_token %}
+      <div class="cinema-auth-field">
         <label for="{{ form.username.id_for_label }}">Имя пользователя</label>
         {{ form.username }}
         {{ form.username.errors }}
-    </div>
-    <div>
+      </div>
+      <div class="cinema-auth-field">
         <label for="{{ form.password.id_for_label }}">Пароль</label>
         {{ form.password }}
         {{ form.password.errors }}
+      </div>
+      {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+      <button class="cinema-auth-submit" type="submit">Войти <span aria-hidden="true">→</span></button>
+    </form>
+    <div class="cinema-auth-links"><a href="{% url 'password_reset' %}">Забыли пароль?</a><span>Нет аккаунта? <a href="{% url 'register' %}">Зарегистрироваться</a></span></div>
+    <div class="cinema-auth-divider"><span>или войдите через</span></div>
+    <div class="cinema-auth-social">
+      <a class="cinema-auth-social__link" href="{% url 'social:begin' 'yandex-oauth2' %}"><img src="{% static 'images/Yandex_icon.svg.png' %}" alt="" loading="lazy">Яндекс</a>
+      <a class="cinema-auth-social__link" href="{% url 'social:begin' 'google-oauth2' %}"><img src="{% static 'images/Google_icon.png' %}" alt="" loading="lazy">Google</a>
     </div>
-    <p><input type="submit" value="Войти"></p>
-</form>
-<p>
-<a href="{% url "password_reset" %}">
-Забыли пароль?
-</a>
-</p>
-</div>
-<div class="social">
-<ul>
-    <li class="yandex">
-<a class="yandex" href="{% url "social:begin" "yandex-oauth2" %}">
-Войти через Яндекс
-</a>
-</li>
-<li class="google">
-<a href="{% url "social:begin" "google-oauth2" %}">
-Войти через Google
-</a>
-</li>
-</ul>
-</div>
+  </div>
+  <p class="cinema-auth-footnote">Ваше пространство для истории просмотров и открытий в мире кино.</p>
+</section>
 {% endblock %}
