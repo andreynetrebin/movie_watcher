@@ -1,18 +1,11 @@
-<!-- templates/directors/director_detail.html -->
 {% extends "base.html" %}
 {% load thumbnail %}
 {% block title %}{{ director.name }}{% endblock %}
 {% block content %}
-<h1>{{ director.name }}</h1>
-
-<!-- Ссылка на Кинопоиск -->
-<p>
-    <a href="https://www.kinopoisk.ru/name/{{ director.staff_id }}/" target="_blank">Посетить страницу о режиссере на Кинопоиске</a>
-</p>
-<br>
-<div id="movie-list">
-{% include "movies/directors/director_list_movies.html" %}
-</div>
-<a href="{% url 'movies:director_list' %}">Назад к списку режиссеров</a>
+<section class="cinema-page cinema-person-detail">
+<nav class="cinema-breadcrumb" aria-label="Навигация"><a href="{% url 'movies:director_list' %}">Рейтинг режиссёров</a><span>/</span><span>{{ director.name }}</span></nav>
+<header class="cinema-person-hero"><div><span class="cinema-eyebrow">РЕЖИССЁР</span><h1>{{ director.name }}</h1><p class="cinema-page__lead">Фильмография и ваш прогресс просмотра фильмов этого режиссёра.</p></div><a class="cinema-button cinema-button--secondary" href="https://www.kinopoisk.ru/name/{{ director.staff_id }}/" target="_blank" rel="noopener noreferrer">Профиль на Кинопоиске ↗</a></header>
+<div id="movie-list" class="cinema-person-movies">{% include "movies/directors/director_list_movies.html" %}</div>
+<p class="cinema-back-link"><a href="{% url 'movies:director_list' %}">← Ко всем режиссёрам</a></p>
+</section>
 {% endblock %}
-
