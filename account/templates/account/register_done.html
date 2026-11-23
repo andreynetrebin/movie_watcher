@@ -1,9 +1,13 @@
 {% extends "base.html" %}
-{% block title %}Добро пожаловать{% endblock %}
+{% block title %}Добро пожаловать — Movie Watcher{% endblock %}
 {% block content %}
-<h1>Добро пожаловать {{ new_user.first_name }}!</h1>
-<p>
-Ваш профиль был успешно создан
-Теперь вы можете <a href="{% url "login" %}">войти</a>.
-</p>
+<section class="cinema-auth-page">
+  <div class="cinema-auth-card cinema-auth-card--success">
+    <div class="cinema-auth-success-icon" aria-hidden="true">✓</div>
+    <p class="cinema-auth-eyebrow">Регистрация завершена</p>
+    <h1>Добро пожаловать{% if new_user.first_name %}, {{ new_user.first_name }}{% endif %}!</h1>
+    <p class="cinema-auth-lead">Ваш профиль успешно создан. Теперь можно войти и начать собирать свою историю кино.</p>
+    <a class="cinema-auth-submit cinema-auth-submit--link" href="{% url 'login' %}">Перейти ко входу <span aria-hidden="true">→</span></a>
+  </div>
+</section>
 {% endblock %}
