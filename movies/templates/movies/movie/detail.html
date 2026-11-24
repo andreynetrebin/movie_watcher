@@ -8,7 +8,6 @@
     {% if movie.poster %}
       {% thumbnail movie.poster "600x900" crop="100%" as im %}
         <img src="{{ im.url }}" alt="{{ movie.title }} — постер" class="poster-img">
-      {% endthumbnail %}
     {% else %}
       <div class="poster-img poster-placeholder" role="img" aria-label="Постер отсутствует">🎬</div>
     {% endif %}
