@@ -3,19 +3,30 @@ from account.models import Profile
 from telegram_bot.notifications import send_new_profile_notification
 import logging
 
-# Настройка логирования
 logger = logging.getLogger(__name__)
+
 
 def create_profile(backend, user, *args, **kwargs):
     """
-    Create user profile for social authentication
+    Ensure every user authenticated through a social backend has a profile.
+
+    This step is intentionally idempotent: it also repairs older social-auth
+    accounts that were created before profile creation was added to the pipeline.
     """
-    try:
-        profile, created = Profile.objects.get_or_create(user=user)
-        if created:
-            send_new_profile_notification(user.username)  # Отправляем уведомление с именем пользователя
-    except Exception as e:
-        logger.error(f"Ошибка при создании профиля для пользователя {user.username}: {e}")
+    if user is None:
+        return
+
+    profile, created = Profile.objects.get_or_create(user=user)
+    if created:
+        try:
+            send_new_profile_notification(user.username)
+        except Exception:
+            # A Telegram outage must not prevent a user from signing in.
+            logger.exception(
+                "Не удалось отправить уведомление о регистрации пользователя %s",
+                user.username,
+            )
+
 
 class EmailAuthBackend:
     """
