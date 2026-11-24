@@ -269,7 +269,7 @@ def user_list(request):
     return render(
         request,
         # 'account/user/list.html',
-                  'account/user/list-migration.html',
+                  'account/user/list.html',
         {
         'section': 'people',
         'users': users
