@@ -412,7 +412,7 @@ tr:hover td { background:rgba(255,255,255,.025); }
 
 /* Movie catalog: sidebar filters, legible watch controls and portrait posters */
 .movie-catalog-layout{display:grid;grid-template-columns:minmax(245px,285px) minmax(0,1fr);align-items:start;gap:1.25rem}
-.movie-catalog-sidebar{min-width:0;position:sticky;top:1rem}
+.movie-catalog-sidebar{min-width:0;width:auto;margin:0;position:sticky;top:1rem}
 .movie-catalog-sidebar .filter{margin:0;padding:1.1rem;background:linear-gradient(160deg,rgba(53,211,154,.055),transparent 42%),var(--cinema-surface);border-color:#344454;box-shadow:0 12px 32px rgba(0,0,0,.16)}
 .movie-catalog-sidebar .filter h4{margin:0 0 1rem;padding-bottom:.8rem;border-bottom:1px solid var(--cinema-border);font-size:1.05rem}
 .movie-catalog-sidebar .filter form{display:grid;align-items:stretch;gap:1rem}
