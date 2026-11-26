@@ -445,3 +445,54 @@ tr:hover td { background:rgba(255,255,255,.025); }
 @media(max-width:980px){.movie-catalog-layout{grid-template-columns:minmax(210px,245px) minmax(0,1fr);gap:.9rem}.movie-catalog-main .movie-list>ul{grid-template-columns:1fr}}
 @media(max-width:760px){.movie-catalog-layout{grid-template-columns:1fr}.movie-catalog-sidebar{position:static}.movie-catalog-sidebar .filter form{grid-template-columns:repeat(2,minmax(0,1fr))}.movie-catalog-sidebar .filter h4{grid-column:1/-1}.movie-catalog-sidebar .filter-group{min-width:0}.movie-catalog-sidebar .filter-group:last-child{grid-column:1/-1}}
 @media(max-width:520px){.movie-catalog-sidebar .filter form{grid-template-columns:1fr}.movie-catalog-sidebar .filter-group:last-child{grid-column:auto}.movie-catalog-main .movie-item{gap:.75rem;padding:.8rem}.movie-catalog-main .movie-poster{flex-basis:88px;width:88px}.movie-catalog-main .movie-poster img,.movie-catalog-main .movie-poster-img{width:88px;height:132px}.movie-catalog-main .movie-actions .action-label{display:inline}.movie-catalog-main .movie-actions button.watched,.movie-catalog-main .movie-actions button.recently-watched{flex:1 1 100%}}
+
+
+/* Movie catalog follow-up: override legacy light filter panels and preserve full posters. */
+.movie-catalog-sidebar .filter .filter-group {
+  margin: 0;
+  padding: .85rem;
+  background: #17212b !important;
+  border: 1px solid #2d3b49;
+  border-radius: 10px;
+}
+.movie-catalog-sidebar .filter .filter-group > label,
+.movie-catalog-sidebar .filter .checkbox-label {
+  color: #dce6ef !important;
+}
+.movie-catalog-sidebar .filter .genre-checkboxes {
+  margin-top: .25rem;
+}
+.movie-catalog-sidebar .filter .filter-group input[type="text"] {
+  color: #edf2f7;
+  background: #0c1219;
+}
+.movie-catalog-sidebar .filter .filter-btn {
+  margin: .15rem 0 0;
+  color: #effff8;
+}
+.movie-catalog-main .movie-poster {
+  flex: 0 0 112px;
+  width: 112px;
+  min-height: 168px;
+}
+.movie-catalog-main .movie-poster img,
+.movie-catalog-main .movie-poster-img {
+  width: 112px;
+  height: 168px;
+  aspect-ratio: 2 / 3;
+  object-fit: contain;
+  object-position: center;
+  background: #0b1118;
+}
+@media (max-width: 520px) {
+  .movie-catalog-main .movie-poster {
+    flex-basis: 88px;
+    width: 88px;
+    min-height: 132px;
+  }
+  .movie-catalog-main .movie-poster img,
+  .movie-catalog-main .movie-poster-img {
+    width: 88px;
+    height: 132px;
+  }
+}
