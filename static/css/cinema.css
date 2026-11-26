@@ -409,3 +409,39 @@ tr:hover td { background:rgba(255,255,255,.025); }
 .cinema-auth-footnote{max-width:440px;margin:0;color:var(--cinema-muted);font-size:.76rem;text-align:center}
 @media(max-width:520px){.cinema-auth-page{margin:1rem auto}.cinema-auth-card{padding:1.2rem;border-radius:14px}.cinema-auth-social{grid-template-columns:1fr}.cinema-auth-links{flex-direction:column}.cinema-auth-brand{margin-bottom:1.3rem}}
 @media(prefers-reduced-motion:reduce){.cinema-auth-submit,.cinema-auth-field input{transition:none}}
+
+/* Movie catalog: sidebar filters, legible watch controls and portrait posters */
+.movie-catalog-layout{display:grid;grid-template-columns:minmax(245px,285px) minmax(0,1fr);align-items:start;gap:1.25rem}
+.movie-catalog-sidebar{min-width:0;position:sticky;top:1rem}
+.movie-catalog-sidebar .filter{margin:0;padding:1.1rem;background:linear-gradient(160deg,rgba(53,211,154,.055),transparent 42%),var(--cinema-surface);border-color:#344454;box-shadow:0 12px 32px rgba(0,0,0,.16)}
+.movie-catalog-sidebar .filter h4{margin:0 0 1rem;padding-bottom:.8rem;border-bottom:1px solid var(--cinema-border);font-size:1.05rem}
+.movie-catalog-sidebar .filter form{display:grid;align-items:stretch;gap:1rem}
+.movie-catalog-sidebar .filter-group{display:grid;grid-template-columns:minmax(0,1fr);align-items:stretch;gap:.6rem;padding-bottom:.9rem;border-bottom:1px solid rgba(154,168,182,.13)}
+.movie-catalog-sidebar .filter-group:last-child{padding-bottom:0;border-bottom:0}
+.movie-catalog-sidebar .filter-group>label{display:flex;align-items:center;gap:.55rem;color:#dce5ed;font-size:.88rem}
+.movie-catalog-sidebar input[type=radio],.movie-catalog-sidebar input[type=checkbox]{flex:0 0 auto;width:16px;height:16px;margin:0;accent-color:var(--cinema-accent)}
+.movie-catalog-sidebar .filter-group input[type=text]{width:100%;min-height:42px;background:#0c1219;color:var(--cinema-text);border-color:#354454}
+.movie-catalog-sidebar .filter-group input[type=text]:focus{border-color:var(--cinema-accent);outline:2px solid rgba(53,211,154,.14)}
+.movie-catalog-sidebar .filter-btn{width:100%;min-height:40px;padding:.55rem .7rem;border:1px solid rgba(53,211,154,.32);border-radius:9px;background:#174b3a;color:#eafff5;font-size:.82rem;font-weight:700}
+.movie-catalog-sidebar .filter-btn:hover{background:#20694f;color:#fff;border-color:var(--cinema-accent);transform:none}
+.movie-catalog-sidebar .genre-checkboxes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.55rem .6rem}
+.movie-catalog-sidebar .checkbox-label{display:flex;align-items:flex-start;gap:.4rem;min-width:0;color:#c5d0da;font-size:.78rem;line-height:1.35}
+.movie-catalog-sidebar .checkbox-label input{margin-top:.1rem}
+.movie-catalog-main{min-width:0}
+.movie-catalog-main .sort-options{margin:0 0 1rem}
+.movie-catalog-main .sort-options form{align-items:center}
+.movie-catalog-main .movie-list>ul{grid-template-columns:repeat(auto-fill,minmax(min(100%,390px),1fr))}
+.movie-catalog-main .movie-item{min-height:100%;gap:1rem;background:#121a23}
+.movie-catalog-main .movie-poster{flex:0 0 112px;width:112px}
+.movie-catalog-main .movie-poster img,.movie-catalog-main .movie-poster-img{display:block;width:112px;height:168px;aspect-ratio:2/3;object-fit:cover;object-position:center;border:1px solid rgba(255,255,255,.09);border-radius:8px;background:var(--cinema-surface-raised)}
+.movie-catalog-main .movie-item.watched{background:linear-gradient(115deg,rgba(24,185,129,.19),rgba(18,34,31,.96) 58%),#14221f;border-color:rgba(53,211,154,.58);box-shadow:inset 4px 0 0 var(--cinema-accent),0 8px 24px rgba(0,0,0,.12)}
+.movie-catalog-main .movie-item.watched:hover{border-color:var(--cinema-accent);box-shadow:inset 4px 0 0 var(--cinema-accent),var(--cinema-shadow)}
+.movie-catalog-main .movie-actions button.watched,.movie-catalog-main .movie-actions button.recently-watched{justify-content:flex-start;min-height:40px;padding:.5rem .7rem;background:#263544;border-color:#435568;color:#f0f5fa;font-weight:650}
+.movie-catalog-main .movie-actions button.watched:hover,.movie-catalog-main .movie-actions button.recently-watched:hover{background:#304457;border-color:#7890a6;color:#fff}
+.movie-catalog-main .movie-actions button.watched i,.movie-catalog-main .movie-actions button.recently-watched i{flex:0 0 auto;color:#aebdca}
+.movie-catalog-main .movie-actions button.watched i.fa-check,.movie-catalog-main .movie-actions button.recently-watched i.fa-check{color:var(--cinema-accent)}
+.movie-catalog-main .movie-actions .action-label{display:inline;color:inherit;font-size:.78rem;line-height:1.3}
+.movie-catalog-main .pagination{margin:1.5rem 0 0}
+@media(max-width:980px){.movie-catalog-layout{grid-template-columns:minmax(210px,245px) minmax(0,1fr);gap:.9rem}.movie-catalog-main .movie-list>ul{grid-template-columns:1fr}}
+@media(max-width:760px){.movie-catalog-layout{grid-template-columns:1fr}.movie-catalog-sidebar{position:static}.movie-catalog-sidebar .filter form{grid-template-columns:repeat(2,minmax(0,1fr))}.movie-catalog-sidebar .filter h4{grid-column:1/-1}.movie-catalog-sidebar .filter-group{min-width:0}.movie-catalog-sidebar .filter-group:last-child{grid-column:1/-1}}
+@media(max-width:520px){.movie-catalog-sidebar .filter form{grid-template-columns:1fr}.movie-catalog-sidebar .filter-group:last-child{grid-column:auto}.movie-catalog-main .movie-item{gap:.75rem;padding:.8rem}.movie-catalog-main .movie-poster{flex-basis:88px;width:88px}.movie-catalog-main .movie-poster img,.movie-catalog-main .movie-poster-img{width:88px;height:132px}.movie-catalog-main .movie-actions .action-label{display:inline}.movie-catalog-main .movie-actions button.watched,.movie-catalog-main .movie-actions button.recently-watched{flex:1 1 100%}}
