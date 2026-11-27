@@ -88,7 +88,7 @@
                     <a href="{{ movie.get_absolute_url }}" class="refactor-block refactor-group">
                         <div class="refactor-relative refactor-mb-2">
                             {% if movie.poster %}
-                                {% thumbnail movie.poster "80x120" crop="100%" as im %}
+                                {% thumbnail movie.poster "240x360" as im %}
                                 <img src="{{ im.url }}" alt="{{ movie.title }}"
                                      class="refactor-poster refactor-poster--lg refactor-shadow-md group-hover:refactor-shadow-lg refactor-transition-shadow">
                             {% else %}
@@ -96,9 +96,6 @@
                                     🎬
                                 </div>
                             {% endif %}
-                        </div>
-                        <div class="refactor-text-xs refactor-text-gray-700 group-hover:refactor-text-primary refactor-font-medium refactor-line-clamp-2">
-                            {{ movie.title }}
                         </div>
                     </a>
                 </div>
