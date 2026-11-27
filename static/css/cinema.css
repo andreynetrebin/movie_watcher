@@ -649,3 +649,68 @@ tr:hover td { background:rgba(255,255,255,.025); }
   .content-wrapper > .actions,.content-wrapper > .combined-sidebar { width:100%; margin:0; }
   .content-wrapper > .combined-sidebar { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr)); }
 }
+
+
+/* Home page refinements for the active migration template (refactor-* classes). */
+.refactor-content-wrapper {
+  grid-template-columns:minmax(0,1fr) minmax(330px,390px) !important;
+  gap:1.5rem;
+}
+.refactor-combined-sidebar {
+  width:100% !important;
+  min-width:0;
+  grid-template-columns:minmax(0,1fr);
+}
+.refactor-top-sidebar {
+  width:100%;
+  min-width:0;
+  padding:1.15rem;
+}
+.refactor-top-sidebar h3 { color:#f1f5f9 !important; }
+.refactor-top-info a {
+  display:block;
+  color:#edf2f7 !important;
+  font-size:.92rem;
+  font-weight:650;
+  line-height:1.4;
+  overflow-wrap:anywhere;
+}
+.refactor-top-info a:hover { color:var(--cinema-accent) !important; }
+.refactor-top-meta { color:#b8c5d1 !important; }
+.refactor-top-item { gap:.8rem; }
+.refactor-movies-slider {
+  gap:.65rem;
+  align-items:flex-start;
+  padding:.25rem 0 .8rem;
+}
+.refactor-movie-slide {
+  flex:0 0 96px;
+  width:96px;
+  text-align:center;
+}
+.refactor-movie-slide > a { display:block; width:100%; }
+.refactor-movie-slide .refactor-relative { margin:0 !important; }
+.refactor-movie-slide img,
+.refactor-movie-slide .refactor-poster--lg {
+  display:block;
+  width:96px;
+  height:144px;
+  margin:0 auto;
+  object-fit:contain;
+  object-position:center;
+}
+@media(max-width:1100px) {
+  .refactor-content-wrapper {
+    grid-template-columns:minmax(0,1fr) minmax(300px,340px) !important;
+  }
+}
+@media(max-width:900px) {
+  .refactor-content-wrapper { grid-template-columns:minmax(0,1fr) !important; }
+  .refactor-combined-sidebar { grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr)); }
+}
+@media(max-width:600px) {
+  .refactor-movies-slider { gap:.5rem; }
+  .refactor-movie-slide { flex-basis:88px; width:88px; }
+  .refactor-movie-slide img,
+  .refactor-movie-slide .refactor-poster--lg { width:88px; height:132px; }
+}
