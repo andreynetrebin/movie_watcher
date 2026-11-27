@@ -62,12 +62,11 @@
                     <div class="slider-item">
                         <a href="{{ movie.get_absolute_url }}">
                             {% if movie.poster %}
-                                {% thumbnail movie.poster "80x120" crop="100%" as im %}
+                                {% thumbnail movie.poster "120x180" as im %}
                                 <img src="{{ im.url }}" alt="{{ movie.title }} poster" class="slider-img">
                             {% else %}
                                 <img src="{% static 'images/default_movie_poster.jpg' %}" alt="Default Poster" class="slider-img" style="width: 80px; height: 120px;">
                             {% endif %}
-                            <div class="slider-title">{{ movie.title }}</div>
                         </a>
                     </div>
                 {% endfor %}
