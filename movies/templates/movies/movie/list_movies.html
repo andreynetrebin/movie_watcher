@@ -13,8 +13,13 @@
 </div>
 
 <div class="movie-catalog-layout">
-<div class="sidebar movie-catalog-sidebar">
-    <div class="filter">
+<aside class="sidebar movie-catalog-sidebar">
+    <details class="movie-filter-drawer" open>
+        <summary class="movie-filter-toggle">
+            <span>Фильтры</span>
+            <span class="movie-filter-toggle-hint" aria-hidden="true">Показать / скрыть</span>
+        </summary>
+        <div class="filter">
         <h4>Фильтры</h4>
         <form method="GET" action="">
             <div class="filter-group">
@@ -59,8 +64,9 @@
             </div>
 
         </form>
-    </div>
-</div>
+        </div>
+    </details>
+</aside>
 
 <main class="movie-catalog-main">
 <div class="sort-options">
@@ -187,3 +193,25 @@
 </div>
 </main>
 </div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const drawer = document.querySelector('.movie-filter-drawer');
+    if (!drawer) return;
+    const mobileQuery = window.matchMedia('(max-width: 760px)');
+    const syncDrawer = function () {
+        if (mobileQuery.matches) {
+            drawer.removeAttribute('open');
+        } else {
+            drawer.setAttribute('open', '');
+        }
+    };
+    syncDrawer();
+    if (mobileQuery.addEventListener) {
+        mobileQuery.addEventListener('change', syncDrawer);
+    } else {
+        mobileQuery.addListener(syncDrawer);
+    }
+});
+</script>
