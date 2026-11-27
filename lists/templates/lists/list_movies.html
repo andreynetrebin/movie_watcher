@@ -7,8 +7,10 @@
                 <li class="movie-item {% if movie.id in watched_movies %}watched{% endif %}">
                     <div class="movie-poster">
                         {% if movie.poster %}
-                            <a href="{{ movie.get_absolute_url }}">
-                                <img src='{% thumbnail movie.poster "240x360" as poster %}{{ poster.url }}' alt="{{ movie.title }} постер" class="movie-poster-img">
+                            <a href="{{ movie.get_absolute_url }}" class="cinema-list-poster-link">
+                                {% thumbnail movie.poster "240x360" crop="smart" as poster %}
+                                    <img src="{{ poster.url }}" alt="{{ movie.title }} — постер" class="movie-poster-img cinema-list-poster">
+                                {% endthumbnail %}
                             </a>
                         {% endif %}
                     </div>
