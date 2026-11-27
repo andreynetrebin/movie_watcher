@@ -986,3 +986,60 @@ tr:hover td { background:rgba(255,255,255,.025); }
   object-position:center;
   background:var(--cinema-surface-raised);
 }
+
+
+/* Enforce a portrait poster frame in public list cards. */
+.cinema-list-detail #movie-list .movie-poster {
+  flex:0 0 92px !important;
+  width:92px !important;
+  height:138px !important;
+  min-height:138px !important;
+  overflow:hidden;
+}
+.cinema-list-detail #movie-list .cinema-list-poster-link {
+  display:block;
+  width:92px !important;
+  height:138px !important;
+  overflow:hidden;
+  border-radius:8px;
+  background:#0b1118;
+}
+.cinema-list-detail #movie-list img.cinema-list-poster {
+  display:block !important;
+  width:92px !important;
+  min-width:92px !important;
+  max-width:92px !important;
+  height:138px !important;
+  min-height:138px !important;
+  max-height:138px !important;
+  aspect-ratio:2/3 !important;
+  object-fit:cover !important;
+  object-position:center !important;
+  border-radius:8px;
+}
+@media(max-width:680px) {
+  .cinema-list-detail #movie-list .movie-poster,
+  .cinema-list-detail #movie-list .cinema-list-poster-link {
+    flex-basis:76px !important;
+    width:76px !important;
+    height:114px !important;
+    min-height:114px !important;
+  }
+  .cinema-list-detail #movie-list img.cinema-list-poster {
+    width:76px !important; min-width:76px !important; max-width:76px !important;
+    height:114px !important; min-height:114px !important; max-height:114px !important;
+  }
+}
+@media(max-width:380px) {
+  .cinema-list-detail #movie-list .movie-poster,
+  .cinema-list-detail #movie-list .cinema-list-poster-link {
+    flex-basis:64px !important;
+    width:64px !important;
+    height:96px !important;
+    min-height:96px !important;
+  }
+  .cinema-list-detail #movie-list img.cinema-list-poster {
+    width:64px !important; min-width:64px !important; max-width:64px !important;
+    height:96px !important; min-height:96px !important; max-height:96px !important;
+  }
+}
