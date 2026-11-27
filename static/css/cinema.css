@@ -1043,3 +1043,60 @@ tr:hover td { background:rgba(255,255,255,.025); }
     height:96px !important; min-height:96px !important; max-height:96px !important;
   }
 }
+
+
+/* Explicit poster sizing for director and screenwriter filmography cards. */
+.cinema-person-detail #movie-list .movie-poster {
+  flex:0 0 92px !important;
+  width:92px !important;
+  height:138px !important;
+  min-height:138px !important;
+  overflow:hidden !important;
+}
+.cinema-person-detail #movie-list .cinema-person-poster-link {
+  display:block !important;
+  width:92px !important;
+  height:138px !important;
+  overflow:hidden !important;
+  border-radius:8px;
+  background:#0b1118;
+}
+.cinema-person-detail #movie-list img.cinema-person-poster {
+  display:block !important;
+  width:92px !important;
+  min-width:92px !important;
+  max-width:92px !important;
+  height:138px !important;
+  min-height:138px !important;
+  max-height:138px !important;
+  aspect-ratio:2/3 !important;
+  object-fit:cover !important;
+  object-position:center !important;
+  border-radius:8px;
+}
+@media(max-width:680px) {
+  .cinema-person-detail #movie-list .movie-poster,
+  .cinema-person-detail #movie-list .cinema-person-poster-link {
+    flex-basis:76px !important;
+    width:76px !important;
+    height:114px !important;
+    min-height:114px !important;
+  }
+  .cinema-person-detail #movie-list img.cinema-person-poster {
+    width:76px !important; min-width:76px !important; max-width:76px !important;
+    height:114px !important; min-height:114px !important; max-height:114px !important;
+  }
+}
+@media(max-width:380px) {
+  .cinema-person-detail #movie-list .movie-poster,
+  .cinema-person-detail #movie-list .cinema-person-poster-link {
+    flex-basis:64px !important;
+    width:64px !important;
+    height:96px !important;
+    min-height:96px !important;
+  }
+  .cinema-person-detail #movie-list img.cinema-person-poster {
+    width:64px !important; min-width:64px !important; max-width:64px !important;
+    height:96px !important; min-height:96px !important; max-height:96px !important;
+  }
+}
