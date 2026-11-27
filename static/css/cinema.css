@@ -741,3 +741,146 @@ tr:hover td { background:rgba(255,255,255,.025); }
 .refactor-top-sidebar .refactor-top-meta {
   color:#b8c5d1 !important;
 }
+
+
+/* Keep movie cards in public lists visually consistent with director filmography cards. */
+.cinema-list-detail #movie-list .movie-list > ul {
+  grid-template-columns:repeat(auto-fill,minmax(min(100%,420px),1fr));
+  align-items:stretch;
+}
+.cinema-list-detail #movie-list .movie-item {
+  height:100%;
+  min-width:0;
+  align-items:flex-start;
+  gap:1rem;
+  padding:1rem;
+  background:var(--cinema-surface);
+  border:1px solid var(--cinema-border);
+  border-radius:var(--cinema-radius);
+}
+.cinema-list-detail #movie-list .movie-item.watched {
+  background:rgba(53,211,154,.075);
+  border-color:rgba(53,211,154,.35);
+}
+.cinema-list-detail #movie-list .movie-poster {
+  flex:0 0 92px;
+  width:92px;
+  margin:0;
+}
+.cinema-list-detail #movie-list .movie-poster-img {
+  display:block;
+  width:92px;
+  height:138px;
+  aspect-ratio:2/3;
+  object-fit:contain;
+  object-position:center;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:9px;
+  background:var(--cinema-surface-raised);
+}
+.cinema-list-detail #movie-list .movie-info {
+  flex:1 1 auto;
+  min-width:0;
+  text-align:left;
+}
+.cinema-list-detail #movie-list .movie-info h2 {
+  margin:0 0 .45rem;
+  font-size:1.05rem;
+  line-height:1.35;
+}
+.cinema-list-detail #movie-list .movie-info h2 a {
+  color:var(--cinema-text);
+  font-weight:750;
+}
+.cinema-list-detail #movie-list .movie-info p {
+  margin:.3rem 0;
+  color:var(--cinema-muted);
+  font-size:.86rem;
+  line-height:1.5;
+}
+.cinema-list-detail #movie-list .movie-info p a {
+  color:var(--cinema-accent);
+}
+.cinema-list-detail #movie-list .movie-actions {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:.4rem;
+  margin-top:.8rem;
+}
+.cinema-list-detail #movie-list .movie-actions button {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:.4rem;
+  min-height:38px;
+  padding:.45rem .65rem;
+  border:1px solid var(--cinema-border);
+  border-radius:9px;
+  background:var(--cinema-surface-hover);
+  color:var(--cinema-text);
+  font-size:.82rem;
+}
+.cinema-list-detail #movie-list .movie-actions button:hover {
+  border-color:rgba(53,211,154,.55);
+  background:rgba(53,211,154,.10);
+  color:var(--cinema-accent);
+}
+.cinema-list-detail #movie-list .movie-actions button i.active {
+  color:var(--cinema-accent);
+}
+.cinema-list-detail #movie-list .movie-actions button.watched,
+.cinema-list-detail #movie-list .movie-actions button.recently-watched {
+  justify-content:flex-start;
+  min-height:40px;
+  padding:.5rem .7rem;
+  background:#263544;
+  border-color:#435568;
+  color:#f0f5fa;
+  font-weight:650;
+}
+.cinema-list-detail #movie-list .movie-actions button.watched:hover,
+.cinema-list-detail #movie-list .movie-actions button.recently-watched:hover {
+  background:#304457;
+  border-color:#7890a6;
+  color:#fff;
+}
+.cinema-list-detail #movie-list .movie-actions button.watched i,
+.cinema-list-detail #movie-list .movie-actions button.recently-watched i {
+  color:#aebdca;
+}
+.cinema-list-detail #movie-list .movie-actions button.watched i.fa-check,
+.cinema-list-detail #movie-list .movie-actions button.recently-watched i.fa-check {
+  color:var(--cinema-accent);
+}
+.cinema-list-detail #movie-list .movie-actions .action-label {
+  display:inline;
+  color:inherit;
+  font-size:.78rem;
+  line-height:1.3;
+}
+.cinema-list-detail #movie-list .kinopoisk-link {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:32px;
+  min-height:36px;
+}
+.cinema-list-detail #movie-list .kinopoisk-link img {
+  display:block;
+  width:28px;
+  height:28px;
+  object-fit:contain;
+}
+@media(max-width:680px) {
+  .cinema-list-detail #movie-list .movie-item { gap:.8rem; padding:.8rem; }
+  .cinema-list-detail #movie-list .movie-poster { flex-basis:76px; width:76px; }
+  .cinema-list-detail #movie-list .movie-poster-img { width:76px; height:114px; }
+  .cinema-list-detail #movie-list .movie-actions .action-label { display:inline; }
+  .cinema-list-detail #movie-list .movie-actions button.watched,
+  .cinema-list-detail #movie-list .movie-actions button.recently-watched { flex:1 1 100%; }
+}
+@media(max-width:380px) {
+  .cinema-list-detail #movie-list .movie-poster { flex-basis:64px; width:64px; }
+  .cinema-list-detail #movie-list .movie-poster-img { width:64px; height:96px; }
+}
