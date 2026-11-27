@@ -9,8 +9,7 @@
                         {% if movie.poster %}
                             <a href="{{ movie.get_absolute_url }}" class="cinema-list-poster-link">
                                 {% thumbnail movie.poster "240x360" crop="smart" as poster %}
-                                    <img src="{{ poster.url }}" alt="{{ movie.title }} — постер" class="movie-poster-img cinema-list-poster">
-                                {% endthumbnail %}
+                                <img src="{{ poster.url }}" alt="{{ movie.title }} — постер" class="movie-poster-img cinema-list-poster">
                             </a>
                         {% endif %}
                     </div>
