@@ -714,3 +714,30 @@ tr:hover td { background:rgba(255,255,255,.025); }
   .refactor-movie-slide img,
   .refactor-movie-slide .refactor-poster--lg { width:88px; height:132px; }
 }
+
+
+/* Keep ranking rows dark and readable on hover/focus (legacy light hover override). */
+.refactor-top-sidebar .refactor-top-item,
+.refactor-top-sidebar .refactor-top-item:hover,
+.refactor-top-sidebar .refactor-top-item:focus-within {
+  background:var(--cinema-surface) !important;
+  color:var(--cinema-text) !important;
+}
+.refactor-top-sidebar .refactor-top-item:hover {
+  border-radius:8px;
+  box-shadow:inset 3px 0 0 var(--cinema-accent);
+}
+.refactor-top-sidebar .refactor-top-item a,
+.refactor-top-sidebar .refactor-top-item a:hover,
+.refactor-top-sidebar .refactor-top-item a:focus-visible {
+  background:transparent !important;
+  color:#edf2f7 !important;
+  text-decoration:none;
+}
+.refactor-top-sidebar .refactor-top-item a:hover,
+.refactor-top-sidebar .refactor-top-item a:focus-visible {
+  color:var(--cinema-accent) !important;
+}
+.refactor-top-sidebar .refactor-top-meta {
+  color:#b8c5d1 !important;
+}
