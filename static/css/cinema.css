@@ -533,3 +533,119 @@ tr:hover td { background:rgba(255,255,255,.025); }
   .movie-catalog-sidebar .filter form { grid-template-columns:1fr; }
   .movie-catalog-sidebar .filter-group:last-child { grid-column:auto; }
 }
+
+
+/* Home page: give ranking cards enough room and improve text contrast. */
+.content-wrapper {
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) minmax(290px,340px);
+  align-items:start;
+  gap:1.25rem;
+  width:100%;
+}
+.content-wrapper > .actions { min-width:0; width:auto; margin:0; }
+.content-wrapper > .combined-sidebar {
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  gap:1rem;
+  min-width:0;
+  width:100%;
+  margin:0;
+  padding:0;
+}
+.top-movies-sidebar,
+.top-users-sidebar,
+.top-lists-sidebar {
+  width:100%;
+  min-width:0;
+  padding:1rem;
+  color:var(--cinema-text);
+  background:var(--cinema-surface);
+  border:1px solid var(--cinema-border);
+  border-radius:14px;
+}
+.top-movies-sidebar h3,
+.top-users-sidebar h3,
+.top-lists-sidebar h3 {
+  margin:0 0 .85rem;
+  color:var(--cinema-text);
+}
+.top-movies-list,.top-users-list,.top-users-lists {
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+.top-movie-item,.top-user-item,.top-list-item {
+  display:flex;
+  align-items:center;
+  gap:.75rem;
+  min-width:0;
+  padding:.65rem 0;
+  border-bottom:1px solid var(--cinema-border);
+}
+.top-movie-item:last-child,.top-user-item:last-child,.top-list-item:last-child { border-bottom:0; }
+.top-movie-item .movie-poster { flex:0 0 42px; width:42px; }
+.top-movie-item .movie-poster img { display:block; width:42px; height:63px; object-fit:cover; border-radius:6px; }
+.top-movie-item .movie-info,.top-user-item .user-info,.top-list-item .list-info {
+  flex:1 1 auto;
+  min-width:0;
+  margin:0;
+  color:var(--cinema-text);
+  text-align:left;
+  overflow-wrap:anywhere;
+}
+.top-movie-item .movie-info a,.top-user-item .user-info a,.top-list-item .list-info a,
+.top-lists-sidebar .list-title {
+  color:#edf2f7;
+  font-weight:650;
+  line-height:1.4;
+}
+.top-movie-item .movie-info a:hover,.top-user-item .user-info a:hover,.top-list-item .list-info a:hover { color:var(--cinema-accent); }
+.top-movie-item .likes-count,.top-user-item .points,.top-list-item .likes-count {
+  display:block;
+  margin-top:.2rem;
+  color:#aebdca;
+  font-size:.8rem;
+}
+.top-movies-sidebar > p,.top-users-sidebar > p,.top-lists-sidebar > p { margin:.75rem 0 0; font-size:.82rem; }
+.top-movies-sidebar > p a,.top-users-sidebar > p a,.top-lists-sidebar > p a { color:var(--cinema-accent); }
+
+/* Recently added slider: compact, evenly aligned portrait posters without duplicate captions. */
+.latest-movies-slider { width:100%; min-width:0; overflow:hidden; }
+.latest-movies-slider .slider {
+  display:flex;
+  align-items:flex-start;
+  justify-content:flex-start;
+  gap:12px;
+  padding:12px;
+}
+.latest-movies-slider .slider-item {
+  flex:0 0 80px;
+  width:80px;
+  margin:0;
+  text-align:center;
+}
+.latest-movies-slider .slider-item a {
+  display:block;
+  width:100%;
+}
+.latest-movies-slider .slider-img {
+  display:block;
+  width:80px;
+  height:120px;
+  margin:0 auto;
+  object-fit:contain;
+  object-position:center;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:8px;
+  background:#0b1118;
+}
+.latest-movies-slider .slider-title { display:none !important; }
+@media(max-width:900px) {
+  .content-wrapper { grid-template-columns:minmax(0,1fr) minmax(260px,300px); }
+}
+@media(max-width:768px) {
+  .content-wrapper { display:flex !important; flex-direction:column; gap:1rem; }
+  .content-wrapper > .actions,.content-wrapper > .combined-sidebar { width:100%; margin:0; }
+  .content-wrapper > .combined-sidebar { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr)); }
+}
