@@ -3,7 +3,7 @@
 {% load thumbnail %}
 {% block title %}{{ movie_list.title }}{% endblock %}
 {% block content %}
-<section class="cinema-page">
+<section class="cinema-page cinema-list-detail">
 <nav class="cinema-breadcrumb" aria-label="Навигация"><a href="{% url 'lists:users_movie_lists' %}">Пользовательские списки</a><span>/</span><span>{{ movie_list.title }}</span></nav>
 <header class="cinema-list-detail-header"><div class="cinema-list-detail-header__main"><span class="cinema-eyebrow">ПОДБОРКА СООБЩЕСТВА</span><h1>{{ movie_list.title }}</h1><p class="cinema-page__lead">Автор: <a href="{{ movie_list.user.get_absolute_url }}">{{ movie_list.user.get_full_name|default:movie_list.user.username }}</a></p><div class="cinema-list-detail-stats"><span><strong>{{ movies|length }}</strong> фильмов</span><span><strong>{{ movie_list.points }}</strong> баллов</span><span><strong>{{ movie_list.users_like.count }}</strong> лайков</span></div></div>
 <div class="cinema-list-detail-header__actions">{% if can_edit %}<a href="{% url 'lists:view_movie_list' movie_list.id %}?edit=true" class="cinema-button cinema-button--secondary">Редактировать список</a>{% endif %}{% if request.user.is_authenticated and can_like %}<form action="{% url 'lists:like_movie_list' movie_list.id %}" method="post">{% csrf_token %}{% if request.user in movie_list.users_like.all %}<button type="submit" class="cinema-button cinema-button--secondary">♥ Убрать лайк</button>{% else %}<button type="submit" class="cinema-button">♥ Нравится</button>{% endif %}</form>{% endif %}</div></header>
