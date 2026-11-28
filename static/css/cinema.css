@@ -1599,3 +1599,168 @@ tr:hover td { background:rgba(255,255,255,.025); }
     grid-template-columns:minmax(0,1fr) !important;
   }
 }
+
+
+/* Movie premieres page — scoped Modern Dark Cinema styling. */
+.cinema-premieres {
+  width: min(100%, 980px);
+  margin: 0 auto;
+  color: var(--cinema-text);
+}
+.cinema-premieres__header {
+  margin: 0 auto 1.8rem;
+  text-align: center;
+}
+.cinema-premieres__eyebrow {
+  display: inline-block;
+  margin-bottom: .35rem;
+  color: var(--cinema-accent);
+  font-size: .75rem;
+  font-weight: 800;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+.cinema-premieres__header h1 {
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto .55rem;
+  padding-bottom: .65rem;
+  border-bottom: 1px solid var(--cinema-border);
+  color: var(--cinema-text);
+  font-size: clamp(1.65rem, 3vw, 2.25rem);
+}
+.cinema-premieres__header p {
+  margin: 0;
+  color: var(--cinema-muted);
+  font-size: .92rem;
+}
+.cinema-premieres__list {
+  display: grid;
+  gap: 1rem;
+}
+.cinema-premiere-card {
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr) 82px;
+  align-items: start;
+  gap: 1.1rem;
+  width: 100%;
+  min-width: 0;
+  padding: 1rem;
+  background: linear-gradient(135deg, #151e28 0%, #121820 100%);
+  border: 1px solid var(--cinema-border);
+  border-radius: 14px;
+  box-shadow: 0 8px 22px rgba(0,0,0,.14);
+  transition: border-color .18s ease, transform .18s ease, box-shadow .18s ease;
+}
+.cinema-premiere-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(53,211,154,.55);
+  box-shadow: 0 14px 30px rgba(0,0,0,.22);
+}
+.cinema-premiere-card__poster {
+  display: block;
+  width: 104px;
+  height: 156px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 9px;
+  background: #0b1118;
+}
+.cinema-premiere-card__poster img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+.cinema-premiere-card__no-poster {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  padding: .5rem;
+  color: var(--cinema-muted);
+  font-size: .8rem;
+  text-align: center;
+}
+.cinema-premiere-card__details { min-width: 0; }
+.cinema-premiere-card__title {
+  margin: 0 0 .45rem;
+  font-size: clamp(1rem, 1.8vw, 1.25rem);
+  line-height: 1.35;
+}
+.cinema-premiere-card__title a { color: var(--cinema-text); }
+.cinema-premiere-card__title a:hover { color: var(--cinema-accent); }
+.cinema-premiere-card__details p {
+  margin: .35rem 0;
+  color: var(--cinema-muted);
+  font-size: .87rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.cinema-premiere-card__details strong {
+  color: #dce5ed;
+  font-weight: 700;
+}
+.cinema-premiere-card__date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .1rem;
+  min-height: 82px;
+  padding: .6rem .4rem;
+  background: rgba(53,211,154,.08);
+  border: 1px solid rgba(53,211,154,.24);
+  border-radius: 10px;
+  text-align: center;
+}
+.cinema-premiere-card__day {
+  color: var(--cinema-accent);
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+}
+.cinema-premiere-card__month {
+  color: #c3d0dc;
+  font-size: .78rem;
+  text-transform: capitalize;
+}
+.cinema-premieres__empty {
+  padding: 2rem;
+  color: var(--cinema-muted);
+  background: var(--cinema-surface);
+  border: 1px dashed var(--cinema-border);
+  border-radius: 12px;
+  text-align: center;
+}
+@media (max-width: 640px) {
+  .cinema-premieres__header { margin-bottom: 1.2rem; }
+  .cinema-premiere-card {
+    grid-template-columns: 76px minmax(0,1fr);
+    gap: .8rem;
+    padding: .8rem;
+  }
+  .cinema-premiere-card__poster {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    width: 76px;
+    height: 114px;
+  }
+  .cinema-premiere-card__details { grid-column: 2; grid-row: 1 / span 2; }
+  .cinema-premiere-card__date {
+    grid-column: 1;
+    grid-row: 3;
+    min-height: 0;
+    padding: .35rem .25rem;
+  }
+  .cinema-premiere-card__day { font-size: 1.1rem; }
+  .cinema-premiere-card__month { font-size: .72rem; }
+  .cinema-premiere-card__details p { font-size: .8rem; }
+}
+@media (max-width: 380px) {
+  .cinema-premiere-card { grid-template-columns: 64px minmax(0,1fr); gap: .65rem; }
+  .cinema-premiere-card__poster { width: 64px; height: 96px; }
+  .cinema-premiere-card__title { font-size: .95rem; }
+}
