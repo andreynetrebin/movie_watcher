@@ -112,22 +112,22 @@ def add_movies_to_list(request, list_id):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
+    template_context = {
+        'movie_list': movie_list,
+        'page_obj': page_obj,
+        'search_query': search_query,
+        'sort_by': sort_by,
+        'order': order,
+    }
+
     if request.method == 'POST':
         selected_movies = request.POST.getlist('movies')
         for movie_id in selected_movies:
             movie_list.movies.add(Movie.objects.get(id=movie_id))
         # Остаемся на той же странице после добавления
-        return render(request, 'lists/add_movies_to_list.html', {
-            'movie_list': movie_list,
-            'page_obj': page_obj,
-            'search_query': search_query,
-        })
+        return render(request, 'lists/add_movies_to_list.html', template_context)
 
-    return render(request, 'lists/add_movies_to_list.html', {
-        'movie_list': movie_list,
-        'page_obj': page_obj,
-        'search_query': search_query,
-    })
+    return render(request, 'lists/add_movies_to_list.html', template_context)
 
 def view_movie_list(request, list_id):
     movie_list = get_object_or_404(MovieList, id=list_id)
