@@ -1764,3 +1764,101 @@ tr:hover td { background:rgba(255,255,255,.025); }
   .cinema-premiere-card__poster { width: 64px; height: 96px; }
   .cinema-premiere-card__title { font-size: .95rem; }
 }
+
+
+/* Premiere detail page. */
+.cinema-premiere-detail__back {
+  display:inline-flex;
+  margin:0 0 1rem;
+  padding:.5rem .75rem;
+  color:var(--cinema-muted);
+  background:var(--cinema-surface);
+  border:1px solid var(--cinema-border);
+  border-radius:9px;
+}
+.cinema-premiere-detail__back:hover {
+  color:var(--cinema-accent);
+  border-color:var(--cinema-accent);
+}
+.cinema-premiere-detail__card {
+  display:grid;
+  grid-template-columns:minmax(180px,280px) minmax(0,1fr);
+  gap:clamp(1.2rem,3vw,2rem);
+  padding:clamp(1rem,3vw,2rem);
+  background:var(--cinema-surface);
+  border:1px solid var(--cinema-border);
+  border-radius:16px;
+}
+.cinema-premiere-detail__poster {
+  display:grid;
+  place-items:start center;
+  min-width:0;
+}
+.cinema-premiere-detail__poster img {
+  display:block;
+  width:100%;
+  max-width:280px;
+  max-height:420px;
+  object-fit:contain;
+  border-radius:11px;
+  background:#0b1118;
+}
+.cinema-premiere-detail__poster span {
+  display:grid;
+  width:100%;
+  min-height:220px;
+  place-items:center;
+  color:var(--cinema-muted);
+  background:var(--cinema-surface-raised);
+  border-radius:11px;
+}
+.cinema-premiere-detail__content { min-width:0; }
+.cinema-premiere-detail__content h1 {
+  margin:.25rem 0 1rem;
+  color:var(--cinema-text);
+}
+.cinema-premiere-detail__content > p {
+  margin:.55rem 0;
+  color:var(--cinema-muted);
+  overflow-wrap:anywhere;
+}
+.cinema-premiere-detail__content > p strong {
+  color:#dce5ed;
+}
+.cinema-premiere-detail__release {
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:.5rem .8rem;
+  margin:0 0 1rem;
+  padding:.75rem .9rem;
+  background:rgba(53,211,154,.08);
+  border:1px solid rgba(53,211,154,.24);
+  border-radius:10px;
+}
+.cinema-premiere-detail__release span { color:var(--cinema-muted); }
+.cinema-premiere-detail__release strong { color:var(--cinema-accent); }
+.cinema-premiere-detail__description {
+  margin-top:1.3rem;
+  padding-top:1rem;
+  border-top:1px solid var(--cinema-border);
+}
+.cinema-premiere-detail__description h2 {
+  margin:0 0 .5rem;
+  color:var(--cinema-text);
+}
+.cinema-premiere-detail__description p { color:#c3cdd7; }
+.cinema-premiere-detail__external {
+  display:inline-flex;
+  margin-top:1rem;
+  padding:.65rem .9rem;
+  color:#062117;
+  background:var(--cinema-accent);
+  border-radius:9px;
+  font-weight:700;
+}
+.cinema-premiere-detail__external:hover { color:#062117; background:#63e6b2; }
+@media(max-width:680px) {
+  .cinema-premiere-detail__card { grid-template-columns:minmax(0,1fr); }
+  .cinema-premiere-detail__poster img { max-width:190px; max-height:285px; }
+}
