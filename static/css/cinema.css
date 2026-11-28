@@ -1476,3 +1476,126 @@ tr:hover td { background:rgba(255,255,255,.025); }
     padding:.85rem !important;
   }
 }
+
+
+/* Public community profile: prevent the statistics grid from overflowing its card. */
+.cinema-public-profile #aboutme > .refactor-grid {
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  gap:1rem !important;
+  align-items:start;
+}
+.cinema-public-profile #aboutme > .refactor-grid > .refactor-card {
+  min-width:0;
+  max-width:100%;
+  overflow:hidden;
+}
+.cinema-public-profile #aboutme .refactor-card__body,
+.cinema-public-profile #aboutme .refactor-card__body > div,
+.cinema-public-profile #aboutme .refactor-space-y-4 {
+  min-width:0;
+}
+.cinema-public-profile #aboutme .refactor-grid.refactor-grid-cols-2 {
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:.65rem !important;
+  width:100%;
+  max-width:100%;
+}
+.cinema-public-profile .refactor-stat-card {
+  display:flex;
+  align-items:center;
+  gap:.65rem;
+  width:100%;
+  min-width:0;
+  max-width:100%;
+  min-height:86px;
+  padding:.8rem;
+  overflow:hidden;
+  color:var(--cinema-text) !important;
+  background:var(--cinema-surface-raised) !important;
+  border:1px solid var(--cinema-border) !important;
+  border-radius:11px;
+  text-decoration:none;
+  box-shadow:none;
+}
+.cinema-public-profile .refactor-stat-card:hover {
+  background:var(--cinema-surface-hover) !important;
+  border-color:rgba(53,211,154,.55) !important;
+  color:var(--cinema-text) !important;
+}
+.cinema-public-profile .refactor-stat-card__icon {
+  display:grid;
+  flex:0 0 38px;
+  width:38px;
+  height:38px;
+  place-items:center;
+  border-radius:9px;
+  background:rgba(53,211,154,.12);
+  font-size:1.15rem;
+}
+.cinema-public-profile .refactor-stat-card__content { min-width:0; }
+.cinema-public-profile .refactor-stat-card__value {
+  color:var(--cinema-text) !important;
+  font-size:1.45rem;
+  font-weight:800;
+  line-height:1.1;
+}
+.cinema-public-profile .refactor-stat-card__label {
+  margin-top:.25rem;
+  color:var(--cinema-muted) !important;
+  font-size:.75rem;
+  line-height:1.3;
+  overflow-wrap:anywhere;
+}
+.cinema-public-profile #activity .refactor-recent-action,
+.cinema-public-profile #comments .refactor-comment-item {
+  min-width:0;
+  overflow:hidden;
+  background:var(--cinema-surface-raised) !important;
+  border:1px solid var(--cinema-border) !important;
+  border-radius:11px;
+  color:var(--cinema-text) !important;
+}
+.cinema-public-profile #activity .refactor-recent-action a,
+.cinema-public-profile #comments .refactor-comment-item a {
+  overflow-wrap:anywhere;
+}
+.cinema-public-profile #activity .refactor-bg-white,
+.cinema-public-profile #activity [class*="refactor-bg-gray-"] {
+  background:var(--cinema-surface-raised) !important;
+}
+.cinema-public-profile #activity .refactor-flex-1,
+.cinema-public-profile #comments .refactor-flex-1 { min-width:0; }
+.cinema-public-profile #comments .refactor-comment-item .refactor-text-gray-700,
+.cinema-public-profile #activity .refactor-recent-action .refactor-text-gray-700 {
+  color:#d5dee8 !important;
+}
+.cinema-public-profile #aboutme .refactor-recent-action {
+  min-width:0;
+  overflow-wrap:anywhere;
+}
+@media(max-width:1100px) {
+  .cinema-public-profile #aboutme > .refactor-grid {
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  }
+  .cinema-public-profile #aboutme > .refactor-grid > .refactor-card:last-child {
+    grid-column:1 / -1;
+  }
+}
+@media(max-width:680px) {
+  .cinema-public-profile #aboutme > .refactor-grid {
+    grid-template-columns:minmax(0,1fr) !important;
+    gap:.85rem !important;
+  }
+  .cinema-public-profile #aboutme > .refactor-grid > .refactor-card:last-child {
+    grid-column:auto;
+  }
+  .cinema-public-profile .refactor-stat-card { min-height:76px; padding:.7rem; }
+  .cinema-public-profile .refactor-stat-card__value { font-size:1.25rem; }
+}
+@media(max-width:390px) {
+  .cinema-public-profile #aboutme .refactor-grid.refactor-grid-cols-2 {
+    grid-template-columns:minmax(0,1fr) !important;
+  }
+}
