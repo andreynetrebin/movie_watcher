@@ -1,125 +1,30 @@
-<!-- lists/view_movie_list.html -->
 {% extends "base.html" %}
 {% load static %}
 {% load thumbnail %}
+{% block title %}Редактирование — {{ movie_list.title }}{% endblock %}
 {% block content %}
-<div class="container">
-    <h2>Список фильмов: {{ movie_list.title }}</h2>
-
-    <h3>Фильмы в списке:</h3>
-    <div class="movie-container">
-        <div class="movie-list">
-            <ul>
-                {% for movie in movie_list.movies.all %}
-                    <li class="movie-item">
-                        <div class="movie-info">
-                            {% if movie.poster %}
-                                <img src="{% thumbnail movie.poster "50x75" crop="100%" %}" alt="{{ movie.title }} постер" class="movie-poster-img">
-                            {% endif %}
-                            <div class="movie-details">
-                                <span class="movie-title">{{ movie.title }} ({{ movie.year }})</span>
-                            </div>
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
+<section class="cinema-page cinema-list-editor cinema-list-manage">
+  <nav class="cinema-breadcrumb" aria-label="Навигация"><a href="{% url 'lists:users_movie_lists' %}">Пользовательские списки</a><span>/</span><span>{{ movie_list.title }}</span><span>/</span><span>Редактирование</span></nav>
+  <header class="cinema-editor-heading"><div><span class="cinema-eyebrow">ВАША ПОДБОРКА</span><h1>{{ movie_list.title }}</h1><p class="cinema-page__lead">Фильмы в списке: {{ movie_list.movies.count }}</p></div></header>
+  <section class="cinema-editor-panel">
+    <div class="cinema-manage-grid">
+      {% for movie in movie_list.movies.all %}
+        <article class="cinema-manage-card">
+          {% if movie.poster %}{% thumbnail movie.poster "240x360" crop="smart" as poster %}<img src="{{ poster.url }}" alt="{{ movie.title }} — постер" loading="lazy">{% else %}<span class="cinema-picker-placeholder">🎬</span>{% endif %}
+          <div class="cinema-manage-card__title">{{ movie.title }} <span>({{ movie.year }})</span></div>
+        </article>
+      {% empty %}
+        <p class="cinema-empty-state">В списке пока нет фильмов. Добавьте фильмы, чтобы наполнить подборку.</p>
+      {% endfor %}
     </div>
-
-    <form method="post" action="{% url 'lists:view_movie_list' list_id=movie_list.id %}">
+    <div class="cinema-manage-actions">
+      <form method="post" action="{% url 'lists:view_movie_list' list_id=movie_list.id %}">
         {% csrf_token %}
-        <button type="submit" name="save_list" class="btn btn-success">Сохранить список</button>
-        <button type="submit" name="clear_list" class="btn btn-danger">Очистить список</button>
-    </form>
-
-    <a href="{% url 'lists:add_movies_to_list' list_id=movie_list.id %}" class="btn btn-primary">Добавить фильмы в список</a>
-</div>
-
-<style>
-.container {
-    max-width: 800px; /* Максимальная ширина контейнера */
-    margin: 0 auto; /* Центрирование контейнера */
-    padding: 20px; /* Отступы внутри контейнера */
-    background-color: #f8f9fa; /* Светлый фон */
-    border-radius: 8px; /* Закругленные углы */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Тень для контейнера */
-}
-
-.movie-container {
-    margin-top: 20px;
-}
-
-.movie-list {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.movie-item {
-    margin: 10px;
-    flex: 1 0 30%; /* Ширина элемента списка */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    padding: 10px;
-    background-color: #fff;
-    display: flex; /* Используем flexbox для выравнивания */
-    align-items: center; /* Выравнивание по центру */
-}
-
-.movie-info {
-    display: flex; /* Используем flexbox для выравнивания */
-    align-items: center; /* Выравнивание по центру */
-}
-
-.movie-poster-img {
-    width: 140px; /* Ширина постера */
-    height: 180px; /* Высота постера */
-    object-fit: cover; /* Обеспечивает обрезку изображения, чтобы оно соответствовало заданным размерам */
-    margin-right: 10px; /* Отступ справа от постера */
-}
-
-.movie-details {
-    flex: 1; /* Позволяет тексту занимать оставшееся пространство */
-}
-
-.movie -title {
-    font-weight: bold; /* Жирный шрифт для названия фильма */
-}
-
-.btn {
-    margin-top: 20px;
-    padding: 10px 15px; /* Отступы внутри кнопки */
-    font-size: 16px; /* Размер шрифта */
-    border-radius: 5px; /* Закругленные углы */
-}
-
-.btn-success {
-    background-color: #28a745; /* Зеленый цвет для кнопки "Сохранить список" */
-    color: white; /* Цвет текста */
-    border: none; /* Убираем границу */
-}
-
-.btn-success:hover {
-    background-color: #218838; /* Цвет фона при наведении */
-}
-
-.btn-danger {
-    background-color: #dc3545; /* Красный цвет для кнопки "Очистить список" */
-    color: white; /* Цвет текста */
-    border: none; /* Убираем границу */
-}
-
-.btn-danger:hover {
-    background-color: #c82333; /* Цвет фона при наведении */
-}
-
-.btn-primary {
-    background-color: #007bff; /* Цвет фона для кнопки "Добавить фильмы в список" */
-    color: white; /* Цвет текста */
-    border: none; /* Убираем границу */
-}
-
-.btn-primary:hover {
-    background-color: #0056b3; /* Цвет фона при наведении */
-}
-</style>
+        <button type="submit" name="save_list" class="cinema-button">Сохранить список</button>
+        <button type="submit" name="clear_list" class="cinema-button cinema-button--danger" onclick="return confirm('Очистить список? Все фильмы будут удалены из подборки.');">Очистить список</button>
+      </form>
+      <a href="{% url 'lists:add_movies_to_list' list_id=movie_list.id %}" class="cinema-button cinema-button--secondary">Добавить фильмы</a>
+    </div>
+  </section>
+</section>
 {% endblock %}

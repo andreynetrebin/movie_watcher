@@ -1,192 +1,25 @@
-<!-- lists/movie_list_detail.html -->
 {% extends "base.html" %}
 {% load static %}
 {% load thumbnail %}
 {% block title %}{{ movie_list.title }}{% endblock %}
 {% block content %}
-<div class="movie-list-detail">
-    <h2>Название списка: {{ movie_list.title }}</h2>
-    <h3>Автор: {{ movie_list.user.get_full_name }}</h3>
-    <hr>
-    <div class="movie-list-info">
-        {% if can_edit %}
-            <a href="{% url 'lists:view_movie_list' movie_list.id %}?edit=true" class="btn btn-secondary">Редактировать список</a> <!-- Ссылка на редактирование -->
-        {% endif %}
-        <p>Баллы: {{ movie_list.points }}</p>
-        <p>Лайки: {{ movie_list.users_like.count }}</p>
-        <!-- Кнопка "Нравится" -->
-        {% if request.user.is_authenticated and can_like %}
-            {% if request.user in movie_list.users_like.all %}
-                <form action="{% url 'lists:like_movie_list' movie_list.id %}" method="post" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">Уже не нравится</button>
-                </form>
-            {% else %}
-                <form action="{% url 'lists:like_movie_list' movie_list.id %}" method="post" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-primary">Нравится</button>
-                </form>
-            {% endif %}
-        {% endif %}
-        <br>
-        <br>
-        <a href="{% url 'lists:users_movie_lists' %}" class="btn btn-light">Назад к списку фильмов</a>
-    </div>
-</div>
-
-<!-- Кнопки для переключения представления -->
-<div class="view-toggle">
-    <button id="grid-view" class="active">Сеткой</button>
-    <button id="table-view">Таблицей</button>
-</div>
-
-<div id="movie-list" class="grid-view">
-    {% include "lists/list_movies.html" %}
-</div>
-
-<div id="movie-list-table" class="table-view" style="display: none;">
-    <table>
-        <thead>
-            <tr>
-                <th>#</th> <!-- Нумерация -->
-                <th>Постер</th>
-                <th>Название фильма</th>
-                <th>Оригинальное название</th>
-                <th>Год выпуска</th>
-                <th>Адрес в <img src="{% static 'images/icon-kp.png' %}" alt="Кинопоиск" class="icon"> Кинопоиске</th> <!-- Новая колонка -->
-            </tr>
-        </thead>
-        <tbody>
-            {% for movie in movies %}
-                <tr class="{% if movie.id in watched_movies %}watched{% endif %}">
-                    <td>{{ forloop.counter }}</td> <!-- Нумерация -->
-                    <td>
-                        {% if movie.poster %}
-                            <img src='{% thumbnail movie.poster 50x75 crop="100%" %}' alt="{{ movie.title }} постер" class="movie-poster-img">
-                        {% endif %}
-                    </td>
-                    <td><a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></td>
-                    <td>{{ movie.title_original }}</td>
-                    <td>{{ movie.year }}</td>
-                    <td><a href="{{ movie.kinopoisk_url }}" target="_blank">{{ movie.kinopoisk_url }}</a></td> <!-- Ссылка на Кинопоиск -->
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-
-<style>
-    .movie-list-detail {
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        padding: 20px;
-        margin-bottom: 20px;
-        background-color: #f9f9f9;
-    }
-
-    .movie-list-detail h2 {
-        margin: 0;
-        font-size: 24px;
-    }
-
-    .movie-list-info {
-        margin-top: 15px;
-    }
-
-    .btn {
-        padding: 10px 15px;
-        border: none;
-        border-radius: 5px;
-        color: white;
-        cursor: pointer;
-        transition: background-color 0.3s;
-        text-decoration: none;
-    }
-
-    .btn-primary {
-        background-color: #007bff; /* Синий цвет для кнопки "Нравится" */
-    }
-
-    .btn-danger {
-        background-color: #dc3545; /* Красный цвет для кнопки "Уже не нравится" */
-    }
-
-    .btn-secondary {
-        background-color: #6c757d; /* Серый цвет для кнопки "Редактировать" */
-    }
-
-    .btn-light {
-        background-color: #f8f9fa; /* Светлый цвет для кнопки "Назад" */
-        color: #000;
-    }
-
-    .btn:hover {
-        opacity: 0.8; /* Плавный эффект при наведении */
-    }
-
-    #movie-list {
-        margin-top: 20px; /* Отступ сверху для списка фильмов */
-    }
-
-    .view-toggle {
-        margin: 20px 0;
-    }
-
-    .view-toggle button {
-        margin-right: 10px;
-        padding: 10px;
-        cursor: pointer;
-    }
-
-    .table-view {
-        margin-top: 20px;
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    .table-view th, .table-view td {
-        border: 1px solid #ddd;
-        padding: 12px;
-        text-align: left;
-    }
-
-    .table-view th {
-        background-color: #f2f2f2;
-        font-weight: bold;
-    }
-
-    .table-view tr:nth-child(even) {
-        background-color: #f9f9f9; /* Светлый фон для четных строк */
-    }
-
-    .table-view tr:hover {
-        background-color: #e9ecef; /* Цвет фона при наведении на строку */
-    }
-
-    .table-view tr.watched {
-        background-color: #d4edda; /* Цвет фона для просмотренных фильмов */
-    }
-
-    .movie-poster-img {
-        border-radius: 5px; /* Закругление углов постера */
-    }
-</style>
-
+<section class="cinema-page cinema-list-detail">
+<nav class="cinema-breadcrumb" aria-label="Навигация"><a href="{% url 'lists:users_movie_lists' %}">Пользовательские списки</a><span>/</span><span>{{ movie_list.title }}</span></nav>
+<header class="cinema-list-detail-header"><div class="cinema-list-detail-header__main"><span class="cinema-eyebrow">ПОДБОРКА СООБЩЕСТВА</span><h1>{{ movie_list.title }}</h1><p class="cinema-page__lead">Автор: <a href="{{ movie_list.user.get_absolute_url }}">{{ movie_list.user.get_full_name|default:movie_list.user.username }}</a></p><div class="cinema-list-detail-stats"><span><strong>{{ movies|length }}</strong> фильмов</span><span><strong>{{ movie_list.points }}</strong> баллов</span><span><strong>{{ movie_list.users_like.count }}</strong> лайков</span></div></div>
+<div class="cinema-list-detail-header__actions">{% if can_edit %}<a href="{% url 'lists:view_movie_list' movie_list.id %}?edit=true" class="cinema-button cinema-button--secondary">Редактировать список</a>{% endif %}{% if request.user.is_authenticated and can_like %}<form action="{% url 'lists:like_movie_list' movie_list.id %}" method="post">{% csrf_token %}{% if request.user in movie_list.users_like.all %}<button type="submit" class="cinema-button cinema-button--secondary">♥ Убрать лайк</button>{% else %}<button type="submit" class="cinema-button">♥ Нравится</button>{% endif %}</form>{% endif %}</div></header>
+<div class="cinema-view-toolbar"><div><h2>Фильмы в подборке</h2><p>Выберите удобный формат просмотра.</p></div><div class="cinema-view-toggle" role="group" aria-label="Формат отображения фильмов"><button type="button" id="grid-view" class="active" aria-pressed="true">Карточки</button><button type="button" id="table-view" aria-pressed="false">Таблица</button></div></div>
+<div id="movie-list" class="cinema-movie-grid-view">{% include "lists/list_movies.html" %}</div>
+<div id="movie-list-table" class="cinema-table-scroll" hidden><table class="cinema-data-table"><thead><tr><th>#</th><th>Постер</th><th>Название</th><th>Оригинальное название</th><th>Год</th><th>Кинопоиск</th></tr></thead><tbody>
+{% for movie in movies %}<tr class="{% if movie.id in watched_movies %}cinema-table-row--watched{% endif %}"><td>{{ forloop.counter }}</td><td>{% if movie.poster %}{% thumbnail movie.poster "50x75" crop="100%" as im %}<img src="{{ im.url }}" alt="{{ movie.title }} — постер" class="cinema-table-poster">{% else %}<span class="cinema-table-poster-placeholder">🎬</span>{% endif %}</td><td><a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></td><td>{{ movie.title_original|default:"—" }}</td><td>{{ movie.year }}</td><td>{% if movie.kinopoisk_url %}<a href="{{ movie.kinopoisk_url }}" target="_blank" rel="noopener noreferrer">Открыть ↗</a>{% else %}—{% endif %}</td></tr>{% empty %}<tr><td colspan="6">В этом списке пока нет фильмов.</td></tr>{% endfor %}
+</tbody></table></div>
+<p class="cinema-back-link"><a href="{% url 'lists:users_movie_lists' %}">← Ко всем пользовательским спискам</a></p>
+</section>
 <script>
-    // По умолчанию показываем сетку
-    document.getElementById('grid-view').addEventListener('click', function() {
-        document.getElementById('movie-list').style.display = 'block';
-        document.getElementById('movie-list-table').style.display = 'none';
-        this.classList.add('active');
-        document.getElementById('table-view').classList.remove('active');
-    });
-
-    document.getElementById('table-view').addEventListener('click', function() {
-        document.getElementById('movie-list').style.display = 'none';
-        document.getElementById('movie-list-table').style.display = 'block';
-        this.classList.add('active');
-        document.getElementById('grid-view').classList.remove('active');
-    });
+document.addEventListener('DOMContentLoaded', function () {
+ const gridButton=document.getElementById('grid-view'), tableButton=document.getElementById('table-view'), grid=document.getElementById('movie-list'), table=document.getElementById('movie-list-table');
+ if(!gridButton||!tableButton||!grid||!table)return;
+ function setView(view){const isGrid=view==='grid';grid.hidden=!isGrid;table.hidden=isGrid;gridButton.classList.toggle('active',isGrid);tableButton.classList.toggle('active',!isGrid);gridButton.setAttribute('aria-pressed',String(isGrid));tableButton.setAttribute('aria-pressed',String(!isGrid));}
+ gridButton.addEventListener('click',function(){setView('grid');});tableButton.addEventListener('click',function(){setView('table');});
+});
 </script>
-
 {% endblock %}

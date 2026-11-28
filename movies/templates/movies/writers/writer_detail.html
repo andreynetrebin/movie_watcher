@@ -1,19 +1,11 @@
-<!-- templates/writers/writer_detail.html -->
 {% extends "base.html" %}
 {% load thumbnail %}
 {% block title %}{{ writer.name }}{% endblock %}
 {% block content %}
-<h1>{{ writer.name }}</h1>
-
-<!-- Ссылка на Кинопоиск -->
-<p>
-    <a href="https://www.kinopoisk.ru/name/{{ writer.staff_id }}/" target="_blank">Посетить страницу о сценаристе на Кинопоиске</a>
-</p>
-<br>
-<div id="movie-list">
-{% include "movies/writers/writer_list_movies.html" %}
-</div>
-<a href="{% url 'movies:writer_list' %}">Назад к списку сценаристов</a>
-
+<section class="cinema-page cinema-person-detail">
+<nav class="cinema-breadcrumb" aria-label="Навигация"><a href="{% url 'movies:writer_list' %}">Рейтинг сценаристов</a><span>/</span><span>{{ writer.name }}</span></nav>
+<header class="cinema-person-hero"><div><span class="cinema-eyebrow">СЦЕНАРИСТ</span><h1>{{ writer.name }}</h1><p class="cinema-page__lead">Фильмография и ваш прогресс просмотра фильмов этого сценариста.</p></div><a class="cinema-button cinema-button--secondary" href="https://www.kinopoisk.ru/name/{{ writer.staff_id }}/" target="_blank" rel="noopener noreferrer">Профиль на Кинопоиске ↗</a></header>
+<div id="movie-list" class="cinema-person-movies">{% include "movies/writers/writer_list_movies.html" %}</div>
+<p class="cinema-back-link"><a href="{% url 'movies:writer_list' %}">← Ко всем сценаристам</a></p>
+</section>
 {% endblock %}
-

@@ -1,82 +1,19 @@
 {% extends "base.html" %}
 {% load custom_filters %}
-{% block title %}Рейтинг режиссеров{% endblock %}
+{% block title %}Рейтинг режиссёров{% endblock %}
 {% block content %}
-<h1>Список Режиссеров</h1>
-
-<table>
-    <thead>
-        <tr>
-            <th style="width: 50px;">Позиция</th>
-            <th>Режиссер</th>
-            <th style="width: 100px;">Количество фильмов</th>
-            <th style="width: 100px;">Просмотрено</th> <!-- Количество просмотренных фильмов -->
-            <th style="width: 100px;">Процент просмотренных</th> <!-- Новый заголовок для процента -->
-        </tr>
-    </thead>
-    <tbody>
-        {% for director in directors %}
-            <tr {% if director.num_watched == director.num_movies %}style="background-color: #d3ffd3;"{% endif %}> <!-- Выделяем строку зеленым цветом -->
-                <td>{{ directors.number|add:-1|mul:20|add:forloop.counter }}</td> <!-- Номер позиции с учетом страницы -->
-                <td>
-                    <a href="{% url 'movies:director_detail' director.pk %}">{{ director.name }}</a>
-                </td>
-                <td>{{ director.num_movies }}</td> <!-- Количество фильмов -->
-                <td>{{ director.num_watched }}</td> <!-- Количество просмотренных фильмов -->
-                <td>{{ director.watched_percentage|floatformat:0 }}%</td> <!-- Процент просмотренных фильмов -->
-            </tr>
-        {% empty %}
-            <tr>
-                <td colspan="5">Нет доступных режиссеров.</td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-<!-- Пагинация -->
-<div class="pagination">
-    <span class="step-links">
-        {% if directors.has_previous %}
-            <a href="?page=1">&laquo; первая</a>
-            <a href="?page={{ directors.previous_page_number }}">предыдущая</a>
-        {% endif %}
-
-        <span class="current">
-            Страница {{ directors.number }} из {{ directors.paginator.num_pages }}.
-        </span>
-
-        {% if directors.has_next %}
-            <a href="?page={{ directors.next_page_number }}">следующая</a>
-            <a href="?page={{ directors.paginator.num_pages }}">последняя &raquo;</a>
-        {% endif %}
-    </span>
-</div>
-
-<style>
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-    th, td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: left;
-    }
-    th {
-        background-color: #f2f2f2;
-    }
-    tr:hover {
-        background-color: #f1f1f1;
-    }
-    .pagination {
-        margin-top: 20px;
-        text-align: center;
-    }
-    .pagination a {
-        margin: 0 5px;
-        text-decoration: none;
-        color: #007bff;
-    }
-</style>
-
+<section class="cinema-page cinema-people-page">
+<header class="cinema-page__header"><div><span class="cinema-eyebrow">АВТОРЫ КИНО</span><h1>Рейтинг режиссёров</h1><p class="cinema-page__lead">Режиссёры и их фильмы — с учётом вашей истории просмотров.</p></div><div class="cinema-page__counter"><strong>{{ directors.paginator.count }}</strong><span>режиссёров</span></div></header>
+<div class="cinema-ranking-wrap"><table class="cinema-ranking-table"><thead><tr><th class="cinema-ranking-table__position">#</th><th>Режиссёр</th><th>Фильмов</th><th>Просмотрено</th><th>Прогресс</th></tr></thead><tbody>
+{% for director in directors %}
+<tr class="{% if director.num_watched == director.num_movies %}cinema-ranking-table__row--complete{% endif %}">
+<td class="cinema-ranking-table__position">{{ directors.number|add:-1|mul:20|add:forloop.counter }}</td>
+<td><a class="cinema-ranking-table__name" href="{% url 'movies:director_detail' director.pk %}">{{ director.name }}</a>{% if director.num_watched == director.num_movies %}<span class="cinema-ranking-table__badge">Всё просмотрено</span>{% endif %}</td>
+<td>{{ director.num_movies }}</td><td>{{ director.num_watched }}</td>
+<td><div class="cinema-ranking-progress"><div class="cinema-ranking-progress__meta"><strong>{{ director.watched_percentage|floatformat:0 }}%</strong></div><div class="cinema-ranking-progress__track"><span style="width:{{ director.watched_percentage }}%"></span></div></div></td>
+</tr>
+{% empty %}<tr><td colspan="5"><div class="cinema-empty"><h2>Режиссёры не найдены</h2><p>Пока нет данных для отображения рейтинга.</p></div></td></tr>{% endfor %}
+</tbody></table></div>
+<div class="cinema-pagination">{% if directors.has_previous %}<a href="?page=1">« Первая</a><a href="?page={{ directors.previous_page_number }}">‹ Назад</a>{% endif %}<span>Страница {{ directors.number }} из {{ directors.paginator.num_pages }}</span>{% if directors.has_next %}<a href="?page={{ directors.next_page_number }}">Вперёд ›</a><a href="?page={{ directors.paginator.num_pages }}">Последняя »</a>{% endif %}</div>
+</section>
 {% endblock %}

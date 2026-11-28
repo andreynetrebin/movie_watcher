@@ -3,116 +3,69 @@
 {% load static %}
 {% block title %}{{ movie.title }}{% endblock %}
 {% block content %}
-<div class="movie-detail">
-
-    <div class="movie-poster">
-        {% thumbnail movie.poster "80x120" crop="100%" as im %}
-        <img src="{{ im.url }}" alt="{{ movie.title }} постер" class="poster-img">
+<article class="movie-detail">
+  <div class="movie-poster">
+    {% if movie.poster %}
+      {% thumbnail movie.poster "600x900" crop="100%" as im %}
+        <img src="{{ im.url }}" alt="{{ movie.title }} — постер" class="poster-img">
+    {% else %}
+      <div class="poster-img poster-placeholder" role="img" aria-label="Постер отсутствует">🎬</div>
+    {% endif %}
+  </div>
+  <div class="movie-info">
+    <h1>{{ movie.title }}</h1>
+    <div class="filter-button">
+      <a href="{% url 'movies:list' %}?kinopoisk_id={{ movie.kinopoisk_id }}" class="btn btn-secondary">Проставить отметки</a>
     </div>
-
-<!-- Кнопка для перехода на страницу со списком фильмов по Кинопоиск ID -->
-
-    <div class="movie-info">
-        <h1>{{ movie.title }}</h1>
-        <div class="filter-button">
-        <a href="{% url 'movies:list' %}?kinopoisk_id={{ movie.kinopoisk_id }}" class="btn btn-secondary">Проставить отметки</a>
-        </div>
-        <div class="info-block">
-            <div class="details">
-                <p><strong>Год выпуска:</strong> {{ movie.year }}</p>
-                {% if movie.duration %}
-                    <p><strong>Продолжительность:</strong> {{ movie.duration }} минут</p>
-                {% endif %}
-                <p><strong>Кинопоиск:</strong> <a href="{{ movie.kinopoisk_url }}" target="_blank">Открыть на Кинопоиске</a></p>
-                <h2>Режиссеры</h2>
-                <ul>
-                    {% for director in movie.directors.all %}
-                        <li>
-                            <a href="{% url 'movies:director_detail' director.id %}">{{ director.name }}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
-
-                <h2>Сценаристы</h2>
-                <ul>
-                    {% for writer in movie.writers.all %}
-                        <li>
-                            <a href="{% url 'movies:writer_detail' writer.id %}">{{ writer.name }}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
-
-                <h2>Жанры</h2>
-                <ul>
-                    {% for genre in movie.genres.all %}
-                        <li>{{ genre.name }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-            <div class="metrics">
-                <h2>Показатели</h2>
-                <p><strong>Просмотрен:</strong> {{ movie.total_views }}</p>
-                <p><strong>Лайки:</strong> {{ movie.total_likes }}</p>
-                <p><strong>Дизлайки:</strong> {{ movie.total_dislikes }}</p>
-                <p><strong>Лайки/Просмотры:</strong> {{ like_ratio|floatformat:2 }}</p>
-                <p><strong>Лайки/Дизлайки:</strong> {{ dislike_ratio|floatformat:2 }}</p>
-            </div>
-        </div>
+    <div class="info-block">
+      <section class="details" aria-label="Информация о фильме">
+        <p><strong>Год выпуска:</strong> {{ movie.year }}</p>
+        {% if movie.duration %}<p><strong>Продолжительность:</strong> {{ movie.duration }} минут</p>{% endif %}
+        <p><strong>Кинопоиск:</strong> <a href="{{ movie.kinopoisk_url }}" target="_blank" rel="noopener noreferrer">Открыть на Кинопоиске</a></p>
+        <h2>Режиссеры</h2>
+        <ul>{% for director in movie.directors.all %}<li><a href="{% url 'movies:director_detail' director.id %}">{{ director.name }}</a></li>{% empty %}<li>Не указаны</li>{% endfor %}</ul>
+        <h2>Сценаристы</h2>
+        <ul>{% for writer in movie.writers.all %}<li><a href="{% url 'movies:writer_detail' writer.id %}">{{ writer.name }}</a></li>{% empty %}<li>Не указаны</li>{% endfor %}</ul>
+        <h2>Жанры</h2>
+        <ul>{% for genre in movie.genres.all %}<li>{{ genre.name }}</li>{% empty %}<li>Не указаны</li>{% endfor %}</ul>
+      </section>
+      <aside class="metrics">
+        <h2>Показатели</h2>
+        <p><strong>Просмотрен:</strong> {{ movie.total_views }}</p>
+        <p><strong>Лайки:</strong> {{ movie.total_likes }}</p>
+        <p><strong>Дизлайки:</strong> {{ movie.total_dislikes }}</p>
+        <p><strong>Лайки/Просмотры:</strong> {{ like_ratio|floatformat:2 }}</p>
+        <p><strong>Лайки/Дизлайки:</strong> {{ dislike_ratio|floatformat:2 }}</p>
+      </aside>
     </div>
-</div>
+  </div>
+</article>
 
-<h2>Комментарии</h2>
-<ul class="comment-list">
+<section class="movie-comments">
+  <h2>Комментарии</h2>
+  <ul class="comment-list">
     {% for comment in comments %}
-        <li class="comment-item">
-            <strong>{{ comment.author.get_full_name }}</strong> ({{ comment.created_on }})<br>
-            <p>{{ comment.body }}</p>
-        </li>
+      <li class="comment-item">
+        <strong>{{ comment.author.get_full_name }}</strong>
+        <time datetime="{{ comment.created_on|date:'c' }}">{{ comment.created_on }}</time>
+        <p>{{ comment.body }}</p>
+      </li>
     {% empty %}
-        <li>Нет комментариев.</li>
+      <li class="comment-item">Нет комментариев.</li>
     {% endfor %}
-</ul>
-
-
-{% if user.is_authenticated %}
+  </ul>
+  {% if user.is_authenticated %}
     <h3>Оставить комментарий</h3>
     <form method="post" class="comment-form">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="id_body">Ваш комментарий:</label>
-            {{ form.body }}  <!-- Используем form.body для отображения поля -->
-        </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-custom">Отправить</button>
-        </div>
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="id_body">Ваш комментарий:</label>
+        {{ form.body }}
+      </div>
+      <div class="form-group"><button type="submit" class="btn btn-custom">Отправить</button></div>
     </form>
-{% else %}
+  {% else %}
     <p>Вы должны <a href="{% url 'login' %}">войти</a>, чтобы оставить комментарий.</p>
-{% endif %}
-
-<style>
-
-.btn-custom {
-    background-color: #28a745; /* Зеленый цвет */
-    border: 2px solid #28a745; /* Цвет границы */
-    color: white; /* Цвет текста */
-    padding: 10px 20px; /* Отступы */
-    font-size: 16px; /* Размер шрифта */
-    border-radius: 5px; /* Закругленные углы */
-    transition: background-color 0.3s, border-color 0.3s, transform 0.2s; /* Плавный переход */
-    cursor: pointer; /* Указатель при наведении */
-}
-
-.btn-custom:hover {
-    background-color: #218838; /* Темно-зеленый цвет при наведении */
-    border-color: #1e7e34; /* Темно-зеленый цвет границы при наведении */
-    transform: scale(1.05); /* Увеличение кнопки при наведении */
-}
-
-.btn-custom:active {
-    transform: scale(0.95); /* Уменьшение кнопки при нажатии */
-}
-</style>
-
-
+  {% endif %}
+</section>
 {% endblock %}

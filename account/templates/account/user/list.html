@@ -1,30 +1,18 @@
 {% extends "base.html" %}
-{% load thumbnail %}
-
-{% block title %}Сообщество{% endblock %}
-{% block content %}
 {% load static %}
 {% load thumbnail %}
-  <h1>Сообщество</h1>
-  <div id="people-list">
-    {% for user in users %}
-      <div class="user">
-                             {% if user.profile.photo %}
-                                    {% thumbnail user.profile.photo "80x80" crop="100%" as im %}
-                                    <a href="{{ user.get_absolute_url }}">
-                                        <img src="{{ im.url }}" alt="{{ user.get_full_name }}" class="item-img">
-                                    </a>
-                                {% else %}
-                                <a href="{{ user.get_absolute_url }}">
-                                    <img src="{% static 'images/default_user_avatar.jpg' %}" alt="Default Avatar" class="item-img">
-                                </a>
-                                {% endif %}
-        <div class="info">
-          <a href="{{ user.get_absolute_url }}" class="title">
-            {{ user.get_full_name }}
-          </a>
-        </div>
-      </div>
-    {% endfor %}
-  </div>
+{% block title %}Сообщество{% endblock %}
+{% block content %}
+<section class="cinema-page">
+<header class="cinema-page__header"><div><span class="cinema-eyebrow">КИНОСМОТРИТЕЛИ</span><h1>Сообщество</h1><p class="cinema-page__lead">Знакомьтесь с участниками сообщества и открывайте для себя их кинопредпочтения.</p></div><div class="cinema-page__counter"><strong>{{ users|length }}</strong><span>участников</span></div></header>
+{% if users %}<div class="cinema-user-grid">
+{% for member in users %}<article class="cinema-user-card">
+<a class="cinema-user-card__avatar" href="{{ member.get_absolute_url }}" aria-label="Профиль {{ member.get_full_name|default:member.username }}">
+{% if member.profile.photo %}{% thumbnail member.profile.photo "112x112" crop="100%" as im %}<img src="{{ im.url }}" alt="{{ member.get_full_name|default:member.username }}">{% else %}<img src="{% static 'images/default_user_avatar.jpg' %}" alt="Аватар пользователя">{% endif %}
+</a>
+<div class="cinema-user-card__body"><a class="cinema-user-card__name" href="{{ member.get_absolute_url }}">{{ member.get_full_name|default:member.username }}</a><span class="cinema-status cinema-status--muted">Участник с {{ member.date_joined|date:"d.m.Y" }}</span></div>
+<a class="cinema-user-card__action" href="{{ member.get_absolute_url }}">Открыть профиль <span aria-hidden="true">→</span></a>
+</article>{% endfor %}</div>
+{% else %}<div class="cinema-empty"><span class="cinema-empty__icon" aria-hidden="true">◎</span><h2>Пока здесь тихо</h2><p>В сообществе пока нет участников для отображения.</p></div>{% endif %}
+</section>
 {% endblock %}

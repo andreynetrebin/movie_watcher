@@ -12,8 +12,14 @@
     <a href="?filter=added" class="{% if filter_type == 'added' %}active{% endif %}">Добавленные</a>
 </div>
 
-<div class="sidebar">
-    <div class="filter">
+<div class="movie-catalog-layout">
+<aside class="sidebar movie-catalog-sidebar">
+    <details class="movie-filter-drawer" open>
+        <summary class="movie-filter-toggle">
+            <span>Фильтры</span>
+            <span class="movie-filter-toggle-hint" aria-hidden="true">Показать / скрыть</span>
+        </summary>
+        <div class="filter">
         <h4>Фильтры</h4>
         <form method="GET" action="">
             <div class="filter-group">
@@ -58,9 +64,11 @@
             </div>
 
         </form>
-    </div>
-</div>
+        </div>
+    </details>
+</aside>
 
+<main class="movie-catalog-main">
 <div class="sort-options">
     <h3>Сортировать по:</h3>
 <form method="GET" action="{% url 'movies:list' %}">
@@ -88,7 +96,7 @@
                     <div class="movie-poster">
                         {% if movie.poster %}
                             <a href="{{ movie.get_absolute_url }}">
-                                <img src="{% thumbnail movie.poster "50x75" crop="100%" %}" alt="{{ movie.title }} постер" class="movie-poster-img">
+                                <img src="{% thumbnail movie.poster "300x450" %}" alt="{{ movie.title }} постер" class="movie-poster-img">
                             </a>
                         {% endif %}
                     </div>
@@ -183,3 +191,27 @@
         {% endif %}
     </span>
 </div>
+</main>
+</div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const drawer = document.querySelector('.movie-filter-drawer');
+    if (!drawer) return;
+    const mobileQuery = window.matchMedia('(max-width: 760px)');
+    const syncDrawer = function () {
+        if (mobileQuery.matches) {
+            drawer.removeAttribute('open');
+        } else {
+            drawer.setAttribute('open', '');
+        }
+    };
+    syncDrawer();
+    if (mobileQuery.addEventListener) {
+        mobileQuery.addEventListener('change', syncDrawer);
+    } else {
+        mobileQuery.addListener(syncDrawer);
+    }
+});
+</script>

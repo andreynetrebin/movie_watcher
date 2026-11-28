@@ -1,12 +1,36 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Редактировать профиль{% endblock %}
 {% block content %}
-<h1>Редактировать профиль</h1>
-<p>Используйте форму ниже, чтобы изменить ваш профиль:</p>
-<form method="post" enctype="multipart/form-data">
-{{ user_form.as_p }}
-{{ profile_form.as_p }}
-{% csrf_token %}
-<p><input type="submit" value="Сохранить изменения"></p>
-</form>
+<div class="cinema-page cinema-edit-page">
+    <nav class="cinema-breadcrumb" aria-label="Навигация">
+        <a href="{% url 'dashboard' %}">Мой кабинет</a>
+        <span aria-hidden="true">/</span>
+        <span>Настройки профиля</span>
+    </nav>
+    <header class="cinema-page__header">
+        <div>
+            <span class="cinema-eyebrow">АККАУНТ</span>
+            <h1>Настройки профиля</h1>
+            <p class="cinema-page__lead">Обновите личную информацию и фотографию профиля</p>
+        </div>
+    </header>
+    <section class="cinema-edit-card">
+        <form method="post" enctype="multipart/form-data" class="cinema-edit-form">
+            {% csrf_token %}
+            <div class="cinema-edit-form__section">
+                <h2>Основная информация</h2>
+                {{ user_form.as_p }}
+            </div>
+            <div class="cinema-edit-form__section">
+                <h2>Профиль и фотография</h2>
+                {{ profile_form.as_p }}
+            </div>
+            <div class="cinema-edit-form__actions">
+                <a href="{% url 'dashboard' %}" class="cinema-button cinema-button--secondary">Отмена</a>
+                <button type="submit" class="cinema-button">Сохранить изменения</button>
+            </div>
+        </form>
+    </section>
+</div>
 {% endblock %}

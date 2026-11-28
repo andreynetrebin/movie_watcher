@@ -1455,3 +1455,344 @@
         font-size: 0.9rem;
     }
 }
+
+
+/* ==========================================================
+   Cinema dashboard: compact dark layouts for profile tabs
+   Scoped to tab panels so the rest of the site is unchanged.
+   ========================================================== */
+
+.refactor-tab-content {
+    width: min(100%, 1120px);
+    margin-inline: auto;
+}
+
+.refactor-tab-content > .refactor-card {
+    background: #111922;
+    border: 1px solid #263442;
+    border-radius: 16px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+}
+
+.refactor-tab-content > .refactor-card > .refactor-card__header {
+    min-height: 68px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    background: #151f2a;
+    border-bottom: 1px solid #263442;
+}
+
+.refactor-tab-content > .refactor-card > .refactor-card__header .refactor-card__title {
+    margin: 0;
+    color: #edf3f8;
+}
+
+.refactor-tab-content > .refactor-card > .refactor-card__body {
+    padding: 1.25rem;
+    color: #c4d0dc;
+}
+
+/* Activity: distinct day groups and compact event tiles */
+#activity .refactor-activity-history {
+    max-width: 100%;
+}
+
+#activity .refactor-activity-day {
+    margin-bottom: 1.25rem;
+    padding: 0.75rem;
+    background: #0e151d;
+    border: 1px solid #293847;
+    border-radius: 12px;
+}
+
+#activity .refactor-activity-day__header {
+    margin: 0 0 0.65rem !important;
+    padding: 0.7rem 0.85rem !important;
+    background: #202d3a !important;
+    border: 1px solid #344657;
+    border-radius: 8px !important;
+    color: #dce7f1;
+}
+
+#activity .refactor-activity-day__header h4,
+#activity .refactor-activity-day__count {
+    color: #dce7f1 !important;
+    margin: 0;
+}
+
+#activity .refactor-activity-day__items {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 390px), 1fr));
+    gap: 0.65rem;
+}
+
+#activity .refactor-activity-item {
+    min-width: 0;
+    margin: 0 !important;
+    padding: 0.85rem 1rem !important;
+    background: #18232e !important;
+    border: 1px solid #2b3b4b !important;
+    border-radius: 9px !important;
+    color: #c7d4e0;
+}
+
+#activity .refactor-activity-item:hover {
+    background: #1d2b38 !important;
+    border-color: #3b8f79 !important;
+    box-shadow: 0 5px 16px rgba(0, 0, 0, 0.18);
+}
+
+#activity .refactor-activity-content,
+#activity .refactor-activity-content .refactor-text-gray-600,
+#activity .refactor-activity-item .refactor-text-gray-500 {
+    color: #c2cfdb !important;
+}
+
+#activity .refactor-activity-item a {
+    color: #35d39a;
+}
+
+#activity .refactor-activity-preview img,
+#activity .refactor-activity-image {
+    border: 1px solid #354657;
+    border-radius: 7px;
+}
+
+/* Lists: keep the table readable without the bright legacy surface */
+#lists .refactor-table-container {
+    border-color: #2b3b4b;
+    border-radius: 10px;
+    background: #141e28;
+}
+
+#lists .refactor-table {
+    background: transparent;
+    color: #c7d4e0;
+}
+
+#lists .refactor-table th {
+    padding: 0.85rem 1rem;
+    background: #202d3a;
+    color: #e5edf5;
+    border-bottom: 1px solid #354657;
+    white-space: nowrap;
+}
+
+#lists .refactor-table td {
+    padding: 0.85rem 1rem;
+    color: #bdcbd8;
+    border-bottom: 1px solid #293847;
+}
+
+#lists .refactor-table-row {
+    background: #151f2a;
+    transition: background-color 0.18s ease;
+}
+
+#lists .refactor-table-row:nth-child(even) {
+    background: #18232e;
+}
+
+#lists .refactor-table-row:hover {
+    background: #223342;
+}
+
+#lists .refactor-table-row a {
+    color: #35d39a;
+}
+
+/* Comments: separate each movie and each comment */
+#comments .refactor-comments-movie {
+    margin-bottom: 1.15rem;
+    padding: 0.7rem;
+    background: #0e151d;
+    border: 1px solid #293847;
+    border-radius: 12px;
+}
+
+#comments .refactor-comments-movie__header {
+    margin: 0 0 0.65rem !important;
+    padding: 0.75rem 0.9rem !important;
+    background: #202d3a !important;
+    border: 1px solid #354657;
+    border-radius: 8px !important;
+}
+
+#comments .refactor-comments-movie__header h4,
+#comments .refactor-comments-movie__header .refactor-text-sm {
+    color: #dce7f1 !important;
+}
+
+#comments .refactor-comments-movie__header a {
+    color: #35d39a;
+}
+
+#comments .refactor-comments-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 390px), 1fr));
+    gap: 0.65rem;
+}
+
+#comments .refactor-comment-item {
+    min-width: 0;
+    margin: 0 !important;
+    padding: 0.9rem 1rem !important;
+    background: #18232e !important;
+    border: 1px solid #2b3b4b !important;
+    border-radius: 9px !important;
+    color: #c7d4e0;
+}
+
+#comments .refactor-comment-item:hover {
+    background: #1d2b38 !important;
+    border-color: #3b8f79 !important;
+    box-shadow: 0 5px 16px rgba(0, 0, 0, 0.18);
+}
+
+#comments .refactor-comment-item__meta,
+#comments .refactor-comment-item__content,
+#comments .refactor-comment-item__content .refactor-text-gray-800 {
+    color: #c7d4e0 !important;
+}
+
+#comments .refactor-comment-item__meta .refactor-text-gray-500 {
+    color: #91a5b8 !important;
+}
+
+#comments .refactor-comment-actions {
+    opacity: 1;
+}
+
+/* Points: clear date groups and compact transaction rows */
+#points .refactor-points-day {
+    margin-bottom: 1.15rem;
+    padding: 0.7rem;
+    background: #0e151d;
+    border: 1px solid #293847;
+    border-radius: 12px;
+}
+
+#points .refactor-points-day__header {
+    margin: 0 0 0.65rem !important;
+    padding: 0.75rem 0.9rem !important;
+    background: #202d3a !important;
+    border: 1px solid #354657;
+    border-radius: 8px;
+    color: #e5edf5;
+}
+
+#points .refactor-points-day__header h4,
+#points .refactor-points-day__total {
+    color: #dce7f1 !important;
+    margin: 0;
+}
+
+#points .refactor-points-day__items {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 390px), 1fr));
+    gap: 0.65rem;
+}
+
+#points .refactor-points-item {
+    min-width: 0;
+    gap: 1rem;
+    padding: 0.85rem 1rem !important;
+    background: #18232e;
+    border: 1px solid #2b3b4b;
+    border-radius: 9px;
+    color: #c7d4e0;
+}
+
+#points .refactor-points-item:hover {
+    background: #1d2b38;
+    border-color: #3b8f79;
+}
+
+#points .refactor-points-item__info,
+#points .refactor-points-item__info .refactor-font-medium {
+    color: #dce7f1 !important;
+}
+
+#points .refactor-points-item__info .refactor-text-sm,
+#points .refactor-points-item__info .refactor-text-xs {
+    color: #9fb0c0 !important;
+}
+
+#points .refactor-points-item__info a {
+    color: #35d39a;
+}
+
+#points .refactor-points-item__amount {
+    flex: 0 0 auto;
+    min-width: 3.25rem;
+    text-align: center;
+    padding: 0.35rem 0.55rem;
+    border-radius: 7px;
+    background: rgba(53, 211, 154, 0.12);
+}
+
+#points .refactor-points--positive {
+    color: #45d6a2 !important;
+}
+
+#points .refactor-points--negative {
+    color: #ff7777 !important;
+    background: rgba(255, 90, 90, 0.12);
+}
+
+/* Consistent compact pagination */
+.refactor-tab-content .refactor-pagination {
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid #293847;
+}
+
+@media (max-width: 700px) {
+    .refactor-tab-content {
+        width: 100%;
+    }
+
+    .refactor-tab-content > .refactor-card > .refactor-card__body {
+        padding: 0.85rem;
+    }
+
+    .refactor-tab-content > .refactor-card > .refactor-card__header {
+        padding: 0.85rem;
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    #activity .refactor-activity-day,
+    #comments .refactor-comments-movie,
+    #points .refactor-points-day {
+        padding: 0.55rem;
+    }
+
+    #activity .refactor-activity-day__items,
+    #comments .refactor-comments-list,
+    #points .refactor-points-day__items {
+        grid-template-columns: 1fr;
+    }
+
+    #activity .refactor-activity-item,
+    #comments .refactor-comment-item,
+    #points .refactor-points-item {
+        padding: 0.75rem !important;
+    }
+
+    #points .refactor-points-item {
+        align-items: flex-start;
+    }
+
+    #points .refactor-points-item__amount {
+        min-width: 2.75rem;
+    }
+
+    #lists .refactor-table {
+        min-width: 720px;
+    }
+}

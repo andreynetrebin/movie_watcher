@@ -149,9 +149,13 @@ document.querySelectorAll('button.watched').forEach(function(watchedButton) {
         .then(response => response.json())
         .then(data => {
             if (data['status'] === 'added') {
-                watchedButton.innerHTML = '<i class="fas fa-circle"><i class="fas fa-check"></i></i>'; // Кружок с галочкой
+                watchedButton.querySelector('i').classList.add('fa-check');
+                watchedButton.querySelector('.action-label').textContent = 'Просмотрен';
+                watchedButton.closest('.movie-item').classList.add('watched');
             } else if (data['status'] === 'removed') {
-                watchedButton.innerHTML = '<i class="fas fa-circle"></i>'; // Возвращаем кружок
+                watchedButton.querySelector('i').classList.remove('fa-check');
+                watchedButton.querySelector('.action-label').textContent = 'Пометить как просмотренный';
+                watchedButton.closest('.movie-item').classList.remove('watched');
             }
         });
     });
@@ -169,11 +173,10 @@ document.querySelectorAll('button.recently-watched').forEach(function(watchedRec
         })
         .then(response => response.json())
         .then(data => {
-            if (data['status'] === 'added') {
-                watchedRecentlyButton.innerHTML = '<i class="fas fa-circle"><i class="fas fa-check"></i></i>'; // Кружок с галочкой
-            } else if (data['status'] === 'already_marked') {
-                // Здесь можно добавить логику, если нужно что-то сделать при повторном нажатии
-                console.log('Фильм уже помечен как просмотренный недавно');
+            if (data['status'] === 'added' || data['status'] === 'already_marked') {
+                watchedRecentlyButton.querySelector('i').classList.add('fa-check');
+                watchedRecentlyButton.querySelector('.action-label').textContent = 'Просмотрен недавно';
+                watchedRecentlyButton.closest('.movie-item').classList.add('watched');
             }
         });
     });
