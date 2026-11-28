@@ -1241,3 +1241,238 @@ tr:hover td { background:rgba(255,255,255,.025); }
   .cinema-list-form__actions > *, .cinema-manage-actions > a,
   .cinema-manage-actions form > button { flex:1 1 100%; }
 }
+
+
+/* Dashboard tab surfaces: replace legacy light utility colors with cinema dark theme. */
+.cinema-account-dashboard .refactor-tab-content > .refactor-card {
+  background:#121a23 !important;
+  color:#e7edf4 !important;
+  border:1px solid #263442 !important;
+  border-radius:14px;
+  overflow:hidden;
+}
+.cinema-account-dashboard .refactor-tab-content .refactor-card__header {
+  background:#151f2a !important;
+  border-bottom:1px solid #263442 !important;
+  color:#f0f4f8 !important;
+}
+.cinema-account-dashboard .refactor-tab-content .refactor-card__body {
+  background:#121a23 !important;
+  color:#d5dee8 !important;
+}
+.cinema-account-dashboard .refactor-tab-content h3,
+.cinema-account-dashboard .refactor-tab-content h4,
+.cinema-account-dashboard .refactor-tab-content .refactor-card__title {
+  color:#f0f4f8 !important;
+}
+.cinema-account-dashboard .refactor-tab-content .refactor-bg-white,
+.cinema-account-dashboard .refactor-tab-content .refactor-bg-gray-50,
+.cinema-account-dashboard .refactor-tab-content [class*="refactor-bg-gray-"] {
+  background:#19232e !important;
+}
+.cinema-account-dashboard .refactor-tab-content .refactor-text-gray-800,
+.cinema-account-dashboard .refactor-tab-content .refactor-text-gray-700,
+.cinema-account-dashboard .refactor-tab-content .refactor-text-gray-600 {
+  color:#d1dce7 !important;
+}
+.cinema-account-dashboard .refactor-tab-content .refactor-text-gray-500,
+.cinema-account-dashboard .refactor-tab-content .refactor-text-gray-400 {
+  color:#91a2b5 !important;
+}
+.cinema-account-dashboard .refactor-tab-content .refactor-border-gray-100,
+.cinema-account-dashboard .refactor-tab-content .refactor-border-b {
+  border-color:#2a3948 !important;
+}
+
+/* Activity: date separators and individual events. */
+.cinema-account-dashboard #activity .refactor-activity-day__header {
+  background:#202d3a !important;
+  border:1px solid #304254;
+  color:#e8eff6 !important;
+}
+.cinema-account-dashboard #activity .refactor-activity-day__header h4 {
+  color:#f3f7fb !important;
+}
+.cinema-account-dashboard #activity .refactor-activity-day__count {
+  color:#aebdcb !important;
+}
+.cinema-account-dashboard #activity .refactor-activity-item {
+  background:#19232e !important;
+  border:1px solid #2a3948 !important;
+  border-radius:10px;
+  color:#d8e2ec !important;
+}
+.cinema-account-dashboard #activity .refactor-activity-content {
+  color:#d8e2ec !important;
+}
+.cinema-account-dashboard #activity .refactor-activity-icon {
+  background:#263b4e !important;
+  color:#c7e6ff !important;
+}
+
+/* Lists: dark table with clear row separation and readable visibility controls. */
+.cinema-account-dashboard #lists .refactor-table-container {
+  width:100%;
+  overflow-x:auto;
+  border:1px solid #2a3948;
+  border-radius:11px;
+  background:#151e28 !important;
+}
+.cinema-account-dashboard #lists .refactor-table {
+  width:100%;
+  min-width:820px;
+  margin:0;
+  border-collapse:separate;
+  border-spacing:0;
+  background:#151e28 !important;
+  color:#d8e2ec !important;
+}
+.cinema-account-dashboard #lists .refactor-table thead,
+.cinema-account-dashboard #lists .refactor-table thead tr,
+.cinema-account-dashboard #lists .refactor-table th {
+  background:#202d3a !important;
+  color:#eaf1f7 !important;
+  border-color:#344657 !important;
+}
+.cinema-account-dashboard #lists .refactor-table th {
+  padding:1rem .9rem;
+  font-size:.78rem;
+  font-weight:750;
+  letter-spacing:.035em;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+.cinema-account-dashboard #lists .refactor-table tbody tr,
+.cinema-account-dashboard #lists .refactor-table tbody td {
+  background:#151e28 !important;
+  color:#cbd7e3 !important;
+  border-color:#293846 !important;
+}
+.cinema-account-dashboard #lists .refactor-table tbody tr:nth-child(even) td {
+  background:#19232e !important;
+}
+.cinema-account-dashboard #lists .refactor-table tbody tr:hover td {
+  background:#22313e !important;
+}
+.cinema-account-dashboard #lists .refactor-table td {
+  padding:.9rem;
+  vertical-align:middle;
+}
+.cinema-account-dashboard #lists .refactor-table td a {
+  color:#35d39a !important;
+}
+.cinema-account-dashboard #lists .refactor-visibility-form,
+.cinema-account-dashboard #lists .refactor-visibility-form > div {
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:.65rem;
+}
+.cinema-account-dashboard #lists .refactor-radio {
+  color:#cbd7e3 !important;
+  white-space:nowrap;
+}
+.cinema-account-dashboard #lists .refactor-radio__label {
+  color:#cbd7e3 !important;
+}
+.cinema-account-dashboard #lists .refactor-radio input {
+  accent-color:#35d39a;
+}
+
+/* Comments: movie group headers and comment cards. */
+.cinema-account-dashboard #comments .refactor-comments-movie__header {
+  background:#202d3a !important;
+  border:1px solid #304254;
+  color:#eaf1f7 !important;
+}
+.cinema-account-dashboard #comments .refactor-comments-movie__header h4,
+.cinema-account-dashboard #comments .refactor-comments-movie__header .refactor-text-gray-600 {
+  color:#d5e0ea !important;
+}
+.cinema-account-dashboard #comments .refactor-comment-item {
+  background:#19232e !important;
+  border:1px solid #2a3948 !important;
+  border-radius:10px;
+  color:#d8e2ec !important;
+}
+.cinema-account-dashboard #comments .refactor-comment-item__content {
+  color:#d8e2ec !important;
+  overflow-wrap:anywhere;
+}
+.cinema-account-dashboard #comments .refactor-comment-item__meta {
+  color:#9fb0c1 !important;
+}
+
+/* Points history: date totals and transaction rows. */
+.cinema-account-dashboard #points .refactor-points-day__header {
+  background:#202d3a !important;
+  border:1px solid #304254;
+  border-radius:10px;
+  color:#eaf1f7 !important;
+}
+.cinema-account-dashboard #points .refactor-points-day__header h4 {
+  color:#f0f5fa !important;
+}
+.cinema-account-dashboard #points .refactor-points-day__items {
+  background:#151e28 !important;
+  border:1px solid #2a3948;
+  border-radius:10px;
+  overflow:hidden;
+}
+.cinema-account-dashboard #points .refactor-points-item {
+  background:#19232e !important;
+  color:#d8e2ec !important;
+  border-color:#2a3948 !important;
+}
+.cinema-account-dashboard #points .refactor-points-item:nth-child(even) {
+  background:#151e28 !important;
+}
+.cinema-account-dashboard #points .refactor-points-item__info,
+.cinema-account-dashboard #points .refactor-points-item__info .refactor-font-medium {
+  color:#e0e8f0 !important;
+}
+.cinema-account-dashboard #points .refactor-points-item__info .refactor-text-sm {
+  color:#aebdcb !important;
+}
+
+/* Consistent empty states and pagination on all dashboard tabs. */
+.cinema-account-dashboard .refactor-tab-content .refactor-empty-state {
+  background:#19232e !important;
+  border:1px dashed #344657;
+  border-radius:11px;
+  color:#cbd7e3 !important;
+}
+.cinema-account-dashboard .refactor-tab-content .refactor-pagination,
+.cinema-account-dashboard .refactor-tab-content .refactor-pagination span {
+  color:#b8c7d5 !important;
+}
+.cinema-account-dashboard .refactor-tab-content .refactor-form-input {
+  color:#e7edf4 !important;
+  background:#0d141c !important;
+  border:1px solid #304254 !important;
+}
+.cinema-account-dashboard .refactor-tab-content .refactor-form-input option {
+  color:#e7edf4;
+  background:#151e28;
+}
+@media(max-width:680px) {
+  .cinema-account-dashboard #lists .refactor-table {
+    min-width:760px;
+  }
+  .cinema-account-dashboard #lists .refactor-table th,
+  .cinema-account-dashboard #lists .refactor-table td {
+    padding:.7rem .65rem;
+    font-size:.8rem;
+  }
+  .cinema-account-dashboard #lists .refactor-visibility-form,
+  .cinema-account-dashboard #lists .refactor-visibility-form > div {
+    align-items:flex-start;
+    flex-direction:column;
+    gap:.4rem;
+  }
+  .cinema-account-dashboard #activity .refactor-activity-item,
+  .cinema-account-dashboard #comments .refactor-comment-item,
+  .cinema-account-dashboard #points .refactor-points-item {
+    padding:.85rem !important;
+  }
+}
