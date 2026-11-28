@@ -10,7 +10,7 @@
     <div class="cinema-manage-grid">
       {% for movie in movie_list.movies.all %}
         <article class="cinema-manage-card">
-          {% if movie.poster %}{% thumbnail movie.poster "240x360" crop="smart" as poster %}<img src="{{ poster.url }}" alt="{{ movie.title }} — постер" loading="lazy">{% endthumbnail %}{% else %}<span class="cinema-picker-placeholder">🎬</span>{% endif %}
+          {% if movie.poster %}{% thumbnail movie.poster "240x360" crop="smart" as poster %}<img src="{{ poster.url }}" alt="{{ movie.title }} — постер" loading="lazy">{% else %}<span class="cinema-picker-placeholder">🎬</span>{% endif %}
           <div class="cinema-manage-card__title">{{ movie.title }} <span>({{ movie.year }})</span></div>
         </article>
       {% empty %}
