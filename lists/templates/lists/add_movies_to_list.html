@@ -32,7 +32,7 @@
         {% for movie in page_obj %}
           <label class="cinema-picker-card" for="movie-{{ movie.id }}">
             <input type="checkbox" name="movies" value="{{ movie.id }}" id="movie-{{ movie.id }}">
-            {% if movie.poster %}{% thumbnail movie.poster "240x360" crop="smart" as poster %}<img src="{{ poster.url }}" alt="{{ movie.title }} — постер" loading="lazy">{% endthumbnail %}{% else %}<span class="cinema-picker-placeholder">🎬</span>{% endif %}
+            {% if movie.poster %}{% thumbnail movie.poster "240x360" crop="smart" as poster %}<img src="{{ poster.url }}" alt="{{ movie.title }} — постер" loading="lazy">{% else %}<span class="cinema-picker-placeholder">🎬</span>{% endif %}
             <span class="cinema-picker-card__title">{{ movie.title }}</span><span class="cinema-picker-card__year">{{ movie.year }}</span>
           </label>
         {% empty %}
